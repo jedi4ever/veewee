@@ -1,0 +1,13 @@
+Before we can actually build the boxes, we need to take care of the minimal things to install
+
+0)Have ruby and rubygems working
+
+1)To avoid messing up your installed gems, it's to start from an empty gem list
+$ . veewee.ENV
+
+2)The minimal thing you need is the rake gem
+$ gem install rake
+
+#To avoid needing Root access =>
+3)You would also want to have Virtualbox installed
+curl http://download.virtualbox.org/virtualbox/3.2.10/VirtualBox-3.2.10-66523-OSX.dmg
