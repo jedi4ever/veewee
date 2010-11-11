@@ -1,8 +1,6 @@
 module Veewee
   class Web
-  
-    @@filename=""
-    @@web_dir=""
+
     require 'webrick'
     include WEBrick
 

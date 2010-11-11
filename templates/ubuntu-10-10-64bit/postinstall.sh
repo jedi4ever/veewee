@@ -1,24 +1,26 @@
 #Updating the box
-echo vagrant | sudo -S apt-get -y update
-echo vagrant | sudo -S apt-get -y upgrade"
+apt-get -y update
+#apt-get -y upgrade
 
 #Shellutil.comment("installing ruby enterprise")
-echo vagrant|sudo -S apt-get -y install linux-headers-$(uname -r) build-essential
-echo vagrant | sudo -S apt-get -y install zlib1g-dev libssl-dev libreadline5-dev
-echo vagrant | sudo -S wget http://rubyforge.org/frs/download.php/71096/ruby-enterprise-1.8.7-2010.02.tar.gz
-echo vagrant | sudo -S tar xzvf ruby-enterprise-1.8.7-2010.02.tar.gz
-echo vagrant | sudo -S ./ruby-enterprise-1.8.7-2010.02/installer -a /opt/ruby
-echo vagrant | sudo -S bash -c \"echo 'PATH=$PATH:/opt/ruby/bin/'> /etc/profile.d/rubyenterprise.sh\"
+apt-get -y install linux-headers-$(uname -r) build-essential
+apt-get -y install zlib1g-dev libssl-dev libreadline5-dev
 
-echo vagrant | sudo -S /opt/ruby/bin/gem install chef")
+wget http://rubyforge.org/frs/download.php/71096/ruby-enterprise-1.8.7-2010.02.tar.gz
+tar xzvf ruby-enterprise-1.8.7-2010.02.tar.gz
+./ruby-enterprise-1.8.7-2010.02/installer -a /opt/ruby
+echo 'PATH=$PATH:/opt/ruby/bin/'> /etc/profile.d/rubyenterprise.sh
 
+/opt/ruby/bin/gem install chef
 
-thebox.execute("mkdir $HOME/.ssh; cd .ssh ;"+
+mkdir $HOME/.ssh; cd .ssh ;
 wget 'http://github.com/mitchellh/vagrant/raw/master/keys/vagrant.pub' -O authorized_keys
-/Applications/VirtualBox.app/Contents/MacOS/VBoxGuestAdditions.iso
-echo vagrant|sudo -S mount /dev/dvd /mnt
-echo vagrant|sudo -S sh /mnt/VBoxLinuxAdditions-x86.run
 
+#/Applications/VirtualBox.app/Contents/MacOS/VBoxGuestAdditions.iso
+#echo vagrant|sudo -S mount /dev/dvd /mnt
+#echo vagrant|sudo -S sh /mnt/VBoxLinuxAdditions-x86.run
+
+exit
 currently vagrant has a problem with the machine up, it calculates the wrong port to ssh to poweroff the system      
 thebox.execute("echo vagrant| sudo -S shutdown -h now")
       thebox.wait_for_state("poweroff")
