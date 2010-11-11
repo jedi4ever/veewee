@@ -1,18 +1,13 @@
-def when_ssh_login_works(sshparams= {},&block)
-      Shellutil.execute_when_ssh_available(ip="localhost", sshparams) do
-              yield
-                end
-end
+module Veewee
+  class Ssh
 
+      def self.when_ssh_login_works(ip="localhost", options = {  } , &block)
 
-def execute_when_ssh_available(ip="localhost", options = {  } , &block)
-
-          defaults={ :port => '22', :timeout => 2 , :gw_machine => '' , :gw_port => '22' , :gw_user => 'root' , :user => 'root', :password => ''}
+          defaults={ :port => '22', :timeout => 200 , :user => 'vagrant', :password => 'vagrant'}
 
           print "sshing to => #{options[:port]}"
 
           options=defaults.merge(options)
-          configfile="#{ENV['VM_STATE']}/.ssh/ssh_config.systr"
 
          begin
                Timeout::timeout(options[:timeout]) do
@@ -37,8 +32,5 @@ def execute_when_ssh_available(ip="localhost", options = {  } , &block)
     return false
 end
 
-def self.execute(command, options = { :progress => "off"} )
-
-        Net::SSH.start(options[:host], options[:user], { :port => options[:port], :password => options[:password], :paranoid => false }) do |ssh|
-        end
+end
 end
