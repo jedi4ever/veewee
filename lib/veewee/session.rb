@@ -146,10 +146,10 @@ module Veewee
             vm.stop
         end     
   
-        #Set all params we know
-        vm.memory_size=@definition[:memory_size]
+        #Set all params we know 
+        vm.memory_size=@definition[:memory_size].to_i
         vm.os_type_id=@definition[:os_type_id]
-        vm.cpu_count=@definition[:cpu_count]
+        vm.cpu_count=@definition[:cpu_count].to_i
         vm.name=boxname
 
         vm.validate
@@ -192,8 +192,7 @@ module Veewee
         #command => "${vboxcmd} storageattach '${vname}' --storagectl 'SATA Controller' --port 0 --device 0 --type hdd --medium '${vname}.vdi'",
         command ="#{vboxcmd} storageattach '#{boxname}' --storagectl 'SATA Controller' --port 0 --device 0 --type hdd --medium '#{location}'"
         IO.popen("#{command}") { |f| puts f.gets }
-        
-        puts "la"
+
         full_iso_file=File.join(@iso_dir,@definition[:iso_file])
         puts "#{full_iso_file}"
         #command => "${vboxcmd} storageattach '${vname}' --storagectl 'IDE Controller' --type dvddrive --port 1 --device 0 --medium '${isodst}' ";
@@ -205,7 +204,11 @@ module Veewee
         #Setting this annoying messages to register
         VirtualBox::ExtraData.global["GUI/RegistrationData"]="triesLeft=0"
         VirtualBox::ExtraData.global["GUI/UpdateDate"]="1 d, 2009-09-20"
-        VirtualBox::ExtraData.global["GUI/SuppressMessages"]="confirmInputCapture,remindAboutAutoCapture,remindAboutMouseIntegrationOff"  
+        VirtualBox::ExtraData.global["GUI/SuppressMessages"]="confirmInputCapture,remindAboutAutoCapture,remindAboutMouseIntegrationOff"
+        VirtualBox::ExtraData.global["GUI/UpdateCheckCount"]="60"
+        update_date=Time.now+86400
+        VirtualBox::ExtraData.global["GUI/UpdateDate"]="1 d, #{update_date.year}-#{update_date.month}-#{update_date.day}, stable"
+        
         VirtualBox::ExtraData.global.save
         
         #Map SSH Ports
@@ -276,15 +279,7 @@ module Veewee
         
       end
     end
-
-    def self.set_ssh_port
-      #	exec {
-      #		"set ssh port":
-      #			command => "${vboxcmd} modifyvm '${vname}' --natpf1 'guestssh,tcp,,${hostsshport},,${guestsshport}'",
-      #			unless => "${vboxcmd} showvminfo '${vname}'|grep State|grep running"
-      #	}
-    end
-    
+  
     def self.local_ip
       orig, Socket.do_not_reverse_lookup = Socket.do_not_reverse_lookup, true  # turn off reverse DNS resolution temporarily
 

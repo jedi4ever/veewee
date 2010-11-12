@@ -1,13 +1,14 @@
-  	thebox =Veebox.new(vmname, { 
-      :dvd => "/Users/patrick/Downloads/CentOS-5.5-i386-bin-DVD/CentOS-5.5-i386-bin-DVD.iso",
-      :floppy => "/Users/patrick/Downloads/floppy-ubuntu.img",
-      :postinstall => "", 
-      :provider => 'vbox', 
-      :vm_options => { :ostype => 'RedHat', :memory => '384' , :acpi => 'on',  :ioapic => 'on', :hwvirtex => 'on' , :nestedpaging => 'on'},
-      :net_options => {:nic1 => "hostonly", :hostonlyadapter1 => 'vboxnet0' , :nic2 => 'intnet', :intnet2 => "pxenet"},
-      :disk_options => {:size => "10240"} ,
-      :ssh_options => {:host => "localhost", :host_port => host_port, :guest_port => 22, :user => "root", :password => "pipopo", :timeout => 300000},
-      :sudo_options => {:user => "root", :password => "pipopo"},
-      :overwrite => true })
-
-      linux text ks=floppy<Enter>
+       Veewee::Session.declare( {
+        :cpu_count => '1', :memory_size=> '384', 
+        :disk_size => '10140', :disk_format => 'VDI',:disk_size => '10240' ,
+        :os_type_id => 'RedHat',
+        :iso_file => "CentOS-5.5-i386-bin-DVD.iso", :iso_src => "", :iso_md5 => "", :iso_download_timeout => 1000,
+        :boot_wait => "10",:boot_cmd_sequence => [ 
+          		          'linux text ks=http://%IP%:%PORT%/ks.cfg<Enter>' 				  
+          ],
+        :kickstart_port => "7122", :kickstart_timeout => 10000,:kickstart_file => "preseed.cfg",
+        :ssh_login_timeout => "100",:ssh_user => "vagrant", :ssh_password => "vagrant",:ssh_key => "",
+        :ssh_host_port => "2222", :ssh_guest_port => "22",
+        :postinstall_files => [ "postinstall.sh"],:postinstall_timeout => 10000
+         }
+      )

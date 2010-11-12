@@ -1,0 +1,59 @@
+<ai_criteria_manifest>
+    <ai_embedded_manifest>
+        <ai_manifest name="default">
+            <ai_pkg_repo_default_publisher>
+                <main url="http://pkg.opensolaris.org/release" 
+publisher="opensolaris.org"/>
+                <mirror url=""/>
+            </ai_pkg_repo_default_publisher>
+
+            <!--
+                By default the latest build available, in the specified IPS
+                repository, is installed.
+                If another build is required, the build number has
+                to be appended to the 'entire' package in following
+                form:
+
+                <pkg_name="entire@0.5.11-0.build#/>
+            -->
+            <ai_install_packages>
+        <!--
+            Due to dependency issues, entire must be listed first
+            in the package list, followed by SUNWcsd, and then SUNWcs.
+            Any additional packages must be listed after SUNWcs.
+        -->
+        <pkg name="entire"/>
+        <pkg name="SUNWcsd"/>
+        <pkg name="SUNWcs"/>
+        <pkg name="babel_install"/>
+            </ai_install_packages>
+            <ai_uninstall_packages>
+            <pkg name="babel_install"/>
+            <pkg name="slim_install"/>
+            </ai_uninstall_packages>
+            <ai_auto_reboot>
+                false
+            </ai_auto_reboot>
+        </ai_manifest>
+    </ai_embedded_manifest>
+    <sc_embedded_manifest name = "AI">
+        <!-- <?xml version='1.0'?>
+        <!DOCTYPE service_bundle SYSTEM "/usr/share/lib/xml/dtd/service_bundle.dtd.1">
+        <service_bundle type="profile" name="name">
+            <service name="ai_properties" version="1" type="service">
+                <instance name="default" enabled="true">
+                    <property_group name="ai" type="application">
+                        <propval name="username" type="astring" value="jack"/>
+            <propval name="userpass" type="astring" value="9Nd/cwBcNWFZg"/>
+                        <propval name="description" type="astring" 
+value="default_user"/>
+                        <propval name="rootpass" type="astring" 
+value="$5$VgppCOxA$ycFmYW4ObRRHhtsGEygDdexk5bugqgSiaSR9niNCouC"/>
+                        <propval name="timezone" type="astring" value="US/Pacific"/>
+                    </property_group>
+                </instance>
+             </service>
+        </service_bundle>
+    -->
+    </sc_embedded_manifest>
+</ai_criteria_manifest>

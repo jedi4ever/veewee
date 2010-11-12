@@ -1,30 +1,18 @@
-    thebox.transaction("latest updates", {:checksum => "fixedssh"}) do
-        thebox.execute("yum -y update ")        
-        thebox.execute("yum -y upgrade") 
-        #to have the new kernel installed , we need to reboot
-        thebox.execute("shutdown -h now") 
-        thebox.wait_for_state("poweroff")
-        thebox.up 
-        thebox.when_ssh_login_works(sudoparams) do
-             Shellutil.comment("ssh login works, let us get on with it")
-         end 
-    end     
-    
 
-   Shellutil.comment("installing ruby enterprise") 
-   thebox.transaction("enterprise ruby installed") do
-      thebox.execute("yum -y install gcc-c++ zlib-devel openssl-devel readline-devel sqlite3-devel")        
-      #thebox.execute("echo vagrant | sudo -S apt-get -y install zlib1g-dev libssl-dev libreadline5-dev")        
-      thebox.execute("wget http://rubyforge.org/frs/download.php/71096/ruby-enterprise-1.8.7-2010.02.tar.gz")        
-      thebox.execute("tar xzvf ruby-enterprise-1.8.7-2010.02.tar.gz ")        
-      thebox.execute("./ruby-enterprise-1.8.7-2010.02/installer -a /opt/ruby")        
-      thebox.execute("echo 'PATH=$PATH:/opt/ruby/bin/'> /etc/profile.d/rubyenterprise.sh")        
- end
+yum -y update
+yum -y upgrade
 
-   Shellutil.comment("installing chef") 
-   thebox.transaction("chef gem installed") do
-     thebox.execute("/opt/ruby/bin/gem install chef")        
-    end
+yum -y install gcc-c++ zlib-devel openssl-devel readline-devel sqlite3-devel     
+      
+wget http://rubyforge.org/frs/download.php/71096/ruby-enterprise-1.8.7-2010.02.tar.gz    
+tar xzvf ruby-enterprise-1.8.7-2010.02.tar.gz   
+./ruby-enterprise-1.8.7-2010.02/installer -a /opt/ruby       
+echo 'PATH=$PATH:/opt/ruby/bin/'> /etc/profile.d/rubyenterprise.sh   
+
+chef gem installed
+/opt/ruby/bin/gem install chef      
+
+exit
 
    Shellutil.comment("making the box vagrant ready") 
    thebox.transaction("vagrant ready",{:checksum => Time.now.hash.to_s }) do
