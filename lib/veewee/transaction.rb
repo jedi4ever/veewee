@@ -1,7 +1,10 @@
 module Veewee
   class Transaction
 
-  def transaction(name,options= { :checksum => "nochecksum"}, &block)
+  def transaction(name,params, &block)
+  end
+  
+  def transaction2(name,options= { :checksum => "nochecksum"}, &block)
      if @provider.snapshot_exists(@vmname,name+"-"+options[:checksum])
         @provider.load_snapshot_vmachine(@vmname,name+"-"+options[:checksum])
       else

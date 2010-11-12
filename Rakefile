@@ -13,8 +13,9 @@ def check_environment
     require 'net/ssh'
     require 'virtualbox'
     require 'webrick'
+    require 'popen4'
   rescue LoadError
-    puts "hmm you had vagrant installed but are missing the net-ssh or virtualbox gem: gem instal virtualbox net-ssh"
+    puts "hmm you had vagrant installed but are missing the net-ssh or virtualbox gem: gem instal virtualbox net-ssh POpen4"
     exit
   end
 end

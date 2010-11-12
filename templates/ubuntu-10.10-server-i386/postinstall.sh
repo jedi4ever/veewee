@@ -1,43 +1,39 @@
+#http://adrianbravo.tumblr.com/post/644860401
+
 #Updating the box
 apt-get -y update
 #apt-get -y upgrade
-
-#Shellutil.comment("installing ruby enterprise")
+apt-get -y remove apparmor
 apt-get -y install linux-headers-$(uname -r) build-essential
 apt-get -y install zlib1g-dev libssl-dev libreadline5-dev
+apt-get clean
 
+#Setting up sudo
+cp /etc/sudoers /etc/sudoers.orig
+sed -i -e 's/%admin ALL=(ALL) ALL/%admin ALL=NOPASSWD:ALL/g' /etc/sudoers
+
+#Installing ruby
 wget http://rubyforge.org/frs/download.php/71096/ruby-enterprise-1.8.7-2010.02.tar.gz
 tar xzvf ruby-enterprise-1.8.7-2010.02.tar.gz
 ./ruby-enterprise-1.8.7-2010.02/installer -a /opt/ruby
 echo 'PATH=$PATH:/opt/ruby/bin/'> /etc/profile.d/rubyenterprise.sh
 
+#Installing chef
 /opt/ruby/bin/gem install chef
 
-mkdir $HOME/.ssh; cd .ssh ;
-wget 'http://github.com/mitchellh/vagrant/raw/master/keys/vagrant.pub' -O authorized_keys
+#Installing vagrant keys
+mkdir /home/vagrant/.ssh
+chmod 700 /home/vagrant/.ssh
+cd /home/vagrant/.ssh
+wget --no-check-certificate 'http://github.com/mitchellh/vagrant/raw/master/keys/vagrant.pub' -O authorized_keys
+chown -R vagrant /home/vagrant/.ssh
 
-#/Applications/VirtualBox.app/Contents/MacOS/VBoxGuestAdditions.iso
-#echo vagrant|sudo -S mount /dev/dvd /mnt
-#echo vagrant|sudo -S sh /mnt/VBoxLinuxAdditions-x86.run
+#INstalling the virtualbox guest additions
+cd /tmp
+wget http://download.virtualbox.org/virtualbox/3.2.8/VBoxGuestAdditions_3.2.8.iso   
+mount -o loop VBoxGuestAdditions_3.2.8.iso /mnt
+sh /mnt/VBoxLinuxAdditions-x86.run
+umount /mnt
 
+shutdown -h now
 exit
-currently vagrant has a problem with the machine up, it calculates the wrong port to ssh to poweroff the system      
-thebox.execute("echo vagrant| sudo -S shutdown -h now")
-      thebox.wait_for_state("poweroff")
-      Shellutil.execute("echo 'Vagrant::Config.run do |config|' > /tmp/Vagrantfile")
-      Shellutil.execute("echo '   config.ssh.forwarded_port_key = \"ssh\"' >> /tmp/Vagrantfile") 
-      Shellutil.execute("echo '   config.vm.forward_port(\"ssh\",22,#{host_port})' >> /tmp/Vagran
-tfile")
-      Shellutil.execute("echo 'end' >> /tmp/Vagrantfile")
-      Shellutil.execute("vagrant package --base #{vmname} --include /tmp/Vagrantfile --output /tm
-p/#{vmname}.box", {:progress => "on"})
-
-      #vagrant export disables the machine
-      thebox.ssh_enable_vmachine({:hostport => host_port , :guestport => 22} )
-
-    end
-   #vagrant box add ubuntu package.box
-   #vagrant init ubuntu
-   #vagrant up
-   #vagrant ssh
-

@@ -14,6 +14,7 @@ module Veewee
              def do_GET(request,response)
                      response['Content-Type']='text/plain'
                      response.status = 200
+                     
                      displayfile=File.open(@localfile,'r')
                      content=displayfile.read()
                      response.body=content
@@ -27,7 +28,6 @@ module Veewee
       
       web_dir=options[:web_dir]
       filename=filename
-      
       s= HTTPServer.new(:Port => options[:port])
       s.mount("/#{filename}", FileServlet,File.join(web_dir,filename))
       trap("INT"){s.shutdown}
@@ -35,5 +35,3 @@ module Veewee
     end
   end
 end
-
-
