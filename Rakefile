@@ -5,7 +5,8 @@ def check_environment
   begin 
     require 'vagrant'
   rescue LoadError
-    puts "you need to install depedencies: gem instal vagrant"
+    puts "you need to install depedencies:"
+    puts "gem install vagrant"
     exit
   end
   
@@ -15,7 +16,8 @@ def check_environment
     require 'webrick'
     require 'popen4'
   rescue LoadError
-    puts "hmm you had vagrant installed but are missing the net-ssh or virtualbox gem: gem instal virtualbox net-ssh POpen4"
+    puts "hmm you had vagrant installed but are missing the net-ssh or virtualbox gem"
+    puts "gem install virtualbox net-ssh POpen4"
     exit
   end
 end
