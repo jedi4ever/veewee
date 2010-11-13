@@ -43,7 +43,7 @@ module Veewee
         puts "this template can not be found, use rake templates to list all templates"
       end
       if File.directory?(File.join(@definition_dir,boxname))
-        puts "this definition already exists, use rake undefine['#{name}'] to remove this definition"
+        puts "this definition already exists, use rake undefine['#{boxname}'] to remove this definition"
       else
         FileUtils.mkdir(File.join(@definition_dir,boxname))
         FileUtils.cp_r(File.join(@template_dir,template_name,'.'),File.join(@definition_dir,boxname))
