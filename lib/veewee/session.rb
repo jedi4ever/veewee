@@ -29,6 +29,7 @@ module Veewee
         :kickstart_port => "7122", :kickstart_ip => self.local_ip, :kickstart_timeout => 10000,:kickstart_file => "preseed.cfg",
         :ssh_login_timeout => "100",:ssh_user => "vagrant", :ssh_password => "vagrant",:ssh_key => "",
         :ssh_host_port => "2222", :ssh_guest_port => "22",
+        :sudo_cmd => "echo '%p'|sudo -S sh '%f'",
         :postinstall_files => [ "postinstall.sh"],:postinstall_timeout => 10000}
         
         @definition=defaults.merge(options)
@@ -193,7 +194,12 @@ module Veewee
                  filename=File.join(@definition_dir,boxname,postinstall_file)
                  transaction(boxname,"#{counter}-#{filename}","postinstall") do
                      Veewee::Ssh.transfer_file("localhost",filename,ssh_options)
-                     Veewee::Ssh.execute("localhost","echo #{@definition[:ssh_password]}|sudo -S sh #{postinstall_file}",ssh_options)
+                     command=@definition[:sudo_cmd]
+                     command.gsub!(/%p/,"#{@definition[:ssh_password]}")
+                    command.gsub!(/%u/,"#{@definition[:ssh_user]}")
+                    command.gsub!(/%f/,"#{postinstall_file}")
+
+                     Veewee::Ssh.execute("localhost","#{command}",ssh_options)
                      counter+=1
                  end
                end  
@@ -241,7 +247,7 @@ module Veewee
       if !vm.nil?
         puts "box already exists"
         #vm.stop
-        vm.destroy
+        #vm.destroy
       end
 
       #Verifying the os.id with the :os_type_id specified
