@@ -31,6 +31,7 @@ module Veewee
         :ssh_login_timeout => "100",:ssh_user => "vagrant", :ssh_password => "vagrant",:ssh_key => "",
         :ssh_host_port => "2222", :ssh_guest_port => "22",
         :sudo_cmd => "echo '%p'|sudo -S sh '%f'",
+        :shutdown_cmd => "shutdown -H",
         :postinstall_files => [ "postinstall.sh"],:postinstall_timeout => 10000}
         
         @definition=defaults.merge(options)
@@ -131,7 +132,7 @@ module Veewee
       #Now we have to load the definition (reads definition.rb)
       load_definition(boxname)
       
-      Veewee::Export.vagrant(boxname,@box_dir)
+      Veewee::Export.vagrant(boxname,@box_dir,@definition)
     end
     
     def self.remove_box(boxname)
