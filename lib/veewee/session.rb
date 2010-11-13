@@ -102,6 +102,13 @@ module Veewee
         puts "Not yet implemented"
     end
 
+    def self.export_box(boxname)
+      #Now we have to load the definition (reads definition.rb)
+      load_definition(boxname)
+      
+      Veewee::Export.vagrant(boxname,@box_dir)
+    end
+    
     def self.remove_box(boxname)
         puts "Not yet implemented"
     end

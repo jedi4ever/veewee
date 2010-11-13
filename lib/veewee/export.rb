@@ -3,12 +3,15 @@ module Veewee
 
 #    Shellutil.execute("vagrant package --base #{vmname} --include /tmp/Vagrantfile --output /tmp/#{vmname}.box", {:progress => "on"})    
     
-    def self.vagrant_box(boxname,boxdir)
+    def self.vagrant(boxname,boxdir)
+      box_path=File.join(boxdir,boxname+".box")
       puts "To export the box you just created to vagrant, use the following commands:"
-      puts "vagrant package --base '#{boxname}' --output #{boxname}.box'"
+      puts "vagrant package --base '#{boxname}' --output '#{box_path}'"
       puts ""
       puts "To import it into vagrant type:"
-      puts "vagrant box add '#{boxname}' '#{boxname}.box'"
+      puts "vagrant box add '#{boxname}' '#{box_path}'"
+      puts ""
+      puts "To use it:"
       puts "vagrant init '#{boxname}'"
       puts "vagrant up"
       puts "vagrant ssh"

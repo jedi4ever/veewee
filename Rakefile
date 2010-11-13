@@ -29,6 +29,7 @@ check_environment
 veewee_dir= File.dirname(__FILE__)
 definition_dir= File.expand_path(File.join(veewee_dir, "definitions"))
 lib_dir= File.expand_path(File.join(veewee_dir, "lib"))
+box_dir= File.expand_path(File.join(veewee_dir, "boxes"))
 template_dir=File.expand_path(File.join(veewee_dir, "templates"))
 vbox_dir=File.expand_path(File.join(veewee_dir, "tmp"))
 iso_dir=File.expand_path(File.join(veewee_dir, "iso"))
@@ -39,7 +40,7 @@ Dir.glob(File.join(lib_dir, '**','*.rb')).each {|f|
   require f  }
 
 #Initialize
-Veewee::Session.setenv({:veewee_dir => veewee_dir, :definition_dir => definition_dir, :template_dir => template_dir, :iso_dir => iso_dir})
+Veewee::Session.setenv({:veewee_dir => veewee_dir, :definition_dir => definition_dir, :template_dir => template_dir, :iso_dir => iso_dir, :box_dir => box_dir})
 
 desc 'Default: list templates'
 task :default => [:templates]
@@ -84,6 +85,15 @@ end
 desc 'List boxes'
 task :boxes do
     Veewee::Session.list_boxes
+end
+
+desc 'Export box'
+task :export, [:boxname] do |t,args|
+  if args.to_hash.size!=1
+    puts "needs one arguments: rake export['boxname']"
+    exit
+  end
+    Veewee::Session.export_box(args.boxname)
 end
 
 desc 'Remove box'

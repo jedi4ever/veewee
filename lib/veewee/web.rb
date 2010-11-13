@@ -30,7 +30,10 @@ module Veewee
       filename=filename
       s= HTTPServer.new(:Port => options[:port])
       s.mount("/#{filename}", FileServlet,File.join(web_dir,filename))
-      trap("INT"){s.shutdown}
+      trap("INT"){
+          s.shutdown
+          exit
+        }
       s.start
     end
   end
