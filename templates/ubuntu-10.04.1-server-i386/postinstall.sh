@@ -17,6 +17,8 @@ wget http://rubyforge.org/frs/download.php/71096/ruby-enterprise-1.8.7-2010.02.t
 tar xzvf ruby-enterprise-1.8.7-2010.02.tar.gz
 ./ruby-enterprise-1.8.7-2010.02/installer -a /opt/ruby
 echo 'PATH=$PATH:/opt/ruby/bin/'> /etc/profile.d/rubyenterprise.sh
+rm -rf ./ruby-enterprise-1.8.7-2010.02/
+rm ruby-enterprise-1.8.7-2010.02.tar.gz
 
 #Installing chef
 /opt/ruby/bin/gem install chef
@@ -29,11 +31,13 @@ wget --no-check-certificate 'http://github.com/mitchellh/vagrant/raw/master/keys
 chown -R vagrant /home/vagrant/.ssh
 
 #INstalling the virtualbox guest additions
+VBOX_VERSION=$(cat /home/vagrant/.vbox_version)
+#INstalling the virtualbox guest additions
 cd /tmp
-wget http://download.virtualbox.org/virtualbox/3.2.8/VBoxGuestAdditions_3.2.8.iso   
-mount -o loop VBoxGuestAdditions_3.2.8.iso /mnt
+wget http://download.virtualbox.org/virtualbox/$VBOX_VERSION/VBoxGuestAdditions_$VBOX_VERSION.iso   
+mount -o loop VBoxGuestAdditions_$VBOX_VERSION.iso /mnt
 sh /mnt/VBoxLinuxAdditions-x86.run
 umount /mnt
 
-shutdown -h now
+rm VBoxGuestAdditions_$VBOX_VERSION.iso
 exit
