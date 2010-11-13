@@ -3,6 +3,11 @@
 module Veewee
   class Shell
  
+    def self.execute2(command,options = {})
+
+      IO.popen("#{command}") { |f| print f }
+    end
+    
     #pty allows you to gradually see the output of a local command
     #http://www.shanison.com/?p=415
       def self.execute(command, options = {} )
@@ -20,7 +25,7 @@ module Veewee
       end
 
       #occassinally fails with 'no child processes
-      def self.execute2(command, options = {} )
+      def self.execute3(command, options = {} )
         defaults= { :port => "22", :exitcode => "0", :user => "root"}
           options=defaults.merge(options) 
 

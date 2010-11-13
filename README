@@ -16,13 +16,14 @@ ALPHA CODE: -> you're on your own....
 Installation:
 =============
 0) To sandbox everything, and avoid root acces , source the veewee.ENV file .
-   This will set your VBOX_HOME_DIR=$VEEWEE/tmp, GEM_PATH=$VEEWEE, GEM_HOME=$VEEWEE
+   This will set your VBOX_HOME_DIR=$VEEWEE/tmp, GEM_PATH=$VEEWEE/gems, GEM_HOME=$VEEWEE/gems
 $ git clone https://github.com/jedi4ever/veewee.git
 $ cd veewee
 $ . veewee.ENV
 
 1) Install all the necessary gems (sandboxes in $VEEWEE/gems)
-$ gem install rake virtualbox vagrant popen4 net-ssh net-scp
+$ gem install rake vagrant popen4
+-> vagrant installs virtualbox,net-ssh, net-scp too
 
 2) List all templates
 $ rake templates
@@ -62,7 +63,7 @@ Veewee::Session.declare( {
   :kickstart_port => "7122", :kickstart_timeout => "10000",:kickstart_file => "preseed.cfg",
   :ssh_login_timeout => "10000",:ssh_user => "vagrant", :ssh_password => "vagrant",:ssh_key => "",
   :ssh_host_port => "2222", :ssh_guest_port => "22",
-  :sudo_cmd => "echo %p|sudo -S sh %f",
+  :sudo_cmd => "echo '%p'|sudo -S sh '%f'",
   :shutdown_cmd => "shutdown -H",
   :postinstall_files => [ "postinstall.sh"],:postinstall_timeout => "10000"
    }

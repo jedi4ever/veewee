@@ -21,9 +21,6 @@ rm ruby-enterprise-1.8.7-2010.02.tar.gz
 #Installing chef
 /opt/ruby/bin/gem install chef
 
-#Enable sudo 
-echo "vagrant        ALL=(ALL)       NOPASSWD: ALL" >> /etc/sudoers
-# Defaults requiretty
 
 #Installing vagrant keys
 mkdir /home/vagrant/.ssh

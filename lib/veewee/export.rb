@@ -8,7 +8,6 @@ module Veewee
       
       #Check if box already exists
       vm=VirtualBox::VM.find(boxname)
-      
       #We need to shutdown first
       if vm.running?
         puts "Vagrant requires the box to be shutdown, before it can export"
@@ -37,7 +36,7 @@ module Veewee
       export_command="vagrant package --base '#{boxname}' --output '#{box_path}'"
       puts "Manually type:"
       puts "#{export_command}"
-      #Veewee::Shell.execute("#{export_command}") hmm, needs to get the gem_home set?
+      Veewee::Shell.execute("#{export_command}") #hmm, needs to get the gem_home set?
       puts
       
       puts "To import it into vagrant type:"

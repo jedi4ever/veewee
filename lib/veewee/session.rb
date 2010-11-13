@@ -389,7 +389,6 @@ module Veewee
       end
     end
     
-
     
     def self.list_ostypes
       puts

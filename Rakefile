@@ -1,5 +1,5 @@
-ENV['GEM_PATH']=File.dirname(__FILE__)
-ENV['GEM_HOME']=File.dirname(__FILE__)
+ENV['GEM_PATH']=File.join(File.dirname(__FILE__),"gems")
+ENV['GEM_HOME']=File.join(File.dirname(__FILE__),"gems")
 
 def check_environment
   begin 
