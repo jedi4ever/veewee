@@ -32,9 +32,14 @@ module Veewee
       path1=Pathname.new(full_path)
       path2=Pathname.new(Dir.pwd)
       box_path=path1.relative_path_from(path2).to_s
+      
+      if File.exists?("#{box_path}")
+        puts "box #{boxname} already exists"
+        exit
+      end
+      
       puts "Excuting vagrant voodoo:"
       export_command="vagrant package --base '#{boxname}' --output '#{box_path}'"
-      puts "Manually type:"
       puts "#{export_command}"
       Veewee::Shell.execute("#{export_command}") #hmm, needs to get the gem_home set?
       puts
