@@ -76,7 +76,9 @@ $ rake build['myubuntubox]
 6) Build the new box:
 $ rake build['myubuntubox]
 
--> This will create the machine according to the definition.rb
+-> This will create a machine + disk according to the definition.rb
+-> Note: :os_type_id = The internal Name Virtualbox uses for that Distribution
+-> Mount the ISO File :iso_file
 -> Boot up the machine and wait for :boot_time
 -> Send the keystrokes in :boot_cmd_sequence
 -> Startup a webserver to wait for a request for the :kickstart_file
