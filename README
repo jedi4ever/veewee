@@ -81,7 +81,7 @@ $ rake build['myubuntubox]
 -> Mount the ISO File :iso_file
 -> Boot up the machine and wait for :boot_time
 -> Send the keystrokes in :boot_cmd_sequence
--> Startup a webserver to wait for a request for the :kickstart_file
+-> Startup a webserver on :kickstart_port to wait for a request for the :kickstart_file
 -> Wait for ssh login to work with :ssh_user , :ssh_password
 -> Sudo execute the :postinstall_files
 
@@ -112,5 +112,6 @@ FUTURE IDEAS:
 - provide for more failsafe execution, testing parameters
 - use more virtualbox ruby instead of calling the VBoxManage command
 - Verify the installation with cucumber-nagios (ssh functionality)
+- Do the same for Vmware Fusion
 
 BUGS: Lots = Like I said it currently works for me, on my machine and with the correct magic sequence :)
