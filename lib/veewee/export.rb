@@ -1,10 +1,21 @@
+require 'pathname'
 module Veewee
   class Export
 
 #    Shellutil.execute("vagrant package --base #{vmname} --include /tmp/Vagrantfile --output /tmp/#{vmname}.box", {:progress => "on"})    
     
     def self.vagrant(boxname,boxdir)
-      box_path=File.join(boxdir,boxname+".box")
+      
+      #Check if box already exists
+      
+      #We need to shutdown first
+      
+      #Wait for state poweroff
+      #Vagrant requires a relative path for output of boxes
+      full_path=File.join(boxdir,boxname+".box")
+      path1=Pathname.new(full_path)
+      path2=Pathname.new(Dir.pwd)
+      box_path=path1.relative_path_from(path2).to_s
       puts "To export the box you just created to vagrant, use the following commands:"
       puts "vagrant package --base '#{boxname}' --output '#{box_path}'"
       puts ""

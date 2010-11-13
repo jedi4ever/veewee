@@ -102,6 +102,27 @@ module Veewee
         puts "Not yet implemented"
     end
 
+    def self.verify_iso(filename)
+      if File.exists?(File.join(@iso_dir,filename))
+        puts "isofile #{filename} is available"
+      else
+        full_path=File.join(@iso_dir,filename)
+        path1=Pathname.new(full_path)
+        path2=Pathname.new(Dir.pwd)
+        rel_path=path1.relative_path_from(path2).to_s
+        
+        puts
+        puts "Isofile is not found. The definition suggested the following URL to download:"
+        puts "-url: #{@definition[:iso_src]}"
+        puts "-md5: #{@definition[:iso_md5]}"
+        puts ""
+        puts "type:"
+        puts "curl '#{@definition[:iso_src]}' -o '#{rel_path}'"
+        puts "md5 '#{rel_path}' "
+      end
+      exit
+    end
+
     def self.export_box(boxname)
       #Now we have to load the definition (reads definition.rb)
       load_definition(boxname)
@@ -125,6 +146,8 @@ module Veewee
         
         #Suppress those annoying virtualbox messages
         suppress_messages  
+        
+        verify_iso(@definition[:iso_file])
         
         transaction(boxname,"initial","initial") do
         
