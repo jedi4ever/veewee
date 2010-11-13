@@ -17,6 +17,8 @@ Installation:
 =============
 0) To sandbox everything, and avoid root acces , source the veewee.ENV file .
    This will set your VBOX_HOME_DIR=$VEEWEE/tmp, GEM_PATH=$VEEWEE, GEM_HOME=$VEEWEE
+$ git clone https://github.com/jedi4ever/veewee.git
+$ cd veewee
 $ . veewee.ENV
 
 1) Install all the necessary gems (sandboxes in $VEEWEE/gems)
