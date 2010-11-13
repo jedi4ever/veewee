@@ -101,6 +101,11 @@ task :remove_box, [:boxname] do |t,args|
     Veewee::Session.remove_box(args.boxname)
 end
 
+desc 'List ostypes available'
+task :list_ostypes do |t,args|
+    Veewee::Session.list_ostypes
+end
+
 desc 'Clean all unfinished builds'
 task :clean do 
     Veewee::Session.clean

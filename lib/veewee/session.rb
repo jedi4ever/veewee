@@ -120,8 +120,9 @@ module Veewee
         puts "curl -C - -L '#{@definition[:iso_src]}' -o '#{rel_path}'"
         puts "md5 '#{rel_path}' "
         puts 
+        exit
       end
-      exit
+  
     end
 
     def self.export_box(boxname)
@@ -243,8 +244,21 @@ module Veewee
         vm.destroy
       end
 
+      #Verifying the os.id with the :os_type_id specified
+      matchfound=false
+      VirtualBox::Global.global.lib.virtualbox.guest_os_types.collect { |os|
+        if @definition[:os_type_id] == os.id
+          matchfound=true
+        end
+      }
+      unless matchfound
+        puts "The ostype: #{@definition[:os_type_id]} is not available in your Virtualbox version"
+        exit
+      end
+
       #TODO One day ruby-virtualbox will be able to handle this creation
       #Box does not exist, we can start to create it
+
       command="#{@vboxcmd} createvm --name '#{boxname}' --ostype '#{@definition[:os_type_id]}' --register"    
       #Exec and system stop the execution here
       Veewee::Shell.execute("#{command}")
@@ -358,6 +372,19 @@ module Veewee
       else
         yield
       end
+    end
+    
+    #VirtualBox::Global.global.lib.virtualbox.version
+    
+    def self.list_ostypes
+      puts
+      puts "Available os types:"
+      VirtualBox::Global.global.lib.virtualbox.guest_os_types.collect { |os|
+        puts "#{os.id}: #{os.description}"
+      }
+      
+      puts 
+      
     end
     
     def transaction2(boxname,name,checksum_params, &block)
