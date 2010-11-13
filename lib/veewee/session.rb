@@ -117,8 +117,9 @@ module Veewee
         puts "-md5: #{@definition[:iso_md5]}"
         puts ""
         puts "type:"
-        puts "curl '#{@definition[:iso_src]}' -o '#{rel_path}'"
+        puts "curl -C - -L '#{@definition[:iso_src]}' -o '#{rel_path}'"
         puts "md5 '#{rel_path}' "
+        puts 
       end
       exit
     end
