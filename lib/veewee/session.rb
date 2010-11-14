@@ -201,12 +201,12 @@ module Veewee
               File.open(versionfile, 'w') {|f| f.write("#{VirtualBox::Global.global.lib.virtualbox.version}") }
               Veewee::Ssh.transfer_file("localhost",versionfile,ssh_options)
               
-               counter=0
+               counter=1
                @definition[:postinstall_files].each do |postinstall_file|
                  
                  filename=File.join(@definition_dir,boxname,postinstall_file)   
                  checksum= Digest::MD5.hexdigest(File.read(filename))        
-                 transaction(boxname,"#{counter}-#{filename}",checksum) do
+                 transaction(boxname,"#{counter}-#{postinstall_file}",checksum) do
                    
                     Veewee::Ssh.transfer_file("localhost",filename,ssh_options)
                     command=@definition[:sudo_cmd]
@@ -389,18 +389,23 @@ module Veewee
     
     def self.transaction(boxname,name,checksum, &block)
       vm=VirtualBox::VM.find(boxname)
+ 
       if vm.nil?
         #this is our first installation
         yield
+        vm=VirtualBox::VM.find(boxname)
       end
       if vm.find_snapshot(name+"-"+checksum)
-        puts "skipping - snapshot already there"
+        #load that snapshot if found
+        puts "Fast forwarding - snapshot already there"
       else
         #check if we have older snapshots (otherwise delete them)
+        #vm.root_snapshot.children
+        
         yield
         puts "taking snapshot #{boxname}-#{name}-#{checksum}"
         vm.take_snapshot(name+"-"+checksum,"created by veewee")
-        vm.reload
+        #vm.reload
       end
     end
     
