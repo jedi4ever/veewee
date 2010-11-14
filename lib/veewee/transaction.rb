@@ -5,25 +5,25 @@ module Veewee
   end
   
   def transaction2(name,options= { :checksum => "nochecksum"}, &block)
-     if @provider.snapshot_exists(@vmname,name+"-"+options[:checksum])
-        @provider.load_snapshot_vmachine(@vmname,name+"-"+options[:checksum])
+     if snapshot_exists(@vmname,name+"-"+options[:checksum])
+        load_snapshot_vmachine(@vmname,name+"-"+options[:checksum])
       else
-        if @provider.snapshot_version_exists(@vmname,name)
-          @provider.rollback_snapshot(@vmname,name)
+        if snapshot_version_exists(@vmname,name)
+          rollback_snapshot(@vmname,name)
           #rollback to snapshot prior to this one
         end
         yield
-        @provider.create_snapshot_vmachine(@vmname,name+"-"+options[:checksum])
+        create_snapshot_vmachine(@vmname,name+"-"+options[:checksum])
       end
     #end
   end
 
   def self.remove_snapshot_vmachine(vmname,snapname)
-    Shellutil.execute("VBoxManage snapshot '#{vmname}' delete '#{snapname}'")
+    Veewee::Shell.execute("VBoxManage snapshot '#{vmname}' delete '#{snapname}'")
   end
 
   def self.create_snapshot_vmachine(vmname,snapname)
-    Shellutil.execute("VBoxManage snapshot '#{vmname}' take '#{snapname}'")
+    Veewee::Shell.execute("VBoxManage snapshot '#{vmname}' take '#{snapname}'")
   end
 
   def self.load_snapshot_vmachine(vmname,snapname)
@@ -32,10 +32,10 @@ module Veewee
       stop_vmachine(vmname)
     end
 
-    Shellutil.execute("VBoxManage snapshot '#{vmname}' restore '#{snapname}'")
+    Veewee::Shell.execute("VBoxManage snapshot '#{vmname}' restore '#{snapname}'")
     #sometimes it takes some time to shutdown
     sleep 2
-    Shellutil.execute("VBoxManage startvm '#{vmname}'")
+    Veewee::Shell.execute("VBoxManage startvm '#{vmname}'")
   end
 
   def self.snapshot_exists(vmname,snapname)
@@ -61,7 +61,7 @@ module Veewee
 
     savestate_recover=false
     if (state_vmachine(vmname)=="running")
-      Shellutil.execute("VBoxManage controlvm '#{vmname}' savestate")
+      Veewee::Shell.execute("VBoxManage controlvm '#{vmname}' savestate")
       savestate_recover=true
      end
 
@@ -77,7 +77,7 @@ module Veewee
     
      sleep 2
 
-      Shellutil.execute("VBoxManage startvm '#{vmname}'")
+      Veewee::Shell.execute("VBoxManage startvm '#{vmname}'")
 
       if (savestate_recover)
         #Recovering from savestate nukes the network! This trick seem to work
@@ -85,9 +85,9 @@ module Veewee
         #http://www.virtualbox.org/ticket/5666
         #http://www.virtualbox.org/ticket/5654
         #This is supposed to be fixed: http://www.virtualbox.org/changeset/25205 but alas
-        Shellutil.execute("VBoxManage controlvm '#{vmname}' nic1 nat")
-        Shellutil.execute("VBoxManage controlvm '#{vmname}' setlinkstate1 off")
-        Shellutil.execute("VBoxManage controlvm '#{vmname}' setlinkstate1 on")
+        Veewee::Shell.execute("VBoxManage controlvm '#{vmname}' nic1 nat")
+        Veewee::Shell.execute("VBoxManage controlvm '#{vmname}' setlinkstate1 off")
+        Veewee::Shell.execute("VBoxManage controlvm '#{vmname}' setlinkstate1 on")
         sleep 2
 
         #hmmm, virtualbox => when recovering from a restore , it looses the nat settings!!! So we need to do this again!!
@@ -101,7 +101,7 @@ module Veewee
 
 
     def self.list_snapshots(vmname)
-      snapshotresult=Shellutil.execute("VBoxManage showvminfo --machinereadable '#{vmname}' |grep ^SnapshotName| cut -d '=' -f 2").stdout
+      snapshotresult=Veewee::Shell.execute("VBoxManage showvminfo --machinereadable '#{vmname}' |grep ^SnapshotName| cut -d '=' -f 2").stdout
       snapshotlist=snapshotresult.gsub(/\"/,'').split(/\n/)
       return snapshotlist
     end

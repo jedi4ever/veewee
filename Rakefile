@@ -1,5 +1,6 @@
-ENV['GEM_PATH']=File.join(File.dirname(__FILE__),"gems")
-ENV['GEM_HOME']=File.join(File.dirname(__FILE__),"gems")
+#We set this in the ENV file
+#ENV['GEM_PATH']=File.join(File.dirname(__FILE__),"gems")
+#ENV['GEM_HOME']=File.join(File.dirname(__FILE__),"gems")
 
 def check_environment
   begin 
@@ -34,6 +35,8 @@ template_dir=File.expand_path(File.join(veewee_dir, "templates"))
 vbox_dir=File.expand_path(File.join(veewee_dir, "tmp"))
 tmp_dir=File.expand_path(File.join(veewee_dir, "tmp"))
 iso_dir=File.expand_path(File.join(veewee_dir, "iso"))
+
+#needs to be moved to the config files to be allowed override
 ENV['VBOX_USER_HOME']=vbox_dir
 
 #Load Veewee::Session libraries

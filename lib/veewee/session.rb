@@ -1,3 +1,4 @@
+require 'digest/md5'
 require 'socket'
 require 'net/scp'
 
@@ -154,7 +155,10 @@ module Veewee
         
         verify_iso(@definition[:iso_file])
         
-        transaction(boxname,"initial","initial") do
+        checksum= Digest::MD5.hexdigest(@definition.to_s)
+        puts "Initial: #{checksum}"
+
+        transaction(boxname,"0-initial",checksum) do
         
             #Create the Virtualmachine and set all the memory and other stuff
             create_vm(boxname)
@@ -188,9 +192,10 @@ module Veewee
               #snapshot initial stuff
             end
         end #initial Transaction
+ 
         
         Veewee::Ssh.when_ssh_login_works("localhost",ssh_options) do
-          
+                    
               #Transfer version of Virtualbox to $HOME/.vbox_version
               versionfile=File.join(@tmp_dir,".vbox_version")    
               File.open(versionfile, 'w') {|f| f.write("#{VirtualBox::Global.global.lib.virtualbox.version}") }
@@ -199,8 +204,9 @@ module Veewee
                counter=0
                @definition[:postinstall_files].each do |postinstall_file|
                  
-                 filename=File.join(@definition_dir,boxname,postinstall_file)             
-                 transaction(boxname,"#{counter}-#{filename}","postinstall") do
+                 filename=File.join(@definition_dir,boxname,postinstall_file)   
+                 checksum= Digest::MD5.hexdigest(File.read(filename))        
+                 transaction(boxname,"#{counter}-#{filename}",checksum) do
                    
                     Veewee::Ssh.transfer_file("localhost",filename,ssh_options)
                     command=@definition[:sudo_cmd]
@@ -381,11 +387,20 @@ module Veewee
       Socket.do_not_reverse_lookup = orig
     end
     
-    def self.transaction(boxname,name,checksum_params, &block)
-      if checksum_params=="initial2"
-        puts "skipping"
-      else
+    def self.transaction(boxname,name,checksum, &block)
+      vm=VirtualBox::VM.find(boxname)
+      if vm.nil?
+        #this is our first installation
         yield
+      end
+      if vm.find_snapshot(name+"-"+checksum)
+        puts "skipping - snapshot already there"
+      else
+        #check if we have older snapshots (otherwise delete them)
+        yield
+        puts "taking snapshot #{boxname}-#{name}-#{checksum}"
+        vm.take_snapshot(name+"-"+checksum,"created by veewee")
+        vm.reload
       end
     end
     

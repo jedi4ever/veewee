@@ -21,10 +21,9 @@ rm ruby-enterprise-1.8.7-2010.02.tar.gz
 #Installing chef
 /opt/ruby/bin/gem install chef
 
-
 #Installing vagrant keys
 mkdir /home/vagrant/.ssh
-chmod 600 /home/vagrant/.ssh
+chmod 700 /home/vagrant/.ssh
 cd /home/vagrant/.ssh
 wget --no-check-certificate 'http://github.com/mitchellh/vagrant/raw/master/keys/vagrant.pub' -O authorized_keys
 chown -R vagrant /home/vagrant/.ssh

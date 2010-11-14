@@ -44,6 +44,8 @@ module Veewee
       Veewee::Shell.execute("#{export_command}") #hmm, needs to get the gem_home set?
       puts
       
+      #add_ssh_nat_mapping back!!!!      
+      
       puts "To import it into vagrant type:"
       puts "vagrant box add '#{boxname}' '#{box_path}'"
       puts ""
