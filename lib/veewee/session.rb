@@ -1,6 +1,7 @@
 require 'digest/md5'
 require 'socket'
 require 'net/scp'
+require 'pp'
 
 module Veewee
   class Session
@@ -155,17 +156,19 @@ module Veewee
         
         verify_iso(@definition[:iso_file])
         
-        checksum= Digest::MD5.hexdigest(@definition.to_s)
-        puts "Initial: #{checksum}"
+        checksums=calculate_checksums(@definition,boxname)
 
-        transaction(boxname,"0-initial",checksum) do
+   
+        
+        transaction(boxname,"0-initial",checksums) do
         
             #Create the Virtualmachine and set all the memory and other stuff
             create_vm(boxname)
-
+      
             #Create a disk with the same name as the boxname
             create_disk(boxname)
-       
+          
+             
             #These command actually call the commandline of Virtualbox, I hope to use the virtualbox-ruby library in the future
             add_ide_controller(boxname)
             add_sata_controller(boxname)
@@ -175,8 +178,10 @@ module Veewee
 
             #Starting machine
             #vm.start("vrdp")
+
             start_vm(boxname,"gui")
 
+            
             #waiting for it to boot
             sleep @definition[:boot_wait].to_i
         
@@ -205,8 +210,8 @@ module Veewee
                @definition[:postinstall_files].each do |postinstall_file|
                  
                  filename=File.join(@definition_dir,boxname,postinstall_file)   
-                 checksum= Digest::MD5.hexdigest(File.read(filename))        
-                 transaction(boxname,"#{counter}-#{postinstall_file}",checksum) do
+      
+                 transaction(boxname,"#{counter}-#{postinstall_file}",checksums) do
                    
                     Veewee::Ssh.transfer_file("localhost",filename,ssh_options)
                     command=@definition[:sudo_cmd]
@@ -311,16 +316,17 @@ module Veewee
       #Now check the disks
       #Maybe one day we can use the name, now we have to check location
       #disk=VirtualBox::HardDrive.find(boxname)
-      disk=nil
       location=boxname+"."+@definition[:disk_format].downcase
-             
+      
+      found=false       
       VirtualBox::HardDrive.all.each do |d|
         if !d.location.match(/#{location}/).nil?
-          disk=d
+          found=true
+          break
         end
       end   
 
-      if disk.nil?
+      if !found
         puts "creating new harddrive"
         newdisk=VirtualBox::HardDrive.new
         newdisk.format=@definition[:disk_format]
@@ -328,7 +334,7 @@ module Veewee
 
         newdisk.location=location
         newdisk.save
-        disk=newdisk             
+           
       end
       
     end
@@ -387,29 +393,6 @@ module Veewee
       Socket.do_not_reverse_lookup = orig
     end
     
-    def self.transaction(boxname,name,checksum, &block)
-      vm=VirtualBox::VM.find(boxname)
- 
-      if vm.nil?
-        #this is our first installation
-        yield
-        vm=VirtualBox::VM.find(boxname)
-      end
-      if vm.find_snapshot(name+"-"+checksum)
-        #load that snapshot if found
-        puts "Fast forwarding - snapshot already there"
-      else
-        #check if we have older snapshots (otherwise delete them)
-        #vm.root_snapshot.children
-        
-        yield
-        puts "taking snapshot #{boxname}-#{name}-#{checksum}"
-        vm.take_snapshot(name+"-"+checksum,"created by veewee")
-        #vm.reload
-      end
-    end
-    
-    
     def self.list_ostypes
       puts
       puts "Available os types:"
@@ -421,20 +404,159 @@ module Veewee
       
     end
     
-    def transaction2(boxname,name,checksum_params, &block)
-      
-       if @provider.snapshot_exists(@vmname,name+"-"+options[:checksum])
-          @provider.load_snapshot_vmachine(@vmname,name+"-"+options[:checksum])
-        else
-          if @provider.snapshot_version_exists(@vmname,name)
-            @provider.rollback_snapshot(@vmname,name)
-            #rollback to snapshot prior to this one
-          end
-          yield
-          @provider.create_snapshot_vmachine(@vmname,name+"-"+options[:checksum])
-        end
-      #end
-    end
+    
+    def self.calculate_checksums(definition,boxname)
 
-  end
-end
+        #TODO: get rid of definitiondir and so one
+        initial=definition.clone
+
+        keys=[:postinstall_files,:sudo_cmd,:postinstall_timeout]
+        keys.each do |key|
+          initial.delete(key)
+        end
+
+        checksums=Array.new
+        checksums << Digest::MD5.hexdigest(initial.to_s)
+
+        postinstall_files=definition[:postinstall_files]
+        unless postinstall_files.nil?
+          for filename in postinstall_files
+            begin
+            full_filename=File.join(@definition_dir,boxname,filename)   
+
+            checksums << Digest::MD5.hexdigest(File.read(full_filename))
+            rescue
+              puts "Error reading postinstall file #{filename} - checksum"
+              exit
+            end
+          end
+        end
+
+        pp checksums
+        return checksums
+
+      end
+
+    
+      def self.transaction(boxname,step_name,checksums,&block)
+
+        current_step_nr=step_name.split("-")[0].to_i
+
+        vm=VirtualBox::VM.find(boxname)  
+        snapnames=Array.new
+
+        #If vm exists , look for snapshots
+        if !vm.nil?
+          start_snapshot=vm.root_snapshot
+          snapshot=start_snapshot
+          counter=0
+
+          while (snapshot!=nil)
+        	  #puts "#{counter}:#{snapshot.name}"
+         	  snapnames[counter]=snapshot.name
+            counter=counter+1  
+            snapshot=snapshot.children[0]
+          end 
+        end
+
+        #find the last snapshot matching the state
+        counter=[snapnames.length, checksums.length].min-1
+        last_good_state=counter
+        for c in 0..counter do
+            #puts "#{c}- #{snapnames[c]} - #{checksums[c]}"
+            if snapnames[c]!=checksums[c]
+      #        puts "we found a bad state"
+              last_good_state=c-1
+              break
+            end  
+        end
+        puts "Last good state: #{last_good_state}"
+
+        if (current_step_nr < last_good_state)
+            puts "fast forwarding #{step_name}"
+            return
+        end
+
+        if (current_step_nr == last_good_state)
+            if vm.running?
+              vm.stop
+            end
+
+            #invalidate later snapshots
+            #puts "remove old snapshots"
+
+            for s in (last_good_state+1)..(snapnames.length-1)
+              puts "removing snapname #{snapnames[s]}"
+              snapshot=vm.find_snapshot(snapnames[s])
+              snapshot.destroy
+              #puts snapshot
+            end
+
+            vm.reload
+            puts "action load #{step_name}"
+            #TODO:Restore snapshot!!!
+            vm.start
+
+        end
+
+        if (current_step_nr > last_good_state)
+
+          if (last_good_state==-1)
+            #no initial snapshot is found, clean machine!
+            vm=VirtualBox::VM.find(boxname) 
+ 
+            if !vm.nil?
+              if vm.running?
+                puts "stopping machine"
+                vm.stop
+                while vm.running?
+                  sleep 1
+                end
+              end
+              
+              #detaching cdroms
+              vm.medium_attachments.each do |m|
+                if m.type==:dvd
+                  puts "detaching dvd"
+                  m.detach
+                end
+              end
+              
+              vm.reload
+              puts "destroying machine+disks"
+              #:destroy_medium => :delete,  will delete machine + all media attachments
+              vm.destroy(:destroy_medium => :delete)
+              #vm.destroy(:destroy_image => true)
+              
+              #if the disk was not attached when the machine was destroyed we also need to delete the disk
+              location=boxname+"."+@definition[:disk_format].downcase
+              found=false       
+              VirtualBox::HardDrive.all.each do |d|
+                if !d.location.match(/#{location}/).nil?
+                  d.destroy(true)
+                  break
+                end
+              end     
+            end
+              
+          end
+
+          puts "(re-)executing step #{step_name}"
+          
+         
+          yield
+          puts "seeking #{boxname}"
+          #Need to look it up again because if it was an initial load
+          vm=VirtualBox::VM.find(boxname) 
+          puts "about to snapshot #{vm}"
+          #take snapshot after succesful execution
+          vm.take_snapshot(step_name,"snapshot taken by veewee")
+
+        end   
+
+        #pp snapnames
+      end
+      
+
+  end #End Class
+end #End Module
