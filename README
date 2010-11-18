@@ -33,7 +33,7 @@ use rake define['<boxname>','CentOS-5.5-i386']
 use rake define['<boxname>','ubuntu-10.04.1-server-i386']
 use rake define['<boxname>','ubuntu-10.10-server-i386']
 
-3) Define a new box (ex. Ubuntu 10.10 server i386)
+3) Define a new box (ex. Ubuntu 10.10 server i386) - this is essentially making a copy based on the  templates provided above.
 $ rake define['myubuntubox','ubuntu-10.10-server-i386']
 template successfully copied
 
@@ -68,6 +68,8 @@ Veewee::Session.declare( {
   :postinstall_files => [ "postinstall.sh"],:postinstall_timeout => "10000"
    }
 )
+
+If you need to change values in the templates, be sure to run the rake undefine, the rake define again to copy the changes across.
 
 5) Put your isofile inside the $VEEWEE/iso directory or if you don't run
 $ rake build['myubuntubox]
