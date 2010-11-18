@@ -6,7 +6,7 @@ def check_environment
   begin 
     require 'vagrant'
   rescue LoadError
-    puts "you need to install depedencies:"
+    puts "you need to install dependencies:"
     puts "gem install vagrant"
     exit
   end
