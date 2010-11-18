@@ -160,7 +160,7 @@ module Veewee
 
    
         
-        transaction(boxname,"0-initial",checksums) do
+        transaction(boxname,"0-initial-#{checksums[0]}",checksums) do
         
             #Create the Virtualmachine and set all the memory and other stuff
             create_vm(boxname)
@@ -211,7 +211,7 @@ module Veewee
                  
                  filename=File.join(@definition_dir,boxname,postinstall_file)   
       
-                 transaction(boxname,"#{counter}-#{postinstall_file}",checksums) do
+                 transaction(boxname,"#{counter}-#{postinstall_file}-#{checksums[counter]}",checksums) do
                    
                     Veewee::Ssh.transfer_file("localhost",filename,ssh_options)
                     command=@definition[:sudo_cmd]
@@ -459,12 +459,14 @@ module Veewee
           end 
         end
 
+        pp snapnames
+        
         #find the last snapshot matching the state
         counter=[snapnames.length, checksums.length].min-1
         last_good_state=counter
         for c in 0..counter do
             #puts "#{c}- #{snapnames[c]} - #{checksums[c]}"
-            if snapnames[c]!=checksums[c]
+            if !snapnames[c].match("#{c}.*-#{checksums[c]}")
       #        puts "we found a bad state"
               last_good_state=c-1
               break
@@ -494,11 +496,18 @@ module Veewee
 
             vm.reload
             puts "action load #{step_name}"
+            sleep 2
+            goodsnap=vm.find_snapshot(snapnames[last_good_state])
+            goodsnap.restore
+            sleep 2
             #TODO:Restore snapshot!!!
             vm.start
 
         end
 
+        puts "last good state #{last_good_state}"
+
+        
         if (current_step_nr > last_good_state)
 
           if (last_good_state==-1)
@@ -548,10 +557,16 @@ module Veewee
           puts "seeking #{boxname}"
           #Need to look it up again because if it was an initial load
           vm=VirtualBox::VM.find(boxname) 
+          puts "saving state"
+          vm.save_state
+          puts "waiting for 2 secs"
+          sleep 2 #waiting for it to be ok
           puts "about to snapshot #{vm}"
           #take snapshot after succesful execution
           vm.take_snapshot(step_name,"snapshot taken by veewee")
-
+          puts "wait 2 secs before starting"
+          sleep 2 #waiting for it to be started again
+          vm.start
         end   
 
         #pp snapnames

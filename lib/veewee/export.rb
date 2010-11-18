@@ -8,6 +8,10 @@ module Veewee
       
       #Check if box already exists
       vm=VirtualBox::VM.find(boxname)
+      if vm.nil?
+        puts "#{boxname} is not found, maybe you need to build first?"
+        exit
+      end
       #We need to shutdown first
       if vm.running?
         puts "Vagrant requires the box to be shutdown, before it can export"
