@@ -199,20 +199,23 @@ module Veewee
         end #initial Transaction
  
         
-        Veewee::Ssh.when_ssh_login_works("localhost",ssh_options) do
                     
               #Transfer version of Virtualbox to $HOME/.vbox_version
-              versionfile=File.join(@tmp_dir,".vbox_version")    
-              File.open(versionfile, 'w') {|f| f.write("#{VirtualBox::Global.global.lib.virtualbox.version}") }
-              Veewee::Ssh.transfer_file("localhost",versionfile,ssh_options)
+              
+              #versionfile=File.join(@tmp_dir,".vbox_version")    
+              #File.open(versionfile, 'w') {|f| f.write("#{VirtualBox::Global.global.lib.virtualbox.version}") }
+              #Veewee::Ssh.transfer_file("localhost",versionfile,ssh_options)
               
                counter=1
                @definition[:postinstall_files].each do |postinstall_file|
+     
                  
                  filename=File.join(@definition_dir,boxname,postinstall_file)   
       
                  transaction(boxname,"#{counter}-#{postinstall_file}-#{checksums[counter]}",checksums) do
                    
+                   Veewee::Ssh.when_ssh_login_works("localhost",ssh_options) do
+ 
                     Veewee::Ssh.transfer_file("localhost",filename,ssh_options)
                     command=@definition[:sudo_cmd]
                     command.gsub!(/%p/,"#{@definition[:ssh_password]}")
@@ -220,10 +223,13 @@ module Veewee
                     command.gsub!(/%f/,"#{postinstall_file}")
 
                     Veewee::Ssh.execute("localhost","#{command}",ssh_options)
-                    counter+=1
+                    end
+                    
                  end
+                 counter+=1
+                 
                end  
-        end
+     
         
     end
 
@@ -479,6 +485,7 @@ module Veewee
             return
         end
 
+        puts "Current step: #{current_step_nr}"
         if (current_step_nr == last_good_state)
             if vm.running?
               vm.stop
