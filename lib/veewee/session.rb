@@ -194,17 +194,15 @@ module Veewee
                                       :web_dir => File.join(@definition_dir,boxname)})
                                       
             Veewee::Ssh.when_ssh_login_works("localhost",ssh_options) do
-              #snapshot initial stuff
+              #Transfer version of Virtualbox to $HOME/.vbox_version            
+              versionfile=File.join(@tmp_dir,".vbox_version")    
+              File.open(versionfile, 'w') {|f| f.write("#{VirtualBox::Global.global.lib.virtualbox.version}") }
+              Veewee::Ssh.transfer_file("localhost",versionfile,ssh_options)
             end
         end #initial Transaction
  
         
                     
-              #Transfer version of Virtualbox to $HOME/.vbox_version
-              
-              #versionfile=File.join(@tmp_dir,".vbox_version")    
-              #File.open(versionfile, 'w') {|f| f.write("#{VirtualBox::Global.global.lib.virtualbox.version}") }
-              #Veewee::Ssh.transfer_file("localhost",versionfile,ssh_options)
               
                counter=1
                @definition[:postinstall_files].each do |postinstall_file|
