@@ -1,3 +1,8 @@
+require 'rubygems'
+require 'bundler'
+require 'bundler/setup'
+Bundler::GemHelper.install_tasks
+
 #We set this in the ENV file
 #ENV['GEM_PATH']=File.join(File.dirname(__FILE__),"gems")
 #ENV['GEM_HOME']=File.join(File.dirname(__FILE__),"gems")
