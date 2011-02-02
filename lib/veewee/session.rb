@@ -45,10 +45,13 @@ module Veewee
       #puts @veewee_dir
       if File.directory?(File.join(@template_dir,template_name))
       else
-        puts "this template can not be found, use rake templates to list all templates"
+        puts "this template can not be found, use vagrant box templates to list all templates"
+      end
+      if !File.exists?(@definition_dir)
+        FileUtils.mkdir(@definition_dir)
       end
       if File.directory?(File.join(@definition_dir,boxname))
-        puts "this definition already exists, use rake undefine['#{boxname}'] to remove this definition"
+        puts "this definition already exists"
       else
         FileUtils.mkdir(File.join(@definition_dir,boxname))
         FileUtils.cp_r(File.join(@template_dir,template_name,'.'),File.join(@definition_dir,boxname))
@@ -89,7 +92,7 @@ module Veewee
           definition=Dir.glob("#{sub}/definition.rb")
           if definition.length!=0
             name=sub.sub(/#{@template_dir}\//,'')
-            puts "use rake define['<boxname>','#{name}']"
+            puts "vagrant box init '<boxname>' '#{name}'"
           end
         end
       end
@@ -290,6 +293,8 @@ module Veewee
       #Box does not exist, we can start to create it
 
       command="#{@vboxcmd} createvm --name '#{boxname}' --ostype '#{@definition[:os_type_id]}' --register"    
+	puts command
+
       #Exec and system stop the execution here
       Veewee::Shell.execute("#{command}")
       vm=VirtualBox::VM.find(boxname)
@@ -337,6 +342,7 @@ module Veewee
         newdisk.logical_size=@definition[:disk_size].to_i
 
         newdisk.location=location
+	Global.global.system_properties.max_vdi_size=1000000
         newdisk.save
            
       end
