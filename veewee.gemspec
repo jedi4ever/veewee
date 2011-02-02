@@ -6,10 +6,10 @@ Gem::Specification.new do |s|
   s.version     = Veewee::VERSION
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Patrick Debois", "Ringo De Smet"]
-  s.email       = ["patrick.debois@jedi.be"]
-  s.homepage    = "http://rubygems.org/gems/vagrant-rake"
-  s.summary     = "A plugin to create boxes"
-  s.description = "A plugin to create boxes"
+  s.email       = ["patrick.debois@jedi.be", "ringo.desmet@gmail.com"]
+  s.homepage    = "http://github.com/jedi4ever/veewee/"
+  s.summary     = %q{Vagrant box creation}
+  s.description = %q{Expand the 'vagrant box' command to support the creation of base boxes from scratch}
 
   s.required_rubygems_version = ">= 1.3.6"
   s.rubyforge_project         = "veewee"
