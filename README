@@ -1,3 +1,7 @@
+# Veewee is currently broken due to changes in Virtualbox 4.x
+# We will fix them soon and move veewee to a plugin for vagrant
+
+
 VeeWee: the tool to easily build vagrant base boxes
 ===================================================
 Vagrant is a great tool to test new things or changes in a virtual machine(Virtualbox) using either chef or puppet.

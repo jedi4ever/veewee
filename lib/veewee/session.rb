@@ -3,6 +3,7 @@ require 'socket'
 require 'net/scp'
 require 'pp'
 
+
 module Veewee
   class Session
     
@@ -270,12 +271,6 @@ module Veewee
     end
     
     def self.create_vm(boxname)
-      vm=VirtualBox::VM.find(boxname)
-      if !vm.nil?
-        puts "box already exists"
-        #vm.stop
-        #vm.destroy
-      end
 
       #Verifying the os.id with the :os_type_id specified
       matchfound=false
@@ -289,22 +284,39 @@ module Veewee
         exit
       end
 
-      #TODO One day ruby-virtualbox will be able to handle this creation
-      #Box does not exist, we can start to create it
 
-      command="#{@vboxcmd} createvm --name '#{boxname}' --ostype '#{@definition[:os_type_id]}' --register"    
-	puts command
-
-      #Exec and system stop the execution here
-      Veewee::Shell.execute("#{command}")
       vm=VirtualBox::VM.find(boxname)
-      
+
       if (!vm.nil? && !(vm.powered_off?))
           puts "shutting down box"
           #We force it here, maybe vm.shutdown is cleaner
           vm.stop
       end     
 
+      if !vm.nil?
+        puts "box already exists"
+        #vm.stop
+        #vm.destroy
+      else
+        #TODO One day ruby-virtualbox will be able to handle this creation
+        #Box does not exist, we can start to create it
+
+        command="#{@vboxcmd} createvm --name '#{boxname}' --ostype '#{@definition[:os_type_id]}' --register"    
+      	puts command
+
+        #Exec and system stop the execution here
+        Veewee::Shell.execute("#{command}")
+        sleep 3
+        
+      end
+
+      vm=VirtualBox::VM.find(boxname)
+      if vm.nil?
+        puts "we tried to create a box or a box was here before"
+        puts "but now it's gone"
+        exit
+      end
+      
       #Set all params we know 
       vm.memory_size=@definition[:memory_size].to_i
       vm.os_type_id=@definition[:os_type_id]
@@ -337,14 +349,18 @@ module Veewee
 
       if !found
         puts "creating new harddrive"
-        newdisk=VirtualBox::HardDrive.new
-        newdisk.format=@definition[:disk_format]
-        newdisk.logical_size=@definition[:disk_size].to_i
+        
+        #newdisk=VirtualBox::HardDrive.new
+        #newdisk.format=@definition[:disk_format]
+        #newdisk.logical_size=@definition[:disk_size].to_i
 
-        newdisk.location=location
-	Global.global.system_properties.max_vdi_size=1000000
-        newdisk.save
-           
+        #newdisk.location=location
+        ##PDB: again problems with the virtualbox GEM
+	      ##VirtualBox::Global.global.max_vdi_size=1000000
+        #newdisk.save
+        command ="#{@vboxcmd} createhd --filename '#{boxname}.#{@definition[:disk_format]}' --size '#{@definition[:disk_size].to_i}' --format #{@definition[:disk_format]}"
+        Veewee::Shell.execute("#{command}")
+                   
       end
       
     end
@@ -545,8 +561,19 @@ module Veewee
               vm.reload
               puts "destroying machine+disks"
               #:destroy_medium => :delete,  will delete machine + all media attachments
-              vm.destroy(:destroy_medium => :delete)
-              #vm.destroy(:destroy_image => true)
+              #vm.destroy(:destroy_medium => :delete)
+              ##vm.destroy(:destroy_image => true)
+              
+              #VBoxManage unregistervm "test-machine" --delete
+              #because the destroy does remove the .vbox file on 4.0.x
+              #PDB
+              #vm.destroy()
+              
+              command="#{@vboxcmd} unregistervm  '#{boxname}' --delete"    
+            	puts command
+
+              #Exec and system stop the execution here
+              Veewee::Shell.execute("#{command}")
               
               #if the disk was not attached when the machine was destroyed we also need to delete the disk
               location=boxname+"."+@definition[:disk_format].downcase
