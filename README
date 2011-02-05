@@ -26,7 +26,7 @@ $ cd veewee
 $ . veewee.ENV
 
 1) Install all the necessary gems (sandboxes in $VEEWEE/gems)
-$ gem install rake vagrant popen4
+$ gem install rake vagrant popen4 bundler
 -> vagrant installs virtualbox,net-ssh, net-scp too
 
 2) List all templates
