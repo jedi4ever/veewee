@@ -2,6 +2,7 @@ PATH
   remote: .
   specs:
     veewee (0.1.0)
+      highline (~> 1.6.1)
       net-ssh (~> 2.1.0)
       popen4 (~> 0.1.2)
       thor (~> 0.14.6)
@@ -17,6 +18,7 @@ GEM
       abstract (>= 1.0.0)
     ffi (0.6.3)
       rake (>= 0.8.7)
+    highline (1.6.1)
     i18n (0.5.0)
     json (1.4.6)
     mario (0.0.6)
@@ -46,6 +48,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  highline
   net-ssh
   popen4
   thor

@@ -11,25 +11,28 @@ Veewee tries to automate this and to share the knowledge and sources you need to
 
 Before we can actually build the boxes, we need to take care of the minimal things to install:
 - Currently this is still a very much 'it works on my machine only' code
-- Have Virtualbox 3.2.x installed -> download it from http://download.virtualbox.org/virtualbox/
+- Have Virtualbox 4.x installed -> download it from http://download.virtualbox.org/virtualbox/
 - Have ruby and rubygems working
 - Have the rake gem installed -> gem install rake
 
 ALPHA CODE: -> you're on your own....
 
-Installation:
-=============
-0) To sandbox everything, and avoid root acces , source the veewee.ENV file .
-   This will set your VBOX_HOME_DIR=$VEEWEE/tmp, GEM_PATH=$VEEWEE/gems, GEM_HOME=$VEEWEE/gems
+### WILL UPDATE SOON ####
+
+
+1)Installation: (from source)
+===========================
 $ git clone https://github.com/jedi4ever/veewee.git
 $ cd veewee
-$ . veewee.ENV
+$ gem install bundler
+$ bundle install 
 
-1) Install all the necessary gems (sandboxes in $VEEWEE/gems)
-$ gem install rake vagrant popen4 bundler
--> vagrant installs virtualbox,net-ssh, net-scp too
+Installation: (as a gem)
+========================
+coming soon
 
-2) List all templates
+List all templates
+===================
 $ rake templates
 the following templates are available:
 use rake define['<boxname>','CentOS-4.8-i386']
