@@ -3,7 +3,9 @@
 require 'rubygems'
 require 'thor'
 require 'bundler'
+require 'virtualbox'
 require 'veewee'
+
 
 #Setup some base variables to use
 veewee_dir= File.expand_path(File.join(File.dirname(__FILE__),".."))
@@ -65,4 +67,10 @@ class VeeweeCLI < Thor
   
 end
 
-VeeweeCLI.start
+version=VirtualBox.version
+if (version.match(/^4.x/))
+	VeeweeCLI.start
+else
+	puts "veewee only supports VirtualBox 4.x"
+end
+
