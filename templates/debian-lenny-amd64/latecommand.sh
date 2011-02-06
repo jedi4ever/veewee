@@ -1,10 +1,8 @@
 #http://adrianbravo.tumblr.com/post/644860401
 
 #Updating the box
-mount -o loop /dev /target/dev
-mount -o loop /proc /target/proc
 apt-get -y update
-apt-get -y dist-upgrade
+#apt-get -y dist-upgrade
 apt-get clean
 
 #Setting up sudo
