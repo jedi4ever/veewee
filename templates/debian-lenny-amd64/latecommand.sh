@@ -1,10 +1,10 @@
 #http://adrianbravo.tumblr.com/post/644860401
 
 #Updating the box
+mount -o loop /dev /target/dev
+mount -o loop /proc /target/proc
 apt-get -y update
 apt-get -y dist-upgrade
-apt-get -y install linux-headers-$(uname -r) build-essential \
-                   zlib1g-dev libssl-dev libreadline5-dev
 apt-get clean
 
 #Setting up sudo
@@ -19,6 +19,8 @@ chown -R vagrant /home/vagrant/.ssh
 
 #Installing the virtualbox guest additions
 # This will not work... We need to figure out some way to get the current VBox version
+apt-get -y install linux-headers-$(uname -r) build-essential \
+                   zlib1g-dev libssl-dev libreadline5-dev
 VBOX_VERSION=$(cat /home/vagrant/.vbox_version)
 VBOX_ISO=/tmp/vboxga.iso
 if [ ! -f $VBOX_ISO ]; then
@@ -30,7 +32,8 @@ umount /mnt
 
 apt-get -y remove linux-headers-$(uname -r) build-essential \
                   zlib1g-dev libssl-dev libreadline5-dev
-apt-get -y autoremove
 
 rm -f $VBOX_ISO $0
+
+apt-get -y autoremove
 exit
