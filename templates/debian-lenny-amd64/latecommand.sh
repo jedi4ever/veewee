@@ -6,7 +6,7 @@ apt-get -y update
 apt-get clean
 
 #Setting up sudo
-sed -i -e 's/vagrant ALL=(ALL) ALL/vagrant ALL=(ALL) NOPASSWD: ALL/g' /etc/sudoers
+echo 'vagrant ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
 
 #Installing vagrant keys
 mkdir /home/vagrant/.ssh
