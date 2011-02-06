@@ -32,6 +32,10 @@ module Veewee
       end
 
       #Vagrant requires a relative path for output of boxes
+  
+      #4.0.x. not using boxes as a subdir
+      boxdir=Pathname.new(Dir.pwd)
+      
       full_path=File.join(boxdir,boxname+".box")
       path1=Pathname.new(full_path)
       path2=Pathname.new(Dir.pwd)

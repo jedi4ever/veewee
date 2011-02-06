@@ -4,6 +4,7 @@ PATH
     veewee (0.1.0)
       net-ssh (~> 2.1.0)
       popen4 (~> 0.1.2)
+      thor (~> 0.14.6)
       vagrant (~> 0.7.0)
 
 GEM
@@ -47,6 +48,7 @@ PLATFORMS
 DEPENDENCIES
   net-ssh
   popen4
+  thor
   vagrant
   veewee!
   virtualbox

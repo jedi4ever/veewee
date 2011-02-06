@@ -358,7 +358,14 @@ module Veewee
         ##PDB: again problems with the virtualbox GEM
 	      ##VirtualBox::Global.global.max_vdi_size=1000000
         #newdisk.save
-        command ="#{@vboxcmd} createhd --filename '#{boxname}.#{@definition[:disk_format]}' --size '#{@definition[:disk_size].to_i}' --format #{@definition[:disk_format]}"
+        
+        command="VBoxManage  list  systemproperties|grep '^Default machine'|cut -d ':' -f 2|sed -e 's/^[ ]*//'"
+        results=IO.popen("#{command}")
+        place=results.gets.chop
+        results.close
+         
+        puts "#{command}" 
+        command ="#{@vboxcmd} createhd --filename '#{place}/#{boxname}/#{boxname}.#{@definition[:disk_format]}' --size '#{@definition[:disk_size].to_i}' --format #{@definition[:disk_format]}"
         Veewee::Shell.execute("#{command}")
                    
       end
@@ -381,9 +388,21 @@ module Veewee
     def self.attach_disk(boxname)
       location=boxname+"."+@definition[:disk_format].downcase
   
+      command="VBoxManage  list  systemproperties|grep '^Default machine'|cut -d ':' -f 2|sed -e 's/^[ ]*//'"
+      results=IO.popen("#{command}")
+      place=results.gets.chop
+      results.close
+
+      location="#{place}/#{boxname}/"+location
+      
+      puts "location=#{location}"
+
+      
       #command => "${vboxcmd} storageattach '${vname}' --storagectl 'SATA Controller' --port 0 --device 0 --type hdd --medium '${vname}.vdi'",
       command ="#{@vboxcmd} storageattach '#{boxname}' --storagectl 'SATA Controller' --port 0 --device 0 --type hdd --medium '#{location}'"
+      puts "#{command}"
       Veewee::Shell.execute("#{command}")
+
     end
     
     def self.mount_isofile(boxname,isofile)
