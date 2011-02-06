@@ -1,5 +1,8 @@
 #http://adrianbravo.tumblr.com/post/644860401
 
+exec > /root/install.log
+exec 2>&1
+
 #Updating the box
 apt-get -y update
 #apt-get -y dist-upgrade
@@ -19,7 +22,8 @@ chown -R vagrant /home/vagrant/.ssh
 # This will not work... We need to figure out some way to get the current VBox version
 apt-get -y install linux-headers-$(uname -r) build-essential \
                    zlib1g-dev libssl-dev libreadline5-dev
-VBOX_VERSION=$(cat /home/vagrant/.vbox_version)
+VAGRANT_VBOX_VERSION=$(cat /home/vagrant/.vbox_version)
+VBOX_VERSION=${VAGRANT_VBOX_VERSION:-4.0.2}
 VBOX_ISO=/tmp/vboxga.iso
 if [ ! -f $VBOX_ISO ]; then
   wget -qO$VBOX_ISO http://download.virtualbox.org/virtualbox/$VBOX_VERSION/VBoxGuestAdditions_$VBOX_VERSION.iso
