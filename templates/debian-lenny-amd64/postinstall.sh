@@ -2,23 +2,11 @@
 
 #Updating the box
 apt-get -y update
-apt-get -y dist-upgrade
 apt-get -y install linux-headers-$(uname -r) build-essential \
                    zlib1g-dev libssl-dev libreadline5-dev
 apt-get clean
 
-#Setting up sudo
-sed -i -e 's/%admin ALL=(ALL) ALL/%admin ALL=NOPASSWD:ALL/g' /etc/sudoers
-
-#Installing vagrant keys
-mkdir /home/vagrant/.ssh
-chmod 700 /home/vagrant/.ssh
-cd /home/vagrant/.ssh
-wget --no-check-certificate 'http://github.com/mitchellh/vagrant/raw/master/keys/vagrant.pub' -O authorized_keys
-chown -R vagrant /home/vagrant/.ssh
-
 #Installing the virtualbox guest additions
-# This will not work... We need to figure out some way to get the current VBox version
 VBOX_VERSION=$(cat /home/vagrant/.vbox_version)
 VBOX_ISO=/tmp/vboxga.iso
 if [ ! -f $VBOX_ISO ]; then

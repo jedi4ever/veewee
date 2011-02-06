@@ -1,6 +1,6 @@
 Veewee::Session.declare( {
   :cpu_count => '1', :memory_size=> '256', 
-  :disk_size => '10140', :disk_format => 'vdi',:disk_size => '10240' ,
+  :disk_size => '10140', :disk_format => 'VDI', :disk_size => '10240' ,
   :os_type_id => 'Debian',
   :iso_file => "debian-508-amd64-netinst.iso",
   :iso_src => "http://cdimage.debian.org/debian-cd/current/amd64/iso-cd/debian-508-amd64-netinst.iso",
@@ -21,8 +21,6 @@ Veewee::Session.declare( {
 			 'debconf/frontend=noninteractive ',
    		         'console-setup/ask_detect=false ',
    		         'console-keymaps-at/keymap=us ',
-#			 'console-setup/modelcode=pc105 ',
-#			 'console-setup/layoutcode=us ',
     		         '<Enter>' 
     ],
   :kickstart_port => "7122", :kickstart_timeout => "10000",:kickstart_file => "preseed.cfg",
