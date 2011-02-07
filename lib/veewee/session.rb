@@ -100,6 +100,7 @@ module Veewee
       name_dir=File.join(@definition_dir,boxname)
       if File.directory?(name_dir)
         #TODO: Needs to be more defensive!!
+        puts "Removing definition #{boxname}"
         FileUtils.rm_rf(name_dir)
       else
         puts "Can not undefine , definition #{boxname} does not exist"
@@ -131,7 +132,11 @@ module Veewee
     end
 
     def self.list_definitions
-        puts "Not yet implemented"
+        puts "The following defined baseboxes exit:"
+        subdirs=Dir.glob("#{@definition_dir}/*")
+        subdirs.each do |sub|
+          puts "- "+File.basename(sub)
+        end
     end
 
     def self.clean
@@ -156,6 +161,11 @@ module Veewee
         
         question=ask("Download? (Yes/No)") {|q| q.default="No"}
         if question.downcase == "yes"
+          if !File.exists?(@iso_dir)
+            puts "Creating an iso directory"
+            FileUtils.mkdir(@iso_dir)
+          end
+          
           download_progress(@definition[:iso_src],full_path)
         else
           puts "You have choosen for manual download: "
@@ -175,6 +185,10 @@ module Veewee
       load_definition(boxname)
       
       Veewee::Export.vagrant(boxname,@box_dir,@definition)
+      #vagrant removes the mapping
+      #we need to restore it in order to be able to login again
+      add_ssh_nat_mapping(boxname)
+      
     end
     
     def self.remove_box(boxname)
@@ -637,7 +651,7 @@ module Veewee
             #puts "remove old snapshots"
 
             for s in (last_good_state+1)..(snapnames.length-1)
-              puts "Removing step [s] snapshot as it is no more valid"
+              puts "Removing step [#{s}] snapshot as it is no more valid"
               snapshot=vm.find_snapshot(snapnames[s])
               snapshot.destroy
               #puts snapshot
@@ -651,7 +665,8 @@ module Veewee
             sleep 2
             #TODO:Restore snapshot!!!
             vm.start
-
+            sleep 2
+            puts "Starting machine"
         end
 
         #puts "last good state #{last_good_state}"

@@ -21,15 +21,20 @@ module Veewee
 class Command < Vagrant::Command::GroupBase
   register "basebox","Commands to manage baseboxes"  
 
-  desc "templates", "List the currently available box templates"
+  desc "templates", "List the currently available basebox templates"
   def templates
     Veewee::Session.list_templates
   end
 
-  desc "define BOXNAME TEMPLATE", "Define a new box starting from a template"
+  desc "define BOXNAME TEMPLATE", "Define a new basebox starting from a template"
   method_option :force,:type => :boolean , :default => false, :aliases => "-f", :desc => "overwrite the definition"
   def define(boxname, template)    
     Veewee::Session.define(boxname,template,options)
+  end
+
+  desc "undefine BOXNAME", "Removes the definition of a basebox "
+  def undefine(boxname)    
+      Veewee::Session.undefine(boxname)
   end
 
   desc "build BOXNAME", "Build the box BOXNAME"
@@ -43,17 +48,17 @@ class Command < Vagrant::Command::GroupBase
     Veewee::Session.list_ostypes
   end
   
-  desc "destroy BOXNAME", "Destroy the virtualmachine of a basebox"
+  desc "destroy BOXNAME", "Destroys the virtualmachine that was build for a basebox"
   def destroy(boxname)
     puts Veewee::Session.destroy_vm(boxname)
   end
   
-  desc "list", "Lists all defined boxes"
+  desc "list", "Lists all defined baseboxes"
   def list
   Veewee::Session.list_definitions
   end
   
-  desc "export [NAME]", "export the box" 
+  desc "export [NAME]", "Exports the basebox to the vagrant box format" 
   method_options :force => :boolean  
   def export(boxname)
       if (!boxname.nil?)

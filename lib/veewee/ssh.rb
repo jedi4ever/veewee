@@ -8,7 +8,7 @@ module Veewee
       options=defaults.merge(options)
 
       puts
-      puts "Trying ssh login with user #{options[:user]} to sshd on port => #{options[:port]}"
+      puts "Waiting for ssh login with user #{options[:user]} to sshd on port => #{options[:port]} to work"
 
       begin
         Timeout::timeout(options[:timeout]) do
