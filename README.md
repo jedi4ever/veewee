@@ -27,9 +27,18 @@ $ gem install veewee
 ## List all templates
 <pre>
 $ vagrant basebox templates
-</pre>
-## Define a new box (ex. Ubuntu 10.10 server i386)
+The following templates are available:
+vagrant basebox define '<boxname>' 'CentOS-4.8-i386'
+vagrant basebox define '<boxname>' 'CentOS-5.5-i386'
+vagrant basebox define '<boxname>' 'CentOS-5.5-i386-netboot'
+vagrant basebox define '<boxname>' 'ubuntu-10.04.1-server-amd64'
+vagrant basebox define '<boxname>' 'ubuntu-10.04.1-server-i386'
+vagrant basebox define '<boxname>' 'ubuntu-10.10-server-amd64'
+vagrant basebox define '<boxname>' 'ubuntu-10.10-server-i386'
 
+</pre>
+## Define a new box 
+Let's define a  Ubuntu 10.10 server i386 basebox called myunbuntubox
 this is essentially making a copy based on the  templates provided above.
 <pre>$ vagrant basebox define 'myubuntubox' 'ubuntu-10.10-server-i386'</pre>
 template successfully copied
