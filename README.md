@@ -28,13 +28,13 @@ $ gem install veewee
 <pre>
 $ vagrant basebox templates
 The following templates are available:
-vagrant basebox define '<boxname>' 'CentOS-4.8-i386'
-vagrant basebox define '<boxname>' 'CentOS-5.5-i386'
-vagrant basebox define '<boxname>' 'CentOS-5.5-i386-netboot'
-vagrant basebox define '<boxname>' 'ubuntu-10.04.1-server-amd64'
-vagrant basebox define '<boxname>' 'ubuntu-10.04.1-server-i386'
-vagrant basebox define '<boxname>' 'ubuntu-10.10-server-amd64'
-vagrant basebox define '<boxname>' 'ubuntu-10.10-server-i386'
+vagrant basebox define 'boxname' 'CentOS-4.8-i386'
+vagrant basebox define 'boxname' 'CentOS-5.5-i386'
+vagrant basebox define 'boxname' 'CentOS-5.5-i386-netboot'
+vagrant basebox define 'boxname' 'ubuntu-10.04.1-server-amd64'
+vagrant basebox define 'boxname' 'ubuntu-10.04.1-server-i386'
+vagrant basebox define 'boxname' 'ubuntu-10.10-server-amd64'
+vagrant basebox define 'boxname' 'ubuntu-10.10-server-i386'
 
 </pre>
 ## Define a new box 
