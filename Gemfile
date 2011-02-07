@@ -2,9 +2,4 @@ source "http://rubygems.org"
 
 gem "veewee", :path => "."
 
-gem 'net-ssh'
-gem 'virtualbox'
-gem 'popen4'
-gem 'vagrant'
-gem 'thor'
-gem 'highline'
+gem "vagrant", :git => "git://github.com/mitchellh/vagrant.git"

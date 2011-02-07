@@ -1,5 +1,5 @@
 module Veewee
-  class Config < Vagrant::Config::Base
+  class BaseBoxConfig < Vagrant::Config::Base
     configures :basebox
   end
 end
