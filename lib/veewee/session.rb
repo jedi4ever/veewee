@@ -197,7 +197,7 @@ module Veewee
 
     def self.build(boxname,options)
       
-        options = {  "force" => false, "format" => "vagrant" }.merge(options)
+        options = {  "force" => false, "format" => "vagrant", "nogui" => true }.merge(options)
       
         #Now we have to load the definition (reads definition.rb)
         load_definition(boxname)
@@ -238,10 +238,12 @@ module Veewee
             add_ssh_nat_mapping(boxname)
 
             #Starting machine
-            #vm.start("vrdp")
 
-            start_vm(boxname,"gui")
-
+            if (options["nogui"]==true)
+              start_vm(boxname,"vrdp")
+            else
+              start_vm(boxname,"gui")
+            end
             
             #waiting for it to boot
             puts "Waiting for the machine to boot"

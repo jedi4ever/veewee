@@ -39,6 +39,8 @@ class Command < Vagrant::Command::GroupBase
 
   desc "build BOXNAME", "Build the box BOXNAME"
   method_option :force,:type => :boolean , :default => false, :aliases => "-f", :desc => "overwrite the basebox"
+  method_option :nogui,:type => :boolean , :default => false, :aliases => "-n", :desc => "no gui"
+
   def build(boxname)
     Veewee::Session.build(boxname,options)
   end
