@@ -5,9 +5,10 @@ module Veewee
 
       defaults={ :port => '22', :timeout => 200 , :user => 'vagrant', :password => 'vagrant'}
 
-      puts "checking if login works ssh => #{options[:port]}"
-
       options=defaults.merge(options)
+
+      puts
+      puts "Trying ssh login with user #{options[:user]} to sshd on port => #{options[:port]}"
 
       begin
         Timeout::timeout(options[:timeout]) do
@@ -33,11 +34,13 @@ module Veewee
     end
 
 
-    def self.transfer_file(host,filename,options)
+    def self.transfer_file(host,filename,destination = '.' , options)
       Net::SSH.start( host,options[:user],options ) do |ssh|
-        puts "Transferring #{filename} "
-        ssh.scp.upload!( filename, '.' ) do |ch, name, sent, total|
-          print "\r#{filename}: #{(sent.to_f * 100 / total.to_f).to_i}%"
+        puts "Transferring #{filename} to #{destination} "
+        ssh.scp.upload!( filename, destination ) do |ch, name, sent, total|
+       #   print "\r#{destination}: #{(sent.to_f * 100 / total.to_f).to_i}%"
+          print "."
+
         end
       end 
       puts

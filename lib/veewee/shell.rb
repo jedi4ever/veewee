@@ -15,7 +15,9 @@ module Veewee
             begin
               PTY.spawn( command ) do |r, w, pid|
                 begin
-                  r.each { |line| print line;}      
+                  r.each { }      
+                  #r.each { |line| print line;}      
+
                rescue Errno::EIO        
                end      
              end  

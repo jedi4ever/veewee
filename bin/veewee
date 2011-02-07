@@ -30,6 +30,8 @@ Dir.glob(File.join(lib_dir, '**','*.rb')).each {|f|
 Veewee::Session.setenv({:veewee_dir => veewee_dir, :definition_dir => definition_dir,
    :template_dir => template_dir, :iso_dir => iso_dir, :box_dir => box_dir, :tmp_dir => tmp_dir})
 
+
+   
 class VeeweeCLI < Thor 
   
   desc "init [NAME] [TEMPLATE]", "initializes a box from a template" 
@@ -67,10 +69,11 @@ class VeeweeCLI < Thor
   
 end
 
+
+
 version=VirtualBox.version
 if (version.match(/^4./))
-	VeeweeCLI.start
+   	VeeweeCLI.start
 else
-	puts "veewee only supports VirtualBox 4.x"
+   	puts "veewee only supports VirtualBox 4.x"
 end
-

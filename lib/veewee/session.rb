@@ -2,6 +2,10 @@ require 'digest/md5'
 require 'socket'
 require 'net/scp'
 require 'pp'
+require 'open-uri'
+require 'progressbar'
+require 'highline/import'
+require 'tempfile'
 
 
 module Veewee
@@ -41,24 +45,42 @@ module Veewee
  
     end
     
-    def self.define(boxname,template_name)
+    def self.define(boxname,template_name,options = {})
       #Check if template_name exists
-      #puts @veewee_dir
+      
+      options = {  "force" => false, "format" => "vagrant" }.merge(options)
+      
       if File.directory?(File.join(@template_dir,template_name))
       else
-        puts "this template can not be found, use vagrant box templates to list all templates"
+        puts "This template can not be found, use vagrant basebox templates to list all templates"
+        exit
       end
       if !File.exists?(@definition_dir)
         FileUtils.mkdir(@definition_dir)
       end
+      
       if File.directory?(File.join(@definition_dir,boxname))
-        puts "this definition already exists"
+        if !options["force"]
+          puts "The definition for #{boxname} already exists. Use --force to overwrite"
+          exit
+        end
       else
         FileUtils.mkdir(File.join(@definition_dir,boxname))
-        FileUtils.cp_r(File.join(@template_dir,template_name,'.'),File.join(@definition_dir,boxname))
-        puts "template succesfully copied"
       end
+      FileUtils.cp_r(File.join(@template_dir,template_name,'.'),File.join(@definition_dir,boxname))
+      puts "The basebox '#{boxname}' has been succesfully created from the template ''#{template_name}'"
+      puts "You can now edit the definition files stored in definitions/#{boxname}"
+      puts "or build the box with:"
+      if (options["format"]=='vagrant') 
+         puts "vagrant basebox build '#{boxname}'"
+       end
+       if (options["format"]=='veewee')
+         puts "veewee  build '#{boxname}'"
+       end
+      
     end
+
+
 
   
     def self.definition_exists?(boxname)
@@ -85,15 +107,20 @@ module Veewee
       end
     end
 
-    def self.list_templates
-      puts "the following templates are available:"
+    def self.list_templates( options = { :format => 'vagrant'})
+      puts "The following templates are available:"
       subdirs=Dir.glob("#{@template_dir}/*")
       subdirs.each do |sub|
         if File.directory?("#{sub}")
           definition=Dir.glob("#{sub}/definition.rb")
           if definition.length!=0
             name=sub.sub(/#{@template_dir}\//,'')
-            puts "vagrant box init '<boxname>' '#{name}'"
+            if (options[:format]=='vagrant') 
+              puts "vagrant basebox define '<boxname>' '#{name}'"
+            end
+            if (options[:format]=='veewee')
+              puts "veewee define '<boxname>' '#{name}'"
+            end
           end
         end
       end
@@ -111,9 +138,10 @@ module Veewee
         puts "Not yet implemented"
     end
 
-    def self.verify_iso(filename)
+    def self.verify_iso(filename,autodownload = false)
       if File.exists?(File.join(@iso_dir,filename))
-        puts "isofile #{filename} is available"
+        puts 
+        puts "Verifying the isofile #{filename} is ok."
       else
         full_path=File.join(@iso_dir,filename)
         path1=Pathname.new(full_path)
@@ -121,15 +149,23 @@ module Veewee
         rel_path=path1.relative_path_from(path2).to_s
         
         puts
-        puts "Isofile is not found. The definition suggested the following URL to download:"
-        puts "-url: #{@definition[:iso_src]}"
-        puts "-md5: #{@definition[:iso_md5]}"
+        puts "The isofile is not found. The definition provided the following information:"
+        puts "- Download url: #{@definition[:iso_src]}"
+        puts "- Md5 Checksum: #{@definition[:iso_md5]}"
         puts ""
-        puts "type:"
-        puts "curl -C - -L '#{@definition[:iso_src]}' -o '#{rel_path}'"
-        puts "md5 '#{rel_path}' "
-        puts 
-        exit
+        
+        question=ask("Download? (Yes/No)") {|q| q.default="No"}
+        if question.downcase == "yes"
+          download_progress(@definition[:iso_src],full_path)
+        else
+          puts "You have choosen for manual download: "
+          puts "curl -C - -L '#{@definition[:iso_src]}' -o '#{rel_path}'"
+          puts "md5 '#{rel_path}' "
+          puts 
+          exit
+        end
+        
+  
       end
   
     end
@@ -145,7 +181,10 @@ module Veewee
         puts "Not yet implemented"
     end
 
-    def self.build(boxname)
+    def self.build(boxname,options)
+      
+        options = {  "force" => false, "format" => "vagrant" }.merge(options)
+      
         #Now we have to load the definition (reads definition.rb)
         load_definition(boxname)
 
@@ -160,9 +199,13 @@ module Veewee
         
         verify_iso(@definition[:iso_file])
         
+        if (options["force"]==false)
+        else    
+          puts "Forcing build by destroying #{boxname} machine"
+          destroy_vm(boxname)
+        end
+        
         checksums=calculate_checksums(@definition,boxname)
-
-   
         
         transaction(boxname,"0-initial-#{checksums[0]}",checksums) do
         
@@ -187,11 +230,12 @@ module Veewee
 
             
             #waiting for it to boot
+            puts "Waiting for the machine to boot"
             sleep @definition[:boot_wait].to_i
         
-            puts "sending keys"
             Veewee::Scancode.send_sequence("#{@vboxcmd}","#{boxname}",@definition[:boot_cmd_sequence])
         
+            puts "Starting a webserver on port #{@definition[:kickstart_port]}"
             #:kickstart_port => "7122", :kickstart_ip => self.local_ip, :kickstart_timeout => 1000,:kickstart_file => "preseed.cfg",
             Veewee::Web.wait_for_request(@definition[:kickstart_file],{:port => @definition[:kickstart_port],
                                       :host => @definition[:kickstart_ip], :timeout => @definition[:kickstart_timeout],
@@ -199,15 +243,16 @@ module Veewee
                                       
             Veewee::Ssh.when_ssh_login_works("localhost",ssh_options) do
               #Transfer version of Virtualbox to $HOME/.vbox_version            
-              versionfile=File.join(@tmp_dir,".vbox_version")    
-              File.open(versionfile, 'w') {|f| f.write("#{VirtualBox::Global.global.lib.virtualbox.version}") }
-              Veewee::Ssh.transfer_file("localhost",versionfile,ssh_options)
+              versionfile=Tempfile.open("vbox.version")
+              versionfile.puts "#{VirtualBox::Global.global.lib.virtualbox.version}"
+              versionfile.rewind
+              Veewee::Ssh.transfer_file("localhost",versionfile.path,".vbox_version", ssh_options)
+              versionfile.close
+              versionfile.delete
             end
         end #initial Transaction
  
-        
-                    
-              
+                 
                counter=1
                @definition[:postinstall_files].each do |postinstall_file|
      
@@ -270,7 +315,53 @@ module Veewee
       vm.save  
     end
     
-    def self.create_vm(boxname)
+    def self.destroy_vm(boxname)
+      #:destroy_medium => :delete,  will delete machine + all media attachments
+      #vm.destroy(:destroy_medium => :delete)
+      ##vm.destroy(:destroy_image => true)
+      
+      #VBoxManage unregistervm "test-machine" --delete
+      #because the destroy does remove the .vbox file on 4.0.x
+      #PDB
+      #vm.destroy()
+      
+      vm=VirtualBox::VM.find(boxname)
+
+      if (!vm.nil? && !(vm.powered_off?))
+          puts "Shutting down vm #{boxname}"
+          #We force it here, maybe vm.shutdown is cleaner
+          vm.stop
+      end     
+      sleep 3
+      
+      command="#{@vboxcmd} unregistervm  '#{boxname}' --delete"    
+
+      puts "Deleting vm #{boxname}"
+      
+      #Exec and system stop the execution here
+      Veewee::Shell.execute("#{command}")
+      sleep 1
+      
+      #if the disk was not attached when the machine was destroyed we also need to delete the disk
+      location=boxname+"."+@definition[:disk_format].downcase
+      found=false       
+      VirtualBox::HardDrive.all.each do |d|
+        if !d.location.match(/#{location}/).nil?
+
+          command="#{@vboxcmd} closemedium disk '#{d.location}' --delete"
+          puts "Deleting disk #{d.location}"
+          Veewee::Shell.execute("#{command}")          
+          #v.3
+          #d.destroy(true)
+          break
+        end
+      end     
+      
+      
+      
+    end
+    
+    def self.create_vm(boxname,force=false)
 
       #Verifying the os.id with the :os_type_id specified
       matchfound=false
@@ -293,8 +384,8 @@ module Veewee
           vm.stop
       end     
 
-      if !vm.nil?
-        puts "box already exists"
+      if !vm.nil? 
+        puts "Box already exists"
         #vm.stop
         #vm.destroy
       else
@@ -302,11 +393,9 @@ module Veewee
         #Box does not exist, we can start to create it
 
         command="#{@vboxcmd} createvm --name '#{boxname}' --ostype '#{@definition[:os_type_id]}' --register"    
-      	puts command
 
         #Exec and system stop the execution here
         Veewee::Shell.execute("#{command}")
-        sleep 3
         
       end
 
@@ -322,7 +411,8 @@ module Veewee
       vm.os_type_id=@definition[:os_type_id]
       vm.cpu_count=@definition[:cpu_count].to_i
       vm.name=boxname
-      
+
+      puts "Creating vm #{vm.name} : #{vm.memory_size}M - #{vm.cpu_count} CPU - #{vm.os_type_id}"
       #setting bootorder 
       vm.boot_order[0]=:hard_disk
       vm.boot_order[1]=:dvd
@@ -348,7 +438,7 @@ module Veewee
       end   
 
       if !found
-        puts "creating new harddrive"
+        puts "Creating new harddrive of size #{@definition[:disk_size].to_i} "
         
         #newdisk=VirtualBox::HardDrive.new
         #newdisk.format=@definition[:disk_format]
@@ -364,8 +454,7 @@ module Veewee
         place=results.gets.chop
         results.close
          
-        puts "#{command}" 
-        command ="#{@vboxcmd} createhd --filename '#{place}/#{boxname}/#{boxname}.#{@definition[:disk_format]}' --size '#{@definition[:disk_size].to_i}' --format #{@definition[:disk_format]}"
+        command ="#{@vboxcmd} createhd --filename '#{place}/#{boxname}/#{boxname}.#{@definition[:disk_format]}' --size '#{@definition[:disk_size].to_i}' --format #{@definition[:disk_format]} > /dev/null"
         Veewee::Shell.execute("#{command}")
                    
       end
@@ -394,20 +483,17 @@ module Veewee
       results.close
 
       location="#{place}/#{boxname}/"+location
-      
-      puts "location=#{location}"
-
+      puts "Attaching disk: #{location}"
       
       #command => "${vboxcmd} storageattach '${vname}' --storagectl 'SATA Controller' --port 0 --device 0 --type hdd --medium '${vname}.vdi'",
       command ="#{@vboxcmd} storageattach '#{boxname}' --storagectl 'SATA Controller' --port 0 --device 0 --type hdd --medium '#{location}'"
-      puts "#{command}"
       Veewee::Shell.execute("#{command}")
 
     end
     
     def self.mount_isofile(boxname,isofile)
       full_iso_file=File.join(@iso_dir,isofile)
-      puts "#{full_iso_file}"
+      puts "Mounting cdrom: #{full_iso_file}"
       #command => "${vboxcmd} storageattach '${vname}' --storagectl 'IDE Controller' --type dvddrive --port 1 --device 0 --medium '${isodst}' ";
       command ="#{@vboxcmd} storageattach '#{boxname}' --storagectl 'IDE Controller' --type dvddrive --port 1 --device 0 --medium '#{full_iso_file}'"
      Veewee::Shell.execute("#{command}")
@@ -443,10 +529,7 @@ module Veewee
       puts "Available os types:"
       VirtualBox::Global.global.lib.virtualbox.guest_os_types.collect { |os|
         puts "#{os.id}: #{os.description}"
-      }
-      
-      puts 
-      
+      }      
     end
     
     
@@ -477,11 +560,28 @@ module Veewee
           end
         end
 
-        pp checksums
         return checksums
 
       end
 
+      def self.download_progress(url,localfile)
+        pbar = nil
+        URI.parse(url).open(
+            :content_length_proc => lambda {|t|
+              if t && 0 < t
+                pbar = ProgressBar.new("Fetching file", t)
+                pbar.file_transfer_mode
+              end
+            },
+            :progress_proc => lambda {|s|
+              pbar.set s if pbar
+            }) { |src|
+              open("#{localfile}","wb") { |dst|
+                dst.write(src.read)
+              }
+            }
+         
+      end
     
       def self.transaction(boxname,step_name,checksums,&block)
 
@@ -504,8 +604,6 @@ module Veewee
           end 
         end
 
-        pp snapnames
-        
         #find the last snapshot matching the state
         counter=[snapnames.length, checksums.length].min-1
         last_good_state=counter
@@ -517,14 +615,14 @@ module Veewee
               break
             end  
         end
-        puts "Last good state: #{last_good_state}"
+        #puts "Last good state: #{last_good_state}"
 
         if (current_step_nr < last_good_state)
-            puts "fast forwarding #{step_name}"
+            #puts "fast forwarding #{step_name}"
             return
         end
 
-        puts "Current step: #{current_step_nr}"
+        #puts "Current step: #{current_step_nr}"
         if (current_step_nr == last_good_state)
             if vm.running?
               vm.stop
@@ -534,14 +632,14 @@ module Veewee
             #puts "remove old snapshots"
 
             for s in (last_good_state+1)..(snapnames.length-1)
-              puts "removing snapname #{snapnames[s]}"
+              puts "Removing step [s] snapshot as it is no more valid"
               snapshot=vm.find_snapshot(snapnames[s])
               snapshot.destroy
               #puts snapshot
             end
 
             vm.reload
-            puts "action load #{step_name}"
+            puts "Loading step #{current_step_nr} snapshots as it has not changed"
             sleep 2
             goodsnap=vm.find_snapshot(snapnames[last_good_state])
             goodsnap.restore
@@ -551,7 +649,7 @@ module Veewee
 
         end
 
-        puts "last good state #{last_good_state}"
+        #puts "last good state #{last_good_state}"
 
         
         if (current_step_nr > last_good_state)
@@ -562,66 +660,41 @@ module Veewee
  
             if !vm.nil?
               if vm.running?
-                puts "stopping machine"
+                puts "Stopping machine"
                 vm.stop
                 while vm.running?
                   sleep 1
                 end
               end
               
-              #detaching cdroms
-              vm.medium_attachments.each do |m|
-                if m.type==:dvd
-                  puts "detaching dvd"
-                  m.detach
-                end
-              end
+              #detaching cdroms (used to work in 3.x)
+#              vm.medium_attachments.each do |m|
+#                if m.type==:dvd
+#                  #puts "Detaching dvd"
+#                  m.detach
+#                end
+#              end
               
               vm.reload
-              puts "destroying machine+disks"
-              #:destroy_medium => :delete,  will delete machine + all media attachments
-              #vm.destroy(:destroy_medium => :delete)
-              ##vm.destroy(:destroy_image => true)
-              
-              #VBoxManage unregistervm "test-machine" --delete
-              #because the destroy does remove the .vbox file on 4.0.x
-              #PDB
-              #vm.destroy()
-              
-              command="#{@vboxcmd} unregistervm  '#{boxname}' --delete"    
-            	puts command
-
-              #Exec and system stop the execution here
-              Veewee::Shell.execute("#{command}")
-              
-              #if the disk was not attached when the machine was destroyed we also need to delete the disk
-              location=boxname+"."+@definition[:disk_format].downcase
-              found=false       
-              VirtualBox::HardDrive.all.each do |d|
-                if !d.location.match(/#{location}/).nil?
-                  d.destroy(true)
-                  break
-                end
-              end     
+              puts "We found no good state so we are destroying the previous machine+disks"
+              destroy_vm(boxname)
             end
               
           end
 
-          puts "(re-)executing step #{step_name}"
+          #puts "(re-)executing step #{step_name}"
           
          
           yield
-          puts "seeking #{boxname}"
+ 
           #Need to look it up again because if it was an initial load
           vm=VirtualBox::VM.find(boxname) 
-          puts "saving state"
+          puts "Step [#{current_step_nr}] was succesfull - saving state"
           vm.save_state
-          puts "waiting for 2 secs"
           sleep 2 #waiting for it to be ok
-          puts "about to snapshot #{vm}"
+          #puts "about to snapshot #{vm}"
           #take snapshot after succesful execution
           vm.take_snapshot(step_name,"snapshot taken by veewee")
-          puts "wait 2 secs before starting"
           sleep 2 #waiting for it to be started again
           vm.start
         end   

@@ -19,6 +19,7 @@ Gem::Specification.new do |s|
   s.add_dependency "popen4", "~> 0.1.2"
   s.add_dependency "thor", "~> 0.14.6"
   s.add_dependency "highline", "~> 1.6.1"
+  s.add_dependency "progressbar"
 
   s.add_development_dependency "bundler", ">= 1.0.0"
 
