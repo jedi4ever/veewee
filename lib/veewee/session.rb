@@ -280,7 +280,7 @@ module Veewee
                    
                    Veewee::Ssh.when_ssh_login_works("localhost",ssh_options) do
  
-                    Veewee::Ssh.transfer_file("localhost",filename,filename,ssh_options)
+                    Veewee::Ssh.transfer_file("localhost",filename,File.basename(filename),ssh_options)
                     command=@definition[:sudo_cmd]
                     command.gsub!(/%p/,"#{@definition[:ssh_password]}")
                     command.gsub!(/%u/,"#{@definition[:ssh_user]}")
