@@ -67,6 +67,8 @@ module Veewee
           special['<Spacebar>'] = '39';
           special['<Return>'] = '1c'
           special['<Esc>'] = '01';
+          special['<Tab>'] = '0f';
+
           #special['<Up>'] = '01';
           #special['<Down>'] = '01';
           #special['<PageUp>'] = '01';

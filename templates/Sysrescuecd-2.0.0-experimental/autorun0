@@ -1,0 +1,3 @@
+#!/bin/bash
+
+echo "testing autorun" > /var/tmp/autorun.test
