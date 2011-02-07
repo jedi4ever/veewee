@@ -316,6 +316,9 @@ module Veewee
     end
     
     def self.destroy_vm(boxname)
+      
+      load_definition(boxname)
+            
       #:destroy_medium => :delete,  will delete machine + all media attachments
       #vm.destroy(:destroy_medium => :delete)
       ##vm.destroy(:destroy_image => true)
@@ -324,6 +327,8 @@ module Veewee
       #because the destroy does remove the .vbox file on 4.0.x
       #PDB
       #vm.destroy()
+      
+      
       
       vm=VirtualBox::VM.find(boxname)
 

@@ -95,7 +95,7 @@ this is actually calling - vagrant package --base 'myubuntubox' --output 'boxes/
 this will result in a myubuntubox.box
 
 ## Add the box as one of your boxes
-vagrant box add 'myubuntubox' 'myubuntubox.box'
+$ vagrant box add 'myubuntubox' 'myubuntubox.box'
 
 ## Use it in vagrant
 Start vagrant init in another window (as we have set the Virtualbox env to tmp before)

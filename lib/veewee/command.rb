@@ -43,7 +43,7 @@ class Command < Vagrant::Command::GroupBase
     Veewee::Session.list_ostypes
   end
   
-  desc "destroy", "Destroy the virtualmachine of a basebox"
+  desc "destroy BOXNAME", "Destroy the virtualmachine of a basebox"
   def destroy(boxname)
     puts Veewee::Session.destroy_vm(boxname)
   end
@@ -51,6 +51,14 @@ class Command < Vagrant::Command::GroupBase
   desc "list", "Lists all defined boxes"
   def list
   Veewee::Session.list_definitions
+  end
+  
+  desc "export [NAME]", "export the box" 
+  method_options :force => :boolean  
+  def export(boxname)
+      if (!boxname.nil?)
+        Veewee::Session.export_box(boxname)
+      end
   end
   
 end
