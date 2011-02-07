@@ -68,7 +68,7 @@ class VeeweeCLI < Thor
 end
 
 version=VirtualBox.version
-if (version.match(/^4.x/))
+if (version.match(/^4./))
 	VeeweeCLI.start
 else
 	puts "veewee only supports VirtualBox 4.x"

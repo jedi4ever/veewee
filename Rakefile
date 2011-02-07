@@ -3,36 +3,8 @@ require 'bundler'
 require 'bundler/setup'
 Bundler::GemHelper.install_tasks
 
-#We set this in the ENV file
-#ENV['GEM_PATH']=File.join(File.dirname(__FILE__),"gems")
-#ENV['GEM_HOME']=File.join(File.dirname(__FILE__),"gems")
-
-def check_environment
-  begin 
-    require 'vagrant'
-  rescue LoadError
-    puts "you need to install dependencies:"
-    puts "gem install vagrant"
-    exit
-  end
-  
-  begin 
-    require 'net/ssh'
-    require 'virtualbox'
-    require 'webrick'
-    require 'popen4'
-  rescue LoadError
-    puts "hmm you had vagrant installed but are missing the net-ssh or virtualbox gem"
-    puts "gem install virtualbox net-ssh POpen4"
-    exit
-  end
-end
-
-#See if all gems and so are installed
-check_environment
-
 #Setup some base variables to use
-veewee_dir= File.dirname(__FILE__)
+veewee_dir= "."
 definition_dir= File.expand_path(File.join(veewee_dir, "definitions"))
 lib_dir= File.expand_path(File.join(veewee_dir, "lib"))
 box_dir= File.expand_path(File.join(veewee_dir, "boxes"))
@@ -41,8 +13,6 @@ vbox_dir=File.expand_path(File.join(veewee_dir, "tmp"))
 tmp_dir=File.expand_path(File.join(veewee_dir, "tmp"))
 iso_dir=File.expand_path(File.join(veewee_dir, "iso"))
 
-#needs to be moved to the config files to be allowed override
-ENV['VBOX_USER_HOME']=vbox_dir
 
 #Load Veewee::Session libraries
 Dir.glob(File.join(lib_dir, '**','*.rb')).each {|f| 
