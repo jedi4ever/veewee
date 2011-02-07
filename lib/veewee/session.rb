@@ -263,6 +263,7 @@ module Veewee
               versionfile.puts "#{VirtualBox::Global.global.lib.virtualbox.version}"
               versionfile.rewind
               Veewee::Ssh.transfer_file("localhost",versionfile.path,".vbox_version", ssh_options)
+              puts ""
               versionfile.close
               versionfile.delete
             end

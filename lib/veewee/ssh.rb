@@ -34,7 +34,7 @@ module Veewee
     end
 
 
-    def self.transfer_file(host,filename,destination = '.' , options)
+    def self.transfer_file(host,filename,destination = '.' , options = {})
       Net::SSH.start( host,options[:user],options ) do |ssh|
         puts "Transferring #{filename} to #{destination} "
         ssh.scp.upload!( filename, destination ) do |ch, name, sent, total|
