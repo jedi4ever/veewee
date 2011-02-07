@@ -18,7 +18,7 @@ $ gem install bundler
 $ bundle install
 
 __as a gem__
-$ gem install veewee
+$ gem install veewee 
 
 
 ## List all templates
