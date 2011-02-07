@@ -80,7 +80,8 @@ If you need to change values in the templates, be sure to run the rake undefine,
 - if it can not find it will suggest to download the iso for you
 
 ## Build the new box:
-$ vagrant basebox build 'myubuntubox'
+<pre>
+$ vagrant basebox build 'myubuntubox'</pre>
 
 - This will create a machine + disk according to the definition.rb
 - Note: :os_type_id = The internal Name Virtualbox uses for that Distribution
