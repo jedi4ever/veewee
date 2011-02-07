@@ -38,7 +38,8 @@ definition.rb	postinstall.sh	postinstall2.sh	preseed.cfg
 
 ## Optionally modify the definition.rb , postinstall.sh or preseed.cfg
 
-`Veewee::Session.declare( {
+<pre>
+Veewee::Session.declare( {
   :cpu_count => '1', :memory_size=> '256', 
   :disk_size => '10140', :disk_format => 'VDI',:disk_size => '10240' ,
   :os_type_id => 'Ubuntu',
@@ -64,6 +65,7 @@ definition.rb	postinstall.sh	postinstall2.sh	preseed.cfg
   :postinstall_files => [ "postinstall.sh"],:postinstall_timeout => "10000"
    }
 )
+</pre>
 
 If you need to change values in the templates, be sure to run the rake undefine, the rake define again to copy the changes across.
 
@@ -73,7 +75,7 @@ $ vagrant basebox build 'myubuntubox'
 -> the build assumes your iso files are in 'currentdir'/iso
 -> if it can not find it will suggest to download the iso for you
 
-6) Build the new box:
+## Build the new box:
 $ vagrant basebox build 'myubuntubox'
 
 - This will create a machine + disk according to the definition.rb
