@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    veewee (0.1.4)
+    veewee (0.1.5)
       highline (~> 1.6.1)
       net-ssh (~> 2.1.0)
       popen4 (~> 0.1.2)
