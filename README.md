@@ -12,29 +12,33 @@ ALPHA CODE: -> you're on your own....
 
 ## Installation: 
 __from source__
+
+<pre>
 $ git clone https://github.com/jedi4ever/veewee.git
 $ cd veewee
 $ gem install bundler
 $ bundle install
-
+</pre>
 __as a gem__
+<pre>
 $ gem install veewee 
-
+</pre>
 
 ## List all templates
+<pre>
 $ vagrant basebox templates
-
+</pre>
 ## Define a new box (ex. Ubuntu 10.10 server i386)
 
 this is essentially making a copy based on the  templates provided above.
-
-$ vagrant basebox define 'myubuntubox' 'ubuntu-10.10-server-i386'
+<pre>$ vagrant basebox define 'myubuntubox' 'ubuntu-10.10-server-i386'</pre>
 template successfully copied
 
 -> This copies over the templates/ubuntu-10.10-server-i386 to definition/myubuntubox
 
-$ ls definitions/myubuntubox
+<pre>$ ls definitions/myubuntubox
 definition.rb	postinstall.sh	postinstall2.sh	preseed.cfg
+</pre>
 
 ## Optionally modify the definition.rb , postinstall.sh or preseed.cfg
 
@@ -70,10 +74,10 @@ Veewee::Session.declare( {
 If you need to change values in the templates, be sure to run the rake undefine, the rake define again to copy the changes across.
 
 ## Put your isofile inside the $VEEWEE/iso directory or if you don't run
-$ vagrant basebox build 'myubuntubox'
+<pre>$ vagrant basebox build 'myubuntubox'</pre>
 
--> the build assumes your iso files are in 'currentdir'/iso
--> if it can not find it will suggest to download the iso for you
+- the build assumes your iso files are in 'currentdir'/iso
+- if it can not find it will suggest to download the iso for you
 
 ## Build the new box:
 $ vagrant basebox build 'myubuntubox'
@@ -88,24 +92,25 @@ $ vagrant basebox build 'myubuntubox'
 - Sudo execute the :postinstall_files
 
 ## Export the vm to a .box file
-$ vagrant basebox export 'myubuntubox' 
+<pre>$ vagrant basebox export 'myubuntubox' </pre>
 
 this is actually calling - vagrant package --base 'myubuntubox' --output 'boxes/myubuntubox.box'
 
 this will result in a myubuntubox.box
 
 ## Add the box as one of your boxes
-$ vagrant box add 'myubuntubox' 'myubuntubox.box'
+To import it into vagrant type:
 
+<pre>$ vagrant box add 'myubuntubox' 'myubuntubox.box'
+</pre>
 ## Use it in vagrant
-Start vagrant init in another window (as we have set the Virtualbox env to tmp before)
-$ To import it into vagrant type:
 
 To use it:
-vagrant init 'myubuntubox'
-vagrant up
-vagrant ssh
-
+<pre>
+$ vagrant init 'myubuntubox'
+$ vagrant up
+$ vagrant ssh
+</pre>
 ## If you have a setup working, share your 'definition' with me. That would be fun! 
 
 IDEAS:
