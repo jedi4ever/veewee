@@ -5,3 +5,4 @@ tmp/*
 definitions/*
 boxes/*
 pkg/*
+*.box
