@@ -10,14 +10,14 @@ Before we can actually build the boxes, we need to take care of the minimal thin
 
 ALPHA CODE: -> you're on your own....
 
-## Installation: (from source)
-**from source **
+## Installation: 
+__from source__
 $ git clone https://github.com/jedi4ever/veewee.git
 $ cd veewee
 $ gem install bundler
 $ bundle install
 
-**as a gem**
+__as a gem__
 $ gem install veewee
 
 
@@ -27,15 +27,18 @@ $ vagrant basebox templates
 ## Define a new box (ex. Ubuntu 10.10 server i386)
 
 this is essentially making a copy based on the  templates provided above.
+
 $ vagrant basebox define 'myubuntubox' 'ubuntu-10.10-server-i386'
 template successfully copied
 
 -> This copies over the templates/ubuntu-10.10-server-i386 to definition/myubuntubox
+
 $ ls definitions/myubuntubox
 definition.rb	postinstall.sh	postinstall2.sh	preseed.cfg
 
 ## Optionally modify the definition.rb , postinstall.sh or preseed.cfg
-Veewee::Session.declare( {
+
+`Veewee::Session.declare( {
   :cpu_count => '1', :memory_size=> '256', 
   :disk_size => '10140', :disk_format => 'VDI',:disk_size => '10240' ,
   :os_type_id => 'Ubuntu',
@@ -73,14 +76,14 @@ $ vagrant basebox build 'myubuntubox'
 6) Build the new box:
 $ vagrant basebox build 'myubuntubox'
 
--> This will create a machine + disk according to the definition.rb
--> Note: :os_type_id = The internal Name Virtualbox uses for that Distribution
--> Mount the ISO File :iso_file
--> Boot up the machine and wait for :boot_time
--> Send the keystrokes in :boot_cmd_sequence
--> Startup a webserver on :kickstart_port to wait for a request for the :kickstart_file
--> Wait for ssh login to work with :ssh_user , :ssh_password
--> Sudo execute the :postinstall_files
+- This will create a machine + disk according to the definition.rb
+- Note: :os_type_id = The internal Name Virtualbox uses for that Distribution
+- Mount the ISO File :iso_file
+- Boot up the machine and wait for :boot_time
+- Send the keystrokes in :boot_cmd_sequence
+- Startup a webserver on :kickstart_port to wait for a request for the :kickstart_file
+- Wait for ssh login to work with :ssh_user , :ssh_password
+- Sudo execute the :postinstall_files
 
 ## Export the vm to a .box file
 $ vagrant basebox export 'myubuntubox' 
@@ -104,9 +107,11 @@ vagrant ssh
 ## If you have a setup working, share your 'definition' with me. That would be fun! 
 
 IDEAS:
+
 - Now you integrate this with your CI build to create a daily basebox
 
 FUTURE IDEAS:
+
 - use snapshots to fastforward initial boot, and every postinstall command
 - export to AMI too
 - provide for more failsafe execution, testing parameters
