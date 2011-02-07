@@ -82,7 +82,8 @@ Veewee::Session.declare( {
 
 If you need to change values in the templates, be sure to run the rake undefine, the rake define again to copy the changes across.
 
-## Put your isofile inside the $VEEWEE/iso directory or if you don't run
+## Getting the cdrom file in place
+Put your isofile inside the 'currentdir'/iso directory or if you don't run
 <pre>$ vagrant basebox build 'myubuntubox'</pre>
 
 - the build assumes your iso files are in 'currentdir'/iso
