@@ -132,7 +132,7 @@ module Veewee
     end
 
     def self.list_definitions
-        puts "The following defined baseboxes exit:"
+        puts "The following defined baseboxes exist:"
         subdirs=Dir.glob("#{@definition_dir}/*")
         subdirs.each do |sub|
           puts "- "+File.basename(sub)
@@ -197,7 +197,7 @@ module Veewee
 
     def self.build(boxname,options)
       
-        options = {  "force" => false, "format" => "vagrant", "nogui" => true }.merge(options)
+        options = {  "force" => false, "format" => "vagrant", "nogui" => false }.merge(options)
       
         #Now we have to load the definition (reads definition.rb)
         load_definition(boxname)
@@ -307,6 +307,7 @@ module Veewee
     end
     
     def self.load_definition(boxname)
+
       if definition_exists?(boxname)
        definition_file=File.join(@definition_dir,boxname,"definition.rb")
        begin
@@ -314,7 +315,11 @@ module Veewee
        rescue LoadError
          puts "Error loading definition of #{boxname}"
          exit
-       end    
+       end  
+      else
+        puts "Error: definition for basebox '#{boxname}' does not exist."
+        list_definitions
+        exit
      end
     end
     
