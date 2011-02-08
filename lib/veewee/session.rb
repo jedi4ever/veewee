@@ -374,10 +374,23 @@ module Veewee
       found=false       
       VirtualBox::HardDrive.all.each do |d|
         if !d.location.match(/#{location}/).nil?
-
+          
+          if File.exists?(d.location) 
+            command="#{@vboxcmd} closemedium disk '#{d.location}' --delete"
+          else
+            command="#{@vboxcmd} closemedium disk '#{d.location}'"        
+          end
+          
           command="#{@vboxcmd} closemedium disk '#{d.location}' --delete"
           puts "Deleting disk #{d.location}"
-          Veewee::Shell.execute("#{command}")          
+          puts "#{command}"
+
+          Veewee::Shell.execute("#{command}") 
+          
+          if File.exists?(d.location) 
+            puts "We tried to delete the disk file '#{d.location} but failed"
+            exit
+          end 
           #v.3
           #d.destroy(true)
           break
