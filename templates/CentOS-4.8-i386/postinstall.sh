@@ -13,13 +13,13 @@ yum -y erase wireless-tools gtk2 libX11 hicolor-icon-theme avahi freetype bitstr
 #Installing ruby
 wget http://rubyforge.org/frs/download.php/71096/ruby-enterprise-1.8.7-2010.02.tar.gz
 tar xzvf ruby-enterprise-1.8.7-2010.02.tar.gz
-./ruby-enterprise-1.8.7-2010.02/installer -a /opt/ruby
+./ruby-enterprise-1.8.7-2010.02/installer -a /opt/ruby --no-dev-docs
 echo 'PATH=$PATH:/opt/ruby/bin/'> /etc/profile.d/rubyenterprise.sh
 rm -rf ./ruby-enterprise-1.8.7-2010.02/
 rm ruby-enterprise-1.8.7-2010.02.tar.gz
 
 #Installing chef
-/opt/ruby/bin/gem install chef
+/opt/ruby/bin/gem install chef --no-ri --no-rdoc
 
 #Installing vagrant keys
 mkdir /home/vagrant/.ssh

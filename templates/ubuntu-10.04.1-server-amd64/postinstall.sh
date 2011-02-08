@@ -10,6 +10,17 @@ apt-get clean
 cp /etc/sudoers /etc/sudoers.orig
 sed -i -e 's/%admin ALL=(ALL) ALL/%admin ALL=NOPASSWD:ALL/g' /etc/sudoers
 
+#Installing ruby
+wget http://rubyforge.org/frs/download.php/71096/ruby-enterprise-1.8.7-2010.02.tar.gz
+tar xzvf ruby-enterprise-1.8.7-2010.02.tar.gz
+./ruby-enterprise-1.8.7-2010.02/installer -a /opt/ruby --no-dev-docs
+echo 'PATH=$PATH:/opt/ruby/bin/'> /etc/profile.d/rubyenterprise.sh
+rm -rf ./ruby-enterprise-1.8.7-2010.02/
+rm ruby-enterprise-1.8.7-2010.02.tar.gz
+
+#Installing chef
+/opt/ruby/bin/gem install chef --no-ri --no-rdoc
+
 #Installing vagrant keys
 mkdir /home/vagrant/.ssh
 chmod 700 /home/vagrant/.ssh
@@ -23,7 +34,7 @@ VBOX_VERSION=$(cat /home/vagrant/.vbox_version)
 cd /tmp
 wget http://download.virtualbox.org/virtualbox/$VBOX_VERSION/VBoxGuestAdditions_$VBOX_VERSION.iso   
 mount -o loop VBoxGuestAdditions_$VBOX_VERSION.iso /mnt
-sh /mnt/VBoxLinuxAdditions-amd64.run
+sh /mnt/VBoxLinuxAdditions.run
 umount /mnt
 
 apt-get -y remove linux-headers-$(uname -r) build-essential
