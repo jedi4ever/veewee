@@ -8,7 +8,7 @@ Veewee::Session.declare( {
   :iso_download_timeout => "1000",
   :boot_wait => "10",:boot_cmd_sequence => [ 
 	 '<Tab> ',
-	 'setkmap=us dodhcp=eth0 dhcphostname=%NAME% ar_source=http://%IP%:%PORT%/ autoruns=0 rootpass=vagrant',
+   'setkmap=us dodhcp=eth0 dhcphostname=%NAME% ar_source=http://%IP%:%PORT%/ autoruns=0 rootpass=vagrant',
 	 '<Enter>' 
     ],
   :kickstart_port => "7122", :kickstart_timeout => "10000",:kickstart_file => "autorun0",
@@ -16,6 +16,7 @@ Veewee::Session.declare( {
   :ssh_host_port => "2222", :ssh_guest_port => "22",
   :sudo_cmd => "sh '%f'",
   :shutdown_cmd => "shutdown -H",
-  :postinstall_files => [ ],:postinstall_timeout => "10000"
+  :postinstall_files => [ "postinstall.sh"],:postinstall_timeout => "10000"
    }
 )
+#'setkmap=us dodhcp=eth0 dhcphostname=%NAME% ar_source=http://%IP%:%PORT%/ autoruns=0 rootpass=vagrant',
