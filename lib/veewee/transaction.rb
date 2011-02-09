@@ -78,6 +78,7 @@ module Veewee
       end
       if (delete_flag) then
         remove_snapshot_vmachine(vmname,name)
+        sleep 1
       end
     }
     

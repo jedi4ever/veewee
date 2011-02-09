@@ -131,6 +131,9 @@ echo "sed -i 's:^DAEMONS\(.*\))$:DAEMONS\1 sshd):' /etc/rc.conf" | chroot /newar
 echo "echo 'sshd:ALL' > /etc/hosts.allow" | chroot /newarch sh -
 echo "echo 'ALL:ALL' > /etc/hosts.deny" | chroot /newarch sh -
 
+
+
+
 #Configure Sudo
 chroot /newarch pacman --noconfirm -S sudo
 echo "echo 'vagrant ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers" | chroot /newarch sh -
@@ -164,15 +167,18 @@ echo "echo '. /usr/local/lib/rvm' >> /etc/bash/bash.rc" | chroot /newarch sh -
 #https://wiki.archlinux.org/index.php/VirtualBox
 #kernel pacman -S kernel26-headers
 chroot /newarch pacman --noconfirm -S kernel26-headers
-#/bin/cp -f /root/.vbox_version /newarch/root/.vbox_version
-#VBOX_VERSION=$(cat /home/vagrant/.vbox_version)
+/bin/cp -f /root/.vbox_version /newarch/home/vagrant/.vbox_version
+VBOX_VERSION=$(cat /root/.vbox_version)
+
 ##INstalling the virtualbox guest additions
-#cd /tmp
-#wget http://download.virtualbox.org/virtualbox/$VBOX_VERSION/VBoxGuestAdditions_$VBOX_VERSION.iso   
-#mount -o loop VBoxGuestAdditions_$VBOX_VERSION.iso /mnt
-#sh /mnt/VBoxLinuxAdditions.run
-#chroot /newarch umount /mnt
-#rm VBoxGuestAdditions_$VBOX_VERSION.iso
+cat <EOF | chroot /newarch /bin/bash -
+cd /tmp
+wget http://download.virtualbox.org/virtualbox/$VBOX_VERSION/VBoxGuestAdditions_$VBOX_VERSION.iso   
+mount -o loop VBoxGuestAdditions_$VBOX_VERSION.iso /mnt
+sh /mnt/VBoxLinuxAdditions.run
+umount /mnt
+rm VBoxGuestAdditions_$VBOX_VERSION.iso
+EOF
 
 echo "sed -i 's:^DAEMONS\(.*\))$:DAEMONS\1 rc.vboxadd):' /etc/rc.conf" | chroot /newarch sh -
 

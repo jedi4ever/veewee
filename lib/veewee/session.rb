@@ -389,7 +389,7 @@ module Veewee
       location=boxname+"."+@definition[:disk_format].downcase
       found=false       
       VirtualBox::HardDrive.all.each do |d|
-        if !d.location.match(/#{location}/).nil?
+        if d.location.match(/#{location}/)
           
           if File.exists?(d.location) 
             command="#{@vboxcmd} closemedium disk '#{d.location}' --delete"
@@ -511,7 +511,7 @@ module Veewee
         place=results.gets.chop
         results.close
          
-        command ="#{@vboxcmd} createhd --filename '#{place}/#{boxname}/#{boxname}.#{@definition[:disk_format]}' --size '#{@definition[:disk_size].to_i}' --format #{@definition[:disk_format]} > /dev/null"
+        command ="#{@vboxcmd} createhd --filename '#{place}/#{boxname}/#{boxname}.#{@definition[:disk_format].downcase}' --size '#{@definition[:disk_size].to_i}' --format #{@definition[:disk_format].downcase} > /dev/null"
         puts "#{command}"
         Veewee::Shell.execute("#{command}")
                    
@@ -706,7 +706,7 @@ module Veewee
             sleep 2
             #TODO:Restore snapshot!!!
             vm.start
-            sleep 2
+            sleep 4
             puts "Starting machine"
         end
 
