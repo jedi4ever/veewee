@@ -397,7 +397,9 @@ module Veewee
           Veewee::Shell.execute("#{command}") 
           
           if File.exists?(d.location) 
-            puts "We tried to delete the disk file '#{d.location} but failed"
+            puts "We tried to delete the disk file via vmware '#{d.location} but failed"
+            puts "Removing it manually"
+            FileUtils.rm(d.location)
             exit
           end 
           #v.3
