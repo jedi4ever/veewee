@@ -20,8 +20,9 @@ echo 'PATH=$PATH:/opt/ruby/bin/'> /etc/profile.d/rubyenterprise.sh
 rm -rf ./ruby-enterprise-1.8.7-2010.02/
 rm ruby-enterprise-1.8.7-2010.02.tar.gz
 
-#Installing chef
-/opt/ruby/bin/gem install chef --no-ri --no-rdoc 
+#Installing chef & Puppet
+/opt/ruby/bin/gem install chef --no-ri --no-rdoc
+/opt/ruby/bin/gem install puppet --no-ri --no-rdoc
 
 #Installing vagrant keys
 mkdir /home/vagrant/.ssh

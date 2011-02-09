@@ -262,7 +262,12 @@ module Veewee
               versionfile=Tempfile.open("vbox.version")
               versionfile.puts "#{VirtualBox::Global.global.lib.virtualbox.version}"
               versionfile.rewind
-              Veewee::Ssh.transfer_file("localhost",versionfile.path,".vbox_version", ssh_options)
+              begin
+                Veewee::Ssh.transfer_file("localhost",versionfile.path,".vbox_version", ssh_options)
+              rescue RuntimeError
+                puts "error transfering file, possible not enough permissions to write?"
+                exit
+              end
               puts ""
               versionfile.close
               versionfile.delete
@@ -279,8 +284,12 @@ module Veewee
                  transaction(boxname,"#{counter}-#{postinstall_file}-#{checksums[counter]}",checksums) do
                    
                    Veewee::Ssh.when_ssh_login_works("localhost",ssh_options) do
- 
-                    Veewee::Ssh.transfer_file("localhost",filename,File.basename(filename),ssh_options)
+                    begin
+                      Veewee::Ssh.transfer_file("localhost",filename,File.basename(filename),ssh_options)
+                    rescue RuntimeError
+                      puts "error transfering file, possible not enough permissions to write?"
+                      exit
+                    end
                     command=@definition[:sudo_cmd]
                     command.gsub!(/%p/,"#{@definition[:ssh_password]}")
                     command.gsub!(/%u/,"#{@definition[:ssh_user]}")
