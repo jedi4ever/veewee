@@ -36,6 +36,8 @@ done
 #enable a mirror
 
 #Partition the disk
+#This assumes a predefined layout - customize to your own liking
+
 sfdisk --force /dev/sda <<EOF
 # partition table of /dev/sda
 unit: sectors
@@ -61,7 +63,13 @@ mount /dev/sda1 /newarch
 mkdir -p /newarch/var/lib/pacman 
 
 #setting pacman - mirror - Belgium
+#Customize to your own liking
 sed -i 's/^#\(.*kangaroot.*\)/\1/' /etc/pacman.d/mirrorlist
+
+# https://wiki.archlinux.org/index.php/Mirrors#List_by_speed
+# pacman -S reflector
+# export LC_ALL=C
+# reflector -c Belgium -l 8 -r -o /etc/pacman.d/mirrorlist
 
 pacman -Sy -r /newarch
 
@@ -84,7 +92,6 @@ mount -t sysfs sys /newarch/sys
 mount -o bind /dev /newarch/dev
 
 chroot /newarch pacman --noconfirm -S kernel26 
-#chroot /newarch pacman --noconfir -S packagename
 
 #set the mirror list within the machine
 chroot /newarch sed -i 's/^#\(.*kangaroot.*\)/\1/' /etc/pacman.d/mirrorlist
@@ -97,6 +104,7 @@ echo "echo '/dev/sda2              swap          swap      defaults             
 #/etc/rc.conf
 
 #hostname
+
 chroot /newarch sed -i 's/^HOSTNAME=\(.*\)/HOSTNAME=vagrant-arch/' /etc/rc.conf
 #gateway
 
@@ -106,13 +114,69 @@ chroot /newarch sed -i 's/^HOSTNAME=\(.*\)/HOSTNAME=vagrant-arch/' /etc/rc.conf
 
 
 #grub
-chroot /newarch grep -v rootfs /proc/mounts > /etc/mtab  
+echo "grep -v rootfs /proc/mounts > /etc/mtab" |chroot /newarch sh -
 chroot /newarch grub-install /dev/sda
-chroot /newarch cp -a /usr/lib/grub/i386-pc/* /boot/grub
+echo "cp -a /usr/lib/grub/i386-pc/* /boot/grub" | chroot /newarch sh -
 
-#create vagrant user 
+#/boot/grub/menu.lst
 
-#chef
+echo "sed -i 's:^kernel\(.*\)$:kernel /boot/vmlinuz26 root=/dev/sda1 ro:' /boot/grub/menu.lst" | chroot /newarch sh -
+echo "sed -i 's:^initrd\(.*\)$:initrd /boot/kernel26.img:' /boot/grub/menu.lst" | chroot /newarch sh -
+
+#Configure ssh
+chroot /newarch pacman --noconfirm -S openssh
+
+#Still errors
+echo "sed -i 's:^DAEMONS\(.*\))$:DAEMONS\1 sshd):' /etc/rc.conf" | chroot /newarch sh -
+echo "echo 'sshd:ALL' > /etc/hosts.allow" | chroot /newarch sh -
+echo "echo 'ALL:ALL' > /etc/hosts.deny" | chroot /newarch sh -
+
+#Configure Sudo
+chroot /newarch pacman --noconfirm -S sudo
+echo "echo 'vagrant ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers" | chroot /newarch sh -
+
+#create vagrant user  / password vagrant
+chroot /newarch useradd -m -r vagrant -p '$1$MPmczGP9$1SeNO4bw5YgiEJuo/ZkWq1'
+
+#get some ruby running
+chroot /newarch pacman --noconfirm -S git curl gcc make
+echo "bash < <( curl -L http://bit.ly/rvm-install-system-wide )"| chroot /newarch /bin/bash -
+echo "/usr/local/bin/rvm install ruby-1.8.7 "| chroot /newarch sh -
+echo "/usr/local/bin/rvm use ruby-1.8.7 --default "| chroot /newarch sh -
+
+
+#Installing chef & Puppet
+echo ". /usr/local/lib/rvm ; gem install chef --no-ri --no-rdoc"| chroot /newarch sh -
+echo ". /usr/local/lib/rvm ; gem install puppet --no-ri --no-rdoc"| chroot /newarch sh -
+
+#Installing vagrant keys
+echo "creating vagrant ssh keys"
+chroot /newarch mkdir /home/vagrant/.ssh
+chroot /newarch chmod 700 /home/vagrant/.ssh
+chroot /newarch cd /home/vagrant/.ssh
+chroot /newarch wget --no-check-certificate 'http://github.com/mitchellh/vagrant/raw/master/keys/vagrant.pub' -O /home/vagrant/.ssh/authorized_keys
+chroot /newarch chmod 600 /home/vagrant/.ssh/authorized_keys
+chroot /newarch chown -R vagrant /home/vagrant/.ssh
+
+echo "adding rvm to global bash rc"
+echo "echo '. /usr/local/lib/rvm' >> /etc/bash/bash.rc" | chroot /newarch sh -
+
+#https://wiki.archlinux.org/index.php/VirtualBox
+#kernel pacman -S kernel26-headers
+chroot /newarch pacman --noconfirm -S kernel26-headers
+#/bin/cp -f /root/.vbox_version /newarch/root/.vbox_version
+#VBOX_VERSION=$(cat /home/vagrant/.vbox_version)
+##INstalling the virtualbox guest additions
+#cd /tmp
+#wget http://download.virtualbox.org/virtualbox/$VBOX_VERSION/VBoxGuestAdditions_$VBOX_VERSION.iso   
+#mount -o loop VBoxGuestAdditions_$VBOX_VERSION.iso /mnt
+#sh /mnt/VBoxLinuxAdditions.run
+#chroot /newarch umount /mnt
+#rm VBoxGuestAdditions_$VBOX_VERSION.iso
+
+echo "sed -i 's:^DAEMONS\(.*\))$:DAEMONS\1 rc.vboxadd):' /etc/rc.conf" | chroot /newarch sh -
+
+
 cd /
 umount /newarch/{proc,sys,dev}
 umount /newarch

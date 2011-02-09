@@ -349,7 +349,7 @@ module Veewee
     def self.destroy_vm(boxname)
       
       load_definition(boxname)
-            
+      @vboxcmd=determine_vboxcmd      
       #:destroy_medium => :delete,  will delete machine + all media attachments
       #vm.destroy(:destroy_medium => :delete)
       ##vm.destroy(:destroy_image => true)
@@ -366,12 +366,19 @@ module Veewee
       if (!vm.nil? && !(vm.powered_off?))
           puts "Shutting down vm #{boxname}"
           #We force it here, maybe vm.shutdown is cleaner
-          vm.stop
+          begin
+            vm.stop
+          rescue VirtualBox::Exceptions::InvalidVMStateException
+            puts "There was problem sending the stop command because the machine is in an Invalid state"
+            puts "Please verify leftovers from a previous build in your vm folder"
+            exit
+          end
+          sleep 3
       end     
-      sleep 3
+
       
       command="#{@vboxcmd} unregistervm  '#{boxname}' --delete"    
-
+      puts command
       puts "Deleting vm #{boxname}"
       
       #Exec and system stop the execution here
@@ -390,14 +397,14 @@ module Veewee
             command="#{@vboxcmd} closemedium disk '#{d.location}'"        
           end
           
-          command="#{@vboxcmd} closemedium disk '#{d.location}' --delete"
+          #command="#{@vboxcmd} closemedium disk '#{d.location}' --delete"
           puts "Deleting disk #{d.location}"
           puts "#{command}"
 
           Veewee::Shell.execute("#{command}") 
           
           if File.exists?(d.location) 
-            puts "We tried to delete the disk file via vmware '#{d.location} but failed"
+            puts "We tried to delete the disk file via virtualbox '#{d.location} but failed"
             puts "Removing it manually"
             FileUtils.rm(d.location)
             exit
@@ -407,9 +414,6 @@ module Veewee
           break
         end
       end     
-      
-      
-      
     end
     
     def self.create_vm(boxname,force=false)
@@ -488,6 +492,8 @@ module Veewee
         end
       end   
 
+      @vboxcmd=determine_vboxcmd
+      
       if !found
         puts "Creating new harddrive of size #{@definition[:disk_size].to_i} "
         
@@ -500,12 +506,13 @@ module Veewee
 	      ##VirtualBox::Global.global.max_vdi_size=1000000
         #newdisk.save
         
-        command="VBoxManage  list  systemproperties|grep '^Default machine'|cut -d ':' -f 2|sed -e 's/^[ ]*//'"
+        command="#{@vboxcmd}  list  systemproperties|grep '^Default machine'|cut -d ':' -f 2|sed -e 's/^[ ]*//'"
         results=IO.popen("#{command}")
         place=results.gets.chop
         results.close
          
         command ="#{@vboxcmd} createhd --filename '#{place}/#{boxname}/#{boxname}.#{@definition[:disk_format]}' --size '#{@definition[:disk_size].to_i}' --format #{@definition[:disk_format]} > /dev/null"
+        puts "#{command}"
         Veewee::Shell.execute("#{command}")
                    
       end
@@ -527,8 +534,10 @@ module Veewee
     
     def self.attach_disk(boxname)
       location=boxname+"."+@definition[:disk_format].downcase
-  
-      command="VBoxManage  list  systemproperties|grep '^Default machine'|cut -d ':' -f 2|sed -e 's/^[ ]*//'"
+    
+      @vboxcmd=determine_vboxcmd
+      
+      command="#{@vboxcmd}  list  systemproperties|grep '^Default machine'|cut -d ':' -f 2|sed -e 's/^[ ]*//'"
       results=IO.popen("#{command}")
       place=results.gets.chop
       results.close

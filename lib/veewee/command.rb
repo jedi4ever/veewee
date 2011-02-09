@@ -52,7 +52,7 @@ class Command < Vagrant::Command::GroupBase
   
   desc "destroy BOXNAME", "Destroys the virtualmachine that was build for a basebox"
   def destroy(boxname)
-    puts Veewee::Session.destroy_vm(boxname)
+     Veewee::Session.destroy_vm(boxname)
   end
   
   desc "list", "Lists all defined baseboxes"

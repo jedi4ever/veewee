@@ -13,7 +13,7 @@ Veewee::Session.declare( {
     ],
   :kickstart_port => "7122", :kickstart_timeout => "10000",:kickstart_file => "autorun0",
   :ssh_login_timeout => "10000",:ssh_user => "root", :ssh_password => "vagrant",:ssh_key => "",
-  :ssh_host_port => "2222", :ssh_guest_port => "22",
+  :ssh_host_port => "7222", :ssh_guest_port => "22",
   :sudo_cmd => "sh '%f'",
   :shutdown_cmd => "shutdown -H",
   :postinstall_files => [ "postinstall.sh"],:postinstall_timeout => "10000"
