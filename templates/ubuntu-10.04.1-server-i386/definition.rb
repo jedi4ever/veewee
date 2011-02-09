@@ -19,7 +19,7 @@ Veewee::Session.declare( {
   :ssh_login_timeout => "10000",:ssh_user => "vagrant", :ssh_password => "vagrant",:ssh_key => "",
   :ssh_host_port => "7222", :ssh_guest_port => "22",
   :sudo_cmd => "echo '%p'|sudo -S sh '%f'",
-  :shutdown_cmd => "shutdown -H",
+  :shutdown_cmd => "shutdown -P now",
   :postinstall_files => [ "postinstall.sh"],:postinstall_timeout => "10000"
    }
 )
