@@ -154,7 +154,7 @@ module Veewee
         rel_path=path1.relative_path_from(path2).to_s
         
         puts
-        puts "The isofile is not found. The definition provided the following information:"
+        puts "We did not find an isofile in <currentdir>/iso. The definition provided the following download information:"
         puts "- Download url: #{@definition[:iso_src]}"
         puts "- Md5 Checksum: #{@definition[:iso_md5]}"
         puts ""
