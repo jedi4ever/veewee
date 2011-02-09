@@ -42,7 +42,7 @@ module Veewee
       box_path=path1.relative_path_from(path2).to_s
       
       if File.exists?("#{box_path}")
-        puts "box #{boxname} already exists"
+        puts "box #{boxname}.box already exists"
         exit
       end
       
