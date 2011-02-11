@@ -3,7 +3,7 @@ Veewee::Session.declare( {
   :disk_size => '10140', :disk_format => 'VDI',:disk_size => '10240' ,
   :os_type_id => 'Linux',
   :iso_file => "systemrescuecd-x86-2.0.0.iso",
-  :iso_src => "http://downloads.sourceforge.net/project/systemrescuecd/sysresccd-x86/2.0.0/systemrescuecd-x86-2.0.0.iso?r=http%3A%2F%2Fwww.sysresccd.org%2FDownload&ts=1297107227&use_mirror=ignum",
+  :iso_src => "http://downloads.sourceforge.net/project/systemrescuecd/sysresccd-x86/2.0.0/systemrescuecd-x86-2.0.0.iso",
   :iso_md5 => "51012e0bb943cff6367e5cea3a61cdbe",
   :iso_download_timeout => "1000",
   :boot_wait => "10",:boot_cmd_sequence => [ 

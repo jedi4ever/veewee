@@ -171,7 +171,7 @@ chroot /newarch pacman --noconfirm -S kernel26-headers
 VBOX_VERSION=$(cat /root/.vbox_version)
 
 ##INstalling the virtualbox guest additions
-cat <EOF | chroot /newarch /bin/bash -
+cat <<EOF | chroot /newarch /bin/bash -
 cd /tmp
 wget http://download.virtualbox.org/virtualbox/$VBOX_VERSION/VBoxGuestAdditions_$VBOX_VERSION.iso   
 mount -o loop VBoxGuestAdditions_$VBOX_VERSION.iso /mnt

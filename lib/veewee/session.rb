@@ -251,11 +251,19 @@ module Veewee
         
             Veewee::Scancode.send_sequence("#{@vboxcmd}","#{boxname}",@definition[:boot_cmd_sequence])
         
-            puts "Starting a webserver on port #{@definition[:kickstart_port]}"
-            #:kickstart_port => "7122", :kickstart_ip => self.local_ip, :kickstart_timeout => 1000,:kickstart_file => "preseed.cfg",
-            Veewee::Web.wait_for_request(@definition[:kickstart_file],{:port => @definition[:kickstart_port],
-                                      :host => @definition[:kickstart_ip], :timeout => @definition[:kickstart_timeout],
-                                      :web_dir => File.join(@definition_dir,boxname)})
+            kickstartfile=@definition[:kickstart_file]
+            puts "#{kickstartfile}"
+            if kickstartfile.nil? || kickstartfile.length == 0
+                puts "Skipping webserver as no kickstartfile was specified"
+            else
+                puts "Starting a webserver on port #{@definition[:kickstart_port]}"
+                #:kickstart_port => "7122", :kickstart_ip => self.local_ip, :kickstart_timeout => 1000,:kickstart_file => "preseed.cfg",
+                Veewee::Web.wait_for_request(kickstartfile,{:port => @definition[:kickstart_port],
+                                          :host => @definition[:kickstart_ip], :timeout => @definition[:kickstart_timeout],
+                                          :web_dir => File.join(@definition_dir,boxname)})
+                
+            end
+                                      
                                       
             Veewee::Ssh.when_ssh_login_works("localhost",ssh_options) do
               #Transfer version of Virtualbox to $HOME/.vbox_version            
