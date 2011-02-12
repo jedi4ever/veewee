@@ -41,7 +41,7 @@ rm VBoxGuestAdditions_$VBOX_VERSION.iso
 
 #poweroff -h   
 
-sed -i "s/Defaults requiretty/#Defaults requiretty/" /etc/sudoers
+sed -i "s/^.*requiretty/#Defaults requiretty/" /etc/sudoers
 
 
 exit

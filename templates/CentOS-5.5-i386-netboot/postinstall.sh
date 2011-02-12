@@ -40,7 +40,8 @@ umount /mnt
 rm VBoxGuestAdditions_$VBOX_VERSION.iso
 
 
-sed -i "s/Defaults requiretty/#Defaults requiretty/" /etc/sudoers
+sed -i "s/^.*requiretty/#Defaults requiretty/" /etc/sudoers
+
 #poweroff -h   
 
 exit
