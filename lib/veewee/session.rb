@@ -211,12 +211,41 @@ module Veewee
         #Suppress those annoying virtualbox messages
         suppress_messages  
         
+        
+        vm=VirtualBox::VM.find(boxname)
+
+        if vm.saved?
+          puts "Removing save state"
+          vm.discard_state
+          vm.reload
+        end
+        
+        if (!vm.nil? && !(vm.powered_off?))
+            puts "Shutting down vm #{boxname}"
+            #We force it here, maybe vm.shutdown is cleaner
+            begin
+
+                vm.stop
+            rescue VirtualBox::Exceptions::InvalidVMStateException
+              puts "There was problem sending the stop command because the machine is in an Invalid state"
+              puts "Please verify leftovers from a previous build in your vm folder"
+              exit
+            end
+            sleep 3
+        end
+        
+        
         verify_iso(@definition[:iso_file])
         
         if (options["force"]==false)
         else    
           puts "Forcing build by destroying #{boxname} machine"
           destroy_vm(boxname)
+        end
+        
+        if Veewee::Utils.is_port_open?("localhost", @definition[:ssh_host_port])
+          puts "Hmm, the port #{@definition[:ssh_host_port]} is open. And we shut down?"
+          exit
         end
         
         checksums=calculate_checksums(@definition,boxname)
@@ -252,7 +281,6 @@ module Veewee
             Veewee::Scancode.send_sequence("#{@vboxcmd}","#{boxname}",@definition[:boot_cmd_sequence])
         
             kickstartfile=@definition[:kickstart_file]
-            puts "#{kickstartfile}"
             if kickstartfile.nil? || kickstartfile.length == 0
                 puts "Skipping webserver as no kickstartfile was specified"
             else
@@ -311,6 +339,11 @@ module Veewee
                  
                end  
      
+          puts "#{boxname} was build succesfully. "
+          puts ""
+          puts "Now you can: "
+          puts "- verify your box by running              : vagrant basebox validate #{boxname}"
+          puts "- export your vm to a .box fileby running : vagrant basebox export   #{boxname}"
         
     end
 
