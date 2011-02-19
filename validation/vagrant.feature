@@ -1,6 +1,6 @@
 Feature: vagrant box validation
-  As a user of example.org
-  I need to login remotely
+  As a valid vagrant box
+  I need to comply to a set of rules
 
 Scenario: Checking login
 	When I ssh to "127.0.0.1" with the following credentials: 

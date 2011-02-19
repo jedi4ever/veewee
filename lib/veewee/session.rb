@@ -214,7 +214,7 @@ module Veewee
         
         vm=VirtualBox::VM.find(boxname)
 
-        if (!vm.nil? && !(vm.saved?))
+        if (!vm.nil? && (vm.saved?))
           puts "Removing save state"
           vm.discard_state
           vm.reload

@@ -80,15 +80,73 @@ When /^I ssh to "([^\"]*)" with the following credentials:$/ do |hostname, table
   }.should_not raise_error
 end
 
-When /^I run "([^\"]*)"$/ do |command| 
-#  @connection.open_channel do |ch|
 #
-	  #ch.request_pty do |ch, success|
-		#raise "Error requesting pty" unless success
-	  #end
-	  #@output = ch.exec(command)
-  #end
-	  @output = @connection.exec!(command)
+When /^I run "([^\"]*)"$/ do |command| 
+  @stdout=nil
+  @stderr=nil
+  @status=-9999
+  channel = @connection.open_channel do |ch|
+	  ch.request_pty do |ch, success|
+      if success
+#		    puts "pty successfully obtained"
+		  else
+#		    puts "could not obtain pty"
+		  end
+	  end
+    ch.exec "#{command}" do |ch, success|
+       raise "could not execute command" unless success
+
+       # "on_data" is called when the process writes something to stdout
+      ch.on_data do |c, data|
+        if @stdout.nil?
+          @stdout=data
+        else  
+          @stdout+=data
+        end
+      end
+
+      # "on_extended_data" is called when the process writes something to stderr
+      ch.on_extended_data do |c, type, data|
+          if @stderr.nil?
+            @stderr=data
+          else  
+            @stderr+=data
+          end
+      end
+      
+      #exit code
+      #http://groups.google.com/group/comp.lang.ruby/browse_thread/thread/a806b0f5dae4e1e2
+      channel.on_request("exit-status") do |ch, data|
+        exit_code = data.read_long
+        @status=exit_code
+      end
+      
+      channel.on_request("exit-signal") do |ch, data|
+        puts "SIGNAL: #{data.read_long}"
+      end
+
+      ch.on_close {
+        puts "done!"
+      }
+    end
+  end
+  channel.wait
+  if !@stdout.nil?
+    if @output.nil?
+      @output=""
+    end
+    @output=@output+@stdout
+  end
+  if !@stderr.nil?
+
+    if @output.nil?
+      @output=""
+    end
+    @output=@output+@stderr
+  end
+  puts @output
+
+	#@output = @connection.exec!(command)
 
 end
 
