@@ -6,3 +6,4 @@ definitions/*
 boxes/*
 pkg/*
 *.box
+.vagrant
