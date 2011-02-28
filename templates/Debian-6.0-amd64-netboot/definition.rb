@@ -12,7 +12,6 @@ Veewee::Session.declare( {
   :boot_wait => "10",:boot_cmd_sequence => [
      '<Esc>',
      'install ',
-     'acpi=off noapic nolapic ',
      'preseed/url=http://%IP%:%PORT%/preseed.cfg ',
      'debian-installer=en_US ',
      'auto ',
@@ -36,7 +35,7 @@ Veewee::Session.declare( {
   :ssh_host_port => "7222",
   :ssh_guest_port => "22",
   :sudo_cmd => "echo '%p'|sudo -S sh '%f'",
-  :shutdown_cmd => "shutdown -H",
+  :shutdown_cmd => "halt -p",
   :postinstall_files => [ "postinstall.sh" ],
   :postinstall_timeout => "10000"
  }
