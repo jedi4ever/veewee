@@ -492,6 +492,11 @@ module Veewee
 
         #Exec and system stop the execution here
         Veewee::Shell.execute("#{command}")
+
+        #Set a shared folder for validation
+        command="#{@vboxcmd} sharedfolder add  '#{boxname}' --name 'veewee-validation' --hostpath '#{File.expand_path(@veewee_dir)}/validation' --automount"    
+
+        Veewee::Shell.execute("#{command}")
         
       end
 
@@ -818,7 +823,7 @@ module Veewee
  
           #Need to look it up again because if it was an initial load
           vm=VirtualBox::VM.find(boxname) 
-          puts "Step [#{current_step_nr}] was succesfull - saving state"
+          puts "Step [#{current_step_nr}] was succesfully - saving state"
           vm.save_state
           sleep 2 #waiting for it to be ok
           #puts "about to snapshot #{vm}"

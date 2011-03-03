@@ -44,9 +44,9 @@ Scenario: Checking puppet
 	And I run ". /etc/profile ; puppet --version 2> /dev/null 1>/dev/null; echo $?"
 	Then I should see "0" in the output
 
-Scenario: Checking puppet
+Scenario: Checking shared folders
 	When I ssh to "127.0.0.1" with the following credentials: 
 	| username| password |keyfile  | port |
 	| vagrant | vagrant  | vagrant-private.key | 7222 |
-	And I run "whoami"
-	Then I should see "vagrant" in the output
+	And I run "mount|grep veewee-validation"
+	Then I should see "veewee-validation" in the output
