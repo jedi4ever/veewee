@@ -7,3 +7,5 @@ boxes/*
 pkg/*
 *.box
 .vagrant
+.buildpath
+.project
