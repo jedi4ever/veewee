@@ -18,6 +18,10 @@ make install -DBATCH
 cd /usr/ports/sysutils/rubygem-chef
 make install -DBATCH
 
+#Installing chef & Puppet
+/usr/local/bin/gem update chef --no-ri --no-rdoc
+/usr/local/bin/gem install puppet --no-ri --no-rdoc
+
 #Get wget
 cd /usr/ports/ftp/wget
 make install -DBATCH
@@ -34,7 +38,7 @@ chown -R vagrant /home/vagrant/.ssh
 cd /usr/ports/ports-mgmt/portupgrade
 make install -DBATCH clean
 
-portsclean -C
+/usr/local/sbin/portsclean -C
 
 # As sharedfolders are not in defaults ports tree
 # We will use vagrant via NFS
