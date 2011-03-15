@@ -1,4 +1,4 @@
-# Many thanks to @draco
+# Many thanks to @draco2002
 # http://dracosplace.com/veewee_and_freebsd
 
 Veewee::Session.declare( {
