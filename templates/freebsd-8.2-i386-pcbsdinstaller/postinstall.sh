@@ -29,6 +29,12 @@ cd /home/vagrant/.ssh
 /usr/local/bin/wget --no-check-certificate 'http://github.com/mitchellh/vagrant/raw/master/keys/vagrant.pub' -O authorized_keys
 chown -R vagrant /home/vagrant/.ssh
 
+# Cleaning portstree to save space
+# http://www.freebsd.org/doc/en_US.ISO8859-1/books/handbook/ports-using.html
+cd /usr/ports/ports-mgmt/portupgrade
+make install -DBATCH clean
+
+portsclean -C
 
 # As sharedfolders are not in defaults ports tree
 # We will use vagrant via NFS
@@ -42,6 +48,7 @@ echo "vagrant ALL=(ALL) NOPASSWD: ALL" >> /usr/local/etc/sudoers
 # Restore correct su permissions
 # I'll leave that up to the reader :)
 
+echo "=============================================================================="
 echo "NOTE: FreeBSD - Vagrant"
 echo "When using this basebox you need to do some special stuff in your Vagrantfile"
 echo "1) Include the correct system"
@@ -52,6 +59,9 @@ echo "3) Enable HostOnly network"
 echo "	 config.vm.network ...."
 echo "4) Use nfs instead of shared folders"
 echo "		:nfs => true"
+echo "============================================================================="
+
+
 
 exit
 
