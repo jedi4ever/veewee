@@ -29,6 +29,32 @@ cd /home/vagrant/.ssh
 /usr/local/bin/wget --no-check-certificate 'http://github.com/mitchellh/vagrant/raw/master/keys/vagrant.pub' -O authorized_keys
 chown -R vagrant /home/vagrant/.ssh
 
+
+# As sharedfolders are not in defaults ports tree
+# We will use vagrant via NFS
+# Enable NFS
+echo 'rpcbind_enable="YES"' >> /etc/rc.conf
+echo 'nfs_server_enable="YES"' >> /etc/rc.conf
+echo 'mountd_flags="-r"' >> /etc/rc.conf
+
+# Enable passwordless sudo 
+echo "vagrant ALL=(ALL) NOPASSWD: ALL" >> /usr/local/etc/sudoers
+# Restore correct su permissions
+# I'll leave that up to the reader :)
+
+echo "NOTE: FreeBSD - Vagrant"
+echo "When using this basebox you need to do some special stuff in your Vagrantfile"
+echo "1) Include the correct system"
+echo "		require 'vagrant/systems/freebsd' "
+echo "2) Add after your config.vm.box = ..."
+echo "		  config.vm.system = :freebsd"
+echo "3) Enable HostOnly network"
+echo "	 config.vm.network ...."
+echo "4) Use nfs instead of shared folders"
+echo "		:nfs => true"
+
+exit
+
 # The iso from virtualbox will only install windows/solaris or linux, no BSD
 # Research is on it's way to have 4.x in the main portstree
 # http://www.listware.net/201102/freebsd-ports/65201-call-for-testers-virtualbox-404.html
@@ -49,6 +75,3 @@ make install -DBATCH
 
 echo 'vboxguest_enable="YES"' >> /etc/rc.conf
 echo 'vboxservice_enable="YES"' >> /etc/rc.conf
-
-# Restore correct sudo permissions
-# I'll leave that up to the reader :)
