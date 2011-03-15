@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    veewee (0.1.14)
+    veewee (0.1.15)
       cucumber (= 0.8.5)
       highline (~> 1.6.1)
       net-ssh (~> 2.1.0)
