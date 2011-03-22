@@ -1,14 +1,14 @@
 module Veewee
   class Scancode
   
-    def self.send_sequence(vboxcmd,vname,sequence)
+    def self.send_sequence(vboxcmd,vname,sequence,webport)
             puts
             counter=0
             sequence.each { |s|
               counter=counter+1
  
               s.gsub!(/%IP%/,Veewee::Session.local_ip);
-              s.gsub!(/%PORT%/,'7122');
+              s.gsub!(/%PORT%/,webport);
               s.gsub!(/%NAME%/, vname);
               puts "Typing:[#{counter}]: "+s
 
@@ -51,9 +51,14 @@ module Veewee
             k['a'] = '1e'; k['s']  = '1f' ; k['d']  = '20' ; k['f']  = '21'; k['g'] = '22' ; k['h'] = '23' ; k['j'] = '24'; k['k']= '25' ; k['l']='26'; k[';'] = '27' 
             k['A'] = '2a 1e aa'; k['S']  = '2a 1f aa' ; k['D']  = '2a 20 aa' ; k['F']  = '2a 21 aa'; k['G'] = '2a 22 aa' ; k['H'] = '2a 23 aa' ; k['J'] = '2a 24 aa'; k['K']= '2a 25 aa' ; k['L']='2a 26 aa'; 
             
-            k[';'] = '27' ;k['"']='28';
+            k[';'] = '27' ;k['"']='2a 28 aa';k['\'']='28';
+   
+            k['\\'] = '2b';   k['|'] = '2a 2b aa';
 
-            k['[']='1a'; k[']']='1b'
+            k['[']='1a'; k[']']='1b';
+            k['<']='2a 33 aa'; k['>']='2a 34 aa';
+            k['$']='2a 05 aa';
+            k['+']='2a 0d aa';
 
             k['z'] = '2c'; k['x']  = '2d' ; k['c']  = '2e' ; k['v']  = '2f'; k['b'] = '30' ; k['n'] = '31' ; k['m'] = '32';
             k['Z'] = '2a 2c aa'; k['X']  = '2a 2d aa' ; k['C']  = '2a 2e aa' ; k['V']  = '2a 2f aa'; k['B'] = '2a 30 aa' ; k['N'] = '2a 31 aa' ; k['M'] = '2a 32 aa';
@@ -68,6 +73,7 @@ module Veewee
           special['<Return>'] = '1c'
           special['<Esc>'] = '01';
           special['<Tab>'] = '0f';
+          special['<KillX>'] = '1d 38 0e';
 
           #special['<Up>'] = '01';
           #special['<Down>'] = '01';
