@@ -8,7 +8,7 @@ apt-get -y install zlib1g-dev libssl-dev libreadline5-dev
 # See https://redmine.dkd.de/issues/9492
 apt-get -y install ruby ruby-dev libopenssl-ruby rdoc ri irb build-essential wget ssl-cert
 apt-get -y install openssl
-apt-get install nfs-common
+apt-get -y install nfs-common
 apt-get clean
 
 #Setting up sudo
@@ -26,6 +26,12 @@ rm ruby-enterprise-1.8.7-2010.02.tar.gz
 #Installing chef & Puppet
 /opt/ruby/bin/gem install chef --no-ri --no-rdoc
 /opt/ruby/bin/gem install puppet --no-ri --no-rdoc
+
+# Install additional languages 
+# @see https://redmine.dkd.de/issues/8615
+locale-gen de_DE.UTF-8
+locale-gen de_DE ISO-8859-1
+locale-gen de_DE@euro ISO-8859-15
 
 #Installing vagrant keys
 mkdir /home/vagrant/.ssh
