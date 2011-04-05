@@ -18,16 +18,11 @@ cp /etc/sudoers /etc/sudoers.orig
 sed -i -e 's/%admin ALL=(ALL) ALL/%admin ALL=NOPASSWD:ALL/g' /etc/sudoers
 
 #Installing ruby
-REE_VERSION="ruby-enterprise-1.8.7-2011.03"
-# @see http://www.rubyenterpriseedition.com/download.html
-# @see http://rubyenterpriseedition.googlecode.com/files/ruby-enterprise_1.8.7-2011.03_i386_ubuntu10.04.deb
-wget http://rubyenterpriseedition.googlecode.com/files/${REE_VERSION}.tar.gz
-#wget http://rubyforge.org/frs/download.php/71096/ruby-enterprise-1.8.7-2010.02.tar.gz
-tar xzvf ${REE_VERSION}.tar.gz
-./${REE_VERSION}/installer -a /opt/ruby --no-dev-docs --dont-install-useful-gems
-echo 'PATH=$PATH:/opt/ruby/bin/'> /etc/profile.d/rubyenterprise.sh
-rm -rf ./${REE_VERSION}/
-rm ${REE_VERSION}.tar.gz
+REE_VERSION="ruby-enterprise_1.8.7-2011.03_i386_ubuntu10.04"
+wget http://rubyenterpriseedition.googlecode.com/files/${REE_VERSION}.deb
+dpkg -i ${REE_VERSION}.deb
+rm ${REE_VERSION}.deb
+
 
 #Installing chef & Puppet
 /opt/ruby/bin/gem install chef --no-ri --no-rdoc
