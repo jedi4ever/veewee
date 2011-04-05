@@ -2,7 +2,7 @@ Veewee::Session.declare( {
   :cpu_count => '1', :memory_size=> '384', 
   :disk_size => '10140', :disk_format => 'VDI',:disk_size => '10240' ,
   :os_type_id => 'Ubuntu',
-  :iso_file => "ubuntu-10.04.2-server-i386.iso",
+  :iso_file => "ubuntu-10.04.1-server-i386.iso",
   :iso_src => "http://releases.ubuntu.com/10.04.2/ubuntu-10.04.2-server-i386.iso",
   :iso_md5 => "9807160b8935289096df8160832e358e",
   :iso_download_timeout => "1000",
