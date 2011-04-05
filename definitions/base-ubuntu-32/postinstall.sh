@@ -25,8 +25,8 @@ rm ${REE_VERSION}.deb
 
 
 #Installing chef & Puppet
-/opt/ruby/bin/gem install chef --no-ri --no-rdoc
-/opt/ruby/bin/gem install puppet --no-ri --no-rdoc
+gem install chef --no-ri --no-rdoc
+gem install puppet --no-ri --no-rdoc
 
 # Install additional languages 
 # @see https://redmine.dkd.de/issues/8615
