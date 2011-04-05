@@ -19,6 +19,8 @@ sed -i -e 's/%admin ALL=(ALL) ALL/%admin ALL=NOPASSWD:ALL/g' /etc/sudoers
 
 #Installing ruby
 REE_VERSION="ruby-enterprise-1.8.7-2011.03"
+# @see http://www.rubyenterpriseedition.com/download.html
+# @see http://rubyenterpriseedition.googlecode.com/files/ruby-enterprise_1.8.7-2011.03_i386_ubuntu10.04.deb
 wget http://rubyenterpriseedition.googlecode.com/files/${REE_VERSION}.tar.gz
 #wget http://rubyforge.org/frs/download.php/71096/ruby-enterprise-1.8.7-2010.02.tar.gz
 tar xzvf ${REE_VERSION}.tar.gz
