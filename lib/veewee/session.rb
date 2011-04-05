@@ -278,7 +278,7 @@ module Veewee
             puts "Waiting for the machine to boot"
             sleep @definition[:boot_wait].to_i
         
-            Veewee::Scancode.send_sequence("#{@vboxcmd}","#{boxname}",@definition[:boot_cmd_sequence])
+            Veewee::Scancode.send_sequence("#{@vboxcmd}","#{boxname}",@definition[:boot_cmd_sequence],@definition[:kickstart_port])
         
             kickstartfile=@definition[:kickstart_file]
             if kickstartfile.nil? || kickstartfile.length == 0
