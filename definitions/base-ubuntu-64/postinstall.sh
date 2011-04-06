@@ -21,11 +21,17 @@ wget http://rubyenterpriseedition.googlecode.com/files/${REE_VERSION}.deb
 dpkg -i ${REE_VERSION}.deb
 rm ${REE_VERSION}.deb
 
+#Installing rubygems
+wget http://production.cf.rubygems.org/rubygems/rubygems-1.3.7.tgz
+tar zxf rubygems-1.3.7.tgz
+ruby rubygems-1.3.7/setup.rb --no-format-executable
+rm rubygems-1.3.7.tgz
+
 #Installing chef & Puppet
 gem install chef --no-ri --no-rdoc
 gem install puppet --no-ri --no-rdoc
 
-# Install additional languages 
+#Installing additional languages 
 # @see https://redmine.dkd.de/issues/8615
 locale-gen de_DE.UTF-8
 locale-gen de_DE ISO-8859-1
@@ -37,13 +43,13 @@ chmod 700 /home/vagrant/.ssh
 cd /home/vagrant/.ssh
 wget --no-check-certificate 'http://github.com/mitchellh/vagrant/raw/master/keys/vagrant.pub' -O authorized_keys
 chown -R vagrant /home/vagrant/.ssh
-# Adding user to group www-data to fix issues with (non-nfs) shared folders
-# https://redmine.dkd.de/issues/9072
+#Adding user to group www-data to fix issues with (non-nfs) shared folders
+#https://redmine.dkd.de/issues/9072
 usermod -G vagrant,admin,www-data vagrant
 
-#INstalling the virtualbox guest additions
+#Installing the virtualbox guest additions
 VBOX_VERSION=$(cat /home/vagrant/.vbox_version)
-#INstalling the virtualbox guest additions
+#Installing the virtualbox guest additions
 cd /tmp
 wget http://download.virtualbox.org/virtualbox/$VBOX_VERSION/VBoxGuestAdditions_$VBOX_VERSION.iso   
 mount -o loop VBoxGuestAdditions_$VBOX_VERSION.iso /mnt

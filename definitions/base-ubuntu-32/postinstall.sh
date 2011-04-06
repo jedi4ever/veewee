@@ -23,12 +23,17 @@ wget http://rubyenterpriseedition.googlecode.com/files/${REE_VERSION}.deb
 dpkg -i ${REE_VERSION}.deb
 rm ${REE_VERSION}.deb
 
+#Installing rubygems
+wget http://production.cf.rubygems.org/rubygems/rubygems-1.3.7.tgz
+tar zxf rubygems-1.3.7.tgz
+ruby rubygems-1.3.7/setup.rb --no-format-executable
+rm rubygems-1.3.7.tgz
 
 #Installing chef & Puppet
 gem install chef --no-ri --no-rdoc
 gem install puppet --no-ri --no-rdoc
 
-# Install additional languages 
+#Installing additional languages 
 # @see https://redmine.dkd.de/issues/8615
 locale-gen de_DE.UTF-8
 locale-gen de_DE ISO-8859-1
