@@ -16,7 +16,7 @@ cp /etc/sudoers /etc/sudoers.orig
 sed -i -e 's/%admin ALL=(ALL) ALL/%admin ALL=NOPASSWD:ALL/g' /etc/sudoers
 
 #Installing ruby
-REE_VERSION="ruby-enterprise_1.8.7-2011.03_amd64_ubuntu10.04.de"
+REE_VERSION="ruby-enterprise_1.8.7-2011.03_amd64_ubuntu10.04"
 wget http://rubyenterpriseedition.googlecode.com/files/${REE_VERSION}.deb
 dpkg -i ${REE_VERSION}.deb
 rm ${REE_VERSION}.deb
