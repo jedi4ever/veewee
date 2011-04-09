@@ -1,29 +1,29 @@
-Veewee::Session.declare( {
+Veewee::Session.declare({
   :cpu_count => '1',
   :memory_size=> '256',
   :disk_size => '10140',
   :disk_format => 'VDI',
-  :disk_size => '10240' ,
+  :disk_size => '10240',
   :os_type_id => 'Debian_64',
   :iso_file => "debian-6.0.0-amd64-netinst.iso",
   :iso_src => "http://ftp.acc.umu.se/debian-cd/current/amd64/iso-cd/debian-6.0.0-amd64-netinst.iso",
   :iso_md5 => "98111f815d3bea761d303a14d8df8887",
   :iso_download_timeout => "1000",
-  :boot_wait => "10",:boot_cmd_sequence => [
-     '<Esc>',
-     'install ',
-     'preseed/url=http://%IP%:%PORT%/preseed.cfg ',
-     'debian-installer=en_US ',
-     'auto ',
-     'locale=en_US ',
-     'kbd-chooser/method=us ',
-     'netcfg/get_hostname=%NAME% ',
-     'netcfg/get_domain=vagrantup.com ',
-     'fb=false ',
-     'debconf/frontend=noninteractive ',
-     'console-setup/ask_detect=false ',
-     'console-keymaps-at/keymap=us ',
-     '<Enter>'
+  :boot_wait => "10", :boot_cmd_sequence => [
+    '<Esc>',
+    'install ',
+    'preseed/url=http://%IP%:%PORT%/preseed.cfg ',
+    'debian-installer=en_US ',
+    'auto ',
+    'locale=en_US ',
+    'kbd-chooser/method=us ',
+    'netcfg/get_hostname=%NAME% ',
+    'netcfg/get_domain=vagrantup.com ',
+    'fb=false ',
+    'debconf/frontend=noninteractive ',
+    'console-setup/ask_detect=false ',
+    'console-keymaps-at/keymap=us ',
+    '<Enter>'
   ],
   :kickstart_port => "7122",
   :kickstart_timeout => "10000",
@@ -38,5 +38,4 @@ Veewee::Session.declare( {
   :shutdown_cmd => "halt -p",
   :postinstall_files => [ "postinstall.sh" ],
   :postinstall_timeout => "10000"
- }
-)
+})
