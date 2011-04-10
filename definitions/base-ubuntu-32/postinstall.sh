@@ -2,13 +2,12 @@
 
 #Updating the box
 apt-get -y update
-#apt-get -y upgrade
 apt-get -y remove apparmor
 apt-get -y install linux-headers-$(uname -r) build-essential
 apt-get -y install zlib1g-dev libssl-dev libreadline5-dev
+apt-get -y install ruby ruby-dev libopenssl-ruby rdoc ri irb build-essential wget ssl-cert
 # Installing additional ruby packages for chef + nfs sharing
 # See https://redmine.dkd.de/issues/9492
-apt-get -y install ruby ruby-dev libopenssl-ruby rdoc ri irb build-essential wget ssl-cert
 apt-get -y install openssl
 apt-get -y install nfs-common
 apt-get clean
@@ -22,12 +21,6 @@ REE_VERSION="ruby-enterprise_1.8.7-2011.03_i386_ubuntu10.04"
 wget http://rubyenterpriseedition.googlecode.com/files/${REE_VERSION}.deb
 dpkg -i ${REE_VERSION}.deb
 rm ${REE_VERSION}.deb
-
-#Installing rubygems
-wget http://production.cf.rubygems.org/rubygems/rubygems-1.3.7.tgz
-tar zxf rubygems-1.3.7.tgz
-ruby rubygems-1.3.7/setup.rb --no-format-executable
-rm rubygems-1.3.7.tgz
 
 #Installing chef & Puppet
 gem install chef --no-ri --no-rdoc
@@ -49,14 +42,17 @@ chown -R vagrant /home/vagrant/.ssh
 # https://redmine.dkd.de/issues/9072
 usermod -G vagrant,admin,www-data vagrant
 
-#INstalling the virtualbox guest additions
-VBOX_VERSION=$(cat /home/vagrant/.vbox_version)
-#INstalling the virtualbox guest additions
+#Installing the virtualbox guest additions
 cd /tmp
-wget http://download.virtualbox.org/virtualbox/$VBOX_VERSION/VBoxGuestAdditions_$VBOX_VERSION.iso   
+VBOX_VERSION=$(cat /home/vagrant/.vbox_version)
+wget http://download.virtualbox.org/virtualbox/$VBOX_VERSION/VBoxGuestAdditions_$VBOX_VERSION.iso
 mount -o loop VBoxGuestAdditions_$VBOX_VERSION.iso /mnt
 sh /mnt/VBoxLinuxAdditions.run
 umount /mnt
-
 rm VBoxGuestAdditions_$VBOX_VERSION.iso
+
+# TODO ct 2011-04-09 We need them later anyways don't we?
+#apt-get -y remove linux-headers-$(uname -r) build-essential
+apt-get -y autoremove
+
 exit
