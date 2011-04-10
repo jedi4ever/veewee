@@ -47,7 +47,7 @@ echo 'rpcbind_enable="YES"' >> /etc/rc.conf
 echo 'nfs_server_enable="YES"' >> /etc/rc.conf
 echo 'mountd_flags="-r"' >> /etc/rc.conf
 
-# Enable passwordless sudo 
+# Enable passwordless sudo
 echo "vagrant ALL=(ALL) NOPASSWD: ALL" >> /usr/local/etc/sudoers
 # Restore correct su permissions
 # I'll leave that up to the reader :)
@@ -73,7 +73,7 @@ exit
 # Research is on it's way to have 4.x in the main portstree
 # http://www.listware.net/201102/freebsd-ports/65201-call-for-testers-virtualbox-404.html
 # Virtualbox additions - http://wiki.freebsd.org/VirtualBox
-# Currently this will only work for 4.0.4 
+# Currently this will only work for 4.0.4
 cd /tmp
 wget http://home.bluelife.at/ports/virtualbox-cft-20110218.tar.gz
 cd /usr/ports

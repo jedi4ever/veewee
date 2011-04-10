@@ -11,9 +11,12 @@ cp /etc/sudoers /etc/sudoers.orig
 sed -i -e 's/%admin ALL=(ALL) ALL/%admin ALL=NOPASSWD:ALL/g' /etc/sudoers
 
 #Installing ruby
-wget http://rubyenterpriseedition.googlecode.com/files/ruby-enterprise_1.8.7-2011.03_amd64_ubuntu10.04.deb
-dpkg -i ruby-enterprise_1.8.7-2011.03_amd64_ubuntu10.04.deb
-rm ruby-enterprise_1.8.7-2011.03_amd64_ubuntu10.04.deb
+wget http://rubyforge.org/frs/download.php/71096/ruby-enterprise-1.8.7-2010.02.tar.gz
+tar xzvf ruby-enterprise-1.8.7-2010.02.tar.gz
+./ruby-enterprise-1.8.7-2010.02/installer -a /opt/ruby --no-dev-docs --dont-install-useful-gems
+echo 'PATH=$PATH:/opt/ruby/bin/'> /etc/profile.d/rubyenterprise.sh
+rm -rf ./ruby-enterprise-1.8.7-2010.02/
+rm ruby-enterprise-1.8.7-2010.02.tar.gz
 
 #Installing chef & Puppet
 /opt/ruby/bin/gem install chef --no-ri --no-rdoc
@@ -38,4 +41,5 @@ apt-get -y remove linux-headers-$(uname -r) build-essential
 apt-get -y autoremove
 
 rm VBoxGuestAdditions_$VBOX_VERSION.iso
+
 exit

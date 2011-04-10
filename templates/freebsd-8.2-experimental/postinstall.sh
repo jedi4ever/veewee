@@ -6,20 +6,20 @@ sysctl kern.geom.debugflags=16
 
 #http://forum.nginx.org/read.php?23,146311,146451
 # Init the disk with an MBR
-gpart create -s mbr ad4 
+gpart create -s mbr ad4
 # Create a BSD container
-gpart add -t freebsd ad4 
+gpart add -t freebsd ad4
 # Init with a BSD scheme
-gpart create -s bsd ad4s1 
+gpart create -s bsd ad4s1
 
 # 1GB for /
-gpart add -t freebsd-ufs -s 1G ad4s1 
+gpart add -t freebsd-ufs -s 1G ad4s1
 
-gpart add -t freebsd-swap -s 2G ad4s1 
+gpart add -t freebsd-swap -s 2G ad4s1
 # 2GB for swap
-gpart add -t freebsd-ufs -s 2G ad4s1 
+gpart add -t freebsd-ufs -s 2G ad4s1
 # 2GB for /var
-gpart add -t freebsd-ufs ad4s1 
+gpart add -t freebsd-ufs ad4s1
 # all rest for /usr
 
 #install bootcode
@@ -27,7 +27,7 @@ gpart bootcode -p /boot/boot -i 1 ad4s1
 gpart set -a active -i 	ad4
 
 cat <<EOF >/install.cfg
-# This is the installation configuration file for our rackmounted FreeBSD 
+# This is the installation configuration file for our rackmounted FreeBSD
 # cluster machines
 
 # Turn on extra debugging.
@@ -48,7 +48,7 @@ debug=yes
 tryDHCP=NO
 
 ################################
-# Which installation device to use 
+# Which installation device to use
 # ftp://ftp.smr.ru/pub/0/FreeBSD/current/src/release/sysinstall/sysinstall.h
 _ftpPath=ftp://ftp2.freebsd.org/pub/FreeBSD/
 #_httpPath=ftp://ftp2.freebsd.org/pub/FreeBSD/
@@ -67,7 +67,7 @@ distSetMinimum
 ################################
 
 ################################
-# Now set the parameters for the partition editor on ad4.  
+# Now set the parameters for the partition editor on ad4. 
 disk=ad4
 partition=all
 #http://www.mail-archive.com/freebsd-questions@freebsd.org/msg212036.html
@@ -145,7 +145,7 @@ EOF
 # WORKS WITH: 0:ad(4,d)/boot/loader
 
 #http://www.mail-archive.com/freebsd-questions@freebsd.org/msg72530.html
-cat  <<EOF > /mnt/boot/loader.conf 
+cat  <<EOF > /mnt/boot/loader.conf
 #geom_label_load="YES"
 #root_disk_unit="4"
 #currdev="disk4s1d"
@@ -168,22 +168,22 @@ cat  <<EOF > mkvirecover
 # PROVIDE: mkvirecover
 # REQUIRE: mountcritremote
 # BEFORE: DAEMON virecover
- 
+
 
 . /etc/rc.subr
- 
+
 name="mkvirecover"
 stop_cmd=":"
 start_cmd="mkvirecover_start"
- 
+
 mkvirecover_start()
 {
 [ -d /var/tmp/vi.recover ] || mkdir -m 1777 /var/tmp/vi.recover
 echo '.'
 }
- 
+
 load_rc_config "\$name"
 run_rc_command "\$1"
 EOF
- 
+
 chmod 555 /mnt/usr/local/etc/rc.d/mkvirecover
