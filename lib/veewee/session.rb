@@ -30,7 +30,7 @@ module Veewee
     def self.declare(options)
       defaults={
         :cpu_count => '1', :memory_size=> '256', 
-        :disk_size => '10140', :disk_format => 'VDI',:disk_size => '10240' ,
+        :disk_size => '10240', :disk_format => 'VDI', :hostiocache => 'off' ,
         :os_type_id => 'Ubuntu',
         :iso_file => "ubuntu-10.10-server-i386.iso", :iso_src => "", :iso_md5 => "", :iso_download_timeout => 1000,
         :boot_wait => "10", :boot_cmd_sequence => [ "boot"],
@@ -573,7 +573,7 @@ module Veewee
     
     def self.add_sata_controller(boxname)
       #unless => "${vboxcmd} showvminfo '${vname}' | grep 'SATA Controller' ";
-      command ="#{@vboxcmd} storagectl '#{boxname}' --name 'SATA Controller' --add sata"
+      command ="#{@vboxcmd} storagectl '#{boxname}' --name 'SATA Controller' --add sata --hostiocache #{@definition[:hostiocache]}"
       Veewee::Shell.execute("#{command}")
     end
     
