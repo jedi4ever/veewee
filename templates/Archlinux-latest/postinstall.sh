@@ -57,10 +57,10 @@ mkfs.ext3 /dev/sda1
 mkswap /dev/sda2
 swapon /dev/sda2
 
-mkdir /newarch 
+mkdir /newarch
 mount /dev/sda1 /newarch
 
-mkdir -p /newarch/var/lib/pacman 
+mkdir -p /newarch/var/lib/pacman
 
 #setting pacman - mirror - Belgium
 #Customize to your own liking
@@ -74,24 +74,24 @@ sed -i 's/^#\(.*kangaroot.*\)/\1/' /etc/pacman.d/mirrorlist
 pacman -Sy -r /newarch
 
 #pacman: error while loading shared libraries: libbz2.so.1.0: cannot open shared object file: No such file or directory
-#require bzip2 
-pacman --noconfirm --cachedir /newarch/var/cache/pacman/pkg -S base -r /newarch 
+#require bzip2
+pacman --noconfirm --cachedir /newarch/var/cache/pacman/pkg -S base -r /newarch
 
 #Create the devices
-cd /newarch/dev 
-rm -f console ; mknod -m 600 console c 5 1 
-rm -f null ; mknod -m 666 null c 1 3 
+cd /newarch/dev
+rm -f console ; mknod -m 600 console c 5 1
+rm -f null ; mknod -m 666 null c 1 3
 rm -f zero ; mknod -m 666 zero c 1 5
 
 #Copy the dns information (cp is aliased so we use the binary)
-/bin/cp -f /etc/resolv.conf /newarch/etc/ 
+/bin/cp -f /etc/resolv.conf /newarch/etc/
 
 #Mount the process architecture
 mount -t proc proc /newarch/proc
 mount -t sysfs sys /newarch/sys
 mount -o bind /dev /newarch/dev
 
-chroot /newarch pacman --noconfirm -S kernel26 
+chroot /newarch pacman --noconfirm -S kernel26
 
 #set the mirror list within the machine
 chroot /newarch sed -i 's/^#\(.*kangaroot.*\)/\1/' /etc/pacman.d/mirrorlist
@@ -170,10 +170,10 @@ chroot /newarch pacman --noconfirm -S kernel26-headers
 /bin/cp -f /root/.vbox_version /newarch/home/vagrant/.vbox_version
 VBOX_VERSION=$(cat /root/.vbox_version)
 
-##INstalling the virtualbox guest additions
+#Installing the virtualbox guest additions
 cat <<EOF | chroot /newarch /bin/bash -
 cd /tmp
-wget http://download.virtualbox.org/virtualbox/$VBOX_VERSION/VBoxGuestAdditions_$VBOX_VERSION.iso   
+wget http://download.virtualbox.org/virtualbox/$VBOX_VERSION/VBoxGuestAdditions_$VBOX_VERSION.iso
 mount -o loop VBoxGuestAdditions_$VBOX_VERSION.iso /mnt
 sh /mnt/VBoxLinuxAdditions.run
 umount /mnt

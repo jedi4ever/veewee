@@ -2,7 +2,7 @@
 
 #Updating the box
 apt-get -y update
-apt-get -y install linux-headers-$(uname -r) build-essential 
+apt-get -y install linux-headers-$(uname -r) build-essential
 apt-get -y install zlib1g-dev libssl-dev libreadline5-dev
 apt-get clean
 
@@ -33,11 +33,10 @@ chown -R vagrant /home/vagrant/.ssh
 apt-get -y remove virtualbox-ose-guest-dkms
 apt-get -y remove virtualbox-ose-guest-utils
 
-#INstalling the virtualbox guest additions
+#Installing the virtualbox guest additions
 VBOX_VERSION=$(cat /home/vagrant/.vbox_version)
-#INstalling the virtualbox guest additions
 cd /tmp
-wget http://download.virtualbox.org/virtualbox/$VBOX_VERSION/VBoxGuestAdditions_$VBOX_VERSION.iso   
+wget http://download.virtualbox.org/virtualbox/$VBOX_VERSION/VBoxGuestAdditions_$VBOX_VERSION.iso
 mount -o loop VBoxGuestAdditions_$VBOX_VERSION.iso /mnt
 yes|sh /mnt/VBoxLinuxAdditions.run
 umount /mnt
@@ -45,5 +44,5 @@ umount /mnt
 apt-get -y remove linux-headers-$(uname -r) build-essential
 apt-get -y autoremove
 
-rm VBoxGuestAdditions_$VBOX_VERSION.iso 
+rm VBoxGuestAdditions_$VBOX_VERSION.iso
 exit

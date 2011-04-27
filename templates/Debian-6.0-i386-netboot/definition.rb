@@ -1,15 +1,15 @@
 #Thanks to Fletcher Nichol - https://github.com/fnichol
 
-Veewee::Session.declare( {
+Veewee::Session.declare({
   :cpu_count => '1',
   :memory_size=> '256',
-  :disk_size => '10140', :disk_format => 'VDI',:hostiocache => 'off',
+  :disk_size => '10140', :disk_format => 'VDI', :hostiocache => 'off',
   :os_type_id => 'Debian',
   :iso_file => "debian-6.0.0-i386-netinst.iso",
   :iso_src => "http://ftp.acc.umu.se/debian-cd/current/i386/iso-cd/debian-6.0.0-i386-netinst.iso",
   :iso_md5 => "2840eea06e9cdd2e125f32cefa25fa1d",
   :iso_download_timeout => "1000",
-  :boot_wait => "10",:boot_cmd_sequence => [
+  :boot_wait => "10", :boot_cmd_sequence => [
      '<Esc>',
      'install ',
      'preseed/url=http://%IP%:%PORT%/preseed.cfg ',
@@ -38,5 +38,4 @@ Veewee::Session.declare( {
   :shutdown_cmd => "halt -p",
   :postinstall_files => [ "postinstall.sh" ],
   :postinstall_timeout => "10000"
- }
-)
+})
