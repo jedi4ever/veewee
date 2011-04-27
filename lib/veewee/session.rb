@@ -296,7 +296,7 @@ module Veewee
             Veewee::Ssh.when_ssh_login_works("localhost",ssh_options) do
               #Transfer version of Virtualbox to $HOME/.vbox_version            
               versionfile=Tempfile.open("vbox.version")
-              versionfile.puts "#{VirtualBox::Global.global.lib.virtualbox.version}.split('_')[0)"
+              versionfile.puts "#{VirtualBox::Global.global.lib.virtualbox.version.split('_')[0]}"
               versionfile.rewind
               begin
                 Veewee::Ssh.transfer_file("localhost",versionfile.path,".vbox_version", ssh_options)

@@ -110,7 +110,7 @@ module Veewee
               ch.on_data do |c, data|
                 @stdout+=data
 
-                  puts data
+                  print data
 
               end
 
@@ -118,7 +118,7 @@ module Veewee
               ch.on_extended_data do |c, type, data|
                 @stderr+=data
 
-                  puts data
+                  print data
 
               end
 
