@@ -170,7 +170,7 @@ chroot /newarch pacman --noconfirm -S kernel26-headers
 /bin/cp -f /root/.vbox_version /newarch/home/vagrant/.vbox_version
 VBOX_VERSION=$(cat /root/.vbox_version)
 
-##INstalling the virtualbox guest additions
+##Installing the virtualbox guest additions
 cat <<EOF | chroot /newarch /bin/bash -
 cd /tmp
 wget http://download.virtualbox.org/virtualbox/$VBOX_VERSION/VBoxGuestAdditions_$VBOX_VERSION.iso   
