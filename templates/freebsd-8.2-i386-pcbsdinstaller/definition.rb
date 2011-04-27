@@ -6,7 +6,7 @@
 
 Veewee::Session.declare( {
   :cpu_count => '1', :memory_size=> '768',
-  :disk_size => '10140', :disk_format => 'VDI',:disk_size => '10240' ,
+  :disk_size => '10140', :disk_format => 'VDI',:hostiocache => 'off',
   :os_type_id => 'FreeBSD',
   :iso_file => "PCBSD8.2-x86-DVD.iso",
   :iso_src => "ftp://mirrors.isc.org/pub/pcbsd/8.2/i386/PCBSD8.2-x86-DVD.iso",

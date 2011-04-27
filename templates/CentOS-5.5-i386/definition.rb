@@ -1,6 +1,6 @@
        Veewee::Session.declare( {
         :cpu_count => '1', :memory_size=> '384', 
-        :disk_size => '10140', :disk_format => 'VDI',:disk_size => '10240' ,
+        :disk_size => '10140', :disk_format => 'VDI',:hostiocache => 'off',
         :os_type_id => 'RedHat',
         :iso_file => "CentOS-5.5-i386-bin-DVD.iso", :iso_src => "", :iso_md5 => "75c92246479df172de41b14c9b966344", :iso_download_timeout => 1000,
         :boot_wait => "10",:boot_cmd_sequence => [ 

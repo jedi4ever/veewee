@@ -1,6 +1,6 @@
 Veewee::Session.declare( {
   :cpu_count => '1', :memory_size=> '384', 
-  :disk_size => '10140', :disk_format => 'VDI',:disk_size => '10240' ,
+  :disk_size => '10140', :disk_format => 'VDI',:hostiocache => 'off',
   :os_type_id => 'Ubuntu_64',
   :iso_file => "ubuntu-10.04.1-server-amd64.iso",
   :iso_src => "http://releases.ubuntu.com/10.04.1/ubuntu-10.04.1-server-amd64.iso",

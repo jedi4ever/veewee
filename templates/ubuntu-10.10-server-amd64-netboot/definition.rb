@@ -1,6 +1,6 @@
 Veewee::Session.declare( {
   :cpu_count => '1', :memory_size=> '256', 
-  :disk_size => '10140', :disk_format => 'VDI',:disk_size => '10240' ,
+  :disk_size => '10140', :disk_format => 'VDI',:hostiocache => 'off',
   :os_type_id => 'Ubuntu_64',
   :iso_file => "ubuntu-10.10-server-amd64-netboot.iso", 
   :iso_src => "http://archive.ubuntu.com/ubuntu/dists/maverick/main/installer-amd64/current/images/netboot/mini.iso",

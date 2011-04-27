@@ -1,6 +1,6 @@
 Veewee::Session.declare( {
   :cpu_count => '1', :memory_size=> '256', 
-  :disk_size => '10140', :disk_format => 'VDI',:disk_size => '10240' ,
+  :disk_size => '10140', :disk_format => 'VDI',:hostiocache => 'off',
   :os_type_id => 'FreeBSD_64',
   :iso_file => "mfsbsd-8.2-amd64.iso",
   :iso_src => "http://mfsbsd.vx.sk/iso/mfsbsd-8.2-amd64.iso",

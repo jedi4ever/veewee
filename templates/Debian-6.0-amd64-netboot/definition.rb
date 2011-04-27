@@ -1,9 +1,7 @@
 Veewee::Session.declare( {
   :cpu_count => '1',
   :memory_size=> '256',
-  :disk_size => '10140',
-  :disk_format => 'VDI',
-  :disk_size => '10240' ,
+  :disk_size => '10140', :disk_format => 'VDI',:hostiocache => 'off',
   :os_type_id => 'Debian_64',
   :iso_file => "debian-6.0.0-amd64-netinst.iso",
   :iso_src => "http://ftp.acc.umu.se/debian-cd/current/amd64/iso-cd/debian-6.0.0-amd64-netinst.iso",

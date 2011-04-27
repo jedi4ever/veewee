@@ -1,6 +1,6 @@
 Veewee::Session.declare( {
   :cpu_count => '1', :memory_size=> '384', 
-  :disk_size => '10140', :disk_format => 'VDI',:disk_size => '10240' ,
+  :disk_size => '10140', :disk_format => 'VDI',:hostiocache => 'off',
   :os_type_id => 'RedHat',
   :iso_file => "CentOS-4.8-i386-bin-DVD.iso", :iso_src => "", :iso_md5 => "", :iso_download_timeout => 1000,
   :boot_wait => "10",:boot_cmd_sequence => [ 'linux text ks=http://%IP%:%PORT%/ks.cfg<Enter>' ],
