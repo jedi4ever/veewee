@@ -1,6 +1,6 @@
 Veewee::Session.declare({
   :cpu_count => '1', :memory_size=> '384',
-  :disk_size => '10140', :disk_format => 'VDI', :hostiocache => 'off',
+  :disk_size => '10140', :disk_format => 'VDI', :hostiocache => 'off', :use_hw_virt_ext => 'off',
   :os_type_id => 'Fedora',
   :iso_file => "Fedora-14-i386-netinst.iso",
   :iso_src => "http://www.gtlib.gatech.edu/pub/fedora.redhat/linux//releases/14/Fedora/i386/iso/Fedora-14-i386-netinst.iso",
