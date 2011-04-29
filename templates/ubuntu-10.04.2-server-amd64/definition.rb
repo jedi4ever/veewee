@@ -2,9 +2,9 @@ Veewee::Session.declare({
   :cpu_count => '1', :memory_size=> '384', 
   :disk_size => '10140', :disk_format => 'VDI', :hostiocache => 'off',
   :os_type_id => 'Ubuntu_64',
-  :iso_file => "ubuntu-10.04.1-server-amd64.iso",
-  :iso_src => "http://releases.ubuntu.com/10.04.1/ubuntu-10.04.1-server-amd64.iso",
-  :iso_md5 => "142aaaa77e7da94ae62d7ee2f39d8b3b",
+  :iso_file => "ubuntu-10.04.2-server-amd64.iso",
+  :iso_src => "http://releases.ubuntu.com/10.04.2/ubuntu-10.04.2-server-amd64.iso",
+  :iso_md5 => "b446b36430a29f3dcf0c5eb797197cac",
   :iso_download_timeout => "1000",
   :boot_wait => "10", :boot_cmd_sequence => [
     '<Esc><Esc><Enter>',
