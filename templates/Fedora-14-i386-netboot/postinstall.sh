@@ -1,7 +1,7 @@
 #http://chrisadams.me.uk/2010/05/10/setting-up-a-centos-base-box-for-development-and-testing-with-vagrant/
 #kernel source is needed for vbox additions
 
-yum -y install gcc bzip2 make kernel-devel-`uname -r`
+yum -y install gcc bzip2 make patch kernel-devel-`uname -r`
 
 #yum -y update
 #yum -y upgrade
