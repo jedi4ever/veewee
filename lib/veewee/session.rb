@@ -488,7 +488,15 @@ module Veewee
         #TODO One day ruby-virtualbox will be able to handle this creation
         #Box does not exist, we can start to create it
 
-        command="#{@vboxcmd} createvm --name '#{boxname}' --ostype '#{@definition[:os_type_id]}' --register --hwvirtexexcl '#{@definition[:use_hw_virt_ext]}'"    
+        command="#{@vboxcmd} createvm --name '#{boxname}' --ostype '#{@definition[:os_type_id]}' --register"
+        puts command
+
+        #Exec and system stop the execution here
+        Veewee::Shell.execute("#{command}")
+
+        # Modify the vm to enable or disable hw virtualization extensions
+        command="#{@vboxcmd} modifyvm #{boxname} --hwvirtex #{@definition[:use_hw_virt_ext]} --pae #{@definition[:use_hw_virt_ext]}"
+        puts command
 
         #Exec and system stop the execution here
         Veewee::Shell.execute("#{command}")
