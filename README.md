@@ -18,7 +18,11 @@ $ git clone https://github.com/jedi4ever/veewee.git
 $ cd veewee
 $ gem install bundler
 $ bundle install
+$ export RUBYLIB="${RUBYLIB:+${RUBYLIB}:}$(pwd)/lib" 
 </pre>
+
+Add <code>require 'veewee'</code> to the top of your Vagrantfile.
+
 __as a gem__
 <pre>
 $ gem install veewee 
