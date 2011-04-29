@@ -97,6 +97,8 @@ Put your isofile inside the 'currentdir'/iso directory or if you don't run
 <pre>
 $ vagrant basebox build 'myubuntubox'</pre>
 
+Click on the VirtualBox console window when it appears to ensure it has focus and will receive the keystrokes that Veewee sends to it.
+
 - This will create a machine + disk according to the definition.rb
 - Note: :os_type_id = The internal Name Virtualbox uses for that Distribution
 - Mount the ISO File :iso_file
