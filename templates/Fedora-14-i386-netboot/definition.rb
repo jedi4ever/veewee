@@ -6,7 +6,7 @@ Veewee::Session.declare({
   :iso_src => "http://www.gtlib.gatech.edu/pub/fedora.redhat/linux//releases/14/Fedora/i386/iso/Fedora-14-i386-netinst.iso",
   :iso_md5 => "59d2490d7bf73a6c8a80d9a790f17184",
   :iso_download_timeout => 1000,
-  :boot_wait => "10", :boot_cmd_sequence => [ 'linux text ks=http://%IP%:%PORT%/ks.cfg<Enter>' ],
+  :boot_wait => "10", :boot_cmd_sequence => [ '<Tab> linux text ks=http://%IP%:%PORT%/ks.cfg<Enter><Enter>' ],
   :kickstart_port => "7122", :kickstart_timeout => 10000, :kickstart_file => "ks.cfg",
   :ssh_login_timeout => "100", :ssh_user => "vagrant", :ssh_password => "vagrant", :ssh_key => "",
   :ssh_host_port => "7222", :ssh_guest_port => "22",
