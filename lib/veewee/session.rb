@@ -30,7 +30,7 @@ module Veewee
     def self.declare(options)
       defaults={
         :cpu_count => '1', :memory_size=> '256', 
-        :disk_size => '10240', :disk_format => 'VDI', :hostiocache => 'off' ,
+        :disk_size => '10240', :disk_format => 'VDI', :hostiocache => 'off' , :use_hw_virt_ext => 'on',
         :os_type_id => 'Ubuntu',
         :iso_file => "ubuntu-10.10-server-i386.iso", :iso_src => "", :iso_md5 => "", :iso_download_timeout => 1000,
         :boot_wait => "10", :boot_cmd_sequence => [ "boot"],
@@ -488,7 +488,7 @@ module Veewee
         #TODO One day ruby-virtualbox will be able to handle this creation
         #Box does not exist, we can start to create it
 
-        command="#{@vboxcmd} createvm --name '#{boxname}' --ostype '#{@definition[:os_type_id]}' --register"    
+        command="#{@vboxcmd} createvm --name '#{boxname}' --ostype '#{@definition[:os_type_id]}' --register --hwvirtexexcl '#{@definition[:use_hw_virt_ext]}'"    
 
         #Exec and system stop the execution here
         Veewee::Shell.execute("#{command}")
