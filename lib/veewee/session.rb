@@ -22,6 +22,7 @@ module Veewee
       @veewee_dir=env[:veewee_dir]
       @definition_dir=env[:definition_dir]
       @template_dir=env[:template_dir]
+      @validation_dir=env[:veewee_dir] + 'validation'
       @box_dir=env[:box_dir]
       @iso_dir=env[:iso_dir]
       @tmp_dir=env[:tmp_dir]
@@ -489,23 +490,25 @@ module Veewee
         #Box does not exist, we can start to create it
 
         command="#{@vboxcmd} createvm --name '#{boxname}' --ostype '#{@definition[:os_type_id]}' --register"
-        puts command
 
         #Exec and system stop the execution here
         Veewee::Shell.execute("#{command}")
 
         # Modify the vm to enable or disable hw virtualization extensions
         command="#{@vboxcmd} modifyvm #{boxname} --hwvirtex #{@definition[:use_hw_virt_ext]} --pae #{@definition[:use_hw_virt_ext]}"
-        puts command
 
         #Exec and system stop the execution here
         Veewee::Shell.execute("#{command}")
 
         #Set a shared folder for validation
-        command="#{@vboxcmd} sharedfolder add  '#{boxname}' --name 'veewee-validation' --hostpath '#{File.expand_path(@veewee_dir)}/validation' --automount"    
+        if !File.exists?(@validation_dir)
+            FileUtils.mkdir(File.expand_path(@validation_dir))
+        end
+
+        command="#{@vboxcmd} sharedfolder add  '#{boxname}' --name 'veewee-validation' --hostpath '#{File.expand_path(@validation_dir)}' --automount"
 
         Veewee::Shell.execute("#{command}")
-        
+
       end
 
       vm=VirtualBox::VM.find(boxname)
