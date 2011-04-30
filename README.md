@@ -18,7 +18,11 @@ $ git clone https://github.com/jedi4ever/veewee.git
 $ cd veewee
 $ gem install bundler
 $ bundle install
+$ export RUBYLIB="${RUBYLIB:+${RUBYLIB}:}$(pwd)/lib" 
 </pre>
+
+Add <code>require 'veewee'</code> to the top of your Vagrantfile.
+
 __as a gem__
 <pre>
 $ gem install veewee 
@@ -92,6 +96,8 @@ Put your isofile inside the 'currentdir'/iso directory or if you don't run
 ## Build the new box:
 <pre>
 $ vagrant basebox build 'myubuntubox'</pre>
+
+Click on the VirtualBox console window when it appears to ensure it has focus and will receive the keystrokes that Veewee sends to it.
 
 - This will create a machine + disk according to the definition.rb
 - Note: :os_type_id = The internal Name Virtualbox uses for that Distribution
