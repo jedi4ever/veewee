@@ -31,7 +31,7 @@ module Veewee
     def self.declare(options)
       defaults={
         :cpu_count => '1', :memory_size=> '256', 
-        :disk_size => '10240', :disk_format => 'VDI', :hostiocache => 'off' , :use_hw_virt_ext => 'on',
+        :disk_size => '10240', :disk_format => 'VDI', :hostiocache => 'off' , :use_hw_virt_ext => 'on', :use_pae => 'off',
         :os_type_id => 'Ubuntu',
         :iso_file => "ubuntu-10.10-server-i386.iso", :iso_src => "", :iso_md5 => "", :iso_download_timeout => 1000,
         :boot_wait => "10", :boot_cmd_sequence => [ "boot"],
@@ -495,7 +495,7 @@ module Veewee
         Veewee::Shell.execute("#{command}")
 
         # Modify the vm to enable or disable hw virtualization extensions
-        command="#{@vboxcmd} modifyvm #{boxname} --hwvirtex #{@definition[:use_hw_virt_ext]} --pae #{@definition[:use_hw_virt_ext]}"
+        command="#{@vboxcmd} modifyvm #{boxname} --hwvirtex #{@definition[:use_hw_virt_ext]} --pae #{@definition[:use_pae]}"
 
         #Exec and system stop the execution here
         Veewee::Shell.execute("#{command}")
