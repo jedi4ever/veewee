@@ -8,7 +8,9 @@ yum -y install gcc bzip2 make patch kernel-devel-`uname -r`
 
 yum -y install gcc-c++ zlib-devel openssl-devel readline-devel sqlite3-devel
 
-yum -y erase wireless-tools gtk2 libX11 hicolor-icon-theme avahi freetype bitstream-vera-fonts
+# don't remove these because dependency removal will remove policycoreutils package and we should
+# not care about these packages being installed in the first place
+#yum -y erase wireless-tools gtk2 libX11 hicolor-icon-theme avahi freetype bitstream-vera-fonts
 
 
 yum -y clean all
