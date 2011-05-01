@@ -22,6 +22,7 @@ module Veewee
       @veewee_dir=env[:veewee_dir]
       @definition_dir=env[:definition_dir]
       @template_dir=env[:template_dir]
+      @validation_dir=env[:veewee_dir] + 'validation'
       @box_dir=env[:box_dir]
       @iso_dir=env[:iso_dir]
       @tmp_dir=env[:tmp_dir]
@@ -30,7 +31,7 @@ module Veewee
     def self.declare(options)
       defaults={
         :cpu_count => '1', :memory_size=> '256', 
-        :disk_size => '10240', :disk_format => 'VDI', :hostiocache => 'off' ,
+        :disk_size => '10240', :disk_format => 'VDI', :hostiocache => 'off' , :use_hw_virt_ext => 'on', :use_pae => 'off',
         :os_type_id => 'Ubuntu',
         :iso_file => "ubuntu-10.10-server-i386.iso", :iso_src => "", :iso_md5 => "", :iso_download_timeout => 1000,
         :boot_wait => "10", :boot_cmd_sequence => [ "boot"],
@@ -488,16 +489,26 @@ module Veewee
         #TODO One day ruby-virtualbox will be able to handle this creation
         #Box does not exist, we can start to create it
 
-        command="#{@vboxcmd} createvm --name '#{boxname}' --ostype '#{@definition[:os_type_id]}' --register"    
+        command="#{@vboxcmd} createvm --name '#{boxname}' --ostype '#{@definition[:os_type_id]}' --register"
+
+        #Exec and system stop the execution here
+        Veewee::Shell.execute("#{command}")
+
+        # Modify the vm to enable or disable hw virtualization extensions
+        command="#{@vboxcmd} modifyvm #{boxname} --hwvirtex #{@definition[:use_hw_virt_ext]} --pae #{@definition[:use_pae]}"
 
         #Exec and system stop the execution here
         Veewee::Shell.execute("#{command}")
 
         #Set a shared folder for validation
-        command="#{@vboxcmd} sharedfolder add  '#{boxname}' --name 'veewee-validation' --hostpath '#{File.expand_path(@veewee_dir)}/validation' --automount"    
+        if !File.exists?(@validation_dir)
+            FileUtils.mkdir(File.expand_path(@validation_dir))
+        end
+
+        command="#{@vboxcmd} sharedfolder add  '#{boxname}' --name 'veewee-validation' --hostpath '#{File.expand_path(@validation_dir)}' --automount"
 
         Veewee::Shell.execute("#{command}")
-        
+
       end
 
       vm=VirtualBox::VM.find(boxname)
