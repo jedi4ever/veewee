@@ -19,8 +19,13 @@ module Veewee
               # A workaround is to send the scancodes one-by-one.
               codes=""
               for keycode in keycodes.split(' ') do
+                
+                  unless keycode=="wait"
                    send_keycode(vboxcmd,vname,keycode)    
                    sleep 0.01                  
+                  else
+                    sleep 1
+                  end
               end
         	    #sleep after each sequence (needs to be param)
         	    sleep 1
@@ -42,38 +47,51 @@ module Veewee
       #http://www.win.tue.nl/~aeb/linux/kbd/scancodes-1.html
   
             k=Hash.new
-            k['1'] = '02' ; k['2'] = '03' ; k['3'] = '04'; k['4']= '05' ;k['5']='06'; k['6'] = '07' ; k['7'] = '08'; k['8'] = '09'; k['9']= '0a'; k['0']='0b'; k['-'] = '0c'; k['='] = '0d' ;
-            k['Tab'] = '0f'; 
-            k['q']  = '10' ;       k['w']  = '11' ;       k['e']  = '12';       k['r'] = '13'       ; k['t'] = '14'       ; k['y'] = '15';      k['u']= '16'        ; k['i']='17';      k['o'] = '18'       ; k['p'] = '19' ; 
+            k['1'] = '02 82' ; k['2'] = '03 83' ; k['3'] = '04 84'; k['4']= '05 85' ;
+            k['5']='06 86'; k['6'] = '07 87' ; k['7'] = '08 88'; k['8'] = '09 89'; k['9']= '0a 8a';
+             k['0']='0b 8b'; k['-'] = '0c 8c'; k['='] = '0d 8d' ;
+            k['Tab'] = '0f 8f'; 
+            k['q']  = '10 90' ;       k['w']  = '11 91' ;       k['e']  = '12 92';  
+                 k['r'] = '13 93'       ; k['t'] = '14 94'       ; k['y'] = '15 95';   
+                    k['u']= '16 96'        ; k['i']='17 97';      k['o'] = '18 98'       ; k['p'] = '19 99' ; 
            
             k['Q']  = '2a 10 aa' ; k['W']  = '2a 11 aa' ; k['E']  = '2a 12 aa'; k['R'] = '2a 13 aa' ; k['T'] = '2a 14 aa' ; k['Y'] = '2a 15 aa'; k['U']= '2a 16 aa' ; k['I']='2a 17 aa'; k['O'] = '2a 18 aa' ; k['P'] = '2a 19 aa' ;
 
-            k['a'] = '1e'; k['s']  = '1f' ; k['d']  = '20' ; k['f']  = '21'; k['g'] = '22' ; k['h'] = '23' ; k['j'] = '24'; k['k']= '25' ; k['l']='26'; k[';'] = '27' 
-            k['A'] = '2a 1e aa'; k['S']  = '2a 1f aa' ; k['D']  = '2a 20 aa' ; k['F']  = '2a 21 aa'; k['G'] = '2a 22 aa' ; k['H'] = '2a 23 aa' ; k['J'] = '2a 24 aa'; k['K']= '2a 25 aa' ; k['L']='2a 26 aa'; 
+            k['a'] = '1e 9e'; k['s']  = '1f 9f' ; k['d']  = '20 a0' ; k['f']  = '21 a1'; k['g'] = '22 a2' ; k['h'] = '23 a3' ; k['j'] = '24 a4'; 
+            k['k']= '25 a5' ; k['l']='26 a6';
+            k['A'] = '2a 1e aa 9e'; k['S']  = '2a 1f aa 9f' ; k['D']  = '2a 20 aa a0' ; k['F']  = '2a 21 aa a1';
+             k['G'] = '2a 22 aa a2' ; k['H'] = '2a 23 aa a3' ; k['J'] = '2a 24 aa a4'; k['K']= '2a 25 aa a5' ; k['L']='2a 26 aa a6'; 
             
-            k[';'] = '27' ;k['"']='2a 28 aa';k['\'']='28';
+            k[';'] = '27 a7' ;k['"']='2a 28 aa a8';k['\'']='28 a8';
    
-            k['\\'] = '2b';   k['|'] = '2a 2b aa';
+            k['\\'] = '2b ab';   k['|'] = '2a 2b aa 8b';
 
-            k['[']='1a'; k[']']='1b';
-            k['<']='2a 33 aa'; k['>']='2a 34 aa';
-            k['$']='2a 05 aa';
-            k['+']='2a 0d aa';
+            k['[']='1a 9a'; k[']']='1b 9b';
+            k['<']='2a 33 aa b3'; k['>']='2a 34 aa b4';
+            k['$']='2a 05 aa 85';
+            k['+']='2a 0d aa 8d';
 
-            k['z'] = '2c'; k['x']  = '2d' ; k['c']  = '2e' ; k['v']  = '2f'; k['b'] = '30' ; k['n'] = '31' ; k['m'] = '32';
-            k['Z'] = '2a 2c aa'; k['X']  = '2a 2d aa' ; k['C']  = '2a 2e aa' ; k['V']  = '2a 2f aa'; k['B'] = '2a 30 aa' ; k['N'] = '2a 31 aa' ; k['M'] = '2a 32 aa';
+            k['z'] = '2c ac'; k['x']  = '2d ad' ; k['c']  = '2e ae' ; k['v']  = '2f af'; k['b'] = '30 b0' ; k['n'] = '31 b1' ;
+            k['m'] = '32 b2';
+            k['Z'] = '2a 2c aa ac'; k['X']  = '2a 2d aa ad' ; k['C']  = '2a 2e aa ae' ; k['V']  = '2a 2f aa af';
+             k['B'] = '2a 30 aa b0' ; k['N'] = '2a 31 aa b1' ; k['M'] = '2a 32 aa b2';
             
-            k[',']= '33' ; k['.']='34'; k['/'] = '35' ;k[':'] = '2a 27 aa';
-            k['%'] = '2a 06 aa';  k['_'] = '2a 0c aa';
+            k[',']= '33 b3' ; k['.']='34 b4'; k['/'] = '35 b5' ;k[':'] = '2a 27 aa a7';
+            k['%'] = '2a 06 aa 8§';  k['_'] = '2a 0c aa 8c';
+            k['&'] = '2a 08 aa 88';
+            k['('] = '2a 0a aa 8a';
+            k[')'] = '2a 0b aa 8b';
+            
 
           special=Hash.new;
-          special['<Enter>'] = '1c';
-          special['<Backspace>'] = '0e';
-          special['<Spacebar>'] = '39';
-          special['<Return>'] = '1c'
-          special['<Esc>'] = '01';
-          special['<Tab>'] = '0f';
+          special['<Enter>'] = '1c 9c';
+          special['<Backspace>'] = '0e 8e';
+          special['<Spacebar>'] = '39 b9';
+          special['<Return>'] = '1c 9c'
+          special['<Esc>'] = '01 81';
+          special['<Tab>'] = '0f 8f';
           special['<KillX>'] = '1d 38 0e';
+          special['<Wait>'] = 'wait';
 
           #special['<Up>'] = '01';
           #special['<Down>'] = '01';

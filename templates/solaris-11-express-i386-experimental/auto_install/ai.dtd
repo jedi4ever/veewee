@@ -1,0 +1,58 @@
+<!--
+ CDDL HEADER START
+
+ The contents of this file are subject to the terms of the
+ Common Development and Distribution License (the "License").
+ You may not use this file except in compliance with the License.
+
+ You can obtain a copy of the license at usr/src/OPENSOLARIS.LICENSE
+ or http://www.opensolaris.org/os/licensing.
+ See the License for the specific language governing permissions
+ and limitations under the License.
+
+ When distributing Covered Code, include this CDDL HEADER in each
+ file and include the License file at usr/src/OPENSOLARIS.LICENSE.
+ If applicable, add the following below this CDDL HEADER, with the
+ fields enclosed by brackets "[]" replaced with your own identifying
+ information: Portions Copyright [yyyy] [name of copyright owner]
+
+ CDDL HEADER END
+
+ Copyright (c) 2010, Oracle and/or its affiliates. All rights reserved.
+
+-->
+
+<!ELEMENT auto_install (ai_instance)>
+
+<!ENTITY % target SYSTEM "target.dtd">
+%target;
+
+<!ENTITY % configuration SYSTEM "configuration.dtd">
+%configuration;
+
+<!ENTITY % software SYSTEM "software.dtd">
+%software;
+
+<!--
+	The source element, if specified, is for post installation changes
+	to the publisher for IPS. The first source element specified
+	will be considered the primary source, all additional sources
+	will be added as secondary sources.
+-->
+
+<!ELEMENT sc_manifest_file EMPTY>
+<!ATTLIST sc_manifest_file name CDATA #REQUIRED>
+<!ATTLIST sc_manifest_file URI CDATA #REQUIRED>
+
+<!ELEMENT sc_embedded_manifest (#PCDATA)>
+<!ATTLIST sc_embedded_manifest name CDATA #REQUIRED>
+
+<!ELEMENT ai_instance (target*, software+, add_drivers?, (configuration*|sc_manifest_file|sc_embedded_manifest), source*)>
+<!ATTLIST ai_instance name CDATA #REQUIRED>
+<!ATTLIST ai_instance http_proxy CDATA #IMPLIED>
+<!ATTLIST ai_instance auto_reboot (true|false) "false">
+
+<!ELEMENT add_drivers (software*, search_all?)>
+
+<!ELEMENT search_all (source?)>
+<!ATTLIST search_all addall (true|false) "false">
