@@ -64,6 +64,11 @@ cd /tmp
 /usr/bin/pkgtrans VirtualBox-4.0.6-SunOS-r71344.pkg . all
 yes|/usr/sbin/pkgadd -d . SUNWvbox
 
+# Fix the shells to include the /opt/csw directories
+
+echo "export PATH=/opt/csw/bin:/opt/csw/sbin/:$PATH" >> /root/.profile
+echo "export PATH=/opt/csw/bin:/opt/csw/sbin/:$PATH" >> /export/home/vagrant/.profile
+
 exit
 
 #Inspiration for ruby enterprise

@@ -22,7 +22,7 @@ module Veewee
       @veewee_dir=env[:veewee_dir]
       @definition_dir=env[:definition_dir]
       @template_dir=env[:template_dir]
-      @validation_dir=env[:veewee_dir] + 'validation'
+      @validation_dir=env[:validation_dir]
       @box_dir=env[:box_dir]
       @iso_dir=env[:iso_dir]
       @tmp_dir=env[:tmp_dir]
@@ -459,7 +459,7 @@ module Veewee
     end
     
     def self.create_vm(boxname,force=false)
-
+      
       #Verifying the os.id with the :os_type_id specified
       matchfound=false
       VirtualBox::Global.global.lib.virtualbox.guest_os_types.collect { |os|
@@ -499,12 +499,6 @@ module Veewee
 
         #Exec and system stop the execution here
         Veewee::Shell.execute("#{command}")
-
-      
-        #Set a shared folder for validation
-        if !File.exists?(@validation_dir)
-            FileUtils.mkdir(File.expand_path(@validation_dir))
-        end
 
         command="#{@vboxcmd} sharedfolder add  '#{boxname}' --name 'veewee-validation' --hostpath '#{File.expand_path(@validation_dir)}' --automount"
 
