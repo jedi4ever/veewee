@@ -8,7 +8,7 @@ Before we can actually build the boxes, we need to take care of the minimal thin
 - Have Virtualbox 4.x installed -> download it from http://download.virtualbox.org/virtualbox/
 
 
-ALPHA CODE: -> you're on your own....
+People have reported good experiences, why don't you give it a try?
 
 ## Installation: 
 __from source__
@@ -28,13 +28,29 @@ $ gem install veewee
 <pre>
 $ vagrant basebox templates
 The following templates are available:
-vagrant basebox define 'boxname' 'CentOS-4.8-i386'
-vagrant basebox define 'boxname' 'CentOS-5.5-i386'
-vagrant basebox define 'boxname' 'CentOS-5.5-i386-netboot'
-vagrant basebox define 'boxname' 'ubuntu-10.04.1-server-amd64'
-vagrant basebox define 'boxname' 'ubuntu-10.04.1-server-i386'
-vagrant basebox define 'boxname' 'ubuntu-10.10-server-amd64'
-vagrant basebox define 'boxname' 'ubuntu-10.10-server-i386'
+The following templates are available:
+vagrant basebox define '<boxname>' 'Archlinux-latest'
+vagrant basebox define '<boxname>' 'CentOS-4.8-i386'
+vagrant basebox define '<boxname>' 'CentOS-5.5-i386'
+vagrant basebox define '<boxname>' 'CentOS-5.5-i386-netboot'
+vagrant basebox define '<boxname>' 'Debian-6.0-amd64-netboot'
+vagrant basebox define '<boxname>' 'Debian-6.0-i386-netboot'
+vagrant basebox define '<boxname>' 'Fedora-14-amd64'
+vagrant basebox define '<boxname>' 'Fedora-14-amd64-netboot'
+vagrant basebox define '<boxname>' 'Fedora-14-i386'
+vagrant basebox define '<boxname>' 'Fedora-14-i386-netboot'
+vagrant basebox define '<boxname>' 'freebsd-8.2-experimental'
+vagrant basebox define '<boxname>' 'freebsd-8.2-pcbsd-i386'
+vagrant basebox define '<boxname>' 'freebsd-8.2-pcbsd-i386-netboot'
+vagrant basebox define '<boxname>' 'solaris-11-express-i386'
+vagrant basebox define '<boxname>' 'Sysrescuecd-2.0.0-experimental'
+vagrant basebox define '<boxname>' 'ubuntu-10.04.2-server-amd64'
+vagrant basebox define '<boxname>' 'ubuntu-10.04.2-server-i386'
+vagrant basebox define '<boxname>' 'ubuntu-10.10-server-amd64'
+vagrant basebox define '<boxname>' 'ubuntu-10.10-server-amd64-netboot'
+vagrant basebox define '<boxname>' 'ubuntu-10.10-server-i386'
+vagrant basebox define '<boxname>' 'ubuntu-10.10-server-i386-netboot'
+
 
 </pre>
 ## Define a new box 
@@ -54,7 +70,7 @@ definition.rb	postinstall.sh	postinstall2.sh	preseed.cfg
 <pre>
 Veewee::Session.declare( {
   :cpu_count => '1', :memory_size=> '256', 
-  :disk_size => '10140', :disk_format => 'VDI',:disk_size => '10240' ,
+  :disk_size => '10140', :disk_format => 'VDI',
   :os_type_id => 'Ubuntu',
   :iso_file => "ubuntu-10.10-server-i386.iso", 
   :iso_src => "http://releases.ubuntu.com/maverick/ubuntu-10.10-server-i386.iso",
@@ -88,6 +104,7 @@ Put your isofile inside the 'currentdir'/iso directory or if you don't run
 
 - the build assumes your iso files are in 'currentdir'/iso
 - if it can not find it will suggest to download the iso for you
+- use '--force' to overwrite an existing install
 
 ## Build the new box:
 <pre>
@@ -101,6 +118,11 @@ $ vagrant basebox build 'myubuntubox'</pre>
 - Startup a webserver on :kickstart_port to wait for a request for the :kickstart_file
 - Wait for ssh login to work with :ssh_user , :ssh_password
 - Sudo execute the :postinstall_files
+
+## Validate the vm 
+<pre>$ vagrant basebox validate 'myubuntubox' </pre>
+
+this will run some cucumber test against the box to see if it has the necessary bits and pieces for vagrant to work
 
 ## Export the vm to a .box file
 <pre>$ vagrant basebox export 'myubuntubox' </pre>
@@ -130,11 +152,6 @@ IDEAS:
 
 FUTURE IDEAS:
 
-- use snapshots to fastforward initial boot, and every postinstall command
 - export to AMI too
 - provide for more failsafe execution, testing parameters
-- use more virtualbox ruby instead of calling the VBoxManage command
-- Verify the installation with cucumber-nagios (ssh functionality)
 - Do the same for Vmware Fusion
-
-BUGS: Lots = Like I said it currently works for me, on my machine and with the correct magic sequence :)
