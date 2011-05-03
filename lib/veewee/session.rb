@@ -500,6 +500,7 @@ module Veewee
         #Exec and system stop the execution here
         Veewee::Shell.execute("#{command}")
 
+      
         #Set a shared folder for validation
         if !File.exists?(@validation_dir)
             FileUtils.mkdir(File.expand_path(@validation_dir))

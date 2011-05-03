@@ -7,15 +7,14 @@ yes|/usr/sbin/pkgadd -d http://mirror.opencsw.org/opencsw/pkgutil-`uname -p`.pkg
 
 /opt/csw/bin/pkgutil -U
 
-# yes|/opt/csw/bin/pkgutil -i CSWruby
-# used SUNWspro
-# has entries in /opt/csw/lib/ruby/1.8/i386-solaris2.9/rbconfig.rb
-# luckily there is another one
+# We need some header stuff and so on to get gcc going
+# Tip thx to - https://wiki.chipp.ch/twiki/bin/view/CmsTier3/InstallationSolaris
+/usr/bin/pkg install SUNWarc SUNWsfwhea SUNWhea SUNWtoo
+/usr/bin/pkg install math/header-math
 
+yes|/opt/csw/bin/pkgutil -i CSWgsed
 yes|/opt/csw/bin/pkgutil -i CSWruby18-gcc4
 yes|/opt/csw/bin/pkgutil -i CSWruby18-dev
-
-# prevents ":in `require': no such file to load -- mkmf (LoadError)"
 yes|/opt/csw/bin/pkgutil -i CSWrubygems
 
 # These are needed to get a compiler working
@@ -24,10 +23,28 @@ export PATH=/opt/csw/bin/:$PATH
 export PATH=/opt/csw/gcc4/bin/:$PATH
 
 yes | /opt/csw/bin/pkgutil -i CSWgcc4core
+
+
 yes | /opt/csw/bin/pkgutil -i CSWgcc4g++
 yes | /opt/csw/bin/pkgutil -i CSWreadline
 yes | /opt/csw/bin/pkgutil -i CSWzlib
 yes | /opt/csw/bin/pkgutil -i CSWossldevel
+
+# prevents ":in `require': no such file to load -- mkmf (LoadError)"
+# yes|/opt/csw/bin/pkgutil -i CSWruby
+# used SUNWspro
+# has entries in /opt/csw/lib/ruby/1.8/i386-solaris2.9/rbconfig.rb
+# luckily there is another one
+# For some reason these don't get installed ok, we need to give them a slight kick again
+yes | /opt/csw/bin/pkgutil -i CSWgcc4core
+yes|/opt/csw/bin/pkgutil -i CSWruby18-gcc4
+
+# no solaris2.11 .... mkheaders here ! needs some fixing ??
+# /opt/csw/gcc4/libexec/gcc/i386-pc-solaris2.10/4.3.3/install-tools/mkheaders
+/opt/csw/gcc4/libexec/gcc/i386-pc-solaris2.8/4.3.3/install-tools/mkheaders 
+
+/opt/csw/sbin/alternatives --display rbconfig18
+/opt/csw/sbin/alternatives --set rbconfig18 /opt/csw/lib/ruby/1.8/i386-solaris2.9/rbconfig.rb.gcc4
 
 /opt/csw/bin/gem install puppet  --no-ri --no-rdoc
 /opt/csw/bin/gem install chef  --no-ri --no-rdoc
