@@ -12,7 +12,7 @@ definition_dir= File.expand_path(File.join(veewee_dir, "definitions"))
 tmp_dir=File.expand_path(File.join(veewee_dir, "tmp"))
 iso_dir=File.expand_path(File.join(veewee_dir, "iso"))
 box_dir=File.expand_path(File.join(veewee_dir, "boxes"))
-validation_dir=File.expand_path(File.join(veewee_dir, "validation"))
+validation_dir=File.expand_path(File.join(lib_dir, "validation"))
 
 #Initialize
 Veewee::Session.setenv({:veewee_dir => veewee_dir, :definition_dir => definition_dir,
