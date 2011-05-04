@@ -149,16 +149,29 @@ module Veewee
         puts 
         puts "Verifying the isofile #{filename} is ok."
       else
+
         full_path=File.join(@iso_dir,filename)
         path1=Pathname.new(full_path)
         path2=Pathname.new(Dir.pwd)
         rel_path=path1.relative_path_from(path2).to_s
         
         puts
-        puts "We did not find an isofile in <currentdir>/iso. The definition provided the following download information:"
-        puts "- Download url: #{@definition[:iso_src]}"
+        puts "We did not find an isofile in <currentdir>/iso. \n\nThe definition provided the following download information:"
+        unless "#{@definition[:iso_src]}"==""
+          puts "- Download url: #{@definition[:iso_src]}"
+        end
         puts "- Md5 Checksum: #{@definition[:iso_md5]}"
-        puts ""
+        puts "#{@definition[:iso_download_instructions]}"
+        puts
+        
+        if @definition[:iso_src] == ""
+          puts "Please follow the instructions above:"
+          puts "- to get the ISO"
+          puts" - put it in <currentdir>/iso"
+          puts "- then re-run the command"
+          puts
+          exit
+        else
         
         question=ask("Download? (Yes/No)") {|q| q.default="No"}
         if question.downcase == "yes"
@@ -176,7 +189,7 @@ module Veewee
           exit
         end
         
-  
+      end
       end
   
     end

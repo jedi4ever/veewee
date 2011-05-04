@@ -11,18 +11,22 @@ Before we can actually build the boxes, we need to take care of the minimal thin
 People have reported good experiences, why don't you give it a try?
 
 ## Installation: 
-__from source__
+__as a gem__
+<pre>
+$ gem install veewee 
+</pre>
 
+__from source__
 <pre>
 $ git clone https://github.com/jedi4ever/veewee.git
 $ cd veewee
 $ gem install bundler
 $ bundle install
+
+# If you don't use rvm, be sure to execute vagrant through bundle exec
+$ alias vagrant="bundle exec vagrant"
 </pre>
-__as a gem__
-<pre>
-$ gem install veewee 
-</pre>
+
 
 ## List all templates
 <pre>

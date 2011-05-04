@@ -5,6 +5,11 @@ Veewee::Session.declare({
   :os_type_id => 'OpenSolaris',
   :iso_file => "sol-11-exp-201011-ai-x86.iso",
   :iso_src => "",
+  :iso_download_instructions => "- You need to download this manually as there is no automated way to do it\n"+
+    "http://www.oracle.com/technetwork/server-storage/solaris11/downloads/index.html\n"+
+    "\n"+
+    "- The version tested is 2010.11\n"+
+    "- For other version: changed the iso filename+checksum\n",
   :iso_md5 => "36527d4d49a645ef6f6d2677c8e0118c",
   :iso_download_timeout => 1000,
   :boot_wait => "10", :boot_cmd_sequence => [ 

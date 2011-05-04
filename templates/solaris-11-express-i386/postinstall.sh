@@ -12,23 +12,23 @@ yes|/usr/sbin/pkgadd -d http://mirror.opencsw.org/opencsw/pkgutil-`uname -p`.pkg
 /usr/bin/pkg install SUNWarc SUNWsfwhea SUNWhea SUNWtoo
 /usr/bin/pkg install math/header-math
 
-yes|/opt/csw/bin/pkgutil -i CSWgsed
-yes|/opt/csw/bin/pkgutil -i CSWruby18-gcc4
-yes|/opt/csw/bin/pkgutil -i CSWruby18-dev
-yes|/opt/csw/bin/pkgutil -i CSWrubygems
+/opt/csw/bin/pkgutil -y -i CSWgsed
+/opt/csw/bin/pkgutil -y -i CSWruby18-gcc4
+/opt/csw/bin/pkgutil -y -i CSWruby18-dev
+/opt/csw/bin/pkgutil -y -i CSWrubygems
 
 # These are needed to get a compiler working
 # Mainly because chef depends on compiling some native gems
 export PATH=/opt/csw/bin/:$PATH
 export PATH=/opt/csw/gcc4/bin/:$PATH
 
-yes | /opt/csw/bin/pkgutil -i CSWgcc4core
+/opt/csw/bin/pkgutil -y -i CSWgcc4core
 
 
-yes | /opt/csw/bin/pkgutil -i CSWgcc4g++
-yes | /opt/csw/bin/pkgutil -i CSWreadline
-yes | /opt/csw/bin/pkgutil -i CSWzlib
-yes | /opt/csw/bin/pkgutil -i CSWossldevel
+/opt/csw/bin/pkgutil -y -i CSWgcc4g++
+/opt/csw/bin/pkgutil -y -i CSWreadline
+/opt/csw/bin/pkgutil -y -i CSWzlib
+/opt/csw/bin/pkgutil -y -i CSWossldevel
 
 # prevents ":in `require': no such file to load -- mkmf (LoadError)"
 # yes|/opt/csw/bin/pkgutil -i CSWruby
@@ -36,8 +36,8 @@ yes | /opt/csw/bin/pkgutil -i CSWossldevel
 # has entries in /opt/csw/lib/ruby/1.8/i386-solaris2.9/rbconfig.rb
 # luckily there is another one
 # For some reason these don't get installed ok, we need to give them a slight kick again
-yes | /opt/csw/bin/pkgutil -i CSWgcc4core
-yes|/opt/csw/bin/pkgutil -i CSWruby18-gcc4
+/opt/csw/bin/pkgutil -y -i CSWgcc4core
+/opt/csw/bin/pkgutil -y -i CSWruby18-gcc4
 
 # no solaris2.11 .... mkheaders here ! needs some fixing ??
 # /opt/csw/gcc4/libexec/gcc/i386-pc-solaris2.10/4.3.3/install-tools/mkheaders
@@ -68,6 +68,8 @@ yes|/usr/sbin/pkgadd -d . SUNWvbox
 
 echo "export PATH=/opt/csw/bin:/opt/csw/sbin/:$PATH" >> /root/.profile
 echo "export PATH=/opt/csw/bin:/opt/csw/sbin/:$PATH" >> /export/home/vagrant/.profile
+
+puts "Note: validation of this box wil fail, as it's not linux based, working on that"
 
 exit
 
