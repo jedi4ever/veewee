@@ -5,9 +5,9 @@ Veewee::Session.declare({
   :memory_size=> '256',
   :disk_size => '10140', :disk_format => 'VDI', :hostiocache => 'off',
   :os_type_id => 'Debian',
-  :iso_file => "debian-6.0.0-i386-netinst.iso",
-  :iso_src => "http://ftp.acc.umu.se/debian-cd/current/i386/iso-cd/debian-6.0.0-i386-netinst.iso",
-  :iso_md5 => "2840eea06e9cdd2e125f32cefa25fa1d",
+  :iso_file => "debian-6.0.1a-i386-netinst.iso",
+  :iso_src => "http://cdimage.debian.org/debian-cd/6.0.1a/i386/iso-cd/debian-6.0.1a-i386-netinst.iso",
+  :iso_md5 => "57bd4f765d0f5909cc84f1a7c1eaf976",
   :iso_download_timeout => "1000",
   :boot_wait => "10", :boot_cmd_sequence => [
      '<Esc>',

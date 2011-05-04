@@ -7,7 +7,7 @@ Veewee::Session.declare({
   :iso_md5 => "02abb1a71bde21a1335e9368dad529ca",
   :iso_download_timeout => "1000",
   :boot_wait => "10", :boot_cmd_sequence => [
-    '<Tabr>',
+    '<Tab>',
     'noapic preseed/url=http://%IP%:%PORT%/preseed.cfg ',
     'debian-installer=en_US auto locale=en_US kbd-chooser/method=us ',
     'hostname=%NAME% ',
