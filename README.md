@@ -23,7 +23,7 @@ $ cd veewee
 $ gem install bundler
 $ bundle install
 
-# If you don't use rvm, be sure to execute vagrant through bundle exec
+If you don't use rvm, be sure to execute vagrant through bundle exec
 $ alias vagrant="bundle exec vagrant"
 </pre>
 
@@ -148,6 +148,35 @@ $ vagrant init 'myubuntubox'
 $ vagrant up
 $ vagrant ssh
 </pre>
+
+## How to add a new OS/installation (needs some love)
+
+- I suggest the easiest way is to get an account on github
+- fork of the veewee repository
+
+<pre>
+$ git clone https://github.com/*your account*/veewee.git
+$ cd veewee
+$ gem install bundler
+$ bundle install
+</pre>
+
+If you don't use rvm, be sure to execute vagrant through bundle exec
+<pre>
+$ alias vagrant="bundle exec vagrant"
+</pre>
+
+Start of an existing one
+<pre>
+$ vagrant basebox define 'mynewos' 'ubuntu...'
+</pre>
+
+- Do changes in the currentdir/definitions/mynewos
+- When it builds ok, move the definition/mynewos to a sensible directory under templates
+- commit the changes (git commit -a)
+- push the changes to github (git push)
+- go to the github gui and issue a pull request for it
+
 ## If you have a setup working, share your 'definition' with me. That would be fun! 
 
 IDEAS:
