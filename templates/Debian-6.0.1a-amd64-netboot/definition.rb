@@ -3,9 +3,9 @@ Veewee::Session.declare({
   :memory_size=> '256',
   :disk_size => '10140', :disk_format => 'VDI', :hostiocache => 'off',
   :os_type_id => 'Debian_64',
-  :iso_file => "debian-6.0.0-amd64-netinst.iso",
-  :iso_src => "http://ftp.acc.umu.se/debian-cd/current/amd64/iso-cd/debian-6.0.0-amd64-netinst.iso",
-  :iso_md5 => "98111f815d3bea761d303a14d8df8887",
+  :iso_file => "debian-6.0.1a-amd64-netinst.iso",
+  :iso_src => "http://cdimage.debian.org/debian-cd/6.0.1a/amd64/iso-cd/debian-6.0.1a-amd64-netinst.iso",
+  :iso_md5 => "eb25e5098ed0e60381f78b4efdde8737",
   :iso_download_timeout => "1000",
   :boot_wait => "10", :boot_cmd_sequence => [
     '<Esc>',
