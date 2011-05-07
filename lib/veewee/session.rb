@@ -300,10 +300,19 @@ module Veewee
             else
                 puts "Starting a webserver on port #{@definition[:kickstart_port]}"
                 #:kickstart_port => "7122", :kickstart_ip => self.local_ip, :kickstart_timeout => 1000,:kickstart_file => "preseed.cfg",
-                Veewee::Web.wait_for_request(kickstartfile,{:port => @definition[:kickstart_port],
+		if kickstartfile.is_a? String
+			Veewee::Web.wait_for_request(kickstartfile,{:port => @definition[:kickstart_port],
                                           :host => @definition[:kickstart_ip], :timeout => @definition[:kickstart_timeout],
                                           :web_dir => File.join(@definition_dir,boxname)})
-                
+		end 
+		if kickstartfile.is_a? Array
+			kickstartfiles=kickstartfile
+			kickstartfiles.each do |kickfile|
+				Veewee::Web.wait_for_request(kickfile,{:port => @definition[:kickstart_port],
+                                          :host => @definition[:kickstart_ip], :timeout => @definition[:kickstart_timeout],
+                                          :web_dir => File.join(@definition_dir,boxname)})
+			end
+		end
             end
                                       
                                       
@@ -341,11 +350,11 @@ module Veewee
                       exit
                     end
                     command=@definition[:sudo_cmd]
-                    command.gsub!(/%p/,"#{@definition[:ssh_password]}")
-                    command.gsub!(/%u/,"#{@definition[:ssh_user]}")
-                    command.gsub!(/%f/,"#{postinstall_file}")
-
-                    Veewee::Ssh.execute("localhost","#{command}",ssh_options)
+                    newcommand=command.gsub(/%p/,"#{@definition[:ssh_password]}")
+                    newcommand.gsub!(/%u/,"#{@definition[:ssh_user]}")
+                    newcommand.gsub!(/%f/,"#{postinstall_file}")
+		    puts "***#{newcommand}"
+                    Veewee::Ssh.execute("localhost","#{newcommand}",ssh_options)
                     end
                     
                  end
