@@ -1,3 +1,6 @@
+#Inspired by https://github.com/fnichol/wiki-notes/wiki/Creating-An-openSUSE-11.3-x32-Vagrant-Box
+
+
 zypper --non-interactive refresh
 # zypper --non-interactive up
 
