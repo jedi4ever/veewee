@@ -80,8 +80,9 @@ echo "emerge gentoo-sources" | chroot /mnt/gentoo /bin/bash -
 
 # We will use genkernel to automate the kernel compilation
 # http://www.gentoo.org/doc/en/genkernel.xml
+echo "emerge grub" | chroot /mnt/gentoo /bin/bash -
 echo "emerge genkernel" | chroot /mnt/gentoo /bin/bash -
-echo "genkernel --real_root=/dev/sda3 --no-splash --install all" | chroot /mnt/gentoo /bin/bash -
+echo "genkernel --bootloader=grub --real_root=/dev/sda3 --no-splash --install all" | chroot /mnt/gentoo /bin/bash -
 
 cat <<EOF | chroot /mnt/gentoo /bin/bash -
 cat <<FSTAB > /etc/fstab
@@ -113,20 +114,6 @@ echo "rc-update add vixie-cron default" | chroot /mnt/gentoo sh -
 
 #Get an editor going
 echo "emerge vim" | chroot /mnt/gentoo sh -
-
-#Boot loader grub
-echo "emerge grub" | chroot /mnt/gentoo sh -
-cat <<EOF | chroot /mnt/gentoo /bin/bash -
-echo <<GRUB > /etc/conf.d/grub
-default 0
-timeout 10
-
-title Gentoo
-root (hd0,0)
-kernel /boot/kernel root=/dev/sda3
-GRUB
-EOF
-
 
 #Allow external ssh
 echo "echo 'sshd:ALL' > /etc/hosts.allow" | chroot /mnt/gentoo sh -
