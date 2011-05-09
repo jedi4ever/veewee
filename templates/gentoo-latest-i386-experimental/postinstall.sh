@@ -38,39 +38,50 @@ mkdir /mnt/gentoo/boot
 mount /dev/sda1 /mnt/gentoo/boot
 cd /mnt/gentoo
 
+#Note: we retry as sometimes mirrors fail to have the files
+
 #Download a stage3 archive
-wget ftp://distfiles.gentoo.org/gentoo/releases/x86/current-stage3/stage3-i686-*.tar.bz2
+while true; do
+	wget ftp://distfiles.gentoo.org/gentoo/releases/x86/current-stage3/stage3-i686-*.tar.bz2 && > gotstage3
+        if [ -f "gotstage3" ]
+        then
+		break
+	else
+		echo "trying in 2seconds"
+		sleep 2
+        fi
+done
 tar xjpf stage3*
 
 #Download Portage snapshot
 cd /mnt/gentoo/usr
-wget http://distfiles.gentoo.org/snapshots/portage-latest.tar.bz2
-tar xjf portage-lat*
+while true; do
+	wget http://distfiles.gentoo.org/snapshots/portage-latest.tar.bz2 && > gotportage
+        if [ -f "gotportage" ]
+        then
+		break
+	else
+		echo "trying in 2seconds"
+		sleep 2
+	fi
+done
 
-#Set the hostname
-cat <<EOF | chroot /mnt/gentoo /bin/bash -
-cd /etc
-echo "127.0.0.1 gentoo.vagrantup.com gentoo localhost" > hosts
-sed -i -e 's/HOSTNAME.*/HOSTNAME="gentoo"/' conf.d/hostname
-hostname gentoo
-hostname -f
-EOF
+tar xjf portage-lat*
 
 #Chroot
 cd /
 mount -t proc proc /mnt/gentoo/proc
 mount --rbind /dev /mnt/gentoo/dev
 cp -L /etc/resolv.conf /mnt/gentoo/etc/
-#chroot /mnt/gentoo /bin/bash
 echo "env-update && source /etc/profile" | chroot /mnt/gentoo /bin/bash -
 
 # Get the kernel sources
-echo "emerge kernel-sources" | chroot /mnt/gentoo /bin/bash -
+echo "emerge gentoo-sources" | chroot /mnt/gentoo /bin/bash -
 
 # We will use genkernel to automate the kernel compilation
 # http://www.gentoo.org/doc/en/genkernel.xml
 echo "emerge genkernel" | chroot /mnt/gentoo /bin/bash -
-echo "genkernel all" | chroot /mnt/gentoo /bin/bash -
+echo "genkernel --real_root=/dev/sda2 --no-splash --install all" | chroot /mnt/gentoo /bin/bash -
 
 cat <<EOF | chroot /mnt/gentoo /bin/bash -
 cat <<FSTAB > /etc/fstab
@@ -81,32 +92,56 @@ FSTAB
 EOF
 
 
+#We need some things to do here
+#Network
+cat <<EOF | chroot /mnt/gentoo /bin/bash -
+cd /etc/conf.d
+echo 'config_eth0=( "dhcp" )' >> net
+#echo 'dhcpd_eth0=( "-t 10" )' >> net
+#echo 'dhcp_eth0=( "release nodns nontp nois" )' >> net
+rc-update add net.eth0 default
+#Module?
+rc-update add sshd default
+EOF
+
+#Root password
+
+# Cron & Syslog
+echo "emerge syslog-ng vixie-cron" | chroot /mnt/gentoo sh -
+echo "rc-update add syslog-ng default" | chroot /mnt/gentoo sh -
+echo "rc-update add vixie-cron default" | chroot /mnt/gentoo sh -
+
+#Get an editor going
+echo "emerge vim" | chroot /mnt/gentoo sh -
+
+#Boot loader grub
+echo "emerge grub" | chroot /mnt/gentoo sh -
+cat <<EOF | chroot /mnt/gentoo /bin/bash -
+echo <<GRUB > /etc/conf.d/grub
+default 0
+timeout 10
+
+title Gentoo
+root (hd0,0)
+kernel /boot/kernel root=/dev/sda3
+GRUB
+EOF
+
+
+#Allow external ssh
 echo "echo 'sshd:ALL' > /etc/hosts.allow" | chroot /mnt/gentoo sh -
 echo "echo 'ALL:ALL' > /etc/hosts.deny" | chroot /mnt/gentoo sh -
+
+#create vagrant user  / password vagrant
+chroot /mnt/gentoo useradd -m -r vagrant -p '$1$MPmczGP9$1SeNO4bw5YgiEJuo/ZkWq1'
 
 #Configure Sudo
 chroot /mnt/gentoo emerge sudo
 echo "echo 'vagrant ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers" | chroot /mnt/gentoo sh -
 
-#create vagrant user  / password vagrant
-chroot /mnt/gentoo useradd -m -r vagrant -p '$1$MPmczGP9$1SeNO4bw5YgiEJuo/ZkWq1'
-
-#get some ruby running
-chroot /mnt/gentoo emerge git curl gcc make
-echo "bash < <( curl -L http://bit.ly/rvm-install-system-wide )"| chroot /mnt/gentoo /bin/bash -
-echo "/usr/local/bin/rvm install ruby-1.8.7 "| chroot /mnt/gentoo sh -
-echo "/usr/local/bin/rvm use ruby-1.8.7 --default "| chroot /mnt/gentoo sh -
-
-
-#Installing chef & Puppet
-echo ". /usr/local/lib/rvm ; gem install chef --no-ri --no-rdoc"| chroot /mnt/gentoo sh -
-echo ". /usr/local/lib/rvm ; gem install puppet --no-ri --no-rdoc"| chroot /mnt/gentoo sh -
-
-
-exit
-
-
 #Installing vagrant keys
+chroot /mnt/gentoo emerge wget 
+
 echo "creating vagrant ssh keys"
 chroot /mnt/gentoo mkdir /home/vagrant/.ssh
 chroot /mnt/gentoo chmod 700 /home/vagrant/.ssh
@@ -115,28 +150,44 @@ chroot /mnt/gentoo wget --no-check-certificate 'http://github.com/mitchellh/vagr
 chroot /mnt/gentoo chmod 600 /home/vagrant/.ssh/authorized_keys
 chroot /mnt/gentoo chown -R vagrant /home/vagrant/.ssh
 
-echo "adding rvm to global bash rc"
-echo "echo '. /usr/local/lib/rvm' >> /etc/bash/bash.rc" | chroot /mnt/gentoo sh -
+#This could be done in postinstall
+#reboot
 
-#https://wiki.archlinux.org/index.php/VirtualBox
-#kernel pacman -S kernel26-headers
-chroot /mnt/gentoo pacman --noconfirm -S kernel26-headers
+#get some ruby running
+chroot /mnt/gentoo emerge git curl gcc automake  m4
+chroot /mnt/gentoo emerge libiconv readline zlib openssl curl git libyaml sqlite libxslt
+echo "bash < <(curl -s https://rvm.beginrescueend.com/install/rvm)"| chroot /mnt/gentoo /bin/bash -
+echo "/usr/local/rvm/bin/rvm install ruby-1.8.7 "| chroot /mnt/gentoo sh -
+echo "/usr/local/rvm/bin/rvm use ruby-1.8.7 --default "| chroot /mnt/gentoo sh -
+
+#Installing chef & Puppet
+echo ". /usr/local/rvm/scripts/rvm ; gem install chef --no-ri --no-rdoc"| chroot /mnt/gentoo sh -
+echo ". /usr/local/rvm/scripts/rvm ; gem install puppet --no-ri --no-rdoc"| chroot /mnt/gentoo sh -
+
+
+echo "adding rvm to global bash rc"
+echo "echo '. /usr/local/rvm/scripts/rvm' >> /etc/bash/bash.rc" | chroot /mnt/gentoo sh -
+
 /bin/cp -f /root/.vbox_version /mnt/gentoo/home/vagrant/.vbox_version
 VBOX_VERSION=$(cat /root/.vbox_version)
+
+#Kernel headers
+chroot /mnt/gentoo emerge linux-headers
 
 #Installing the virtualbox guest additions
 cat <<EOF | chroot /mnt/gentoo /bin/bash -
 cd /tmp
+mkdir /mnt/vbox
 wget http://download.virtualbox.org/virtualbox/$VBOX_VERSION/VBoxGuestAdditions_$VBOX_VERSION.iso
-mount -o loop VBoxGuestAdditions_$VBOX_VERSION.iso /mnt
-sh /mnt/VBoxLinuxAdditions.run
-umount /mnt
-rm VBoxGuestAdditions_$VBOX_VERSION.iso
+mount -o loop VBoxGuestAdditions_$VBOX_VERSION.iso /mnt/vbox
+sh /mnt/vbox/VBoxLinuxAdditions.run
+#umount /mnt/vbox
+#rm VBoxGuestAdditions_$VBOX_VERSION.iso
 EOF
 
 echo "sed -i 's:^DAEMONS\(.*\))$:DAEMONS\1 rc.vboxadd):' /etc/rc.conf" | chroot /mnt/gentoo sh -
 
-
+exit
 cd /
 umount /mnt/gentoo/{proc,sys,dev}
 umount /mnt/gentoo

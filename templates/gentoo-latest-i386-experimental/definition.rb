@@ -12,18 +12,18 @@ Veewee::Session.declare( {
         '2<Enter>',
         '1<Enter>',
 	'<Wait><Wait>ifconfig -a <Enter>',
-	'sleep 5 ;curl http://%IP%:%PORT%/stages.sh -o stages.sh &&',
-	'bash stages.sh &<Enter>',
-        #'/etc/init.d/sshd start<Enter>',
-        #'passwd<Enter><Wait><Wait>',
-	#'vagrant<Enter><Wait>',
-	#'vagrant<Enter><Wait>',
+	#'sleep 5 ;curl http://%IP%:%PORT%/stages.sh -o stages.sh &&',
+	#'bash stages.sh &<Enter>',
+        'passwd<Enter><Wait><Wait>',
+	'vagrant<Enter><Wait>',
+	'vagrant<Enter><Wait>',
+        '/etc/init.d/sshd start<Enter>'
     ],
-  :kickstart_port => "7122", :kickstart_timeout => "10000",:kickstart_file => "stages.sh",
-  :ssh_login_timeout => "10000",:ssh_user => "vagrant", :ssh_password => "vagrant",:ssh_key => "",
+  :kickstart_port => "7122", :kickstart_timeout => "10000",:kickstart_file => "",
+  :ssh_login_timeout => "10000",:ssh_user => "root", :ssh_password => "vagrant",:ssh_key => "",
   :ssh_host_port => "7222", :ssh_guest_port => "22",
   :sudo_cmd => "cat '%f'|su -",
   :shutdown_cmd => "shutdown -p now",
-  :postinstall_files => [ "postinstall.sh"],:postinstall_timeout => "10000"
+  :postinstall_files => [ "post_install.sh"],:postinstall_timeout => "10000"
    }
 )
