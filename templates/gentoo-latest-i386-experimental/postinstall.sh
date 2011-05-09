@@ -81,7 +81,7 @@ echo "emerge gentoo-sources" | chroot /mnt/gentoo /bin/bash -
 # We will use genkernel to automate the kernel compilation
 # http://www.gentoo.org/doc/en/genkernel.xml
 echo "emerge genkernel" | chroot /mnt/gentoo /bin/bash -
-echo "genkernel --real_root=/dev/sda2 --no-splash --install all" | chroot /mnt/gentoo /bin/bash -
+echo "genkernel --real_root=/dev/sda3 --no-splash --install all" | chroot /mnt/gentoo /bin/bash -
 
 cat <<EOF | chroot /mnt/gentoo /bin/bash -
 cat <<FSTAB > /etc/fstab
