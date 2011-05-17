@@ -1,7 +1,7 @@
 # http://projects.puppetlabs.com/projects/1/wiki/Puppet_Solaris
 
 # Add the opencsw package site
-export PATH=/usr/bin/:/usr/sbin:$PATH
+export PATH=/usr/bin:/usr/sbin:$PATH
 
 yes|/usr/sbin/pkgadd -d http://mirror.opencsw.org/opencsw/pkgutil-`uname -p`.pkg all
 
@@ -19,8 +19,8 @@ yes|/usr/sbin/pkgadd -d http://mirror.opencsw.org/opencsw/pkgutil-`uname -p`.pkg
 
 # These are needed to get a compiler working
 # Mainly because chef depends on compiling some native gems
-export PATH=/opt/csw/bin/:$PATH
-export PATH=/opt/csw/gcc4/bin/:$PATH
+export PATH=/opt/csw/bin:$PATH
+export PATH=/opt/csw/gcc4/bin:$PATH
 
 /opt/csw/bin/pkgutil -y -i CSWgcc4core
 
@@ -66,8 +66,8 @@ yes|/usr/sbin/pkgadd -d . SUNWvbox
 
 # Fix the shells to include the /opt/csw directories
 
-echo "export PATH=/opt/csw/bin:/opt/csw/sbin/:$PATH" >> /root/.profile
-echo "export PATH=/opt/csw/bin:/opt/csw/sbin/:$PATH" >> /export/home/vagrant/.profile
+echo "export PATH=/opt/csw/bin:/opt/csw/sbin:$PATH" >> /root/.profile
+echo "export PATH=/opt/csw/bin:/opt/csw/sbin:$PATH" >> /export/home/vagrant/.profile
 
 puts "Note: validation of this box wil fail, as it's not linux based, working on that"
 
