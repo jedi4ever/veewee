@@ -1,6 +1,6 @@
 Veewee::Session.declare({
   :cpu_count => '1', :memory_size=> '384',
-  :disk_size => '10140', :disk_format => 'VDI', :hostiocache => 'off', :use_hw_virt_ext => 'on',
+  :disk_size => '10140', :disk_format => 'VDI', :hostiocache => 'off', :hwvirtext => 'on',
   :os_type_id => 'Fedora',
   :iso_file => "Fedora-14-i386-DVD.iso",
   :iso_src => "http://mirror.uoregon.edu/fedora/linux/releases/14/Fedora/i386/iso/Fedora-14-i386-DVD.iso",
