@@ -7,6 +7,7 @@ apt-get -y install zlib1g-dev libssl-dev libreadline5-dev
 apt-get clean
 
 #Setting up sudo
+sed -i -e '/Defaults\s\+env_reset/a Defaults\texempt_group=admin' /etc/sudoers
 cp /etc/sudoers /etc/sudoers.orig
 sed -i -e 's/%admin ALL=(ALL) ALL/%admin ALL=NOPASSWD:ALL/g' /etc/sudoers
 
