@@ -1,9 +1,9 @@
-# Official base box postinstall.sh for VeeWee, used to setup lucid32
+# postinstall.sh created from Mitchell's official lucid32/64 baseboxes
 
 # Apt-install various things necessary for Ruby, guest additions,
 # etc., and remove optional things to trim down the machine.
 apt-get -y update
-apt-get -y remove apparmor
+apt-get -y upgrade
 apt-get -y install linux-headers-$(uname -r) build-essential
 apt-get -y install zlib1g-dev libssl-dev libreadline5-dev
 apt-get clean
