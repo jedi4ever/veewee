@@ -1,6 +1,6 @@
 Veewee::Session.declare({
   :cpu_count => '1', :memory_size=> '384',
-  :disk_size => '10140', :disk_format => 'VDI', :hostiocache => 'off',
+  :disk_size => '10140', :disk_format => 'VDI', :hostiocache => 'off', :ioapic => 'on', :pae => 'on',
   :os_type_id => 'RedHat',
   :iso_file => "CentOS-5.5-i386-netinstall.iso",
   :iso_src => "http://mirror.bytemark.co.uk/centos/5.5/isos/i386/CentOS-5.5-i386-netinstall.iso",

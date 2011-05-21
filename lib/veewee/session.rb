@@ -31,7 +31,7 @@ module Veewee
     def self.declare(options)
       defaults={
         :cpu_count => '1', :memory_size=> '256', 
-        :disk_size => '10240', :disk_format => 'VDI', :hostiocache => 'off' , :use_hw_virt_ext => 'on', :use_pae => 'off',
+        :disk_size => '10240', :disk_format => 'VDI', :hostiocache => 'off' ,
         :os_type_id => 'Ubuntu',
         :iso_file => "ubuntu-10.10-server-i386.iso", :iso_src => "", :iso_md5 => "", :iso_download_timeout => 1000,
         :boot_wait => "10", :boot_cmd_sequence => [ "boot"],
@@ -517,7 +517,14 @@ module Veewee
         Veewee::Shell.execute("#{command}")
 
         # Modify the vm to enable or disable hw virtualization extensions
-        command="#{@vboxcmd} modifyvm #{boxname} --hwvirtex #{@definition[:use_hw_virt_ext]} --pae #{@definition[:use_pae]}"
+        vm_flags=%w{pagefusion acpi ioapic pae hpet hwvirtex hwvirtexcl nestedpaging largepages vtxvpid synthxcpu rtcuseutc}
+        
+        vm_flags.each do |vm_flag|
+          unless @definition[vm_flag.to_sym].nil?
+            puts "Setting VM Flag #{vm_flag} to #{@definition[vm_flag.to_sym]}"
+            command="#{@vboxcmd} modifyvm #{boxname} --#{vm_flag.to_s} #{@definition[vm_flag.to_sym]}"
+          end
+        end
 
         #Exec and system stop the execution here
         Veewee::Shell.execute("#{command}")
