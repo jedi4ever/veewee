@@ -12,7 +12,7 @@ Veewee::Session.declare({
     'debian-installer=en_US auto locale=en_US kbd-chooser/method=us ',
     'hostname=%NAME% ',
     'fb=false debconf/frontend=noninteractive ',
-    'console-setup/ask_detect=false console-setup/modelcode=pc105 console-setup/layoutcode=us ',
+    'keyboard-configuration/layout=USA keyboard-configuration/variant=USA console-setup/ask_detect=false ',
     'initrd=/install/initrd.gz -- <Enter>'
   ],
   :kickstart_port => "7122", :kickstart_timeout => "10000", :kickstart_file => "preseed.cfg",
