@@ -30,12 +30,13 @@ cd ..
 rm -rf ruby-1.8.7-p334*
 
 # Install RubyGems 1.7.2
-wget http://production.cf.rubygems.org/rubygems/rubygems-1.7.2.tgz
-tar xzf rubygems-1.7.2.tgz
-cd rubygems-1.7.2
+VEEWEE_RUBYGEMS_VERSION="rubygems-1.7.2"
+wget http://production.cf.rubygems.org/rubygems/${VEEWEE_RUBYGEMS_VERSION}.tgz
+tar xzf ${VEEWEE_RUBYGEMS_VERSION}.tgz
+cd ${VEEWEE_RUBYGEMS_VERSION}
 /opt/ruby/bin/ruby setup.rb
 cd ..
-rm -rf rubygems-1.7.2*
+rm -rf ${VEEWEE_RUBYGEMS_VERSION}*
 
 # Installing chef & Puppet
 /opt/ruby/bin/gem install chef --no-ri --no-rdoc
