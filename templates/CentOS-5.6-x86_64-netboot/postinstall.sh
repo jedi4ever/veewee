@@ -18,7 +18,7 @@ rpm -Uvh http://rbel.frameos.org/rbel5
 
 #Installing chef & Puppet
 yum -y install rubygem-chef
-/opt/ruby/bin/gem install puppet --no-ri --no-rdoc
+/usr/bin/gem install puppet --no-ri --no-rdoc
 
 #Installing vagrant keys
 mkdir /home/vagrant/.ssh
