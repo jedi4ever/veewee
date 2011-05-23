@@ -35,7 +35,7 @@ module Veewee
         :os_type_id => 'Ubuntu',
         :iso_file => "ubuntu-10.10-server-i386.iso", :iso_src => "", :iso_md5 => "", :iso_download_timeout => 1000,
         :boot_wait => "10", :boot_cmd_sequence => [ "boot"],
-        :kickstart_port => "7122", :kickstart_ip => self.local_ip, :kickstart_timeout => 10000,:kickstart_file => "preseed.cfg",
+        :kickstart_port => "7122", :kickstart_ip => self.local_ip, :kickstart_timeout => 10000,
         :ssh_login_timeout => "100",:ssh_user => "vagrant", :ssh_password => "vagrant",:ssh_key => "",
         :ssh_host_port => "2222", :ssh_guest_port => "22",
         :sudo_cmd => "echo '%p'|sudo -S sh '%f'",
