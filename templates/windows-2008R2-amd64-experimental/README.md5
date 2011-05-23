@@ -6,3 +6,11 @@ The installation uses the Standard way for Windows Unattended installation. The 
   - cygwin-install.bat (this script will run the cygwin installer + get sshd/openssl going)
   - winrm-install.bat (activates the http and https listener + punches the firewall hole)
 
+Expose the winrm port:
+
+<pre>
+$ ssh -p 7222 -L5985:localhost:5985 vagrant@localhost
+$ gem install chef
+$ gem install knife-windows
+$ knife bootstrap windows winrm localhost -x Administrator -P 'vagrant'
+</pre>

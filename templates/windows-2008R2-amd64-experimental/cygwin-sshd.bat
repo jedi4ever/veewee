@@ -36,17 +36,3 @@ net start sshd
 # Fix corrupt recycle bin
 # http://www.winhelponline.com/blog/fix-corrupted-recycle-bin-windows-7-vista/
 cmd /c rd /s /q c:\$Recycle.bin
-
-# http://myratnest.blogspot.com/2010/11/fun-cygwin-and-windows-2008-r2.html
-# editrights -u sshd_server -a SeCreateTokenPrivilege
-
-# http://superuser.com/questions/40545/upgrading-and-installing-packages-through-the-cygwin-command-line
-#wget http://apt-cyg.googlecode.com/svn/trunk/apt-cyg
-#chmod +x apt-cyg
-#mv apt-cyg /usr/local/bin/
-
-# wget http://download.virtualbox.org/virtualbox/4.0.8/VirtualBox-4.0.8-71778-Win.exe
-#  chmod +x VirtualBox-4.0.8-71778-Win.exe 
-# ./VirtualBox-4.0.8-71778-Win.exe -extract -s -p .
-# msiexec /i VirtualBox-4.0.8-r71778-MultiArch_amd64.msi ALLUSERS=2
-
