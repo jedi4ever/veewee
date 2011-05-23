@@ -527,6 +527,36 @@ module Veewee
           end
         end
 
+        # Todo Check for java
+        # Todo check output of commands
+        
+        # Check for floppy
+        unless @definition[:floppy_files].nil?
+            require 'tmpdir'
+            temp_dir=Dir.tmpdir
+            @definition[:floppy_files].each do |filename|
+              full_filename=full_filename=File.join(@definition_dir,boxname,filename)
+              FileUtils.cp("#{full_filename}","#{temp_dir}")
+            end
+            javacode_dir=File.expand_path(File.join(__FILE__,'..','..','java'))
+            floppy_file=File.join(@definition_dir,boxname,"virtualfloppy.vfd")
+            command="java -jar #{javacode_dir}/dir2floppy.jar '#{temp_dir}' '#{floppy_file}'"
+            puts "#{command}"
+            Veewee::Shell.execute("#{command}")
+            
+            # Create floppy controller
+            command="#{@vboxcmd} storagectl '#{boxname}' --name 'Floppy Controller' --add floppy"
+            puts "#{command}"
+            Veewee::Shell.execute("#{command}")
+            
+            # Attach floppy to machine (the vfd extension is crucial to detect msdos type floppy)
+            command="#{@vboxcmd} storageattach '#{boxname}' --storagectl 'Floppy Controller' --port 0 --device 0 --type fdd --medium '#{floppy_file}'"
+            puts "#{command}"
+            Veewee::Shell.execute("#{command}")   
+            
+        end
+        
+        
         #Exec and system stop the execution here
         Veewee::Shell.execute("#{command}")
 

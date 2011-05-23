@@ -7,3 +7,4 @@ boxes/*
 pkg/*
 *.box
 .vagrant
+virtualfloppy.vfd
