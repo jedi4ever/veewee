@@ -1,3 +1,9 @@
+You can download a free trial of Windows 2008 R2
+
+My downloaded iso was named '7601.17514.101119-1850_x64fre_server_eval_en-us-GRMSXEVAL_EN_DVD.iso'
+
+- place it in a directory called iso
+
 The installation uses the Standard way for Windows Unattended installation. The XML file was created using the Windows AIK kit, but the file can also be edited by hand.
 
 - Building the machine creates a floppy that contains:
