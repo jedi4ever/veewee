@@ -14,10 +14,10 @@ yum -y erase wireless-tools gtk2 libX11 hicolor-icon-theme avahi freetype bitstr
 yum -y clean all
 
 #Installing ruby
-rpm -Uvh http://rbel.frameos.org/rbel`rpm --eval '%rhel'`
+rpm -Uvh http://rbel.frameos.org/rbel5
 
 #Installing chef & Puppet
-yum install rubygem-chef
+yum -y install rubygem-chef
 /opt/ruby/bin/gem install puppet --no-ri --no-rdoc
 
 #Installing vagrant keys
