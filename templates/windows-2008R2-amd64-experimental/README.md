@@ -20,3 +20,14 @@ $ gem install chef
 $ gem install knife-windows
 $ knife bootstrap windows winrm localhost -x Administrator -P 'vagrant'
 </pre>
+
+
+- http://wiki.opscode.com/display/chef/Knife+Windows+Bootstrap
+- https://github.com/opscode/knife-windows/blob/master/lib/chef/knife/bootstrap/windows-shell.erb
+
+- https://github.com/zenchild/WinRM
+
+- http://devopscloud.net/2011/04/17/managing-chef-from-windows-7/
+- http://devopscloud.net/2011/04/28/powershell-userdata-to-start-a-chef-run/
+- http://devopscloud.net/2011/03/23/dissection-of-a-chef-recipe-or-two-for-windows/
+- https://github.com/pmorton/chef-windows-installer
