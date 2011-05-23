@@ -1,0 +1,8 @@
+The installation uses the Standard way for Windows Unattended installation. The XML file was created using the Windows AIK kit, but the file can also be edited by hand.
+
+- Building the machine creates a floppy that contains:
+  - AutoUnattend.xml (that will configure the windows)
+  - cygwin-setup.exe (the standard setup.exe cygwin binaries)
+  - cygwin-install.bat (this script will run the cygwin installer + get sshd/openssl going)
+  - winrm-install.bat (activates the http and https listener + punches the firewall hole)
+

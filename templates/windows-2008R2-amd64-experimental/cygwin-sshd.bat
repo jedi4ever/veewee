@@ -2,7 +2,7 @@ REM http://webcache.googleusercontent.com/search?q=cache:SjoPPpuQxuoJ:www.tcm.ph
 
 REM create the cygwin directory
 cmd /c mkdir %SystemDrive%\cygwin
-copy a:setup.exe %SystemDrive%\cygwin
+copy a:cygwin-setup.exe %SystemDrive%\cygwin
 
 REM goto a temp directory
 cd %SystemDrive%\windows\temp
@@ -33,6 +33,10 @@ cmd /c if exist %Systemroot%\system32\netsh.exe netsh advfirewall firewall add r
 
 net start sshd
 
+# Fix corrupt recycle bin
+# http://www.winhelponline.com/blog/fix-corrupted-recycle-bin-windows-7-vista/
+cmd /c rd /s /q c:\$Recycle.bin
+
 # http://myratnest.blogspot.com/2010/11/fun-cygwin-and-windows-2008-r2.html
 # editrights -u sshd_server -a SeCreateTokenPrivilege
 
@@ -43,5 +47,6 @@ net start sshd
 
 # wget http://download.virtualbox.org/virtualbox/4.0.8/VirtualBox-4.0.8-71778-Win.exe
 #  chmod +x VirtualBox-4.0.8-71778-Win.exe 
-# ./VirtualBox-4.0.8-71778-Win.exe -extract
-# ./VirtualBox-4.0.8-71778-Win.exe /extract /path .
+# ./VirtualBox-4.0.8-71778-Win.exe -extract -s -p .
+# msiexec /i VirtualBox-4.0.8-r71778-MultiArch_amd64.msi ALLUSERS=2
+
