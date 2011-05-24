@@ -522,7 +522,7 @@ module Veewee
         vm_flags.each do |vm_flag|
           unless @definition[vm_flag.to_sym].nil?
             puts "Setting VM Flag #{vm_flag} to #{@definition[vm_flag.to_sym]}"
-            command="#{@vboxcmd} modi fyvm #{boxname} --#{vm_flag.to_s} #{@definition[vm_flag.to_sym]}"
+            command="#{@vboxcmd} modifyvm #{boxname} --#{vm_flag.to_s} #{@definition[vm_flag.to_sym]}"
             Veewee::Shell.execute("#{command}")
           end
         end
