@@ -1,0 +1,23 @@
+# PRO VERSION
+wget http://www.daemon-tools.cc/eng/downloads/dtproAdv
+ mv getfile.php\@p\=http%3A%2F%2Fwww.disc-tools.com%2Fc3537614d404403feeba73e3231c5ecb%2FDAEMONToolsPro4410314-0232.exe daemontools.exe
+
+wget http://disc-tools.com/request?p=dbfadc0bb380a8ddc61d2e04d015d770/DTLite4402-0131.exe
+mv getfile.php\@p\=http%3A%2F%2Fdisc-tools.com%2Fdbfadc0bb380a8ddc61d2e04d015d770%2FDTLite4402-0131.exe  DTLite.exe
+
+chmod +x daemontools.exe 
+
+
+# http://www.daemon-help.com/en/installation_notes_lite/installation_lite.html
+# Silent install - http://forum.daemon-tools.cc/f24/dt-4-08-a-15030/
+ ./daemontools.exe  /S
+
+# http://www.daemon-help.com/en/windows_integration_lite/command_line_parameters.html
+# /cygdrive/c/Program Files (x86)/DAEMON Tools Pro
+ ./DTLite.exe -mount 0,"c:\cygwin\home\vagrant\VBoxGuestAdditions_4.0.8.iso"
+
+./DTLite.exe -unmount 0
+
+/cygdrive/e
+
+#http://www.msfn.org/board/topic/105277-howto-create-a-fully-up-to-date-xp-x64-dvd/
