@@ -1,7 +1,7 @@
 Veewee::Session.declare({
   :cpu_count => '1', :memory_size=> '384', 
   :disk_size => '10140', :disk_format => 'VDI', :hostiocache => 'off',
-  :os_type_id => 'Ubuntu',
+  :os_type_id => 'Ubuntu64',
   :iso_file => "ubuntu-11.04-server-amd64.iso",
   :iso_src => "http://releases.ubuntu.com/11.04/ubuntu-11.04-server-amd64.iso",
   :iso_md5 => "ce1cee108de737d7492e37069eed538e",
