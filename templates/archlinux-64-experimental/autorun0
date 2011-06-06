@@ -1,0 +1,6 @@
+#!/bin/bash
+
+echo "We are installing archlinux through the livecd of System Rescue"
+echo "Please wait while we do the grunt work ."
+
+echo "Occasionally this hangs because of network issues to the archlinux mirrors"

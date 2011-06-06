@@ -93,10 +93,27 @@ module Veewee
           special['<KillX>'] = '1d 38 0e';
           special['<Wait>'] = 'wait';
 
-          #special['<Up>'] = '01';
-          #special['<Down>'] = '01';
-          #special['<PageUp>'] = '01';
-          #special['<PageDown>'] = '01';
+          special['<Up>'] = '48 c8';
+          special['<Down>'] = '50 d0';
+          special['<PageUp>'] = '49 c9';
+          special['<PageDown>'] = '51 d1';
+          special['<End>'] = '4f cf';
+          special['<Insert>'] = '52 d2';
+          special['<Delete>'] = '53 d3';
+          special['<Left>'] = '4b cb';
+          special['<Right>'] = '4d cd';
+          special['<Home>'] = '47 c7';
+
+	  special['<F1>'] = '3b';
+	  special['<F2>'] = '3c';
+	  special['<F3>'] = '3d';
+	  special['<F4>'] = '3e';
+	  special['<F5>'] = '3f';
+	  special['<F6>'] = '40';
+	  special['<F7>'] = '41';
+	  special['<F8>'] = '42';
+	  special['<F9>'] = '43';
+	  special['<F10>'] = '44';
 
           keycodes=''
           thestring.gsub!(/ /,"<Spacebar>")
