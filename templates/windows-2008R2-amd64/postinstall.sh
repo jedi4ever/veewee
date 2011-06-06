@@ -63,19 +63,23 @@ cd "/cygdrive/c/Program Files (x86)/DAEMON Tools Lite"
 
 #Installing ruby
 cd /home/vagrant
-wget http://rubyforge.org/frs/download.php/74298/rubyinstaller-1.9.2-p180.exe
-chmod +x rubyinstaller-1.9.2-p180.exe
-./rubyinstaller-1.9.2-p180.exe /verysilent  /dir="c:\ruby" /tasks="assocfiles,modpath" /SUPPRESSMSGBOXES /LOG="rubyinstaller.log"
+
+# Ruby 1.9
+#wget http://rubyforge.org/frs/download.php/74298/rubyinstaller-1.9.2-p180.exe -O rubyinstaller.exe
+# Ruby 1.8
+wget http://files.rubyforge.vm.bytemark.co.uk/rubyinstaller/rubyinstaller-1.8.7-p334.exe -O rubyinstaller.exe
+
+chmod +x rubyinstaller.exe
+./rubyinstaller.exe /verysilent /dir="C:\ruby" /tasks="assocfiles,modpath" /SUPPRESSMSGBOXES
 
 # Now add it to the path cmd, and cygwin path
 # http://serverfault.com/questions/63017/how-do-i-modify-the-system-path-in-windows-2003-windows-2008-using-a-script
-setx  PATH "%PATH%;c:\ruby\bin" /M
+/cygdrive/c/Windows/System32/setx.exe  PATH "c:\windows\system32;c:\ruby\bin" /M
 export PATH=$PATH:/cygdrive/c/ruby/bin
 
 # Install Ruby dev kit (native extensions)
-wget --no-check-certificate  http://github.com/downloads/oneclick/rubyinstaller/DevKit-tdm-32-4.5.1-20101214-1400-sfx.exe
+wget --no-check-certificate  http://github.com/downloads/oneclick/rubyinstaller/DevKit-tdm-32-4.5.1-20101214-1400-sfx.exe -O rubydevkit.exe
 mkdir /cygdrive/c/devkit
-mv DevKit-tdm-32-4.5.1-20101214-1400-sfx.exe /cygdrive/c/devkit/rubydevkit.exe
 cd /cygdrive/c/devkit
 chmod +x rubydevkit.exe
 ./rubydevkit -y
@@ -85,10 +89,34 @@ ruby dk.rb install
 # Installing puppet
 gem.bat install puppet  --no-rdoc --no-ri --verbose
 
-# Installing chef
-gem.bat install win32-open3 rdp-ruby-wmi windows-api windows-pr --no-rdoc --no-ri --verbose
+# Installing chef required gems on windows
+# For ruby 1.8
+gem.bat install win32-open3 ruby-wmi windows-api windows-pr --no-rdoc --no-ri --verbose
+# For ruby 1.9
+#gem.bat install win32-open3 rdp-ruby-wmi windows-api windows-pr --no-rdoc --no-ri --verbose
+
+# Install chef
+gem.bat install ohai --no-rdoc --no-ri --verbose
 gem.bat install chef  --no-rdoc --no-ri --verbose
+
+# Currently 1.9 ruby + chef 10 doesn't seem to be able to 
+#http://stackoverflow.com/questions/4819807/ohai-fails-to-determine-os-version-in-cygwin
+
+#Making aliases
+cat <<EOF > /home/vagrant/.bash_profile
+alias chef-client="chef-client.bat"
+alias gem="gem.bat"
+alias ruby="ruby.exe"
+alias puppet="puppet.bat"
+alias ohai="ohai.bat"
+alias irb="irb.bat"
+alias facter="facter.bat" 
+EOF
 
 # Reboot
 # http://www.techrepublic.com/blog/datacenter/restart-windows-server-2003-from-the-command-line/245
 shutdown.exe /r /t 0 /c "Vagrant initial reboot"
+
+# Mounting a directory
+#./net.exe use  x: \\vboxsvr\veewee-validation
+
