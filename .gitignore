@@ -3,6 +3,8 @@ gems/*
 iso/*
 tmp/*
 definitions/*
+Vagrantfile
+cookbooks/*
 boxes/*
 pkg/*
 *.box

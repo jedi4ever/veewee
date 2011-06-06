@@ -8,7 +8,6 @@ PATH
       popen4 (~> 0.1.2)
       progressbar
       rspec (~> 2.5.0)
-      simon (~> 0.1.1)
       thor (~> 0.14.6)
       vagrant (~> 0.7.0)
 
@@ -44,7 +43,6 @@ GEM
       Platform (>= 0.4.0)
       open4 (>= 0.4.0)
     progressbar (0.9.0)
-    rinject (0.1.2)
     rspec (2.5.0)
       rspec-core (~> 2.5.0)
       rspec-expectations (~> 2.5.0)
@@ -53,14 +51,8 @@ GEM
     rspec-expectations (2.5.0)
       diff-lcs (~> 1.1.2)
     rspec-mocks (2.5.0)
-    simon (0.1.1)
-      progressbar
-      rinject (>= 0.1.1)
-      transmission (>= 0.1)
-      trollop (>= 1.15)
     term-ansicolor (1.0.5)
     thor (0.14.6)
-    transmission (0.1.0)
     trollop (1.16.2)
     vagrant (0.7.5)
       archive-tar-minitar (= 0.5.2)

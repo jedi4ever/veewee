@@ -2,6 +2,7 @@
 
 #https://wiki.archlinux.org/index.php/Install_from_Existing_Linux
 
+#ARCH=x86_64
 ARCH=i686
 mkdir /tmp/archlinux
 cd /tmp/archlinux
@@ -42,8 +43,8 @@ sfdisk --force /dev/sda <<EOF
 # partition table of /dev/sda
 unit: sectors
 
-/dev/sda1 : start=     2048, size= 18874368, Id=83
-/dev/sda2 : start= 18876416, size=  2095104, Id=82
+/dev/sda1 : start=     2048, size= 16777216, Id=83
+/dev/sda2 : start= 16779264, size=  3987456, Id=82
 /dev/sda3 : start=        0, size=        0, Id= 0
 /dev/sda4 : start=        0, size=        0, Id= 0
 EOF
