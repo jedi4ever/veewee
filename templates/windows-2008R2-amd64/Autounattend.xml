@@ -98,7 +98,7 @@
             </AutoLogon>
             <FirstLogonCommands>
                 <SynchronousCommand wcm:action="add">
-                    <CommandLine>cmd.exe /c a:cygwin-sshd.bat</CommandLine>
+                    <CommandLine>cmd.exe /c a:install-cygwin-sshd.bat</CommandLine>
                     <Description>Install Cygwin SSH</Description>
                     <Order>1</Order>
                     <RequiresUserInput>true</RequiresUserInput>

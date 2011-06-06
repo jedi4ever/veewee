@@ -5,10 +5,9 @@ Veewee::Session.declare({
   :iso_file => "7601.17514.101119-1850_x64fre_server_eval_en-us-GRMSXEVAL_EN_DVD.iso",
   :iso_src => "",
   :iso_md5 => "",
-  :floppy_files => ["Autounattend.xml","cygwin-setup.exe","cygwin-sshd.bat","install-winrm.bat"],
+  :floppy_files => ["Autounattend.xml","cygwin-setup.exe","install-cygwin-sshd.bat","install-winrm.bat","oracle-cert.cer"],
   :iso_download_timeout => "1000",
-  :boot_wait => "10", :boot_cmd_sequence => [
-  ],
+  :boot_wait => "10", :boot_cmd_sequence => [ ],
   :ssh_login_timeout => "10000", :ssh_user => "vagrant", :ssh_password => "vagrant", :ssh_key => "",
   :ssh_host_port => "7222", :ssh_guest_port => "22",
   :sudo_cmd => "sh '%f'",

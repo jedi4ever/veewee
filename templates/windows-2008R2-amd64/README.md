@@ -15,9 +15,10 @@ The installation uses the Standard way for Windows Unattended installation. The 
 Expose the winrm port:
 
 <pre>
-$ ssh -p 7222 -L5985:localhost:5985 vagrant@localhost
 $ gem install chef
 $ gem install knife-windows
+#Create a tunnel
+$ ssh -p 7222 -L5985:localhost:5985 vagrant@localhost
 $ knife bootstrap windows winrm localhost -x Administrator -P 'vagrant'
 </pre>
 
