@@ -18,6 +18,7 @@ Veewee::Session.declare({
     'vagrant<Enter>',
     'vagrant<Enter>',
     '/etc/rc.d/sshd start<Enter><Wait>',
+    'echo "Now we continue with the post-install.sh"<Enter>',
   ],
   :kickstart_port => "7122", :kickstart_timeout => "10000", :kickstart_file => "",
   :ssh_login_timeout => "10000", :ssh_user => "root", :ssh_password => "vagrant", :ssh_key => "",
