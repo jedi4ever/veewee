@@ -78,9 +78,9 @@ chmod +x rubyinstaller.exe
 export PATH=$PATH:/cygdrive/c/ruby/bin
 
 # Install Ruby dev kit (native extensions)
-wget --no-check-certificate  http://github.com/downloads/oneclick/rubyinstaller/DevKit-tdm-32-4.5.1-20101214-1400-sfx.exe -O rubydevkit.exe
 mkdir /cygdrive/c/devkit
 cd /cygdrive/c/devkit
+wget --no-check-certificate  http://github.com/downloads/oneclick/rubyinstaller/DevKit-tdm-32-4.5.1-20101214-1400-sfx.exe -O rubydevkit.exe
 chmod +x rubydevkit.exe
 ./rubydevkit -y
 ruby dk.rb init
