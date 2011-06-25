@@ -12,19 +12,23 @@ People have reported good experiences, why don't you give it a try?
 
 ## Installation:
 __as a gem__
+
     $ gem install veewee
 
 __from source__
+
     $ git clone https://github.com/jedi4ever/veewee.git
     $ cd veewee
     $ gem install bundler
     $ bundle install
 
 If you don't use rvm, be sure to execute vagrant through bundle exec
+
     $ alias vagrant="bundle exec vagrant"
 
 
 ## List all templates
+
     $ vagrant basebox templates
     The following templates are available:
     vagrant basebox define '<boxname>' 'ubuntu-10.10-server-i386-netboot'
@@ -110,6 +114,7 @@ If you need to change values in the templates, be sure to run the rake undefine,
 
 ## Getting the cdrom file in place
 Put your isofile inside the 'currentdir'/iso directory or if you don't run
+
     $ vagrant basebox build 'myubuntubox'
 
 - the build assumes your iso files are in 'currentdir'/iso
@@ -117,6 +122,7 @@ Put your isofile inside the 'currentdir'/iso directory or if you don't run
 - use '--force' to overwrite an existing install
 
 ## Build the new box:
+
     $ vagrant basebox build 'myubuntubox'
 
 - This will create a machine + disk according to the definition.rb
@@ -129,11 +135,13 @@ Put your isofile inside the 'currentdir'/iso directory or if you don't run
 - Sudo execute the :postinstall_files
 
 ## Validate the vm 
+
     $ vagrant basebox validate 'myubuntubox'
 
 this will run some cucumber test against the box to see if it has the necessary bits and pieces for vagrant to work
 
 ## Export the vm to a .box file
+
     $ vagrant basebox export 'myubuntubox'
 
 this is actually calling - vagrant package --base 'myubuntubox' --output 'boxes/myubuntubox.box'
@@ -144,9 +152,11 @@ this will result in a myubuntubox.box
 To import it into vagrant type:
 
     $ vagrant box add 'myubuntubox' 'myubuntubox.box'
+
 ## Use it in vagrant
 
 To use it:
+
     $ vagrant init 'myubuntubox'
     $ vagrant up
     $ vagrant ssh
@@ -156,15 +166,18 @@ To use it:
 - I suggest the easiest way is to get an account on github
 - fork of the veewee repository
 
+
     $ git clone https://github.com/*your account*/veewee.git
     $ cd veewee
     $ gem install bundler
     $ bundle install
 
 If you don't use rvm, be sure to execute vagrant through bundle exec
-  $ alias vagrant="bundle exec vagrant"
+
+    $ alias vagrant="bundle exec vagrant"
 
 Start of an existing one
+
     $ vagrant basebox define 'mynewos' 'ubuntu...'
 
 - Do changes in the currentdir/definitions/mynewos
