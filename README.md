@@ -163,9 +163,7 @@ To use it:
 
 ## How to add a new OS/installation (needs some love)
 
-- I suggest the easiest way is to get an account on github
-- fork of the veewee repository
-
+I suggest the easiest way is to get an account on github and fork of the veewee repository
 
     $ git clone https://github.com/*your account*/veewee.git
     $ cd veewee
