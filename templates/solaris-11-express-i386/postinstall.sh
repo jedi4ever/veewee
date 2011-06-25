@@ -69,7 +69,7 @@ yes|/usr/sbin/pkgadd -d . SUNWvbox
 echo "export PATH=/opt/csw/bin:/opt/csw/sbin:$PATH" >> /root/.profile
 echo "export PATH=/opt/csw/bin:/opt/csw/sbin:$PATH" >> /export/home/vagrant/.profile
 
-puts "Note: validation of this box wil fail, as it's not linux based, working on that"
+echo "Note: validation of this box wil fail, as it's not linux based, working on that"
 
 exit
 

@@ -15,22 +15,18 @@ Veewee::Session.declare({
   :boot_wait => "10", :boot_cmd_sequence => [ 
     'e',
     'e',
-    '<Backspace><Backspace><Backspace><Backspace><Backspace><Backspace><Backspace><Backspace><Backspace><Backspace>',
-    '<Backspace><Backspace><Backspace><Backspace><Backspace><Backspace><Backspace><Backspace><Backspace><Backspace><Backspace><Backspace>',
+    '<Backspace>'*22,
     'false',
     #',aimanifest=prompt',
     #',aimanifest=http://%IP%:%PORT%/default.xml',
     '<Enter>',
     'b',
-    '<Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait>',
-    '<Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait>',
-    '<Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait>',
-    '<Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait>',
+    '<Wait>'*75,
 
     # login as root
     'root<Enter><Wait>',
     'solaris<Enter><Wait>',
-    
+
     # Background check when install is complete, add vagrant to the sudo 
     'while (true); do sleep 5; test -f /a/etc/sudoers  && grep -v "vagrant" "/a/etc/sudoers" 2> /dev/null',
     ' && echo "vagrant ALL=(ALL) NOPASSWD: ALL" >> /a/etc/sudoers && break ; done &<Enter>',
@@ -39,17 +35,16 @@ Veewee::Session.declare({
     '<Enter>while (true); do grep "You may wish to reboot" "/tmp/install_log" 2> /dev/null',
     ' && reboot; sleep 10; done &<Enter>',
 
-    
     # Wait for 5 seconds, so the webserver will be up
     'sleep 5; curl http://%IP%:%PORT%/default.xml -o default.xml;',
     'cp default.xml /tmp/ai_combined_manifest.xml;',
 
     # Start the installer
     'svcadm enable svc:/application/auto-installer:default;',
-    
+
     # Wait for the installer to launch and display the logfile
     'sleep 3; tail -f /tmp/install_log<Enter>'
-    
+
     ],
   :kickstart_port => "7122", :kickstart_timeout => 10000, :kickstart_file => "default.xml",
   :ssh_login_timeout => "100", :ssh_user => "vagrant", :ssh_password => "vagrant", :ssh_key => "",
