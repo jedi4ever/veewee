@@ -12,74 +12,74 @@ People have reported good experiences, why don't you give it a try?
 
 ## Installation:
 __as a gem__
-  $ gem install veewee
+    $ gem install veewee
 
 __from source__
-  $ git clone https://github.com/jedi4ever/veewee.git
-  $ cd veewee
-  $ gem install bundler
-  $ bundle install
+    $ git clone https://github.com/jedi4ever/veewee.git
+    $ cd veewee
+    $ gem install bundler
+    $ bundle install
 
 If you don't use rvm, be sure to execute vagrant through bundle exec
-  $ alias vagrant="bundle exec vagrant"
+    $ alias vagrant="bundle exec vagrant"
 
 
 ## List all templates
-  $ vagrant basebox templates
-  The following templates are available:
-  vagrant basebox define '<boxname>' 'ubuntu-10.10-server-i386-netboot'
-  vagrant basebox define '<boxname>' 'ubuntu-10.10-server-amd64-netboot'
-  vagrant basebox define '<boxname>' 'solaris-11-express-i386'
-  vagrant basebox define '<boxname>' 'freebsd-8.2-pcbsd-i386-netboot'
-  vagrant basebox define '<boxname>' 'Fedora-14-amd64-netboot'
-  vagrant basebox define '<boxname>' 'ubuntu-11.04-server-amd64'
-  vagrant basebox define '<boxname>' 'freebsd-8.2-experimental'
-  vagrant basebox define '<boxname>' 'archlinux-i686'
-  vagrant basebox define '<boxname>' 'CentOS-5.6-i386-netboot'
-  vagrant basebox define '<boxname>' 'openindiana-148-ai-x86'
-  vagrant basebox define '<boxname>' 'ubuntu-10.10-server-i386'
-  vagrant basebox define '<boxname>' 'ubuntu-10.04.2-server-i386'
-  vagrant basebox define '<boxname>' 'ubuntu-10.04.2-amd64-netboot'
-  vagrant basebox define '<boxname>' 'Sysrescuecd-2.0.0-experimental'
-  vagrant basebox define '<boxname>' 'Debian-6.0.1a-amd64-netboot'
-  vagrant basebox define '<boxname>' 'freebsd-8.2-pcbsd-i386'
-  vagrant basebox define '<boxname>' 'Fedora-14-i386'
-  vagrant basebox define '<boxname>' 'Fedora-14-amd64'
-  vagrant basebox define '<boxname>' 'ubuntu-10.04.2-server-i386-netboot'
-  vagrant basebox define '<boxname>' 'opensuse-11.4-i386-experimental'
-  vagrant basebox define '<boxname>' 'CentOS-4.8-i386'
-  vagrant basebox define '<boxname>' 'ubuntu-10.04.2-server-amd64'
-  vagrant basebox define '<boxname>' 'ubuntu-8.04.4-server-amd64'
-  vagrant basebox define '<boxname>' 'gentoo-latest-i386-experimental'
-  vagrant basebox define '<boxname>' 'ubuntu-8.04.4-server-i386'
-  vagrant basebox define '<boxname>' 'windows-2008R2-amd64'
-  vagrant basebox define '<boxname>' 'Fedora-14-i386-netboot'
-  vagrant basebox define '<boxname>' 'archlinux-64-experimental'
-  vagrant basebox define '<boxname>' 'Debian-6.0.1a-i386-netboot'
-  vagrant basebox define '<boxname>' 'ubuntu-10.10-server-amd64'
-  vagrant basebox define '<boxname>' 'archlinux-64-aif-experimental'
-  vagrant basebox define '<boxname>' 'ubuntu-11.04-server-i386'
-  vagrant basebox define '<boxname>' 'CentOS-5.6-i386'
+    $ vagrant basebox templates
+    The following templates are available:
+    vagrant basebox define '<boxname>' 'ubuntu-10.10-server-i386-netboot'
+    vagrant basebox define '<boxname>' 'ubuntu-10.10-server-amd64-netboot'
+    vagrant basebox define '<boxname>' 'solaris-11-express-i386'
+    vagrant basebox define '<boxname>' 'freebsd-8.2-pcbsd-i386-netboot'
+    vagrant basebox define '<boxname>' 'Fedora-14-amd64-netboot'
+    vagrant basebox define '<boxname>' 'ubuntu-11.04-server-amd64'
+    vagrant basebox define '<boxname>' 'freebsd-8.2-experimental'
+    vagrant basebox define '<boxname>' 'archlinux-i686'
+    vagrant basebox define '<boxname>' 'CentOS-5.6-i386-netboot'
+    vagrant basebox define '<boxname>' 'openindiana-148-ai-x86'
+    vagrant basebox define '<boxname>' 'ubuntu-10.10-server-i386'
+    vagrant basebox define '<boxname>' 'ubuntu-10.04.2-server-i386'
+    vagrant basebox define '<boxname>' 'ubuntu-10.04.2-amd64-netboot'
+    vagrant basebox define '<boxname>' 'Sysrescuecd-2.0.0-experimental'
+    vagrant basebox define '<boxname>' 'Debian-6.0.1a-amd64-netboot'
+    vagrant basebox define '<boxname>' 'freebsd-8.2-pcbsd-i386'
+    vagrant basebox define '<boxname>' 'Fedora-14-i386'
+    vagrant basebox define '<boxname>' 'Fedora-14-amd64'
+    vagrant basebox define '<boxname>' 'ubuntu-10.04.2-server-i386-netboot'
+    vagrant basebox define '<boxname>' 'opensuse-11.4-i386-experimental'
+    vagrant basebox define '<boxname>' 'CentOS-4.8-i386'
+    vagrant basebox define '<boxname>' 'ubuntu-10.04.2-server-amd64'
+    vagrant basebox define '<boxname>' 'ubuntu-8.04.4-server-amd64'
+    vagrant basebox define '<boxname>' 'gentoo-latest-i386-experimental'
+    vagrant basebox define '<boxname>' 'ubuntu-8.04.4-server-i386'
+    vagrant basebox define '<boxname>' 'windows-2008R2-amd64'
+    vagrant basebox define '<boxname>' 'Fedora-14-i386-netboot'
+    vagrant basebox define '<boxname>' 'archlinux-64-experimental'
+    vagrant basebox define '<boxname>' 'Debian-6.0.1a-i386-netboot'
+    vagrant basebox define '<boxname>' 'ubuntu-10.10-server-amd64'
+    vagrant basebox define '<boxname>' 'archlinux-64-aif-experimental'
+    vagrant basebox define '<boxname>' 'ubuntu-11.04-server-i386'
+    vagrant basebox define '<boxname>' 'CentOS-5.6-i386'
 
 
 ## Define a new box
 Let's define a  Ubuntu 10.10 server i386 basebox called myunbuntubox
 this is essentially making a copy based on the  templates provided above.
 
-  $ vagrant basebox define 'myubuntubox' 'ubuntu-10.10-server-i386'
-  The basebox 'myubuntubox' has been succesfully created from the template ''ubuntu-10.10-server-i386'
-  You can now edit the definition files stored in definitions/myubuntubox
-  or build the box with:
-  vagrant basebox build 'myubuntubox'
+    $ vagrant basebox define 'myubuntubox' 'ubuntu-10.10-server-i386'
+    The basebox 'myubuntubox' has been succesfully created from the template ''ubuntu-10.10-server-i386'
+    You can now edit the definition files stored in definitions/myubuntubox
+    or build the box with:
+    vagrant basebox build 'myubuntubox'
 
 -> This copies over the templates/ubuntu-10.10-server-i386 to definition/myubuntubox
 
-  $ ls definitions/myubuntubox
-  definition.rb	postinstall.sh	postinstall2.sh	preseed.cfg
+    $ ls definitions/myubuntubox
+    definition.rb	postinstall.sh	postinstall2.sh	preseed.cfg
 
 ## Optionally modify the definition.rb , postinstall.sh or preseed.cfg
 
-  Veewee::Session.declare( {
+    Veewee::Session.declare( {
     :cpu_count => '1', :memory_size=> '256', 
     :disk_size => '10140', :disk_format => 'VDI',
     :os_type_id => 'Ubuntu',
@@ -104,20 +104,20 @@ this is essentially making a copy based on the  templates provided above.
     :shutdown_cmd => "shutdown -H",
     :postinstall_files => [ "postinstall.sh"],:postinstall_timeout => "10000"
      }
-  )
+    )
 
 If you need to change values in the templates, be sure to run the rake undefine, the rake define again to copy the changes across.
 
 ## Getting the cdrom file in place
 Put your isofile inside the 'currentdir'/iso directory or if you don't run
-  $ vagrant basebox build 'myubuntubox'
+    $ vagrant basebox build 'myubuntubox'
 
 - the build assumes your iso files are in 'currentdir'/iso
 - if it can not find it will suggest to download the iso for you
 - use '--force' to overwrite an existing install
 
 ## Build the new box:
-  $ vagrant basebox build 'myubuntubox'
+    $ vagrant basebox build 'myubuntubox'
 
 - This will create a machine + disk according to the definition.rb
 - Note: :os_type_id = The internal Name Virtualbox uses for that Distribution
@@ -129,12 +129,12 @@ Put your isofile inside the 'currentdir'/iso directory or if you don't run
 - Sudo execute the :postinstall_files
 
 ## Validate the vm 
-  $ vagrant basebox validate 'myubuntubox'
+    $ vagrant basebox validate 'myubuntubox'
 
 this will run some cucumber test against the box to see if it has the necessary bits and pieces for vagrant to work
 
 ## Export the vm to a .box file
-  $ vagrant basebox export 'myubuntubox'
+    $ vagrant basebox export 'myubuntubox'
 
 this is actually calling - vagrant package --base 'myubuntubox' --output 'boxes/myubuntubox.box'
 
@@ -143,29 +143,29 @@ this will result in a myubuntubox.box
 ## Add the box as one of your boxes
 To import it into vagrant type:
 
-  $ vagrant box add 'myubuntubox' 'myubuntubox.box'
+    $ vagrant box add 'myubuntubox' 'myubuntubox.box'
 ## Use it in vagrant
 
 To use it:
-  $ vagrant init 'myubuntubox'
-  $ vagrant up
-  $ vagrant ssh
+    $ vagrant init 'myubuntubox'
+    $ vagrant up
+    $ vagrant ssh
 
 ## How to add a new OS/installation (needs some love)
 
 - I suggest the easiest way is to get an account on github
 - fork of the veewee repository
 
-  $ git clone https://github.com/*your account*/veewee.git
-  $ cd veewee
-  $ gem install bundler
-  $ bundle install
+    $ git clone https://github.com/*your account*/veewee.git
+    $ cd veewee
+    $ gem install bundler
+    $ bundle install
 
 If you don't use rvm, be sure to execute vagrant through bundle exec
   $ alias vagrant="bundle exec vagrant"
 
 Start of an existing one
-  $ vagrant basebox define 'mynewos' 'ubuntu...'
+    $ vagrant basebox define 'mynewos' 'ubuntu...'
 
 - Do changes in the currentdir/definitions/mynewos
 - When it builds ok, move the definition/mynewos to a sensible directory under templates
