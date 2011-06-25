@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ CDDL HEADER START
+
+ The contents of this file are subject to the terms of the
+ Common Development and Distribution License (the "License").
+ You may not use this file except in compliance with the License.
+
+ You can obtain a copy of the license at usr/src/OPENSOLARIS.LICENSE
+ or http://www.opensolaris.org/os/licensing.
+ See the License for the specific language governing permissions
+ and limitations under the License.
+
+ When distributing Covered Code, include this CDDL HEADER in each
+ file and include the License file at usr/src/OPENSOLARIS.LICENSE.
+ If applicable, add the following below this CDDL HEADER, with the
+ fields enclosed by brackets "[]" replaced with your own identifying
+ information: Portions Copyright [yyyy] [name of copyright owner]
+
+ CDDL HEADER END
+
+ Copyright (c) 2008, 2010, Oracle and/or its affiliates. All rights reserved.
+
+-->
+<!DOCTYPE auto_install SYSTEM "file:///usr/share/auto_install/ai.dtd">
+<auto_install>
+  <ai_instance name="default">
+    <software>
+      <source>
+        <publisher name="openindiana.org">
+          <origin name="http://pkg.openindiana.org/dev"/>
+        </publisher>
+      </source>
+      <!--
+	By default the latest build available, in the specified IPS
+	repository, is installed.  If another build is required, the 
+	build number has to be appended to the 'entire' package in following
+	form:
+
+	<name>pkg:/entire@0.5.11-0.build#</name>
+      -->
+      <software_data action="install" type="IPS">
+        <name>pkg:/server_install</name>
+        <!--
+	    The following packages are required by iSCSI and included
+	    by default to make it easier for users to enable iSCSI if
+	    desired. They can be deleted from this list if iSCSI isn't 
+	    used. See iscsiadm(1m) man page for more information. 
+	    support for iSCSI. 
+	-->
+      </software_data>
+      <!--
+	    babel_install and slim_install are group packages used to
+	    define the default installation.  They are removed here so
+	    that they do not inhibit removal of other packages on the
+	    installed system.
+        -->
+      <software_data action="uninstall" type="IPS">
+        <name>pkg:/server_install</name>
+      </software_data>
+   	
+    </software>
+   <!--
+	Add missing driver packages to a booted install image so an
+	installation can complete.  Add packages to target as well.
+	<search_all> searches and installs from configured repo.
+    -->
+    <add_drivers>
+      <search_all/>
+    </add_drivers>
+    <sc_embedded_manifest name="AI">
+      <!-- <?xml version='1.0'?>
+      <!DOCTYPE service_bundle SYSTEM "/usr/share/lib/xml/dtd/service_bundle.dtd.1">
+      <service_bundle type="profile" name="system configuration">
+        <service name="system/install/config" version="1" type="service">
+          <instance name="default" enabled="true">
+            <property_group name="user_account" type="application">
+              <propval name="login" type="astring" value="vagrant"/>
+              <propval name="password" type="astring" value="$1$MPmczGP9$1SeNO4bw5YgiEJuo/ZkWq1"/>
+              <propval name="description" type="astring" value="default_user"/>
+              <propval name="shell" type="astring" value="/usr/bin/bash"/>
+              <propval name="uid" type='count' value='101'/>
+              <propval name="gid" type='count' value='10'/>
+              <propval name="type" type="astring" value="normal"/>
+              <propval name="roles" type="astring" value="root"/>
+            </property_group>
+
+            <property_group name="root_account" type="application">
+                <propval name="password" type="astring" value="$1$MPmczGP9$1SeNO4bw5YgiEJuo/ZkWq1"/>
+                <propval name="type" type="astring" value="role"/>
+            </property_group>
+
+            <property_group name="other_sc_params" type="application">
+              <propval name="timezone" type="astring" value="GMT"/>
+              <propval name="hostname" type="astring" value="solaris"/>
+            </property_group>
+          </instance>
+        </service>
+        <service name="system/console-login" version="1" type="service">
+          <property_group name="ttymon" type="application">
+            <propval name="terminal_type" type="astring" value="sun"/>
+          </property_group>
+        </service>
+
+        <service name='system/keymap' version='1' type='service'>
+          <instance name='default' enabled='true'>
+            <property_group name='keymap' type='system'>
+              <propval name='layout' type='astring' value='US-English'/>
+            </property_group>
+          </instance>
+        </service>
+
+        <service name="network/physical" version="1" type="service">
+          <instance name="nwam" enabled="true"/>
+          <instance name="default" enabled="false"/>
+        </service>
+      </service_bundle>
+      -->
+    </sc_embedded_manifest>
+  </ai_instance>
+</auto_install>

@@ -1,0 +1,196 @@
+<!--
+ CDDL HEADER START
+
+ The contents of this file are subject to the terms of the
+ Common Development and Distribution License (the "License").
+ You may not use this file except in compliance with the License.
+
+ You can obtain a copy of the license at usr/src/OPENSOLARIS.LICENSE
+ or http://www.opensolaris.org/os/licensing.
+ See the License for the specific language governing permissions
+ and limitations under the License.
+
+ When distributing Covered Code, include this CDDL HEADER in each
+ file and include the License file at usr/src/OPENSOLARIS.LICENSE.
+ If applicable, add the following below this CDDL HEADER, with the
+ fields enclosed by brackets "[]" replaced with your own identifying
+ information: Portions Copyright [yyyy] [name of copyright owner]
+
+ CDDL HEADER END
+
+ Copyright (c) 2010, Oracle and/or its affiliates. All rights reserved.
+
+-->
+
+<!ELEMENT target (target_device+)>
+
+<!--
+	A partition and slice element must be specified within a
+	containing element, such as a disk, zpool or vdev. There must
+	be one element, if disk or pool are specified, that is
+	tagged as the root device. If no target_devices are specified
+	the the application must choose the device based on its
+	specific criteria and assume this is the root device.
+-->
+
+<!ELEMENT target_device (disk|zpool+|swap|dump)>
+
+<!--
+	If a disk is specified at the top level, that is not contained
+	within a zpool specification, this disk will be assumed
+	to be the root device. If a disk target is specified
+	at the top level, and then a zpool with the is_root attribute
+	set this is an error. The user can specify a specific
+	slice within the disk to be used as the root slice. If
+	no slice specified then root slice will be 0.
+-->
+
+<!ELEMENT disk ((disk_name|disk_prop|disk_keyword|iscsi), partition*, slice*)>
+<!--
+	Disk name can be one of ctd, volid, devpath or devid name.
+	Default is "ctd".
+-->
+<!ELEMENT disk_name EMPTY>
+<!ATTLIST disk_name name CDATA #REQUIRED>
+<!ATTLIST disk_name name_type (ctd|volid|devpath|devid) "ctd">
+
+<!ELEMENT disk_prop EMPTY>
+<!ATTLIST disk_prop dev_type CDATA #IMPLIED>
+<!ATTLIST disk_prop dev_vendor CDATA #IMPLIED>
+<!ATTLIST disk_prop dev_size CDATA #IMPLIED>
+
+<!ELEMENT disk_keyword EMPTY>
+<!ATTLIST disk_keyword key (boot_disk) #REQUIRED>
+
+<!--
+	A vdev must start with a disk element. The slice and partition
+	elements use numerical names, such as 0 or 1. A disk must
+	be named for a vdev, using the disk element notation. 
+-->
+
+<!ELEMENT vdev (disk+, partition*, slice*)>
+<!ATTLIST vdev redundancy (mirror|raidz|raidz1|raidz2|raidz3|none) "mirror">
+
+<!ELEMENT dataset (zvol|filesystem)>
+
+<!--
+	No size specification means we create the slice the whole size of
+	the disk. If multiple slices specified for one disk, with
+	no sizes, this is an error. The attribute is_root is only
+	valid when a slice is part of a disk definition, outside of
+	a zpool definition. The user can request to format the disk
+	with multiple slices but specify one that they want to
+	be included in the root pool.
+
+-->
+
+
+<!ELEMENT slice (size?)>
+<!ATTLIST slice action (create|delete|preserve) "create">
+<!ATTLIST slice name CDATA #REQUIRED>
+<!ATTLIST slice is_root (true|false) #IMPLIED>
+
+<!--
+	The use of the 'force' attribute on slice specifies that on
+	a 'create' of a slice that already exists we overwrite the
+	slice if force==true. Otherwise the application errors.
+-->
+
+<!ATTLIST slice force (true|false) "false">
+
+<!--
+	If partition size is not provided the partition will be the
+	remaining free size left on the disk.
+-->
+
+<!ELEMENT partition (slice*, size?)>
+<!ATTLIST partition action (create|delete|use_existing) "create">
+
+<!--
+	A partition name is a numeric value, e.g. 1, will be
+	interpreted as partition 1. If a name is not provided 
+	the user must specify the use_existing action, otherwise
+	this will be an invalid specification.
+-->
+<!ATTLIST partition name CDATA #IMPLIED>
+<!ATTLIST partition part_type CDATA "191">
+
+<!--
+	Size must be suffixed with a size unit. i.e 100gb, 2secs, 2tb.
+-->
+<!ELEMENT size EMPTY>
+<!ATTLIST size val CDATA #REQUIRED>
+<!ATTLIST size start_sector CDATA #IMPLIED>
+
+
+<!ELEMENT options (#PCDATA)>
+
+<!--
+	Option elements allow any string type, and this string is parsable
+	character data, should the application require it.
+-->
+
+<!--
+	Filesystem options are for zfs filesystems. The format of these
+	is this: "-o property=value". Any editable ZFS filesystem property
+	can be set at creation time. Multiple -o options can be
+	specified. An error will occur if a propert is specified in
+	multiple -o options.
+-->
+
+<!ELEMENT filesystem (options?)>
+<!ATTLIST filesystem name CDATA #REQUIRED>
+<!ATTLIST filesystem action (create|delete|preserve) "create">
+<!ATTLIST filesystem mountpoint CDATA #IMPLIED>
+
+<!--
+	Redundancy needs to be part of the vdev grouping,
+	not a property on zpool itself. There can be multiple
+	vdev groupings within one pool configuration.
+-->
+
+<!ELEMENT zpool (vdev*, dataset*, pool_options?, dataset_options?)>
+<!ATTLIST zpool action (create|delete|preserve|use_existing) "create">
+<!ATTLIST zpool name CDATA #REQUIRED>
+<!ATTLIST zpool is_root (true|false) "false">
+
+<!--
+	The pool option string, which is also a parsable string, 
+	can include both pool options and filesystem options.
+	For pool options the format is: "-o property=value". For
+	filesystem properties the format is: "-O file-system-property=value"
+	Both of these typs of properties can be set in the option string.
+	An example of combining these in the option string:
+
+"-o altroot=/a -o autoexpand=off -o delegation=off -O atime=on -O compression=lzbj"
+-->
+
+<!ELEMENT pool_options (options)>
+<!ELEMENT dataset_options (options)>
+
+
+<!ELEMENT zvol (options?, size) >
+<!ATTLIST zvol action (create|delete|preserve|use_existing) "create">
+<!ATTLIST zvol name CDATA #REQUIRED>
+
+<!-- 
+	ISCSI does not have an action attribute. We use iscsi devices but
+	we do not operate directly on them.
+-->
+<!ELEMENT iscsi (ip)>
+<!ATTLIST iscsi name CDATA #REQUIRED>
+<!ATTLIST iscsi source CDATA #IMPLIED>
+<!ATTLIST iscsi target_lun CDATA #IMPLIED>
+<!ATTLIST iscsi target_port CDATA #IMPLIED>
+
+<!ELEMENT ip (#PCDATA)>
+
+<!--
+	Swap and dump are optional with Solaris install.
+-->
+
+<!ELEMENT swap (zvol)>
+<!ATTLIST swap no_swap (true|false) "false">
+
+<!ELEMENT dump (zvol)>
+<!ATTLIST dump no_dump (true|false) "false">

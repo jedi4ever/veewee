@@ -1,0 +1,105 @@
+<!--
+ CDDL HEADER START
+
+ The contents of this file are subject to the terms of the
+ Common Development and Distribution License (the "License").
+ You may not use this file except in compliance with the License.
+
+ You can obtain a copy of the license at usr/src/OPENSOLARIS.LICENSE
+ or http://www.opensolaris.org/os/licensing.
+ See the License for the specific language governing permissions
+ and limitations under the License.
+
+ When distributing Covered Code, include this CDDL HEADER in each
+ file and include the License file at usr/src/OPENSOLARIS.LICENSE.
+ If applicable, add the following below this CDDL HEADER, with the
+ fields enclosed by brackets "[]" replaced with your own identifying
+ information: Portions Copyright [yyyy] [name of copyright owner]
+
+ CDDL HEADER END
+
+ Copyright (c) 2010, Oracle and/or its affiliates. All rights reserved.
+
+-->
+
+<!ELEMENT software (destination?, source*, software_data*)>
+
+<!--
+	The software name is utilized to allow users to associate
+	a specific software instance with a specific checkpoint.
+	For example, we could have multiple transfer types during the
+	course of an installation process. If a software is
+	to be associated with a specific checkpoint the software inst
+	name must be utilized and must be the same as the associated
+	checkpoint. If no name provided the software elements
+	will be used in order based on the type provided.
+-->
+
+<!ATTLIST software name CDATA #IMPLIED>
+
+<!ELEMENT software_data (name*)>
+<!ATTLIST software_data action (install|uninstall|unpack|noinstall) "install">
+<!ATTLIST software_data type (IPS|SVR4|ARCHIVE|IMAGE|P5I|DU|P5P|FILE|DIR) "IPS">
+
+<!ELEMENT name (#PCDATA)>
+
+<!--
+	Destination element is not required. If specified there can only
+	be one destination per software element. If not specified,
+	the destination is assumed to be an ipkg image and will be
+	discovered automatically. 
+-->
+
+<!ELEMENT destination (image|dir)>
+
+<!ELEMENT image (facet*, img_type?, property*)>
+<!ATTLIST image action (create|use_existing) "create">
+<!ATTLIST image index (true|false) "false">
+<!ATTLIST image ssl_key CDATA #IMPLIED>
+<!ATTLIST image ssl_cert CDATA #IMPLIED>
+<!ATTLIST image img_root CDATA #IMPLIED>
+
+<!ELEMENT img_type EMPTY>
+<!ATTLIST img_type completeness (full|partial) #REQUIRED>
+<!ATTLIST img_type zone (true|false) "false">
+
+<!--
+	A property on an image is set via pkg set-property <propname>.
+	So, for use in this schema an example would be:
+		<image>
+		    <img_type completeness="partial" zone="true"/>
+		    <property val="true">send-uuid</property>
+		    <property val="false">flush-content-cache-on-success
+			</property>  
+		</image>
+-->
+<!ELEMENT property (#PCDATA)>
+<!ATTLIST property val (true|false) #REQUIRED>
+
+<!--
+	A facet is an option that may be selected or not selected,
+	such as various locales, documentation, etc. This is per
+	image.
+-->
+
+<!ELEMENT facet (#PCDATA)>
+<!ATTLIST facet set (true|false) "true">
+
+<!ELEMENT source (publisher+|dir)>
+
+<!--
+	If name is not specified, and this is an ips install,
+	then publishers known by the specified repository will be added to 
+	the image. Origin can be an uri, path to a file, archive, directory.
+-->
+<!ELEMENT publisher (origin+, mirror*)>
+<!ATTLIST publisher name CDATA #IMPLIED>
+
+<!ELEMENT origin EMPTY>
+<!ATTLIST origin name CDATA #REQUIRED>
+
+<!ELEMENT mirror EMPTY>
+<!ATTLIST mirror name CDATA #REQUIRED>
+
+<!ELEMENT dir EMPTY>
+<!ATTLIST dir path CDATA #REQUIRED>
