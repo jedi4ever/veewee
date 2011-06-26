@@ -81,16 +81,16 @@ tar xzvf ruby-enterprise-1.8.7-2010.02.tar.gz
 ./ruby-enterprise-1.8.7-2010.02/installer -a /opt/ruby --no-dev-docs --dont-install-useful-gems
 
 # http://www.darkaslight.com/blog/entry/38-Compiling-Ruby-Enterprise-Edition-on-Solaris-10
-* To install C compiler:
-* To install C++ compiler:
-* To install Zlib development headers:
-* To install OpenSSL development headers:
-* To install GNU Readline development headers:
-
-bash-3.00# wget http://rubyforge.org/frs/download.php/38084/ruby-enterprise-1.8.6-20080507.tar.gz
-bash-3.00# gtar xvf ruby-enterprise-1.8.6-20080507.tar.gz
-bash-3.00# cd ruby-enterprise-1.8.6-20080507/source
-bash-3.00# ./configure --with-openssl-dir=/opt/csw --with-readline-dir=/opt/csw \
---with-iconv-dir=/opt/csw --prefix=/opt/rubyenterprise
-bash-3.00# make
-bash-3.00# make install
+#* To install C compiler:
+#* To install C++ compiler:
+#* To install Zlib development headers:
+#* To install OpenSSL development headers:
+#* To install GNU Readline development headers:
+#
+#bash-3.00# wget http://rubyforge.org/frs/download.php/38084/ruby-enterprise-1.8.6-20080507.tar.gz
+#bash-3.00# gtar xvf ruby-enterprise-1.8.6-20080507.tar.gz
+#bash-3.00# cd ruby-enterprise-1.8.6-20080507/source
+#bash-3.00# ./configure --with-openssl-dir=/opt/csw --with-readline-dir=/opt/csw \
+#--with-iconv-dir=/opt/csw --prefix=/opt/rubyenterprise
+#bash-3.00# make
+#bash-3.00# make install
