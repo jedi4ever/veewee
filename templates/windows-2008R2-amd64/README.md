@@ -32,3 +32,37 @@ $ knife bootstrap windows winrm localhost -x Administrator -P 'vagrant'
 - http://devopscloud.net/2011/04/28/powershell-userdata-to-start-a-chef-run/
 - http://devopscloud.net/2011/03/23/dissection-of-a-chef-recipe-or-two-for-windows/
 - https://github.com/pmorton/chef-windows-installer
+
+==
+https://github.com/zenchild/WinRM/issues/unreads#issue/1
+http -> requires unencryptedwinrm quickconfig (said yes to enable firewall)
+winrm p winrm/config/service @{AllowUnencrypted="true"}
+winrm set winrm/config/service/auth @{Basic="true"}netsh advfirewall firewall set rule group="remote administration" new enable=yes
+ 
+- http://forums.citrix.com/thread.jspa?messageID=1535826
+- http://support.microsoft.com/kb/2019527
+
+winrm get winrm/config
+
+The purpose of configuring WinRM for HTTPS is to encrypt the data being sent across the wire.
+
+WinRM HTTPS requires a local computer "Server Authentication" certificate with a CN matching the hostname, that is not expired, revoked, or self-signed to be installed.
+
+To install or view certificates for the local computer:
+
+- click Start, run, MMC, "File" menu, "Add or Remove Snap-ins" select "Certificates" and click "Add".  Go through the wizard selecting "Computer account".
+
+- Install or view the certificates under:
+Certificates (Local computer)
+    Personal
+        Certificates
+
+If you do not have a Sever Authenticating certificate consult your certicate administrator.  If you have a microsoft Certificate server you may be abel to request a certificate using the web certificate template from HTTPS://<MyDomainCertificateServer>/certsrv
+
+Once the certificate is installed type the following to configure WINRM to listen on HTTPS:
+
+winrm quickconfig -transport:https
+
+ If you do not have an appropriate certificate you can run the following with the authentication methods configured for WinRM however the data will not be encrypted.
+
+winrm quickconfig
