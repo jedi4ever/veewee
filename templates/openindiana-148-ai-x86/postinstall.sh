@@ -9,7 +9,8 @@ yes|/usr/sbin/pkgadd -d http://mirror.opencsw.org/opencsw/pkgutil-`uname -p`.pkg
 
 # We need some header stuff and so on to get gcc going
 # Tip thx to - https://wiki.chipp.ch/twiki/bin/view/CmsTier3/InstallationSolaris
-/usr/bin/pkg install SUNWarc SUNWsfwhea SUNWhea SUNWtoo
+#/usr/bin/pkg install SUNWarc SUNWsfwhea SUNWhea SUNWtoo
+/usr/bin/pkg install SUNWarc SUNWhea SUNWtoo
 /usr/bin/pkg install math/header-math
 
 /opt/csw/bin/pkgutil -y -i CSWgsed
