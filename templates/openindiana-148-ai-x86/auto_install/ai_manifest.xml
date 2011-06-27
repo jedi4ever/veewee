@@ -1,0 +1,241 @@
+<?xml version="1.0"?>
+<!--
+CDDL HEADER START
+
+The contents of this file are subject to the terms of the
+Common Development and Distribution License (the "License").
+You may not use this file except in compliance with the License.
+
+You can obtain a copy of the license at usr/src/OPENSOLARIS.LICENSE
+or http://www.opensolaris.org/os/licensing.
+See the License for the specific language governing permissions
+and limitations under the License.
+
+When distributing Covered Code, include this CDDL HEADER in each
+file and include the License file at usr/src/OPENSOLARIS.LICENSE.
+If applicable, add the following below this CDDL HEADER, with the
+fields enclosed by brackets "[]" replaced with your own identifying
+information: Portions Copyright [yyyy] [name of copyright owner]
+
+CDDL HEADER END
+
+Copyright (c) 2008, 2010, Oracle and/or its affiliates. All rights reserved.
+-->
+<!--
+===============================================================================
+DTD sample manifest for Automatic Installer input manifest specification.
+===============================================================================
+-->
+<!DOCTYPE auto_install SYSTEM "file:///usr/share/auto_install/ai.dtd">
+<auto_install>
+  <!--
+	"auto_reboot" set to "true" may be an issue for x86 machines.
+	The boot order is not guaranteed and may cause unexpected
+	behavior. If auto_reboot is not desired, removing this
+	attribute, e.g. <ai_instance name="sample_ai_manfiest">
+	will work. "auto_reboot" is set to false by default. 
+    -->
+  <ai_instance name="sample_ai_manifest" auto_reboot="true">
+    <!--
+      =======================================================================
+      <target/target_device> - selections for AI target Device specification
+
+      Disk criteria are divided into three mutually exclusive groups:
+
+      G1 - deterministic disk criteria
+      ................................
+        * target_device/disk/iscsi parameters
+        * target_device/disk/disk_name, with name_type attribute:
+          one of ctd, volid, devpath or devid
+
+      G2 - non-deterministic disk criteria
+      ..........................
+        * target_device/disk/disk_prop: Any of dev_type, dev_vendor or
+          dev_size
+
+      G3 - keyword disk criteria
+      ...........................
+        * target_device/disk/disk_keyword: "boot_disk"
+
+      Schema ai.dtd enforces following policy:
+
+      * criteria in group G1 are mutually exclusive - only
+        one can be specified at a time
+
+      * groups G1, G2 and G3 are mutually exclusive - i.e.
+        if criteria from G1 is specified, no criteria
+        from G2 or G3 are allowed and vice versa
+
+      * multiple criteria from G2 can be specified
+      =======================================================================
+    -->
+    <target>
+      <target_device>
+        <disk>
+          <!-- G1 -->
+          <!--
+            c#t#d# device name like c0t0d0 or 
+            MPXIO name like c0t2000002037CD9F72d0
+          -->
+          <disk_name name="c1t0d0" name_type="ctd"/>
+          <!-- volume name set for instance by means
+            of format(1M) command
+          -->
+          <!--
+          <disk_name name="ai-disk" name_type="volid"/>
+          -->
+          <!-- device id - e.g. can be obtained by means of
+            iostat(1M) -iEn
+          -->
+          <!--
+          <disk_name name="id1,cmdk@AST31000340NS=____________9QJ2LNYY" name_type="devid"/>
+          -->
+          <!-- device path under /devices directory, e.g.
+            /pci@1e,600000/pci@0/pci@9/pci@0/scsi@1/sd@0,0
+          -->
+          <!--
+          <disk_name name="/pci@0/pci@9/pci@0/scsi@1/sd@0,0" name_type="devpath"/>
+          -->
+          <!--
+            ISCSI target device
+
+          <iscsi name="c0d2E0001010F68">
+            <ip>192.168.1.34</ip>
+          </iscsi> 
+          -->
+          <!-- G2 -->
+          <!--
+          <disk_prop dev_vendor="hitachi" dev_size="20480mb"/>
+          -->
+          <!-- G3 -->
+          <!--
+          <disk_keyword key="boot_disk"/>
+          -->
+          <!--
+            Uncomment this to force AI to find an existing Solaris
+            partition instead of creating a new one.
+          -->
+          <!--
+          <partition action="use_existing"/>
+          -->
+          <partition name="1" part_type="99">
+            <size start_sector="200" val="20480mb"/>
+          </partition>
+          <partition name="4" part_type="99">
+            <size start_sector="2000" val="20480mb"/>
+          </partition>
+          <slice name="0" is_root="true">
+            <size val="20480mb"/>
+          </slice>
+          <slice name="4">
+            <size val="20480mb"/>
+          </slice>
+        </disk>
+      </target_device>
+    </target>
+    <software name="ips">
+      <source>
+        <publisher name="openindiana.org">
+          <origin name="http://pkg.openindiana.org/dev"/>
+        </publisher>
+      </source>
+      <!--
+        By default the latest build available, in the
+        specified IPS repository, is installed.
+        if another build is required, the build number has
+        to be appended to the 'entire' package in following
+        form:
+      <name="entire@0.5.11-0.build#"/>
+      -->
+      <software_data type="IPS">
+        <name>pkg:/entire</name>
+        <name>pkg:/babel_install</name>
+      </software_data>
+      <!--
+          babel_install and slim_install are group packages used to
+          define the default installation.  They are removed here so
+          that they do not inhibit removal of other packages on the installed
+          system
+      -->
+      <software_data action="uninstall" type="IPS">
+        <name>pkg:/babel_install</name>
+        <name>pkg:/slim_install</name>
+      </software_data>
+    </software>
+    <add_drivers>
+      <!--
+	    Driver Updates: This section is for adding driver packages to the
+            boot environment before the installation takes place.  The
+            installer can then access all devices on the system.  The
+            packages installed in the boot environment will also be installed
+            on the target.
+
+            A <search_all> entry performs a search for devices which are
+            missing their drivers.  A repository publisher and location
+            may be specified, and that repository and its database will
+            be used.  If no publisher and location is specified, the
+            configured repositories will be used.
+            (See pkg publisher command.)  If <addall> is specified as
+            "true", then drivers the database says are third-party drivers
+            will be added like all others; otherwise third-party drivers
+            will not be added.
+
+                <search_all addall="true">
+                    <source>
+                        <publisher name="solaris">
+                            <origin name="http://pkg.oracle.com/solaris/release"/>
+                        </publisher>
+                    </source>
+                </search_all>
+
+            <software> entries are user-provided specifications of packages
+            needed in order to perform the install.  types are P5I, SVR4, DU.
+            A <software_data> action of "noinstall" inhibits adding to target.
+
+            P5I: A pkg(5) P5I file, full path is in the source/publisher/origin.
+            Path may be to a local file or an http or ftp specification.
+                <software>
+                    <source>
+                        <publisher>
+                            <origin
+				name=
+	"http://pkg.oracle.com/solaris/release/p5i/0/driver/firewire.p5i"/>
+                        </publisher>
+                    </source>
+		    <software_data type="P5I"/>
+                </software>
+
+            SVR4: An SVR4 package spec. The source/publisher/origin corresponds
+            to the directory containing the packages.  The 
+	    software/software_data/name refers tp the package's top level
+	    directory or the package's datastream file.
+
+                <software>
+                    <source>
+                        <publisher>
+                            <origin name="/export/package_dir"/>
+                        </publisher>
+                    </source>
+                    <software_data type="SVR4">
+                        <name>my_disk_driver.d</name>
+                    </software_data>
+                </software>
+
+            DU: An ITU (Install Time Update) or Driver Update image.
+            The source/publisher/origin refers to the path just above the 
+	    image's DU directory (if expanded) or the name of the .iso image.  
+	    All packages in the image will be added.
+
+                <software>
+                    <source>
+                        <publisher>
+                            <origin name="/export/duimages/mydriver.iso"/>
+                        </publisher>
+                    </source>
+                    <software_data type="DU"/>
+                </software>	
+      -->
+      <search_all/>
+    </add_drivers>
+  </ai_instance>
+</auto_install>
