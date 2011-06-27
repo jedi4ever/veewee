@@ -20,22 +20,24 @@ apt-get -y install nfs-common
 # can install their own Rubies using packages or however.
 # We must install the 1.8.x series since Puppet doesn't support
 # Ruby 1.9 yet.
-wget http://ftp.ruby-lang.org/pub/ruby/ruby-1.8.7-p334.tar.gz
-tar xvzf ruby-1.8.7-p334.tar.gz
-cd ruby-1.8.7-p334
+VEEWEE_RUBY_VERSION="ruby-1.8.7-p334"
+wget http://ftp.ruby-lang.org/pub/ruby/${VEEWEE_RUBY_VERSION}.tar.gz
+tar xvzf ${VEEWEE_RUBY_VERSION}.tar.gz
+cd ${VEEWEE_RUBY_VERSION}
 ./configure --prefix=/opt/ruby
 make
 make install
 cd ..
-rm -rf ruby-1.8.7-p334*
+rm -rf ${VEEWEE_RUBY_VERSION}*
 
 # Install RubyGems 1.7.2
-wget http://production.cf.rubygems.org/rubygems/rubygems-1.7.2.tgz
-tar xzf rubygems-1.7.2.tgz
-cd rubygems-1.7.2
+VEEWEE_RUBYGEMS_VERSION="rubygems-1.7.2"
+wget http://production.cf.rubygems.org/rubygems/${VEEWEE_RUBYGEMS_VERSION}.tgz
+tar xzf ${VEEWEE_RUBYGEMS_VERSION}.tgz
+cd ${VEEWEE_RUBYGEMS_VERSION}
 /opt/ruby/bin/ruby setup.rb
 cd ..
-rm -rf rubygems-1.7.2*
+rm -rf ${VEEWEE_RUBYGEMS_VERSION}*
 
 # Installing chef & Puppet
 /opt/ruby/bin/gem install chef --no-ri --no-rdoc
