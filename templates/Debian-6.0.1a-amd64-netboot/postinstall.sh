@@ -30,8 +30,9 @@ wget --no-check-certificate 'http://github.com/mitchellh/vagrant/raw/master/keys
 chown -R vagrant /home/vagrant/.ssh
 
 #the netboot install the virtualbox stuff so we have to remove it
-apt-get -y remove virtualbox-ose-guest-dkms
-apt-get -y remove virtualbox-ose-guest-utils
+/etc/init.d/virtualbox-ose-guest-utils stop
+rmmod vboxguest
+aptitude -y purge virtualbox-ose-guest-x11 virtualbox-ose-guest-dkms virtualbox-ose-guest-utils
 
 #Installing the virtualbox guest additions
 VBOX_VERSION=$(cat /home/vagrant/.vbox_version)

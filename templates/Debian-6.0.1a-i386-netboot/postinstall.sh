@@ -42,8 +42,9 @@ echo 'UseDNS no' >> /etc/ssh/sshd_config
 echo 'Welcome to your Vagrant-built virtual machine.' > /var/run/motd
 
 # The netboot installs the VirtualBox support (old) so we have to remove it
-apt-get -y remove virtualbox-ose-guest-dkms
-apt-get -y remove virtualbox-ose-guest-utils
+/etc/init.d/virtualbox-ose-guest-utils stop
+rmmod vboxguest
+aptitude -y purge virtualbox-ose-guest-x11 virtualbox-ose-guest-dkms virtualbox-ose-guest-utils
 
 # Install the VirtualBox guest additions
 VBOX_VERSION=$(cat /home/vagrant/.vbox_version)
