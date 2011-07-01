@@ -70,9 +70,10 @@ class Command < Vagrant::Command::GroupBase
   end
   
   desc "validate [NAME]", "Validates a box against vagrant compliancy rules"
+  method_option :user,:default => "vagrant", :aliases => "-u", :desc => "user to login with"
   def validate(boxname)
       if (!boxname.nil?)
-        Veewee::Session.validate_box(boxname)
+        Veewee::Session.validate_box(boxname,options)
       end
   end
   

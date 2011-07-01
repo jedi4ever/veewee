@@ -5,6 +5,7 @@ The first step is to download an existing 'base box'. I believe this scares a lo
 Veewee tries to automate this and to share the knowledge and sources you need to create a basebox. Instead of creating custom ISO's from your favorite distribution, it leverages the 'keyboardputscancode' command of Virtualbox so send the actual 'boot prompt' keysequence to boot an existing iso.
 
 Before we can actually build the boxes, we need to take care of the minimal things to install:
+
 - Have Virtualbox 4.x installed -> download it from http://download.virtualbox.org/virtualbox/
 
 

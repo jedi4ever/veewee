@@ -70,6 +70,10 @@ yes|/usr/sbin/pkgadd -d . SUNWvbox
 echo "export PATH=/opt/csw/bin:/opt/csw/sbin:$PATH" >> /root/.profile
 echo "export PATH=/opt/csw/bin:/opt/csw/sbin:$PATH" >> /export/home/vagrant/.profile
 
+# Zero out the free space to save space in the final image:
+dd if=/dev/zero of=/EMPTY bs=1M
+rm -f /EMPTY
+
 echo "Note: validation of this box wil fail, as it's not linux based, working on that"
 
 exit

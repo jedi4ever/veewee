@@ -696,13 +696,13 @@ module Veewee
       Socket.do_not_reverse_lookup = orig
     end
     
-    def self.validate_box(boxname)
+    def self.validate_box(boxname,options)
       require 'cucumber'
 
       require 'cucumber/rspec/disable_option_parser'
       require 'cucumber/cli/main'
 
-
+      ENV['veewee_user']=options[:user]
       feature_path=File.join(File.dirname(__FILE__),"..","..","validation","vagrant.feature")
 
       features=Array.new
