@@ -144,8 +144,8 @@ chroot /mnt/gentoo chown -R vagrant /home/vagrant/.ssh
 chroot /mnt/gentoo emerge git curl gcc automake  m4
 chroot /mnt/gentoo emerge libiconv readline zlib openssl curl git libyaml sqlite libxslt
 echo "bash < <(curl -s https://rvm.beginrescueend.com/install/rvm)"| chroot /mnt/gentoo /bin/bash -
-echo "/usr/local/rvm/bin/rvm install ruby-1.8.7 "| chroot /mnt/gentoo sh -
-echo "/usr/local/rvm/bin/rvm use ruby-1.8.7 --default "| chroot /mnt/gentoo sh -
+echo "/usr/local/rvm/bin/rvm install http://ftp.ruby-lang.org/pub/ruby/1.8/ruby-1.8.7-p334.tar.gz "| chroot /mnt/gentoo sh -
+echo "/usr/local/rvm/bin/rvm use http://ftp.ruby-lang.org/pub/ruby/1.8/ruby-1.8.7-p334.tar.gz --default "| chroot /mnt/gentoo sh -
 
 #Installing chef & Puppet
 echo ". /usr/local/rvm/scripts/rvm ; gem install chef --no-ri --no-rdoc"| chroot /mnt/gentoo sh -
