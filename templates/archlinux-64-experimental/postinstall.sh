@@ -144,8 +144,8 @@ chroot /newarch useradd -m -r vagrant -p '$1$MPmczGP9$1SeNO4bw5YgiEJuo/ZkWq1'
 #get some ruby running
 chroot /newarch pacman --noconfirm -S git curl gcc make
 echo "bash < <( curl -L http://bit.ly/rvm-install-system-wide )"| chroot /newarch /bin/bash -
-echo "/usr/local/bin/rvm install http://ftp.ruby-lang.org/pub/ruby/1.8/ruby-1.8.7-p334.tar.gz "| chroot /newarch sh -
-echo "/usr/local/bin/rvm use http://ftp.ruby-lang.org/pub/ruby/1.8/ruby-1.8.7-p334.tar.gz --default "| chroot /newarch sh -
+echo "/usr/local/bin/rvm install ruby-1.8.7 "| chroot /newarch sh -
+echo "/usr/local/bin/rvm use ruby-1.8.7 --default "| chroot /newarch sh -
 
 
 #Installing chef & Puppet
