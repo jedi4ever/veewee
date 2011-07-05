@@ -10,16 +10,12 @@
 # - package update and upgrade are done in the preseed.cfg via the late_command
 #
 
-echo 'Sleeping... ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ'
-sleep 10
-
 set -x
 #set -e
 
 export DEBIAN_FRONTEND=noninteractive
 export VEEWEE_USER="vagrant"
 export VBOX_VERSION=$(cat /home/${VEEWEE_USER}/.vbox_version)
-export VBOX_VERSION=4.0.4
 
 ### Install packages
 #
