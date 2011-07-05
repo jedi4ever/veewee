@@ -25,7 +25,7 @@ module Veewee
               end
             rescue Net::SSH::AuthenticationFailed
               $stdout.puts 'Retry login with private-public key-pair'
-              options[:keys] => './../../validation/vagrant'
+              options[:keys] = './../../validation/vagrant'
               options.delete(:password)
               ssh_options = options
               $stdout.puts ssh_options.inspect
