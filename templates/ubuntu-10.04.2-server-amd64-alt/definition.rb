@@ -1,7 +1,7 @@
 require 'digest/md5'
 CURRENT_DIR       = File.dirname(__FILE__)
 PRESEED_MD5       = "#{Digest::MD5.file("#{CURRENT_DIR}/preseed.cfg").hexdigest}"
-ISO_MD5           = "#{Digest::MD5.file("#{CURRENT_DIR}/../../iso/ubuntu-10.04.2-alternate-amd64.iso").hexdigest}"
+#ISO_MD5           = "#{Digest::MD5.file("#{CURRENT_DIR}/../../iso/ubuntu-10.04.2-alternate-amd64.iso").hexdigest}"
 
 Veewee::Session.declare( {
   :boot_cmd_sequence    => [
