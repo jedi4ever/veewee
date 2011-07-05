@@ -24,11 +24,9 @@ module Veewee
                 return true
               end
             rescue Net::SSH::AuthenticationFailed
-              $stdout.puts 'Retry login with private-public key-pair'
-              options[:keys] = './../../validation/vagrant'
+              options[:keys] = File.join(File.dirname(__FILE__),'./../../validation/vagrant')
               options.delete(:password)
               ssh_options = options
-              $stdout.puts ssh_options.inspect
               if @key_auth_tried
                  raise
               else
@@ -103,64 +101,80 @@ module Veewee
 
       puts "Executing command: #{command}"
 
-      Net::SSH.start(host, options[:user], { :port => options[:port], :password => options[:password], :paranoid => false }) do |ssh|
+      @key_auth_tried = false
+      ssh_options = { :port => options[:port], :password => options[:password], :paranoid => false}
+      # ssh_options[:verbose] => :debug
+      begin
+        Net::SSH.start(host, options[:user], ssh_options) do |ssh|
 
-          # open a new channel and configure a minimal set of callbacks, then run
-          # the event loop until the channel finishes (closes)
-          channel = ssh.open_channel do |ch|
+            # open a new channel and configure a minimal set of callbacks, then run
+            # the event loop until the channel finishes (closes)
+            channel = ssh.open_channel do |ch|
 
-            #request pty for sudo stuff and so
-            ch.request_pty do |ch, success| 
-                raise "Error requesting pty" unless success 
-            end
-              
-
-            ch.exec "#{command}" do |ch, success|
-              raise "could not execute command" unless success
-
-
-              
-              # "on_data" is called when the process writes something to stdout
-              ch.on_data do |c, data|
-                @stdout+=data
-
-                  print data
-
+              #request pty for sudo stuff and so
+              ch.request_pty do |ch, success|
+                  raise "Error requesting pty" unless success
               end
 
-              # "on_extended_data" is called when the process writes something to stderr
-              ch.on_extended_data do |c, type, data|
-                @stderr+=data
 
-                  print data
+              ch.exec "#{command}" do |ch, success|
+                raise "could not execute command" unless success
 
-              end
 
-              #exit code
-              #http://groups.google.com/group/comp.lang.ruby/browse_thread/thread/a806b0f5dae4e1e2
-              channel.on_request("exit-status") do |ch, data|
-                exit_code = data.read_long
-                @status=exit_code
-                if exit_code > 0
-                  puts "ERROR: exit code #{exit_code}"
-                else
-                  #puts "Successfully executed"
+
+                # "on_data" is called when the process writes something to stdout
+                ch.on_data do |c, data|
+                  @stdout+=data
+
+                    print data
+
                 end
-              end
 
-              channel.on_request("exit-signal") do |ch, data|
-                puts "SIGNAL: #{data.read_long}"
-              end
+                # "on_extended_data" is called when the process writes something to stderr
+                ch.on_extended_data do |c, type, data|
+                  @stderr+=data
 
-              ch.on_close {
-                #puts "done!"
-              }
-              #status=ch.exec "echo $?"
+                    print data
+
+                end
+
+                #exit code
+                #http://groups.google.com/group/comp.lang.ruby/browse_thread/thread/a806b0f5dae4e1e2
+                channel.on_request("exit-status") do |ch, data|
+                  exit_code = data.read_long
+                  @status=exit_code
+                  if exit_code > 0
+                    puts "ERROR: exit code #{exit_code}"
+                  else
+                    #puts "Successfully executed"
+                  end
+                end
+
+                channel.on_request("exit-signal") do |ch, data|
+                  puts "SIGNAL: #{data.read_long}"
+                end
+
+                ch.on_close {
+                  #puts "done!"
+                }
+                #status=ch.exec "echo $?"
+              end
             end
+            channel.wait
           end
-          channel.wait
+      rescue Net::SSH::AuthenticationFailed
+        ssh_options[:keys] = Array.new([File.join(File.dirname(__FILE__),'./../../validation/vagrant')])
+        ssh_options.delete(:password)
+        ssh_options[:auth_methods] = ['publickey']
+        if @key_auth_tried
+           raise
+        else
+           @key_auth_tried = true
+          retry
         end
- 
+      rescue Net::SSH::Disconnect, Errno::ECONNREFUSED, Errno::EHOSTUNREACH, Errno::ECONNABORTED, Errno::ECONNRESET, Errno::ENETUNREACH
+        sleep 1
+      end
   
       if (@status.to_s != options[:exitcode] )
         if (options[:exitcode]=="*")
