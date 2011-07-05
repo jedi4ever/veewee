@@ -13,13 +13,27 @@ module Veewee
       begin
         Timeout::timeout(options[:timeout]) do
           connected=false
+          @key_auth_tried = false
+          ssh_options = { :port => options[:port] , :password => options[:password], :paranoid => false, :timeout => options[:timeout]  }
           while !connected do
             begin
               print "."
-              Net::SSH.start(ip, options[:user], { :port => options[:port] , :password => options[:password], :paranoid => false, :timeout => options[:timeout]  }) do |ssh|
+              Net::SSH.start(ip, options[:user], ssh_options) do |ssh|
                 block.call(ip);
                 puts ""
                 return true
+              end
+            rescue Net::SSH::AuthenticationFailed
+              $stdout.puts 'Retry login with private-public key-pair'
+              options[:keys] => './../../validation/vagrant'
+              options.delete(:password)
+              ssh_options = options
+              $stdout.puts ssh_options.inspect
+              if @key_auth_tried
+                 raise
+              else
+                 @key_auth_tried = true
+                retry
               end
             rescue Net::SSH::Disconnect,Errno::ECONNREFUSED, Errno::EHOSTUNREACH, Errno::ECONNABORTED, Errno::ECONNRESET, Errno::ENETUNREACH
               sleep 5
