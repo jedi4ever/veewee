@@ -33,7 +33,7 @@ Then /^I can ssh to the following hosts with these credentials:$/ do |table|
     end
     
     lambda {
-	    Net::SSH.start(session["hostname"], session["username"], :password => session["password"], 
+	    Net::SSH.start(session["hostname"], session["username"], :password => session["password"],
                                                                :auth_methods => session_auth_methods,
                                                                :keys => session_keys)
     }.should_not raise_error(Net::SSH::AuthenticationFailed)
@@ -70,13 +70,27 @@ When /^I ssh to "([^\"]*)" with the following credentials:$/ do |hostname, table
   
 
   lambda {
-    @connection = Net::SSH.start(hostname, session["username"], :password => session["password"], 
-                                                                :auth_methods => session_auth_methods,
-# This is the list of authorization methods to try. It defaults to “publickey”, “hostbased”, “password”, and “keyboard-interactive”. (These are also the only authorization methods that are supported.) If 
-#http://net-ssh.rubyforge.org/ssh/v1/chapter-2.html
-                                                                :port => session_port,
-                                                                :keys => session_keys)
-#                                                                :keys => session_keys,:verbose => :debug)
+         # This is the list of authorization methods to try. It defaults to “publickey”, “hostbased”, “password”, and “keyboard-interactive”. (These are also the only authorization methods that are supported.) If
+         # http://net-ssh.rubyforge.org/ssh/v1/chapter-2.html
+    key_auth_tried = false
+    ssh_options = {:password => session["password"], :auth_methods => session_auth_methods, :port => session_port, :keys => session_keys}
+    # ssh_options[:verbose] => :debug
+    begin
+      print "."
+      @connection = Net::SSH.start(session["hostname"], session["username"], ssh_options)
+    rescue Net::SSH::AuthenticationFailed
+      ssh_options[:keys] = Array.new([File.join(File.dirname(__FILE__),'./../../vagrant')])
+      ssh_options.delete(:password)
+      ssh_options[:auth_methods] = ['publickey']
+      if key_auth_tried
+         raise
+      else
+         key_auth_tried = true
+        retry
+      end
+    rescue Net::SSH::Disconnect, Errno::ECONNREFUSED, Errno::EHOSTUNREACH, Errno::ECONNABORTED, Errno::ECONNRESET, Errno::ENETUNREACH
+      sleep 5
+    end
   }.should_not raise_error
 end
 
