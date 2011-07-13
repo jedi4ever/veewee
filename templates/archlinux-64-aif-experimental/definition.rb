@@ -27,6 +27,6 @@ Veewee::Session.declare({
   :ssh_login_timeout => "10000", :ssh_user => "root", :ssh_password => "vagrant", :ssh_key => "",
   :ssh_host_port => "7224", :ssh_guest_port => "22",
   :sudo_cmd => "sh '%f'",
-  :shutdown_cmd => "shutdown -h",
+  :shutdown_cmd => "shutdown -h now",
   :postinstall_files => [ "postinstall.sh"], :postinstall_timeout => "10000"
 })
