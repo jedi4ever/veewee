@@ -1,22 +1,84 @@
 #!/bin/bash
 
 # launch automated install
-#su -c 'aif -p automatic -c aif.cfg'
+su -c 'aif -p automatic -c aif.cfg'
+
+# copy over the vbox version file
+/bin/cp -f /root/.vbox_version /mnt/root/.vbox_version
 
 # chroot into the new system
 mount -o bind /dev /mnt/dev
 mount -o bind /sys /mnt/sys
 mount -t proc none /mnt/proc
-chroot /mnt
+chroot /mnt <<ENDCHROOT
 
-# make sure ssh is allowed
-cat <<EOF > /etc/hosts.allow
-sshd:	ALL
+# make sure network is up and a nameserver is available
+dhcpcd eth0
+
+# sudo setup
+# note: do not use tabs here, it autocompletes and borks the sudoers file
+cat <<EOF > /etc/sudoers
+root    ALL=(ALL)    ALL
+%wheel    ALL=(ALL)    NOPASSWD: ALL
 EOF
 
-# make sure sshd starts
-sed -i '$s/network /network sshd /' /etc/rc.conf
-
 # set up user accounts
-sed -i 's/root::/root:$1$9mqoT8YL$6pA27gnKGt0P1lQtlRDDb\/:/' /mnt/etc/shadow
-echo 'vagrant:$1$9mqoT8YL$6pA27gnKGt0P1lQtlRDDb/:15167:0:99999:7:::' >> /mnt/etc/shadow
+passwd<<EOF
+vagrant
+vagrant
+EOF
+useradd -m -G wheel -r vagrant
+passwd -d vagrant
+passwd vagrant<<EOF
+vagrant
+vagrant
+EOF
+
+# make sure ssh is allowed
+echo "sshd:	ALL" > /etc/hosts.allow
+
+# and everything else isn't
+echo "ALL:	ALL" > /etc/hosts.deny
+
+# make sure sshd starts
+sed -i 's:^DAEMONS\(.*\))$:DAEMONS\1 sshd):' /etc/rc.conf
+
+# install mitchellh's ssh key
+mkdir /home/vagrant/.ssh
+chmod 700 /home/vagrant/.ssh
+wget --no-check-certificate 'http://github.com/mitchellh/vagrant/raw/master/keys/vagrant.pub' -O /home/vagrant/.ssh/authorized_keys
+chmod 600 /home/vagrant/.ssh/authorized_keys
+chown -R vagrant /home/vagrant/.ssh
+
+# choose a mirror
+sed -i 's/^#\(.*leaseweb.*\)/\1/' /etc/pacman.d/mirrorlist
+
+# update pacman
+pacman -Syy
+pacman -S --noconfirm pacman
+
+# upgrade pacman db
+pacman-db-upgrade
+pacman -Syy
+
+# install some packages
+pacman -S --noconfirm ruby glibc kernel26-headers
+gem install --no-ri --no-rdoc puppet
+
+# if you want chef -> costs +30Mb
+pacman -S make gcc
+gem install --no-ri --no-rdoc chef
+
+# install virtualbox guest additions
+cd /tmp
+VBOX_VERSION=$(cat /root/.vbox_version)
+wget http://download.virtualbox.org/virtualbox/$VBOX_VERSION/VBoxGuestAdditions_$VBOX_VERSION.iso
+mount -o loop VBoxGuestAdditions_$VBOX_VERSION.iso /mnt
+sh /mnt/VBoxLinuxAdditions.run
+umount /mnt
+rm VBoxGuestAdditions_$VBOX_VERSION.iso
+
+ENDCHROOT
+
+# and reboot!
+reboot
