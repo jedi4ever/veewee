@@ -62,21 +62,17 @@ pacman-db-upgrade
 pacman -Syy
 
 # install some packages
-pacman -S --noconfirm ruby glibc kernel26-headers
-gem install --no-ri --no-rdoc puppet
-
-# if you want chef -> costs +30Mb
-pacman -S make gcc
-gem install --no-ri --no-rdoc chef
+pacman -S --noconfirm ruby glibc
+gem install --no-ri --no-rdoc puppet chef
 
 # install virtualbox guest additions
 cd /tmp
 VBOX_VERSION=$(cat /root/.vbox_version)
-wget http://download.virtualbox.org/virtualbox/$VBOX_VERSION/VBoxGuestAdditions_$VBOX_VERSION.iso
-mount -o loop VBoxGuestAdditions_$VBOX_VERSION.iso /mnt
+wget http://download.virtualbox.org/virtualbox/"$VBOX_VERSION"/VBoxGuestAdditions_"$VBOX_VERSION".iso
+mount -o loop VBoxGuestAdditions_"$VBOX_VERSION".iso /mnt
 sh /mnt/VBoxLinuxAdditions.run
 umount /mnt
-rm VBoxGuestAdditions_$VBOX_VERSION.iso
+rm VBoxGuestAdditions_"$VBOX_VERSION".iso
 
 ENDCHROOT
 
