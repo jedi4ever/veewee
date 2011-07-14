@@ -5,6 +5,7 @@ su -c 'aif -p automatic -c aif.cfg'
 
 # copy over the vbox version file
 /bin/cp -f /root/.vbox_version /mnt/root/.vbox_version
+VBOX_VERSION=$(cat /root/.vbox_version)
 
 # chroot into the new system
 mount -o bind /dev /mnt/dev
@@ -62,17 +63,29 @@ pacman-db-upgrade
 pacman -Syy
 
 # install some packages
-pacman -S --noconfirm ruby glibc
-gem install --no-ri --no-rdoc puppet chef
+pacman -S --noconfirm ruby glibc git
+gem install --no-ri --no-rdoc chef facter
+cd /tmp
+git clone https://github.com/puppetlabs/puppet.git
+cd puppet
+ruby install.rb --bindir=/usr/bin --sbindir=/sbin
 
 # install virtualbox guest additions
 cd /tmp
-VBOX_VERSION=$(cat /root/.vbox_version)
 wget http://download.virtualbox.org/virtualbox/"$VBOX_VERSION"/VBoxGuestAdditions_"$VBOX_VERSION".iso
 mount -o loop VBoxGuestAdditions_"$VBOX_VERSION".iso /mnt
 sh /mnt/VBoxLinuxAdditions.run
 umount /mnt
 rm VBoxGuestAdditions_"$VBOX_VERSION".iso
+
+# clean out pacman cache
+pacman -Scc<<EOF
+y
+y
+EOF
+
+# zero out the fs
+dd if=/dev/zero of=/tmp/clean || rm /tmp/clean
 
 ENDCHROOT
 
