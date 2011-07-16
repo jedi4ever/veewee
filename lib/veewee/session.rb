@@ -69,7 +69,7 @@ module Veewee
         FileUtils.mkdir(File.join(@definition_dir,boxname))
       end
       FileUtils.cp_r(File.join(@template_dir,template_name,'.'),File.join(@definition_dir,boxname))
-      puts "The basebox '#{boxname}' has been succesfully created from the template ''#{template_name}'"
+      puts "The basebox '#{boxname}' has been successfully created from the template ''#{template_name}'"
       puts "You can now edit the definition files stored in definitions/#{boxname}"
       puts "or build the box with:"
       if (options["format"]=='vagrant') 
@@ -346,7 +346,7 @@ module Veewee
                     begin
                       Veewee::Ssh.transfer_file("localhost",filename,File.basename(filename),ssh_options)
                     rescue RuntimeError
-                      puts "error transfering file, possible not enough permissions to write?"
+                      puts "error transferring file, possible not enough permissions to write?"
                       exit
                     end
                     command=@definition[:sudo_cmd]
@@ -362,11 +362,11 @@ module Veewee
                  
                end  
      
-          puts "#{boxname} was build succesfully. "
+          puts "#{boxname} was built successfully. "
           puts ""
           puts "Now you can: "
-          puts "- verify your box by running              : vagrant basebox validate #{boxname}"
-          puts "- export your vm to a .box fileby running : vagrant basebox export   #{boxname}"
+          puts "- verify your box by running               : vagrant basebox validate #{boxname}"
+          puts "- export your vm to a .box file by running : vagrant basebox export   #{boxname}"
         
     end
 
@@ -889,11 +889,11 @@ module Veewee
  
           #Need to look it up again because if it was an initial load
           vm=VirtualBox::VM.find(boxname) 
-          puts "Step [#{current_step_nr}] was succesfully - saving state"
+          puts "Step [#{current_step_nr}] was successfully - saving state"
           vm.save_state
           sleep 2 #waiting for it to be ok
           #puts "about to snapshot #{vm}"
-          #take snapshot after succesful execution
+          #take snapshot after successful execution
           vm.take_snapshot(step_name,"snapshot taken by veewee")
           sleep 2 #waiting for it to be started again
           vm.start
