@@ -1,2 +1,1 @@
-require 'vagrant'
-require 'veewee/command'
+require 'veewee/session'

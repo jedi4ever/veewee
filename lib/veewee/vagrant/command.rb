@@ -1,30 +1,14 @@
-require 'veewee/session'
-
-#Load Veewee::Session libraries
-lib_dir= File.expand_path(File.join(File.dirname(__FILE__),"..","..", "lib"))
-Dir.glob(File.join(lib_dir, '**','*.rb')).each {|f| require f  }
-
-#Setup some base variables to use
-template_dir=File.expand_path(File.join(lib_dir,"..", "templates"))
-
-veewee_dir="."
-definition_dir= File.expand_path(File.join(veewee_dir, "definitions"))
-tmp_dir=File.expand_path(File.join(veewee_dir, "tmp"))
-iso_dir=File.expand_path(File.join(veewee_dir, "iso"))
-box_dir=File.expand_path(File.join(veewee_dir, "boxes"))
-validation_dir=File.expand_path(File.join(lib_dir, "..","validation"))
-
-#Initialize
-Veewee::Session.setenv({:veewee_dir => veewee_dir, :definition_dir => definition_dir,
-   :template_dir => template_dir, :iso_dir => iso_dir, :box_dir => box_dir, :tmp_dir => tmp_dir, :validation_dir => validation_dir})
+require 'veewee'
 
 module Veewee
+
 class Command < Vagrant::Command::GroupBase
   register "basebox","Commands to manage baseboxes"  
-
+  
   desc "templates", "List the currently available basebox templates"
   def templates
-    Veewee::Session.list_templates
+
+#    Veewee::Session.list_templates
   end
 
   desc "define BOXNAME TEMPLATE", "Define a new basebox starting from a template"
@@ -41,9 +25,13 @@ class Command < Vagrant::Command::GroupBase
   desc "build BOXNAME", "Build the box BOXNAME"
   method_option :force,:type => :boolean , :default => false, :aliases => "-f", :desc => "overwrite the basebox"
   method_option :nogui,:type => :boolean , :default => false, :aliases => "-n", :desc => "no gui"
+  method_option :definition_dir , :aliases => "-d", :desc => "definition dir"
+  method_option :template_dir , :aliases => "-t", :desc => "template dir"
+  method_option :iso_dir , :aliases => "-i", :desc => "iso dir"
 
   def build(boxname)
-    Veewee::Session.build(boxname,options)
+    session=Veewee::Session.new(options)
+    session.build(boxname,options)
   end
 
   desc "ostypes", "List the available Operating System types"

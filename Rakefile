@@ -3,27 +3,17 @@ require 'bundler'
 require 'bundler/setup'
 Bundler::GemHelper.install_tasks
 
-#Setup some base variables to use
-veewee_dir= "."
-definition_dir= File.expand_path(File.join(veewee_dir, "definitions"))
-lib_dir= File.expand_path(File.join(veewee_dir, "lib"))
-box_dir= File.expand_path(File.join(veewee_dir, "boxes"))
-template_dir=File.expand_path(File.join(veewee_dir, "templates"))
-vbox_dir=File.expand_path(File.join(veewee_dir, "tmp"))
-tmp_dir=File.expand_path(File.join(veewee_dir, "tmp"))
-iso_dir=File.expand_path(File.join(veewee_dir, "iso"))
+desc 'Default: run tests'
+task :default => :test
+
+require 'rake/testtask'
+Bundler::GemHelper.install_tasks
 
 
-#Load Veewee::Session libraries
-Dir.glob(File.join(lib_dir, '**','*.rb')).each {|f| 
-  require f  }
-
-#Initialize
-Veewee::Session.setenv({:veewee_dir => veewee_dir, :definition_dir => definition_dir,
-   :template_dir => template_dir, :iso_dir => iso_dir, :box_dir => box_dir, :tmp_dir => tmp_dir})
-
-desc 'Default: list templates'
-task :default => [:templates]
+Rake::TestTask.new do |t|
+  t.libs << "test"
+  t.pattern = 'test/**/*_test.rb'
+end
 
 desc 'List templates'
 task :templates do

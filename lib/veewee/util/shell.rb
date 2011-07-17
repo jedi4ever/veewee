@@ -1,6 +1,7 @@
 #require 'open4'
 
 module Veewee
+  module Util
   class Shell
  
     def self.execute2(command,options = {})
@@ -51,4 +52,5 @@ module Veewee
       end
 
   end #Class
+end #Module
 end #Module

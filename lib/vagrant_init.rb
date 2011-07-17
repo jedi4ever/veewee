@@ -1,6 +1,7 @@
 begin
-  require 'veewee'
+  require 'vagrant'
+  require 'veewee/vagrant/command'
 rescue LoadError
   require 'rubygems'
-  require 'veewee'
+  require 'veewee/vagrant/command'
 end

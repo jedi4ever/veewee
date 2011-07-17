@@ -39,6 +39,7 @@ GEM
       Platform (>= 0.4.0)
       open4 (>= 0.4.0)
     progressbar (0.9.1)
+    rake (0.8.7)
     rspec (2.5.0)
       rspec-core (~> 2.5.0)
       rspec-expectations (~> 2.5.0)
@@ -65,4 +66,5 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  rake
   veewee!
