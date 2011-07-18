@@ -1,8 +1,8 @@
 #http://chrisadams.me.uk/2010/05/10/setting-up-a-centos-base-box-for-development-and-testing-with-vagrant/
 
-cat > /etc/yum.repos.d/stahna.repo << EOM
-[stahnma]
-name=stahnma
+cat > /etc/yum.repos.d/puppetlabs.repo << EOM
+[puppetlabs]
+name=puppetlabs
 baseurl=http://stahnma.fedorapeople.org/puppetlabs/6/\$basearch
 enabled=1
 gpgcheck=0
@@ -16,10 +16,12 @@ enabled=1
 gpgcheck=0
 EOM
 
-#yum -y install gcc bzip2 make kernel-devel-`uname -r` gcc-c++ zlib-devel openssl-devel readline-devel sqlite3-devel puppet facter
-yum -y install puppet facter
+yum -y install puppet facter ruby-devel rubygems
 yum -y erase wireless-tools gtk2 libX11 hicolor-icon-theme avahi freetype bitstream-vera-fonts
 yum -y clean all
+rm /etc/yum.repos.d/{puppetlabs,epel}.repo
+
+gem install --no-ri --no-rdoc chef
 
 # Installing vagrant keys
 mkdir /home/vagrant/.ssh
