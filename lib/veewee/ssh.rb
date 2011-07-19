@@ -8,7 +8,8 @@ module Veewee
       options=defaults.merge(options)
 
       puts
-      puts "Waiting for ssh login with user #{options[:user]} to sshd on port => #{options[:port]} to work"
+      puts "Waiting for ssh login with user #{options[:user]} to sshd on port => #{options[:port]} to work with options:"
+      puts options.inspect
 
       begin
         Timeout::timeout(options[:timeout]) do
@@ -27,10 +28,13 @@ module Veewee
               options[:keys] = File.join(File.dirname(__FILE__),'./../../validation/vagrant')
               options.delete(:password)
               ssh_options = options
+              ssh_options[:user_known_hosts_file] = '/dev/null'
               if @key_auth_tried
                  raise
               else
-                 @key_auth_tried = true
+                @key_auth_tried = true
+                puts "Waiting for passwordless ssh login with user #{options[:user]} to sshd on port => #{options[:port]} to work with options:"
+                puts ssh_options.inspect
                 retry
               end
             rescue Net::SSH::Disconnect,Errno::ECONNREFUSED, Errno::EHOSTUNREACH, Errno::ECONNABORTED, Errno::ECONNRESET, Errno::ENETUNREACH
@@ -39,6 +43,8 @@ module Veewee
           end
         end
       rescue Timeout::Error
+        puts ssh_options.inspect
+        puts caller.join("/n")
         raise 'ssh timeout'
       end
       puts ""
@@ -47,15 +53,31 @@ module Veewee
 
 
     def self.transfer_file(host,filename,destination = '.' , options = {})
-      
-      Net::SSH.start( host,options[:user],options ) do |ssh|
-        puts "Transferring #{filename} to #{destination} "
-        ssh.scp.upload!( filename, destination ) do |ch, name, sent, total|
-       #   print "\r#{destination}: #{(sent.to_f * 100 / total.to_f).to_i}%"
-          print "."
+      begin
+        ssh_options = options
+        ssh_options[:timeout] = 1000 if ssh_options[:timeout].nil?
+        Net::SSH.start( host, options[:user], ssh_options ) do |ssh|
+          puts "Transferring #{filename} to #{destination} "
+          ssh.scp.upload!( filename, destination ) do |ch, name, sent, total|
+         #   print "\r#{destination}: #{(sent.to_f * 100 / total.to_f).to_i}%"
+            print "."
 
+          end
         end
-      end 
+      rescue Net::SSH::AuthenticationFailed
+        ssh_options[:keys] = Array.new([File.join(File.dirname(__FILE__),'./../../validation/vagrant')])
+        ssh_options.delete(:password)
+        ssh_options[:auth_methods] = ['publickey']
+        ssh_options[:user_known_hosts_file] = '/dev/null'
+        if @key_auth_tried
+           raise
+        else
+           @key_auth_tried = true
+          retry
+        end
+
+
+      end
       puts
     end
 

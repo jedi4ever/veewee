@@ -82,6 +82,7 @@ When /^I ssh to "([^\"]*)" with the following credentials:$/ do |hostname, table
       ssh_options[:keys] = Array.new([File.join(File.dirname(__FILE__),'./../../vagrant')])
       ssh_options.delete(:password)
       ssh_options[:auth_methods] = ['publickey']
+      ssh_options[:user_known_hosts_file] = '/dev/null'
       if key_auth_tried
          raise
       else
