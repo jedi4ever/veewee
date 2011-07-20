@@ -10,6 +10,8 @@
 # - package update and upgrade are done in the preseed.cfg via the late_command
 #
 
+date > /etc/vagrant_box_build_time
+
 set -x
 #set -e
 

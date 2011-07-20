@@ -1,5 +1,7 @@
 #!/bin/sh
 
+date > /etc/vagrant_box_build_time
+
 VBOX_VERSION=$(cat /home/vagrant/.vbox_version)
 
 yum -y install \
