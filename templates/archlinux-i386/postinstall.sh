@@ -1,5 +1,7 @@
 #!/bin/bash
 
+date > /etc/vagrant_box_build_time
+
 # launch automated install
 su -c 'aif -p automatic -c aif.cfg'
 

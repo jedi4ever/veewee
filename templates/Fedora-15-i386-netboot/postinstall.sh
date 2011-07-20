@@ -1,5 +1,7 @@
 #!/bin/sh
 
+date > /etc/vagrant_box_build_time
+
 # Install VirtualBox extensions.
 
 VBOX_VERSION=$(cat /home/vagrant/.vbox_version)
