@@ -16,12 +16,14 @@ module Veewee
         #We need to shutdown first
         if vm.running?
           puts "Vagrant requires the box to be shutdown, before it can export"
-          puts "Sudo also needs to work for user #{definition[:ssh_user]}"
+          puts "Sudo also needs to work for user #{@definition.ssh_user}"
           puts "Performing a clean shutdown now."
-          ssh_options={ :user => definition[:ssh_user], :port => definition[:ssh_host_port], :password => definition[:ssh_password],
-            :timeout => definition[:ssh_timeout]}       
+          ssh_options={ :user => definition[:ssh_user], 
+            :port => @definition.ssh_host_port, 
+            :password => @definition.ssh_password,
+            :timeout => @definition.ssh_timeout}       
 
-            Veewee::Ssh.execute("localhost","sudo #{definition[:shutdown_cmd]}",ssh_options)
+            Veewee::Ssh.execute("localhost","sudo #{@definition.shutdown_cmd}",ssh_options)
 
             #Wait for state poweroff
             while (vm.running?) do 

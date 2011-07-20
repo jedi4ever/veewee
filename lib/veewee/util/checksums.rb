@@ -1,4 +1,7 @@
-
+module Veewee
+  module Util
+    class Checksums
+      
             def self.calculate_checksums(definition,boxname)
 
               #TODO: get rid of definitiondir and so one
@@ -29,3 +32,7 @@
               return checksums
 
             end
+      end
+  end
+end
+      

@@ -1,5 +1,18 @@
 module Veewee
   module Util
+
+    class SshResult
+      attr_accessor :stdout
+      attr_accessor :stderr
+      attr_accessor :status
+      
+      def initialize(stdout,stderr,status)
+        @stdout=stdout
+        @stderr=stderr
+        @status=status
+      end
+    end
+    
     class Ssh
       
       require 'net/ssh'
@@ -26,7 +39,7 @@ module Veewee
                   return true
                 end
               rescue Net::SSH::Disconnect,Errno::ECONNREFUSED, Errno::EHOSTUNREACH, Errno::ECONNABORTED, Errno::ECONNRESET, Errno::ENETUNREACH
-                sleep 5
+                sleep 1
               end
             end
           end
@@ -55,11 +68,11 @@ module Veewee
       def self.execute(host,command, options = { :progress => "on"} )
         defaults= { :port => "22", :exitcode => "0", :user => "root"}
         options=defaults.merge(options)
-        @pid=""
-        @stdin=command
-        @stdout=""
-        @stderr=""
-        @status=-99999
+        pid=""
+        stdin=command
+        stdout=""
+        stderr=""
+        status=-99999
 
         puts "Executing command: #{command}"
 
@@ -80,7 +93,7 @@ module Veewee
 
               # "on_data" is called when the process writes something to stdout
               ch.on_data do |c, data|
-                @stdout+=data
+                stdout+=data
 
                 print data
 
@@ -88,7 +101,7 @@ module Veewee
 
               # "on_extended_data" is called when the process writes something to stderr
               ch.on_extended_data do |c, type, data|
-                @stderr+=data
+                stderr+=data
 
                 print data
 
@@ -98,7 +111,7 @@ module Veewee
               #http://groups.google.com/group/comp.lang.ruby/browse_thread/thread/a806b0f5dae4e1e2
               channel.on_request("exit-status") do |ch, data|
                 exit_code = data.read_long
-                @status=exit_code
+                status=exit_code
                 if exit_code > 0
                   puts "ERROR: exit code #{exit_code}"
                 else
@@ -120,7 +133,7 @@ module Veewee
         end
 
 
-        if (@status.to_s != options[:exitcode] )
+        if (status.to_s != options[:exitcode] )
           if (options[:exitcode]=="*")
             #its a test so we don't need to worry
           else
@@ -128,6 +141,8 @@ module Veewee
           end
 
         end
+
+        return Veewee::Util::SshResult.new(stdout,stderr,status)
 
       end
 

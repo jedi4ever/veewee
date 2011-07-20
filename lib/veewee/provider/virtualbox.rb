@@ -1,5 +1,8 @@
 require 'veewee/provider/virtualbox/build'
 require 'veewee/provider/virtualbox/destroy'
+require 'veewee/provider/virtualbox/ssh'
+require 'veewee/provider/virtualbox/console_type'
+
 require 'veewee/provider/core/iso'
 require 'virtualbox'
 
@@ -43,13 +46,13 @@ module Veewee
         vm.save  
       end
 
-      def self.list_ostypes
-        puts
-        puts "Available os types:"
-        VirtualBox::Global.global.lib.virtualbox.guest_os_types.collect { |os|
-          puts "#{os.id}: #{os.description}"
-        }      
-      end
+#      def self.list_ostypes
+#        puts
+#        puts "Available os types:"
+#        VirtualBox::Global.global.lib.virtualbox.guest_os_types.collect { |os|
+#          puts "#{os.id}: #{os.description}"
+#        }      
+#      end
       
     end
 end

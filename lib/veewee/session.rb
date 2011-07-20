@@ -55,24 +55,68 @@ module Veewee
       options={}
       defaults={ :provider_type => "Virtualbox" }
       options=defaults.merge(options)
-      provider=Veewee::Session.get_provider(options[:provider_type]).new(name,definition,self)
-      
-      #verify_postinstalls
-      #verify it all
-      
+      box_provider=Veewee::Session.get_provider(options[:provider_type]).new(name,definition,self)
+      box_provider.build
 
-      provider.build
     end
     
     def destroy(name,definition)
       options={}
       defaults={ :provider_type => "Virtualbox" }
       options=defaults.merge(options)
-      provider=Veewee::Session.get_provider(options[:provider_type]).new(name,definition,self)      
-      provider.destroy_vm
+      box_provider=Veewee::Session.get_provider(options[:provider_type]).new(name,definition,self)      
+      box_provider.destroy_vm
     end
     
-      def self.define(boxname,template_name,options = {})
+    def ssh(name,definition,command)
+      options={}
+      defaults={ :provider_type => "Virtualbox" }
+      options=defaults.merge(options)
+      box_provider=Veewee::Session.get_provider(options[:provider_type]).new(name,definition,self)      
+      box_provider.ssh(command)
+    end
+
+    def console_type(name,definition,command)
+      options={}
+      defaults={ :provider_type => "Virtualbox" }
+      options=defaults.merge(options)
+      box_provider=Veewee::Session.get_provider(options[:provider_type]).new(name,definition,self)      
+      box_provider.console_type(command)
+    end
+    
+    
+    def list_templates( options = { :format => 'vagrant'})
+      require 'pp'
+      puts @template_dir
+      puts "The following templates are available:"
+      subdirs=Dir.glob("#{@template_dir}/*")
+      subdirs.each do |sub|
+        if File.directory?("#{sub}")
+          definition=Dir.glob("#{sub}/definition.rb")
+          if definition.length!=0
+            name=sub.sub(/#{@template_dir}\//,'')
+            if (options[:format]=='vagrant') 
+              puts "vagrant basebox define '<boxname>' '#{name}'"
+            end
+            if (options[:format]=='veewee')
+              puts "veewee define '<boxname>' '#{name}'"
+            end
+          end
+        end
+      end
+    end
+    
+    def list_definitions
+      puts "The following defined baseboxes exist:"
+      subdirs=Dir.glob("#{@definition_dir}/*")
+      subdirs.each do |sub|
+        puts "- "+File.basename(sub)
+      end
+    end
+    
+    
+    
+    def define(boxname,template_name,options = {})
         #Check if template_name exists
 
         options = {  "force" => false, "format" => "vagrant" }.merge(options)
@@ -95,7 +139,7 @@ module Veewee
         else
           FileUtils.mkdir(File.join(@definition_dir,boxname))
         end
-<<
+
         FileUtils.cp_r(File.join(@template_dir,template_name,'.'),File.join(@definition_dir,boxname))
         puts "The basebox '#{boxname}' has been succesfully created from the template ''#{template_name}'"
         puts "You can now edit the definition files stored in definitions/#{boxname}"
@@ -109,7 +153,7 @@ module Veewee
 
       end
 
-      def self.undefine(boxname)
+    def undefine(boxname)
         name_dir=File.join(@definition_dir,boxname)
         if File.directory?(name_dir)
           #TODO: Needs to be more defensive!!
@@ -121,42 +165,8 @@ module Veewee
         end
       end
 
-      def self.list_templates( options = { :format => 'vagrant'})
-        puts "The following templates are available:"
-        subdirs=Dir.glob("#{@template_dir}/*")
-        subdirs.each do |sub|
-          if File.directory?("#{sub}")
-            definition=Dir.glob("#{sub}/definition.rb")
-            if definition.length!=0
-              name=sub.sub(/#{@template_dir}\//,'')
-              if (options[:format]=='vagrant') 
-                puts "vagrant basebox define '<boxname>' '#{name}'"
-              end
-              if (options[:format]=='veewee')
-                puts "veewee define '<boxname>' '#{name}'"
-              end
-            end
-          end
-        end
-      end
 
-
-      def self.list_boxes
-        puts "Not yet implemented"
-      end
-
-      def self.list_definitions
-        puts "The following defined baseboxes exist:"
-        subdirs=Dir.glob("#{@definition_dir}/*")
-        subdirs.each do |sub|
-          puts "- "+File.basename(sub)
-        end
-      end
-
- 
-
-
-            def self.validate_box(boxname,options)
+    def self.validate_box(boxname,options)
               require 'cucumber'
 
               require 'cucumber/rspec/disable_option_parser'
