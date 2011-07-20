@@ -1,3 +1,5 @@
+date > /etc/vagrant_box_build_time
+
 #http://www.freebsd.org/doc/en_US.ISO8859-1/articles/remote-install/installation.html
 dd if=/dev/zero of=/dev/ad4 count=2
 #bsdlabel -w -B /dev/ad4
