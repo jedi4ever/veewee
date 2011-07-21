@@ -1,5 +1,7 @@
 # postinstall.sh created from Mitchell's official lucid32/64 baseboxes
 
+date > /etc/vagrant_box_build_time
+
 # Apt-install various things necessary for Ruby, guest additions,
 # etc., and remove optional things to trim down the machine.
 apt-get -y update

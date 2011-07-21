@@ -1,5 +1,7 @@
 #http://adrianbravo.tumblr.com/post/644860401
 
+date > /etc/vagrant_box_build_time
+
 # Update the box
 apt-get -y update
 apt-get -y install linux-headers-$(uname -r) build-essential

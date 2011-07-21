@@ -1,5 +1,7 @@
 # http://projects.puppetlabs.com/projects/1/wiki/Puppet_Solaris
 
+date > /etc/vagrant_box_build_time
+
 # Add the opencsw package site
 export PATH=/usr/bin:/usr/sbin:$PATH
 
