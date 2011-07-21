@@ -14,7 +14,7 @@ Gem::Specification.new do |s|
   s.required_rubygems_version = ">= 1.3.6"
   s.rubyforge_project         = "veewee"
 
-  s.add_dependency "vagrant", "~> 0.7.0"
+  s.add_dependency "vagrant", "~> 0.8.0"
   s.add_dependency "net-ssh", "~> 2.1.0"
   s.add_dependency "popen4", "~> 0.1.2"
   s.add_dependency "thor", "~> 0.14.6"
