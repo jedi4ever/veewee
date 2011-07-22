@@ -6,6 +6,9 @@ require 'open-uri'
 require 'progressbar'
 require 'highline/import'
 require 'tempfile'
+require 'virtualbox'
+require 'virtualbox/abstract_model'
+require 'virtualbox/ext/byte_normalizer'
 
 
 module Veewee
