@@ -49,7 +49,7 @@ module Veewee
         puts "Error: definition for basebox '#{name}' does not exist."
         exit
       end
-      return Veewee::Definition.new(Veewee::Session.get_loaded_definition)
+      return Veewee::Definition.new(Veewee::Environment.get_loaded_definition)
     end
     
     

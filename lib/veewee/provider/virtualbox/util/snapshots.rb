@@ -45,7 +45,7 @@ module Veewee
 
       def self.rollback_snapshot(vmname,snapname)
         delete_flag=false
-        @vboxcmd=Veewee::Session.determine_vboxcmd
+        @vboxcmd=Veewee::Environment.determine_vboxcmd
 
         savestate_recover=false
         if (state_vmachine(vmname)=="running")
@@ -90,7 +90,7 @@ module Veewee
 
 
       def self.list_snapshots(vmname)
-        @vboxcmd=Veewee::Session.determine_vboxcmd
+        @vboxcmd=Veewee::Environment.determine_vboxcmd
 
         snapshotresult=Veewee::Shell.execute("#{@vboxcmd} showvminfo --machinereadable '#{vmname}' |grep ^SnapshotName| cut -d '=' -f 2").stdout
         snapshotlist=snapshotresult.gsub(/\"/,'').split(/\n/)

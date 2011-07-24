@@ -1,4 +1,4 @@
-Veewee::Session.declare({
+Veewee::Environment.declare({
   :cpu_count => '1', :memory_size=> '392',
   :disk_size => '10140', :disk_format => 'VDI', :hostiocache => 'off', :ioapic => 'on', :pae => 'on',
   :os_type_id => 'RedHat_64',

@@ -4,12 +4,12 @@ require 'virtualbox'
 vm=VirtualBox::VM.find("blub")
 #vm.start
 vm.state
-#session = VirtualBox::Lib.lib.session
+#environment = VirtualBox::Lib.lib.environment
 
-vm.with_open_session do |session|
-	pp session
-	pp session.console
-	pp session.console.keyboard
-	pp session.console.keyboard.methods
-	session.console.keyboard.put_scancode(20)
+vm.with_open_environment do |environment|
+	pp environment
+	pp environment.console
+	pp environment.console.keyboard
+	pp environment.console.keyboard.methods
+	environment.console.keyboard.put_scancode(20)
 end

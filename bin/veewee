@@ -20,20 +20,20 @@ class VeeweeCLI < Thor
     end
     
     puts "Init a new box #{boxname}, starting from template #{template}"
-  	Veewee::Session.define(boxname,template)
+  	Veewee::Environment.define(boxname,template)
   	
   end
 
   desc "templates", "list the template available" 
   def templates 
-    Veewee::Session.list_templates
+    Veewee::Environment.list_templates
   end
   
   desc "build [NAME]", "build the box defined" 
   method_options :force => :boolean
   def build(boxname)
     puts "Building box #{boxname}"
-    vs=Veewee::Session.new(options)
+    vs=Veewee::Environment.new(options)
     vd=vs.get_definition(boxname)
     vs.build(boxname,vd)    
   end
@@ -42,7 +42,7 @@ class VeeweeCLI < Thor
   method_options :force => :boolean  
   def export(boxname)
       if (!boxname.nil?)
-        Veewee::Session.export_box(boxname)
+        Veewee::Environment.export_box(boxname)
       end
   end
   

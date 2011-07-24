@@ -1,4 +1,4 @@
-Veewee::Session.declare({
+Veewee::Environment.declare({
   :cpu_count => '1', :memory_size=> '768',
   #Disk size needs to be 12Gig +
   :disk_size => '15140', :disk_format => 'VDI', :hostiocache => 'on', :use_hw_virt_ext => 'on',

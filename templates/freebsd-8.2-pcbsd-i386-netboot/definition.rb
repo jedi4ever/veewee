@@ -6,7 +6,7 @@
 
 #Based on https://gist.github.com/911058
 
-Veewee::Session.declare( {
+Veewee::Environment.declare( {
   :cpu_count => '1', :memory_size=> '768',
   :disk_size => '10140', :disk_format => 'VDI',:hostiocache => 'off',
   :os_type_id => 'FreeBSD',
