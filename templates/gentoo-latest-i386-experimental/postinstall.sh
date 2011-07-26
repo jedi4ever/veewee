@@ -1,5 +1,7 @@
 #!/bin/bash
 
+date > /etc/vagrant_box_build_time
+
 #Based on http://www.gentoo.org/doc/en/gentoo-x86-quickinstall.xml
 
 #Partition the disk

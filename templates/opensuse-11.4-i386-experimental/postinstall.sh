@@ -1,5 +1,6 @@
 #Inspired by https://github.com/fnichol/wiki-notes/wiki/Creating-An-openSUSE-11.3-x32-Vagrant-Box
 
+date > /etc/vagrant_box_build_time
 
 zypper --non-interactive refresh
 # zypper --non-interactive up
