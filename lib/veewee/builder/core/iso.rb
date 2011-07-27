@@ -1,5 +1,5 @@
 module Veewee
-  module Provider
+  module Builder
     module Core
       
       require 'open-uri'

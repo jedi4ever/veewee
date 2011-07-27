@@ -2,7 +2,7 @@ require 'veewee/util/scancode'
 require 'veewee/util/tcp'
 
 module Veewee
-  module Provider
+  module Builder
     module Virtualbox
 
       def send_sequence(sequence)

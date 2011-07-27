@@ -1,11 +1,11 @@
 require 'pathname'
 module Veewee
-  module Provider
+  module Builder
     module Virtualbox
 
       #    Shellutil.execute("vagrant package --base #{vmname} --include /tmp/Vagrantfile --output /tmp/#{vmname}.box", {:progress => "on"})    
 
-      def export_vagrant
+      def export_vagrant(export_options={})
 
         #Check if box already exists
         vm=VirtualBox::VM.find(@boxname)

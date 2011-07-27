@@ -1,7 +1,7 @@
 module Veewee
-  module Provider
+  module Builder
     module Virtualbox
-      def ssh(command)
+      def ssh(command,ssh_options={})
         ssh_options={ 
           :user => @definition.ssh_user, 
           :port => @definition.ssh_host_port,

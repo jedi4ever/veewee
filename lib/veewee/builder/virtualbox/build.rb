@@ -3,18 +3,18 @@ require 'veewee/util/tcp'
 require 'veewee/util/web'
 require 'veewee/util/ssh'
 
-require 'veewee/provider/virtualbox/util/create'
-require 'veewee/provider/virtualbox/util/snapshots'
-require 'veewee/provider/virtualbox/util/transaction'
-require 'veewee/provider/virtualbox/util/scancode'
+require 'veewee/builder/virtualbox/util/create'
+require 'veewee/builder/virtualbox/util/snapshots'
+require 'veewee/builder/virtualbox/util/transaction'
+require 'veewee/builder/virtualbox/util/scancode'
 
 module Veewee
-  module Provider
+  module Builder
     module Virtualbox
 
-      def build
+      def build(build_options={})
         options={}
-        options = {  "force" => true, "format" => "vagrant", "nogui" => false }.merge(options)
+        options = {  "force" => true, "format" => "vagrant", "nogui" => false }.merge(build_options)
 
         #Command to execute locally
 
@@ -60,7 +60,7 @@ module Veewee
           puts "The box is already there, we can't destroy it"
         else    
           puts "Forcing build by destroying #{@boxname} machine"
-          destroy_vm
+          destroy
         end
 
         if Veewee::Util::Tcp.is_port_open?("localhost", @definition.ssh_host_port)
@@ -69,7 +69,7 @@ module Veewee
         end
 
 
-        #checksums=calculate_checksums(@definition,boxname)
+        #checksums=calculate_checksums(@definition,@boxname)
         checksums=[ "XXX"]
         #        transaction("0-initial-#{checksums[0]}",checksums) do
 
@@ -172,11 +172,11 @@ module Veewee
 
             end  
 
-            puts "#{boxname} was build succesfully. "
+            puts "#{@boxname} was build succesfully. "
             puts ""
             puts "Now you can: "
-            puts "- verify your box by running              : vagrant basebox validate #{boxname}"
-            puts "- export your vm to a .box fileby running : vagrant basebox export   #{boxname}"
+            puts "- verify your box by running              : vagrant basebox validate #{@boxname}"
+            puts "- export your vm to a .box fileby running : vagrant basebox export   #{@boxname}"
 
           end
 

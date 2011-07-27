@@ -14,6 +14,9 @@ module Veewee
         end
         def do_GET(request,response)
           response['Content-Type']='text/plain'
+          
+          require 'pp'
+          pp request
           response.status = 200
           puts "Serving file #{@localfile}"                     
           displayfile=File.open(@localfile,'r')

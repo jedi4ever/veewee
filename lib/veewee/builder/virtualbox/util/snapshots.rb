@@ -2,7 +2,7 @@ require 'veewee/util/shell'
 require 'veewee/util/tcp'
 
 module Veewee
-  module Provider
+  module Builder
     module Virtualbox
 
       def remove_snapshot_vmachine(vmname,snapname)

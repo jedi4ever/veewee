@@ -1,5 +1,6 @@
 require 'veewee/definition'
-require 'veewee/provider/virtualbox'
+require 'veewee/builderfactory'
+require 'veewee/builder/virtualbox'
 require 'tempfile'
 
 require 'virtualbox'
@@ -48,41 +49,9 @@ module Veewee
       @loaded_definition=options
     end
 
-    def self.get_provider(name)
-      Object.const_get("Veewee").const_get("Virtualbox")
-    end
-    
-    def build(name,definition)
-      options={}
-      defaults={ :provider_type => "Virtualbox" }
-      options=defaults.merge(options)
-      box_provider=Veewee::Environment.get_provider(options[:provider_type]).new(name,definition,self)
-      box_provider.build
-
-    end
-    
-    def destroy(name,definition)
-      options={}
-      defaults={ :provider_type => "Virtualbox" }
-      options=defaults.merge(options)
-      box_provider=Veewee::Environment.get_provider(options[:provider_type]).new(name,definition,self)      
-      box_provider.destroy_vm
-    end
-    
-    def ssh(name,definition,command)
-      options={}
-      defaults={ :provider_type => "Virtualbox" }
-      options=defaults.merge(options)
-      box_provider=Veewee::Environment.get_provider(options[:provider_type]).new(name,definition,self)      
-      box_provider.ssh(command)
-    end
-
-    def console_type(name,definition,command)
-      options={}
-      defaults={ :provider_type => "Virtualbox" }
-      options=defaults.merge(options)
-      box_provider=Veewee::Environment.get_provider(options[:provider_type]).new(name,definition,self)      
-      box_provider.console_type(command)
+    def builder(type)
+      builder=Veewee::BuilderFactory.new(type,self)
+      return builder
     end
     
     

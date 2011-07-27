@@ -1,22 +1,25 @@
-require 'veewee/provider/virtualbox/build'
-require 'veewee/provider/virtualbox/destroy'
-require 'veewee/provider/virtualbox/ssh'
-require 'veewee/provider/virtualbox/console_type'
+require 'veewee/builder/virtualbox/build'
+require 'veewee/builder/virtualbox/destroy'
+require 'veewee/builder/virtualbox/ssh'
+require 'veewee/builder/virtualbox/console_type'
 
-require 'veewee/provider/core/iso'
+require 'veewee/builder/core/iso'
+require 'veewee/builder/box'
+
 require 'virtualbox'
 
 module Veewee
-    class Virtualbox
-      include Veewee::Provider::Core
-      include Veewee::Provider::Virtualbox
+    class Virtualbox < Box
+      include Veewee::Builder::Core
+      include Veewee::Builder::Virtualbox
       
-      def initialize(boxname,definition,environment)
+      def initialize(boxname,definition,environment,builder_options={})
         @vboxcmd=determine_vboxcmd
         @definition=definition
         @boxname=boxname
         @environment=environment       
       end
+      
       
       def determine_vboxcmd
         return "VBoxManage"

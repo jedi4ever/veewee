@@ -1,8 +1,8 @@
 module Veewee
-  module Provider
+  module Builder
     module Virtualbox
 
-      def destroy_vm
+      def destroy(destroy_options={})
 
         #:destroy_medium => :delete,  will delete machine + all media attachments
         #vm.destroy(:destroy_medium => :delete)

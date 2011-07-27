@@ -14,7 +14,7 @@ class Command < Vagrant::Command::GroupBase
   def build(boxname)
     vs=Veewee::Environment.new(options)
     vd=vs.get_definition(boxname)
-    vs.build(boxname,vd)
+    vs.builder(:virtualbox).get(boxname,vd).build()
   end
   
   desc "ostypes", "List the available Operating System types"

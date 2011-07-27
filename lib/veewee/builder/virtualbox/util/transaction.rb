@@ -2,7 +2,7 @@ require 'veewee/util/shell'
 require 'veewee/util/tcp'
 
 module Veewee
-  module Provider
+  module Builder
     module Virtualbox
 
       def transaction(step_name,checksums,&block)
@@ -100,7 +100,7 @@ module Veewee
 
               vm.reload
               puts "We found no good state so we are destroying the previous machine+disks"
-              destroy_vm
+              destroy
             end
 
           end

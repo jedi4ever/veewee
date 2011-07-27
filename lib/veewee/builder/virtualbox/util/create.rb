@@ -1,7 +1,7 @@
 require 'tempfile'
 
 module Veewee
-  module Provider
+  module Builder
     module Virtualbox
       
       def create_vm
