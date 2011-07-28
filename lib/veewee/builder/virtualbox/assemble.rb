@@ -144,19 +144,20 @@ module Veewee
           ##VirtualBox::Global.global.max_vdi_size=1000000
           #newdisk.save
 
-          command="#{@vboxcmd}  list  systemproperties|grep '^Default machine'|cut -d ':' -f 2|sed -e 's/^[ ]*//'"
-          results=IO.popen("#{command}")
-          place=results.gets.chop
-          results.close
-
-          command ="#{@vboxcmd} createhd --filename '#{place}/#{@box_name}/#{@box_name}.#{@definition.disk_format.downcase}' --size '#{@definition.disk_size.to_i}' --format #{@definition.disk_format.downcase} > /dev/null"
-          puts "#{command}"
+          place=get_vm_location
+          command ="#{@vboxcmd} createhd --filename '#{place}/#{@box_name}/#{@box_name}.#{@definition.disk_format.downcase}' --size '#{@definition.disk_size.to_i}' --format #{@definition.disk_format.downcase}"
           Veewee::Util::Shell.execute("#{command}")
-
         end
 
       end
 
+      def get_vm_location
+        command="#{@vboxcmd}  list  systemproperties"
+        shell_results=Veewee::Util::Shell.execute("#{command}")
+        place=shell_results.stdout.split(/\n/).grep(/Default machine/)[0].split(":")[1].strip
+        return place
+      end
+      
       def add_ide_controller
         #unless => "${vboxcmd} showvminfo '${vname}' | grep 'IDE Controller' "
         command ="#{@vboxcmd} storagectl '#{@box_name}' --name 'IDE Controller' --add ide"
@@ -171,12 +172,9 @@ module Veewee
 
 
       def attach_disk
+        
+        place=get_vm_location
         location=@box_name+"."+@definition.disk_format.downcase
-
-        command="#{@vboxcmd}  list  systemproperties|grep '^Default machine'|cut -d ':' -f 2|sed -e 's/^[ ]*//'"
-        results=IO.popen("#{command}")
-        place=results.gets.chop
-        results.close
 
         location="#{place}/#{@box_name}/"+location
         puts "Attaching disk: #{location}"

@@ -1,5 +1,6 @@
 require 'veewee/util/scancode'
 require 'veewee/util/tcp'
+require 'veewee/util/shell'
 
 module Veewee
   module Builder
@@ -45,7 +46,7 @@ module Veewee
       def send_keycode(keycode)
         command= "#{@vboxcmd} controlvm '#{@box_name}' keyboardputscancode #{keycode}"
         #puts "#{command}"
-        IO.popen("#{command}") { |f| print '' }
+        Veewee::Util::Shell.execute("#{command}")
       end
       
 end #Module

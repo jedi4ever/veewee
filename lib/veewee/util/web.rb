@@ -30,9 +30,11 @@ module Veewee
 
       def self.wait_for_request(filename,options={:timeout => 10, :web_dir => "", :port => 7125})  
 
-        #TODO: check if file exists
+        # Calculate the OS equivalent of /dev/null , on windows this is NUL:
+        # http://www.ruby-forum.com/topic/115472
+        fn = test(?e, '/dev/null') ? '/dev/null' : 'NUL:'
         
-        webrick_logger=WEBrick::Log.new("/dev/null", WEBrick::Log::INFO)
+        webrick_logger=WEBrick::Log.new(fn, WEBrick::Log::INFO)
 
         web_dir=options[:web_dir]
         filename=filename
