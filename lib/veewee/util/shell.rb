@@ -19,6 +19,7 @@ module Veewee
 
       # http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-talk/185404
       # This should work on windows too now
+      # This will result in a ShellResult structure with stdout, stderr and status
       def self.execute(command,options = {})
         result=ShellResult.new
         IO.popen("#{command}") { |p|
