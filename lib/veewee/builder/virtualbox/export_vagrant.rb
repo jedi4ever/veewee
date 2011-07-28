@@ -8,9 +8,9 @@ module Veewee
       def export_vagrant(export_options={})
 
         #Check if box already exists
-        vm=VirtualBox::VM.find(@boxname)
+        vm=VirtualBox::VM.find(@box_name)
         if vm.nil?
-          puts "#{@boxname} is not found, maybe you need to build first?"
+          puts "#{@box_name} is not found, maybe you need to build first?"
           exit
         end
         #We need to shutdown first
@@ -18,12 +18,12 @@ module Veewee
           puts "Vagrant requires the box to be shutdown, before it can export"
           puts "Sudo also needs to work for user #{@definition.ssh_user}"
           puts "Performing a clean shutdown now."
-          ssh_options={ :user => definition[:ssh_user], 
+          ssh_options={ :user => @definition.ssh_user, 
             :port => @definition.ssh_host_port, 
             :password => @definition.ssh_password,
-            :timeout => @definition.ssh_timeout}       
+            :timeout => @definition.ssh_login_timeout}       
 
-            Veewee::Ssh.execute("localhost","sudo #{@definition.shutdown_cmd}",ssh_options)
+            Veewee::Util::Ssh.execute("localhost","sudo #{@definition.shutdown_cmd}",ssh_options)
 
             #Wait for state poweroff
             while (vm.running?) do 
@@ -31,7 +31,7 @@ module Veewee
               sleep 1
             end
             puts
-            puts "Machine #{@boxname} is powered off cleanly"
+            puts "Machine #{@box_name} is powered off cleanly"
           end
 
           #Vagrant requires a relative path for output of boxes
@@ -39,32 +39,32 @@ module Veewee
           #4.0.x. not using boxes as a subdir
           boxdir=Pathname.new(Dir.pwd)
 
-          full_path=File.join(boxdir,@boxname+".box")
+          full_path=File.join(boxdir,@box_name+".box")
           path1=Pathname.new(full_path)
           path2=Pathname.new(Dir.pwd)
           box_path=path1.relative_path_from(path2).to_s
 
           if File.exists?("#{box_path}")
-            puts "box #{boxname}.box already exists"
+            puts "box #{box_name}.box already exists"
             exit
           end
 
           puts "Excuting vagrant voodoo:"
-          export_command="vagrant package --base '#{@boxname}' --output '#{box_path}'"
+          export_command="vagrant package --base '#{@box_name}' --output '#{box_path}'"
           puts "#{export_command}"
-          Veewee::Shell.execute("#{export_command}") #hmm, needs to get the gem_home set?
+          Veewee::Util::Shell.execute("#{export_command}") #hmm, needs to get the gem_home set?
           puts
 
           #add_ssh_nat_mapping back!!!!      
           #vagrant removes the mapping
           #we need to restore it in order to be able to login again
-          add_ssh_nat_mapping(boxname)
-
+          add_ssh_nat_mapping
+          
           puts "To import it into vagrant type:"
-          puts "vagrant box add '#{@boxname}' '#{box_path}'"
+          puts "vagrant box add '#{@box_name}' '#{box_path}'"
           puts ""
           puts "To use it:"
-          puts "vagrant init '#{@boxname}'"
+          puts "vagrant init '#{@box_name}'"
           puts "vagrant up"
           puts "vagrant ssh"
         end

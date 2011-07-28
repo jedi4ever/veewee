@@ -2,7 +2,7 @@ module Veewee
   module Util
     class Checksums
       
-            def self.calculate_checksums(definition,boxname)
+            def self.calculate_checksums(definition,box_name)
 
               #TODO: get rid of definitiondir and so one
               initial=definition.clone
@@ -19,7 +19,7 @@ module Veewee
               unless postinstall_files.nil?
                 for filename in postinstall_files
                   begin
-                    full_filename=File.join(@definition_dir,boxname,filename)   
+                    full_filename=File.join(@definition_dir,box_name,filename)   
 
                     checksums << Digest::MD5.hexdigest(File.read(full_filename))
                   rescue

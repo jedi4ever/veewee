@@ -1,19 +1,13 @@
+require 'veewee/builder/virtualbox/builder'
+
 module Veewee  
   
-  # This class is here only for backwards compatibility
   class BuilderFactory
-    def initialize(type,environment)
-      @environment=environment
-      @classname=type.to_s.capitalize
-      return self
-    end
-    
-    def get_box(boxname,definition,builder_options={})
-      builder_class=Object.const_get("Veewee").const_get(@classname)
-      builder=builder_class.new(boxname,definition,@environment,builder_options)
-      return builder
-    end
-    
+    def self.instantiate(builder_type,builder_options,environment)
+      classname=builder_type.to_s.capitalize      
+      builder_class=Object.const_get("Veewee").const_get("Builder").const_get(classname).const_get("Builder")
+      return builder_class.new(builder_options,environment)
+    end    
   end
 
 end

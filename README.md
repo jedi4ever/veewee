@@ -32,39 +32,39 @@ If you don't use rvm, be sure to execute vagrant through bundle exec
 
     $ vagrant basebox templates
     The following templates are available:
-    vagrant basebox define '<boxname>' 'ubuntu-10.10-server-i386-netboot'
-    vagrant basebox define '<boxname>' 'ubuntu-10.10-server-amd64-netboot'
-    vagrant basebox define '<boxname>' 'solaris-11-express-i386'
-    vagrant basebox define '<boxname>' 'freebsd-8.2-pcbsd-i386-netboot'
-    vagrant basebox define '<boxname>' 'Fedora-14-amd64-netboot'
-    vagrant basebox define '<boxname>' 'ubuntu-11.04-server-amd64'
-    vagrant basebox define '<boxname>' 'freebsd-8.2-experimental'
-    vagrant basebox define '<boxname>' 'archlinux-i686'
-    vagrant basebox define '<boxname>' 'CentOS-5.6-i386-netboot'
-    vagrant basebox define '<boxname>' 'openindiana-148-ai-x86'
-    vagrant basebox define '<boxname>' 'ubuntu-10.10-server-i386'
-    vagrant basebox define '<boxname>' 'ubuntu-10.04.2-server-i386'
-    vagrant basebox define '<boxname>' 'ubuntu-10.04.2-amd64-netboot'
-    vagrant basebox define '<boxname>' 'Sysrescuecd-2.0.0-experimental'
-    vagrant basebox define '<boxname>' 'Debian-6.0.1a-amd64-netboot'
-    vagrant basebox define '<boxname>' 'freebsd-8.2-pcbsd-i386'
-    vagrant basebox define '<boxname>' 'Fedora-14-i386'
-    vagrant basebox define '<boxname>' 'Fedora-14-amd64'
-    vagrant basebox define '<boxname>' 'ubuntu-10.04.2-server-i386-netboot'
-    vagrant basebox define '<boxname>' 'opensuse-11.4-i386-experimental'
-    vagrant basebox define '<boxname>' 'CentOS-4.8-i386'
-    vagrant basebox define '<boxname>' 'ubuntu-10.04.2-server-amd64'
-    vagrant basebox define '<boxname>' 'ubuntu-8.04.4-server-amd64'
-    vagrant basebox define '<boxname>' 'gentoo-latest-i386-experimental'
-    vagrant basebox define '<boxname>' 'ubuntu-8.04.4-server-i386'
-    vagrant basebox define '<boxname>' 'windows-2008R2-amd64'
-    vagrant basebox define '<boxname>' 'Fedora-14-i386-netboot'
-    vagrant basebox define '<boxname>' 'archlinux-64-experimental'
-    vagrant basebox define '<boxname>' 'Debian-6.0.1a-i386-netboot'
-    vagrant basebox define '<boxname>' 'ubuntu-10.10-server-amd64'
-    vagrant basebox define '<boxname>' 'archlinux-64-aif-experimental'
-    vagrant basebox define '<boxname>' 'ubuntu-11.04-server-i386'
-    vagrant basebox define '<boxname>' 'CentOS-5.6-i386'
+    vagrant basebox define '<box_name>' 'ubuntu-10.10-server-i386-netboot'
+    vagrant basebox define '<box_name>' 'ubuntu-10.10-server-amd64-netboot'
+    vagrant basebox define '<box_name>' 'solaris-11-express-i386'
+    vagrant basebox define '<box_name>' 'freebsd-8.2-pcbsd-i386-netboot'
+    vagrant basebox define '<box_name>' 'Fedora-14-amd64-netboot'
+    vagrant basebox define '<box_name>' 'ubuntu-11.04-server-amd64'
+    vagrant basebox define '<box_name>' 'freebsd-8.2-experimental'
+    vagrant basebox define '<box_name>' 'archlinux-i686'
+    vagrant basebox define '<box_name>' 'CentOS-5.6-i386-netboot'
+    vagrant basebox define '<box_name>' 'openindiana-148-ai-x86'
+    vagrant basebox define '<box_name>' 'ubuntu-10.10-server-i386'
+    vagrant basebox define '<box_name>' 'ubuntu-10.04.2-server-i386'
+    vagrant basebox define '<box_name>' 'ubuntu-10.04.2-amd64-netboot'
+    vagrant basebox define '<box_name>' 'Sysrescuecd-2.0.0-experimental'
+    vagrant basebox define '<box_name>' 'Debian-6.0.1a-amd64-netboot'
+    vagrant basebox define '<box_name>' 'freebsd-8.2-pcbsd-i386'
+    vagrant basebox define '<box_name>' 'Fedora-14-i386'
+    vagrant basebox define '<box_name>' 'Fedora-14-amd64'
+    vagrant basebox define '<box_name>' 'ubuntu-10.04.2-server-i386-netboot'
+    vagrant basebox define '<box_name>' 'opensuse-11.4-i386-experimental'
+    vagrant basebox define '<box_name>' 'CentOS-4.8-i386'
+    vagrant basebox define '<box_name>' 'ubuntu-10.04.2-server-amd64'
+    vagrant basebox define '<box_name>' 'ubuntu-8.04.4-server-amd64'
+    vagrant basebox define '<box_name>' 'gentoo-latest-i386-experimental'
+    vagrant basebox define '<box_name>' 'ubuntu-8.04.4-server-i386'
+    vagrant basebox define '<box_name>' 'windows-2008R2-amd64'
+    vagrant basebox define '<box_name>' 'Fedora-14-i386-netboot'
+    vagrant basebox define '<box_name>' 'archlinux-64-experimental'
+    vagrant basebox define '<box_name>' 'Debian-6.0.1a-i386-netboot'
+    vagrant basebox define '<box_name>' 'ubuntu-10.10-server-amd64'
+    vagrant basebox define '<box_name>' 'archlinux-64-aif-experimental'
+    vagrant basebox define '<box_name>' 'ubuntu-11.04-server-i386'
+    vagrant basebox define '<box_name>' 'CentOS-5.6-i386'
 
 
 ## Define a new box
@@ -84,7 +84,7 @@ this is essentially making a copy based on the  templates provided above.
 
 ## Optionally modify the definition.rb , postinstall.sh or preseed.cfg
 
-    Veewee::Environment.declare( {
+    Veewee::Definition.declare( {
     :cpu_count => '1', :memory_size=> '256', 
     :disk_size => '10140', :disk_format => 'VDI',
     :os_type_id => 'Ubuntu',

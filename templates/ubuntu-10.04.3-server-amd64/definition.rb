@@ -2,7 +2,7 @@ require 'digest/md5'
 CURRENT_DIR       = File.dirname(__FILE__)
 PRESEED_MD5       = "#{Digest::MD5.file("#{CURRENT_DIR}/preseed.cfg").hexdigest}"
 
-Veewee::Session.declare( {
+Veewee::Definition.declare( {
   :boot_cmd_sequence    => [
                            "<Esc><Esc><Enter>",
                            "/install/vmlinuz ",

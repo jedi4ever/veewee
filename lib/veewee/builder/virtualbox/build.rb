@@ -1,20 +1,10 @@
-require 'veewee/util/shell'
-require 'veewee/util/tcp'
-require 'veewee/util/web'
-require 'veewee/util/ssh'
-
-require 'veewee/builder/virtualbox/util/create'
-require 'veewee/builder/virtualbox/util/snapshots'
-require 'veewee/builder/virtualbox/util/transaction'
-require 'veewee/builder/virtualbox/util/scancode'
-
 module Veewee
   module Builder
     module Virtualbox
 
       def build(build_options={})
         options={}
-        options = {  "force" => true, "format" => "vagrant", "nogui" => false }.merge(build_options)
+        options = {  "force" => false, "format" => "vagrant", "nogui" => false }.merge(build_options)
 
         #Command to execute locally
 
@@ -31,7 +21,7 @@ module Veewee
         #Check iso file
         verify_iso(@definition.iso_file)
 
-        vm=VirtualBox::VM.find(@boxname)
+        vm=VirtualBox::VM.find(@box_name)
 
         # Discarding save state
         if (!vm.nil? && (vm.saved?))
@@ -42,7 +32,7 @@ module Veewee
 
         # If the box is running shut it down
         if (!vm.nil? && !(vm.powered_off?))
-          puts "Shutting down vm #{@boxname}"
+          puts "Shutting down vm #{@box_name}"
           #We force it here, maybe vm.shutdown is cleaner
           begin
 
@@ -58,8 +48,9 @@ module Veewee
 
         if (options["force"]==false)
           puts "The box is already there, we can't destroy it"
+          exit
         else    
-          puts "Forcing build by destroying #{@boxname} machine"
+          puts "Forcing build by destroying #{@box_name} machine"
           destroy
         end
 
@@ -69,15 +60,15 @@ module Veewee
         end
 
 
-        #checksums=calculate_checksums(@definition,@boxname)
+        #checksums=calculate_checksums(@definition,@box_name)
         checksums=[ "XXX"]
         #        transaction("0-initial-#{checksums[0]}",checksums) do
 
         #Create the Virtualmachine and set all the memory and other stuff
-        create_vm
+        assemble
         add_shared_folder
 
-        #Create a disk with the same name as the boxname
+        #Create a disk with the same name as the box_name
         create_disk
 
         #These command actually call the commandline of Virtualbox, I hope to use the virtualbox-ruby library in the future
@@ -111,14 +102,14 @@ module Veewee
           if kickstartfile.is_a? String
             Veewee::Util::Web.wait_for_request(kickstartfile,{:port => @definition.kickstart_port,
               :host => @definition.kickstart_ip, :timeout => @definition.kickstart_timeout,
-              :web_dir => File.join(@environment.definition_dir,@boxname)})
+              :web_dir => File.join(@environment.definition_dir,@box_name)})
             end 
             if kickstartfile.is_a? Array
               kickstartfiles=kickstartfile
               kickstartfiles.each do |kickfile|
                 Veewee::Util::Web.wait_for_request(kickfile,{:port => @definition.kickstart_port,
                   :host => @definition.kickstart_ip, :timeout => @definition.kickstart_timeout,
-                  :web_dir => File.join(@environment.definition_dir,@boxname)})
+                  :web_dir => File.join(@environment.definition_dir,@box_name)})
                 end
               end
             end
@@ -148,9 +139,9 @@ module Veewee
             counter=1
             @definition.postinstall_files.each do |postinstall_file|
 
-              filename=File.join(@environment.definition_dir,@boxname,postinstall_file)   
+              filename=File.join(@environment.definition_dir,@box_name,postinstall_file)   
 
-              #transaction(boxname,"#{counter}-#{postinstall_file}-#{checksums[counter]}",checksums) do
+              #transaction(box_name,"#{counter}-#{postinstall_file}-#{checksums[counter]}",checksums) do
 
               Veewee::Util::Ssh.when_ssh_login_works("localhost",ssh_options) do
                 begin
@@ -172,16 +163,16 @@ module Veewee
 
             end  
 
-            puts "#{@boxname} was build succesfully. "
+            puts "#{@box_name} was build succesfully. "
             puts ""
             puts "Now you can: "
-            puts "- verify your box by running              : vagrant basebox validate #{@boxname}"
-            puts "- export your vm to a .box fileby running : vagrant basebox export   #{@boxname}"
+            puts "- verify your box by running              : vagrant basebox validate #{@box_name}"
+            puts "- export your vm to a .box fileby running : vagrant basebox export   #{@box_name}"
 
           end
 
           def start_vm(mode)
-            vm=VirtualBox::VM.find(@boxname)
+            vm=VirtualBox::VM.find(@box_name)
             vm.start(mode)
           end
 

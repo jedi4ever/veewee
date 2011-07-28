@@ -9,10 +9,17 @@ task :default => :test
 require 'rake/testtask'
 Bundler::GemHelper.install_tasks
 
-
+desc 'Tests not requiring an real box'
 Rake::TestTask.new do |t|
   t.libs << "test"
   t.pattern = 'test/**/*_test.rb'
+end
+
+desc 'Tests requiring an real box'
+Rake::TestTask.new do |t|
+  t.name="realtest"
+  t.libs << "test"
+  t.pattern = 'test/**/*_realtest.rb'
 end
 
 desc 'List templates'
@@ -21,21 +28,21 @@ task :templates do
 end
 
 desc 'Define box'
-task :define, [:boxname,:template_name] do |t,args|
+task :define, [:box_name,:template_name] do |t,args|
     if args.to_hash.size!=2
-      puts "needs two arguments: rake define['boxname','template_name']"
+      puts "needs two arguments: rake define['box_name','template_name']"
       exit
     end
-    Veewee::Environment.define(args.boxname,args.template_name)
+    Veewee::Environment.define(args.box_name,args.template_name)
 end
 
 desc 'Undefine box'
-task :undefine, [:boxname] do |t,args|
+task :undefine, [:box_name] do |t,args|
     if args.to_hash.size!=1
       puts "needs one arguments: rake undefine[\"yourname\"]"
       exit
     end
-    Veewee::Environment.undefine(args.boxname)
+    Veewee::Environment.undefine(args.box_name)
 end
 
 desc 'List Definitions'
@@ -44,12 +51,12 @@ task :definitions do
 end
 
 desc 'Build box'
-task :build, [:boxname] do |t,args|
+task :build, [:box_name] do |t,args|
     if args.to_hash.size!=1
-      puts "needs one arguments: rake build['boxname']"
+      puts "needs one arguments: rake build['box_name']"
       exit
     end
-    Veewee::Environment.build(args.boxname)
+    Veewee::Environment.build(args.box_name)
 end
 
 desc 'List boxes'
@@ -58,17 +65,17 @@ task :boxes do
 end
 
 desc 'Export box'
-task :export, [:boxname] do |t,args|
+task :export, [:box_name] do |t,args|
   if args.to_hash.size!=1
-    puts "needs one arguments: rake export['boxname']"
+    puts "needs one arguments: rake export['box_name']"
     exit
   end
-    Veewee::Environment.export_box(args.boxname)
+    Veewee::Environment.export_box(args.box_name)
 end
 
 desc 'Remove box'
-task :remove_box, [:boxname] do |t,args|
-    Veewee::Environment.remove_box(args.boxname)
+task :remove_box, [:box_name] do |t,args|
+    Veewee::Environment.remove_box(args.box_name)
 end
 
 desc 'List ostypes available'

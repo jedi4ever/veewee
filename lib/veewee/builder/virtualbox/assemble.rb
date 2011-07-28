@@ -4,7 +4,8 @@ module Veewee
   module Builder
     module Virtualbox
       
-      def create_vm
+      # This function 'assembles' the box based on the definition
+      def assemble
 
         #Verifying the os.id with the :os_type_id specified
         matchfound=false
@@ -18,7 +19,7 @@ module Veewee
           exit
         end
 
-        vm=VirtualBox::VM.find(@boxname)
+        vm=VirtualBox::VM.find(@box_name)
 
         if (!vm.nil? && !(vm.powered_off?))
           puts "shutting down box"
@@ -34,7 +35,7 @@ module Veewee
           #TODO One day ruby-virtualbox will be able to handle this creation
           #Box does not exist, we can start to create it
 
-          command="#{@vboxcmd} createvm --name '#{@boxname}' --ostype '#{@definition.os_type_id}' --register"
+          command="#{@vboxcmd} createvm --name '#{@box_name}' --ostype '#{@definition.os_type_id}' --register"
 
           #Exec and system stop the execution here
           Veewee::Util::Shell.execute("#{command}")
@@ -46,15 +47,15 @@ module Veewee
             if @definition.instance_variable_defined?("@#{vm_flag}")
               vm_flag_value=@definition.instance_variable_get(vm_flag.to_sym)
               puts "Setting VM Flag #{vm_flag} to #{vm_flag_value}"
-              command="#{@vboxcmd} modifyvm #{@boxname} --#{vm_flag.to_s} #{vm_flag_value}"
-              Veewee::Shell.execute("#{command}")
+              command="#{@vboxcmd} modifyvm #{@box_name} --#{vm_flag.to_s} #{vm_flag_value}"
+              Veewee::Util::Shell.execute("#{command}")
             end
           end
 
 
         end
 
-        vm=VirtualBox::VM.find(@boxname)
+        vm=VirtualBox::VM.find(@box_name)
         if vm.nil?
           puts "we tried to create a box or a box was here before"
           puts "but now it's gone"
@@ -65,7 +66,7 @@ module Veewee
         vm.memory_size=@definition.memory_size.to_i
         vm.os_type_id=@definition.os_type_id
         vm.cpu_count=@definition.cpu_count.to_i
-        vm.name=@boxname
+        vm.name=@box_name
 
         puts "Creating vm #{vm.name} : #{vm.memory_size}M - #{vm.cpu_count} CPU - #{vm.os_type_id}"
         #setting bootorder 
@@ -81,7 +82,7 @@ module Veewee
 
       def add_shared_folder
         
-        command="#{@vboxcmd} sharedfolder add  '#{@boxname}' --name 'veewee-validation' --hostpath '#{File.expand_path(@environment.validation_dir)}' --automount"
+        command="#{@vboxcmd} sharedfolder add  '#{@box_name}' --name 'veewee-validation' --hostpath '#{File.expand_path(@environment.validation_dir)}' --automount"
         Veewee::Util::Shell.execute("#{command}")
         
       end
@@ -95,22 +96,22 @@ module Veewee
           require 'tmpdir'
           temp_dir=Dir.tmpdir
           @definition.floppy_files.each do |filename|
-            full_filename=full_filename=File.join(@environment.definition_dir,@boxname,filename)
+            full_filename=full_filename=File.join(@environment.definition_dir,@box_name,filename)
             FileUtils.cp("#{full_filename}","#{temp_dir}")
           end
           javacode_dir=File.expand_path(File.join(__FILE__,'..','..','java'))
-          floppy_file=File.join(@environment.definition_dir,@boxname,"virtualfloppy.vfd")
+          floppy_file=File.join(@environment.definition_dir,@box_name,"virtualfloppy.vfd")
           command="java -jar #{javacode_dir}/dir2floppy.jar '#{temp_dir}' '#{floppy_file}'"
           puts "#{command}"
           Veewee::Util::Shell.execute("#{command}")
 
           # Create floppy controller
-          command="#{@vboxcmd} storagectl '#{@boxname}' --name 'Floppy Controller' --add floppy"
+          command="#{@vboxcmd} storagectl '#{@box_name}' --name 'Floppy Controller' --add floppy"
           puts "#{command}"
           Veewee::Util::Shell.execute("#{command}")
 
           # Attach floppy to machine (the vfd extension is crucial to detect msdos type floppy)
-          command="#{@vboxcmd} storageattach '#{@boxname}' --storagectl 'Floppy Controller' --port 0 --device 0 --type fdd --medium '#{floppy_file}'"
+          command="#{@vboxcmd} storageattach '#{@box_name}' --storagectl 'Floppy Controller' --port 0 --device 0 --type fdd --medium '#{floppy_file}'"
           puts "#{command}"
           Veewee::Util::Shell.execute("#{command}")   
 
@@ -120,8 +121,8 @@ module Veewee
       def create_disk
         #Now check the disks
         #Maybe one day we can use the name, now we have to check location
-        #disk=VirtualBox::HardDrive.find(boxname)
-        location=@boxname+"."+@definition.disk_format.downcase
+        #disk=VirtualBox::HardDrive.find(box_name)
+        location=@box_name+"."+@definition.disk_format.downcase
 
         found=false       
         VirtualBox::HardDrive.all.each do |d|
@@ -148,7 +149,7 @@ module Veewee
           place=results.gets.chop
           results.close
 
-          command ="#{@vboxcmd} createhd --filename '#{place}/#{@boxname}/#{@boxname}.#{@definition.disk_format.downcase}' --size '#{@definition.disk_size.to_i}' --format #{@definition.disk_format.downcase} > /dev/null"
+          command ="#{@vboxcmd} createhd --filename '#{place}/#{@box_name}/#{@box_name}.#{@definition.disk_format.downcase}' --size '#{@definition.disk_size.to_i}' --format #{@definition.disk_format.downcase} > /dev/null"
           puts "#{command}"
           Veewee::Util::Shell.execute("#{command}")
 
@@ -158,30 +159,30 @@ module Veewee
 
       def add_ide_controller
         #unless => "${vboxcmd} showvminfo '${vname}' | grep 'IDE Controller' "
-        command ="#{@vboxcmd} storagectl '#{@boxname}' --name 'IDE Controller' --add ide"
+        command ="#{@vboxcmd} storagectl '#{@box_name}' --name 'IDE Controller' --add ide"
         Veewee::Util::Shell.execute("#{command}")
       end
 
       def add_sata_controller
         #unless => "${vboxcmd} showvminfo '${vname}' | grep 'SATA Controller' ";
-        command ="#{@vboxcmd} storagectl '#{@boxname}' --name 'SATA Controller' --add sata --hostiocache #{@definition.hostiocache}"
+        command ="#{@vboxcmd} storagectl '#{@box_name}' --name 'SATA Controller' --add sata --hostiocache #{@definition.hostiocache}"
         Veewee::Util::Shell.execute("#{command}")
       end
 
 
       def attach_disk
-        location=@boxname+"."+@definition.disk_format.downcase
+        location=@box_name+"."+@definition.disk_format.downcase
 
         command="#{@vboxcmd}  list  systemproperties|grep '^Default machine'|cut -d ':' -f 2|sed -e 's/^[ ]*//'"
         results=IO.popen("#{command}")
         place=results.gets.chop
         results.close
 
-        location="#{place}/#{@boxname}/"+location
+        location="#{place}/#{@box_name}/"+location
         puts "Attaching disk: #{location}"
 
         #command => "${vboxcmd} storageattach '${vname}' --storagectl 'SATA Controller' --port 0 --device 0 --type hdd --medium '${vname}.vdi'",
-        command ="#{@vboxcmd} storageattach '#{@boxname}' --storagectl 'SATA Controller' --port 0 --device 0 --type hdd --medium '#{location}'"
+        command ="#{@vboxcmd} storageattach '#{@box_name}' --storagectl 'SATA Controller' --port 0 --device 0 --type hdd --medium '#{location}'"
         Veewee::Util::Shell.execute("#{command}")
 
       end
@@ -190,7 +191,7 @@ module Veewee
         full_iso_file=File.join(@environment.iso_dir,@definition.iso_file)
         puts "Mounting cdrom: #{full_iso_file}"
         #command => "${vboxcmd} storageattach '${vname}' --storagectl 'IDE Controller' --type dvddrive --port 1 --device 0 --medium '${isodst}' ";
-        command ="#{@vboxcmd} storageattach '#{@boxname}' --storagectl 'IDE Controller' --type dvddrive --port 1 --device 0 --medium '#{full_iso_file}'"
+        command ="#{@vboxcmd} storageattach '#{@box_name}' --storagectl 'IDE Controller' --type dvddrive --port 1 --device 0 --medium '#{full_iso_file}'"
         Veewee::Util::Shell.execute("#{command}")
       end
 

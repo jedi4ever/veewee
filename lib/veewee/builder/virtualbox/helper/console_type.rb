@@ -4,7 +4,10 @@ require 'veewee/util/tcp'
 module Veewee
   module Builder
     module Virtualbox
-
+      def console_type(command,type_options={})
+        send_sequence(command)
+      end
+      
       def send_sequence(sequence)
         puts
         counter=0
@@ -13,7 +16,7 @@ module Veewee
 
           s.gsub!(/%IP%/,Veewee::Util::Tcp.local_ip);
           s.gsub!(/%PORT%/,@definition.kickstart_port);
-          s.gsub!(/%NAME%/, @boxname);
+          s.gsub!(/%NAME%/, @box_name);
           puts "Typing:[#{counter}]: "+s
 
           keycodes=Veewee::Util::Scancode.string_to_keycode(s)
@@ -40,12 +43,11 @@ module Veewee
       end
 
       def send_keycode(keycode)
-        command= "#{@vboxcmd} controlvm '#{@boxname}' keyboardputscancode #{keycode}"
+        command= "#{@vboxcmd} controlvm '#{@box_name}' keyboardputscancode #{keycode}"
         #puts "#{command}"
         IO.popen("#{command}") { |f| print '' }
       end
-
-    end #Module
-  end #Module
+      
 end #Module
-
+end #Module
+end #Module

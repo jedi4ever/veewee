@@ -1,22 +1,22 @@
 module Veewee
   class Definition
     
+    # This function initializes a Veewee::Definition
+    # options match the symbols in the definition.rb file
+    
     def initialize(options)
 
       defaults={
-        :cpu_count => '1', 
-        :memory_size=> '256', 
-        :disk_size => '10240', 
-        :disk_format => 'VDI', 
+        :cpu_count => '1', :memory_size=> '256', 
+        :disk_size => '10240', :disk_format => 'VDI', 
         :hostiocache => 'off' ,
         :os_type_id => 'Ubuntu',
         :iso_file => "ubuntu-10.10-server-i386.iso", :iso_src => "",:iso_md5 => "", 
         :iso_download_timeout => 1000,
         :boot_wait => "10", :boot_cmd_sequence => [ "boot"],
         :kickstart_port => "7122", :kickstart_ip => "127.0.0.1", :kickstart_timeout => 10000,
-        :ssh_login_timeout => "100",:ssh_user => "vagrant", :ssh_password => "vagrant",:ssh_key => "",
-        :ssh_host_port => "2222", :ssh_guest_port => "22",
-        :sudo_cmd => "echo '%p'|sudo -S sh '%f'",
+        :ssh_login_timeout => "100", :ssh_user => "vagrant", :ssh_password => "vagrant",:ssh_key => "",
+        :ssh_host_port => "2222", :ssh_guest_port => "22", :sudo_cmd => "echo '%p'|sudo -S sh '%f'",
         :shutdown_cmd => "shutdown -h now",
         :postinstall_files => [ "postinstall.sh"],:postinstall_timeout => 10000,
         :floppy_files => nil,
@@ -49,9 +49,21 @@ module Veewee
         puts "Error: definition for basebox '#{name}' does not exist."
         exit
       end
-      return Veewee::Definition.new(Veewee::Environment.get_loaded_definition)
+      return Veewee::Definition.new(Veewee::Definition.get_loaded_definition)
     end
     
+    #
+    @loaded_definitions=nil 
+    def self.get_loaded_definition
+      @loaded_definition
+    end
+
+    # For backwards compatible reasons
+    # Shoud not be called directly
+    def self.declare(options)
+      @loaded_definition=options
+      return options
+    end
     
     private
     def self.definition_exists?(name,definition_dir)

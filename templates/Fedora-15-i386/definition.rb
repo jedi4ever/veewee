@@ -1,4 +1,4 @@
-Veewee::Environment.declare({
+Veewee::Definition.declare({
   # Minimum RAM requirement for installation is 640MB.
   :cpu_count => '1', :memory_size=> '640',
   :disk_size => '10140', :disk_format => 'VDI', :hostiocache => 'off', :hwvirtext => 'on',

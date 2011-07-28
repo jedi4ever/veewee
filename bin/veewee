@@ -12,15 +12,15 @@ class VeeweeCLI < Thor
   
   desc "define [NAME] [TEMPLATE]", "initializes a box from a template" 
   method_options :force => :boolean
-  def define(boxname=nil, template=nil)
+  def define(box_name=nil, template=nil)
     
-    if (boxname.nil?)  
-      puts "please provide a boxname"
+    if (box_name.nil?)  
+      puts "please provide a box_name"
       exit
     end
     
-    puts "Init a new box #{boxname}, starting from template #{template}"
-  	Veewee::Environment.define(boxname,template)
+    puts "Init a new box #{box_name}, starting from template #{template}"
+  	Veewee::Environment.define(box_name,template)
   	
   end
 
@@ -31,18 +31,18 @@ class VeeweeCLI < Thor
   
   desc "build [NAME]", "build the box defined" 
   method_options :force => :boolean
-  def build(boxname)
-    puts "Building box #{boxname}"
+  def build(box_name)
+    puts "Building box #{box_name}"
     vs=Veewee::Environment.new(options)
-    vd=vs.get_definition(boxname)
-    vs.build(boxname,vd)    
+    vd=vs.get_definition(box_name)
+    vs.build(box_name,vd)    
   end
 
   desc "export [NAME]", "export the box" 
   method_options :force => :boolean  
-  def export(boxname)
-      if (!boxname.nil?)
-        Veewee::Environment.export_box(boxname)
+  def export(box_name)
+      if (!box_name.nil?)
+        Veewee::Environment.export_box(box_name)
       end
   end
   

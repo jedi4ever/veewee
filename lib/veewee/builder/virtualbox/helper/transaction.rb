@@ -9,7 +9,7 @@ module Veewee
 
         current_step_nr=step_name.split("-")[0].to_i
 
-        vm=VirtualBox::VM.find(@boxname)  
+        vm=VirtualBox::VM.find(@box_name)  
         snapnames=Array.new
 
         #If vm exists , look for snapshots
@@ -79,7 +79,7 @@ module Veewee
 
           if (last_good_state==-1)
             #no initial snapshot is found, clean machine!
-            vm=VirtualBox::VM.find(@boxname) 
+            vm=VirtualBox::VM.find(@box_name) 
 
             if !vm.nil?
               if vm.running?
@@ -111,7 +111,7 @@ module Veewee
           yield
 
           #Need to look it up again because if it was an initial load
-          vm=VirtualBox::VM.find(@boxname) 
+          vm=VirtualBox::VM.find(@box_name) 
           puts "Step [#{current_step_nr}] was succesfully - saving state"
           vm.save_state
           sleep 2 #waiting for it to be ok

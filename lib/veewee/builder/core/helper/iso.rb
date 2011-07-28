@@ -1,14 +1,12 @@
 module Veewee
   module Builder
     module Core
-      
+
       require 'open-uri'
       require 'progressbar'
       require 'highline/import'
       require 'digest/md5'
-      
-      #TODO move to veewee definition?
-      
+
       def download_progress(url,localfile)
         pbar = nil
         URI.parse(url).open(

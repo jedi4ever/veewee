@@ -13,10 +13,10 @@ module Veewee
         #PDB
         #vm.destroy()
 
-        vm=VirtualBox::VM.find(@boxname)
+        vm=VirtualBox::VM.find(@box_name)
 
         if (!vm.nil? && !(vm.powered_off?))
-          puts "Shutting down vm #{@boxname}"
+          puts "Shutting down vm #{@box_name}"
           #We force it here, maybe vm.shutdown is cleaner
           begin
             vm.stop
@@ -28,16 +28,16 @@ module Veewee
           sleep 3
         end     
 
-        command="#{@vboxcmd} unregistervm  '#{@boxname}' --delete"    
+        command="#{@vboxcmd} unregistervm  '#{@box_name}' --delete"    
         puts command
-        puts "Deleting vm #{@boxname}"
+        puts "Deleting vm #{@box_name}"
 
         #Exec and system stop the execution here
         Veewee::Util::Shell.execute("#{command}")
         sleep 1
 
         #if the disk was not attached when the machine was destroyed we also need to delete the disk
-        location=@boxname+"."+@definition.disk_format.downcase
+        location=@box_name+"."+@definition.disk_format.downcase
         found=false       
         VirtualBox::HardDrive.all.each do |d|
           if d.location.match(/#{location}/)
