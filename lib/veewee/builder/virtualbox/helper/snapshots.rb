@@ -1,3 +1,5 @@
+##Note: this is currently not used anymore, it seems no one is using it
+
 require 'veewee/util/shell'
 require 'veewee/util/tcp'
 

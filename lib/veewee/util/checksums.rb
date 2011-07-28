@@ -1,3 +1,5 @@
+##Note: this is currently not used anymore, it seems no one is using it
+
 module Veewee
   module Util
     class Checksums
