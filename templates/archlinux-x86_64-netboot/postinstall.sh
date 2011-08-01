@@ -54,14 +54,6 @@ chown -R vagrant /home/vagrant/.ssh
 # choose a mirror
 sed -i 's/^#\(.*leaseweb.*\)/\1/' /etc/pacman.d/mirrorlist
 
-# update pacman
-pacman -Syy
-pacman -S --noconfirm pacman
-
-# upgrade pacman db
-pacman-db-upgrade
-pacman -Syy
-
 # install some packages
 gem install --no-ri --no-rdoc chef facter
 cd /tmp
