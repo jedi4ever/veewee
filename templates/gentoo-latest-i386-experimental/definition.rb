@@ -2,9 +2,9 @@ Veewee::Session.declare( {
   :cpu_count => '1', :memory_size=> '768',
   :disk_size => '10140', :disk_format => 'VDI',:hostiocache => 'off',
   :os_type_id => 'Gentoo',
-  :iso_file => "install-x86-minimal-20110426.iso",
-  :iso_src => "http://distfiles.gentoo.org/releases/x86/autobuilds/current-iso/install-x86-minimal-20110426.iso",
-  :iso_md5 => "548646b9d1042a162f769bc280149417",
+  :iso_file => "install-x86-minimal-20110726.iso",
+  :iso_src => "http://distfiles.gentoo.org/releases/x86/autobuilds/current-iso/install-x86-minimal-20110726.iso",
+  :iso_md5 => "29fc74988e7f86417395e376afc1af47",
   :iso_download_timeout => "1000",
   :boot_wait => "120",:boot_cmd_sequence => [
         'net-setup eth0<Enter>',
