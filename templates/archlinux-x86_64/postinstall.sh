@@ -7,7 +7,6 @@ su -c 'aif -p automatic -c aif.cfg'
 
 # copy over the vbox version file
 /bin/cp -f /root/.vbox_version /mnt/root/.vbox_version
-VBOX_VERSION=$(cat /root/.vbox_version)
 
 # chroot into the new system
 mount -o bind /dev /mnt/dev
@@ -75,32 +74,14 @@ git clone https://github.com/puppetlabs/puppet.git
 cd puppet
 ruby install.rb --bindir=/usr/bin --sbindir=/sbin
 
-# install virtualbox guest additions
-cd /tmp
-wget http://download.virtualbox.org/virtualbox/"$VBOX_VERSION"/VBoxGuestAdditions_"$VBOX_VERSION".iso
-mount -o loop VBoxGuestAdditions_"$VBOX_VERSION".iso /mnt
-sh /mnt/VBoxLinuxAdditions.run
-umount /mnt
-rm VBoxGuestAdditions_"$VBOX_VERSION".iso
+# set up networking
+sed -i 's/^\(interface=*\)/\1eth0/' /etc/rc.conf
 
-# host-only networking
-cat <<EOF
-# enable DHCP at boot on eth0
-# See https://wiki.archlinux.org/index.php/Network#DHCP_fails_at_boot
-dhcpcd -k eth0
-dhcpcd -nd eth0
-EOF >> /etc/rc.local
-
-# clean out pacman cache
-pacman -Scc<<EOF
-y
-y
-EOF
-
-# zero out the fs
-dd if=/dev/zero of=/tmp/clean || rm /tmp/clean
-
+# leave the chroot
 ENDCHROOT
+
+# take down network to prevent next postinstall.sh from starting too soon
+/etc/rc.d/network stop
 
 # and reboot!
 reboot
