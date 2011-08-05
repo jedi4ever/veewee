@@ -46,7 +46,7 @@ module Veewee
       def send_keycode(keycode)
         command= "#{@vboxcmd} controlvm '#{@box_name}' keyboardputscancode #{keycode}"
         #puts "#{command}"
-        Veewee::Util::Shell.execute("#{command}")
+        Veewee::Util::Shell.execute("#{command}",{:mute => true})
       end
       
 end #Module

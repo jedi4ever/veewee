@@ -1,9 +1,11 @@
 .DS_Store
+.bundle
 gems/*
 iso/*
 tmp/*
 definitions/*
 Vagrantfile
+Vagrantfile.*
 cookbooks/*
 manifests/*
 boxes/*

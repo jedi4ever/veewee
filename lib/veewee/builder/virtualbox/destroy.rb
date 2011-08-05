@@ -23,7 +23,6 @@ module Veewee
           rescue VirtualBox::Exceptions::InvalidVMStateException
             puts "There was problem sending the stop command because the machine is in an Invalid state"
             puts "Please verify leftovers from a previous build in your vm folder"
-            exit
           end
           sleep 3
         end     

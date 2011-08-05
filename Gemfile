@@ -2,6 +2,8 @@ source "http://rubygems.org"
 
 gem "veewee", :path => "."
 gem "ruby-vnc"
+gem "fog", :path => "/Users/patrick/imac/fog/"
+gem "vagrant"
 
 
 #gem "vagrant", :git => "git://github.com/mitchellh/vagrant.git"
@@ -9,3 +11,4 @@ gem "ruby-vnc"
 group :test do
   gem "rake"
 end
+gemspec

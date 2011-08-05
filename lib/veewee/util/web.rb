@@ -14,9 +14,7 @@ module Veewee
         end
         def do_GET(request,response)
           response['Content-Type']='text/plain'
-          
-          require 'pp'
-          pp request
+          #response['peeraddr']=["AF_INET", 55009, "10.100.1.100", "10.100.1.100"],
           response.status = 200
           puts "Serving file #{@localfile}"                     
           displayfile=File.open(@localfile,'r')

@@ -1,4 +1,6 @@
 require 'veewee/builder/virtualbox/builder'
+require 'veewee/builder/vmfusion/builder'
+require 'veewee/builder/kvm/builder'
 
 module Veewee  
   

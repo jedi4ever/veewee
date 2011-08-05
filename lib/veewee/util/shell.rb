@@ -21,11 +21,21 @@ module Veewee
       # This should work on windows too now
       # This will result in a ShellResult structure with stdout, stderr and status
       def self.execute(command,options = {})
-        result=ShellResult.new
-        IO.popen("#{command}") { |p|
-             p.each_line{ |l| result.stdout+=l }
+        result=ShellResult.new("","",-1)
+        puts "Executing #{command}" unless options[:mute]
+        escaped_command=command
+#        puts "#{escaped_command}"
+        IO.popen("#{escaped_command}") { |p|
+             p.each_line{ |l| 
+               result.stdout+=l
+               print l unless options[:mute]
+             }
              result.status=Process.waitpid2(p.pid)[1].exitstatus
+             if result.status!=0
+               puts "Exit status was not 0 but #{result.status}" unless options[:mute]
+             end
          }
+         return result
       end
 
       # This it original execute command, the main reason was for being able to output content 

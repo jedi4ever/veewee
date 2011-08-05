@@ -25,20 +25,20 @@ module Veewee
         options=defaults.merge(options)
 
         puts
-        puts "Waiting for ssh login with user #{options[:user]} to sshd on port => #{options[:port]} to work"
+        puts "Waiting for ssh login on #{ip} with user #{options[:user]} to sshd on port => #{options[:port]} to work, timeout=#{options[:timeout]} min"
 
         begin
-          Timeout::timeout(options[:timeout]) do
+          Timeout::timeout(options[:timeout]*60) do
             connected=false
             while !connected do
               begin
                 print "."
-                Net::SSH.start(ip, options[:user], { :port => options[:port] , :password => options[:password], :paranoid => false, :timeout => options[:timeout]  }) do |ssh|
+                Net::SSH.start(ip, options[:user], { :port => options[:port] , :password => options[:password], :paranoid => false , :timeout => 60 }) do |ssh|
                   block.call(ip);
                   puts ""
                   return true
                 end
-              rescue Net::SSH::Disconnect,Errno::ECONNREFUSED, Errno::EHOSTUNREACH, Errno::ECONNABORTED, Errno::ECONNRESET, Errno::ENETUNREACH
+              rescue Net::SSH::Disconnect,Errno::ECONNREFUSED, Errno::EHOSTUNREACH, Errno::ECONNABORTED, Errno::ECONNRESET, Errno::ENETUNREACH,Errno::ETIMEDOUT
                 sleep 1
               end
             end
@@ -52,7 +52,10 @@ module Veewee
 
 
       def self.transfer_file(host,filename,destination = '.' , options = {})
-
+        
+        defaults={ :paranoid => false }
+        options=defaults.merge(options)
+        
         Net::SSH.start( host,options[:user],options ) do |ssh|
           puts "Transferring #{filename} to #{destination} "
           ssh.scp.upload!( filename, destination ) do |ch, name, sent, total|

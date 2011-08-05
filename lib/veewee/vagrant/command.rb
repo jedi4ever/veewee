@@ -63,6 +63,11 @@ module Veewee
     method_option :template_dir , :aliases => "-t", :desc => "directory where templates are found"
     method_option :iso_dir , :aliases => "-i", :desc => "directory where to look/store iso images"
     method_option :box_name , :desc => "name to use for the box"
+    method_option :auto_download, :type => :boolean, :default => false, :desc => "download files automatically if required"
+    method_option :auto_validate, :type => :boolean, :default => false, :desc => "validate the box if build is succesfull"
+    method_option :auto_export, :type => :boolean, :default => false, :desc => "export the box if build is succesfull"
+    method_option :auto_destroy, :type => :boolean, :default => false, :desc => "destroy the vm after possible build,validation,export"
+    method_option :auto_ssh_port, :type => :boolean, :default => false, :desc => "if there is an ssh port clash, calculate a new conflicting port"
     def build(box_name)
       Veewee::UI::VagrantPlugin.build(box_name,options)
     end

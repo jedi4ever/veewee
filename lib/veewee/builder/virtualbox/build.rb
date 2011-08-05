@@ -3,17 +3,8 @@ module Veewee
     module Virtualbox
 
       def build(build_options={})
-        options={}
-        options = {  "force" => false, "format" => "vagrant", "nogui" => false }.merge(build_options)
-
-        #Command to execute locally
-
-        ssh_options={ 
-          :user => @definition.ssh_user, 
-          :port => @definition.ssh_host_port,
-          :password => @definition.ssh_password,
-          :timeout => @definition.ssh_login_timeout.to_i
-        }       
+        defaults={  "force" => false, "format" => "vagrant", "nogui" => false }
+        options = defaults.merge(build_options)
 
         #Suppress those annoying virtualbox messages
         suppress_messages  
@@ -40,7 +31,6 @@ module Veewee
           rescue VirtualBox::Exceptions::InvalidVMStateException
             puts "There was problem sending the stop command because the machine is in an Invalid state"
             puts "Please verify leftovers from a previous build in your vm folder"
-            exit
           end
           sleep 3
         end
@@ -60,27 +50,10 @@ module Veewee
         end
 
 
-        #checksums=calculate_checksums(@definition,@box_name)
-        checksums=[ "XXX"]
-        #        transaction("0-initial-#{checksums[0]}",checksums) do
-
         #Create the Virtualmachine and set all the memory and other stuff
         assemble
-        add_shared_folder
-
-        #Create a disk with the same name as the box_name
-        create_disk
-
-        #These command actually call the commandline of Virtualbox, I hope to use the virtualbox-ruby library in the future
-        add_ide_controller
-        add_sata_controller
-        attach_disk
-        mount_isofile
-        add_ssh_nat_mapping
-        create_floppy
 
         #Starting machine
-
         if (options["nogui"]==true)
           start_vm("vrdp")
         else
@@ -93,89 +66,20 @@ module Veewee
 
         send_sequence(@definition.boot_cmd_sequence)
 
-        kickstartfile=@definition.kickstart_file
-        if kickstartfile.nil? || kickstartfile.length == 0
-          puts "Skipping webserver as no kickstartfile was specified"
-        else
-          puts "Starting a webserver on port #{@definition.kickstart_port}"
-          #:kickstart_port => "7122", :kickstart_ip => self.local_ip, :kickstart_timeout => 1000,:kickstart_file => "preseed.cfg",
-          if kickstartfile.is_a? String
-            Veewee::Util::Web.wait_for_request(kickstartfile,{:port => @definition.kickstart_port,
-              :host => @definition.kickstart_ip, :timeout => @definition.kickstart_timeout,
-              :web_dir => File.join(@environment.definition_dir,@box_name)})
-            end 
-            if kickstartfile.is_a? Array
-              kickstartfiles=kickstartfile
-              kickstartfiles.each do |kickfile|
-                Veewee::Util::Web.wait_for_request(kickfile,{:port => @definition.kickstart_port,
-                  :host => @definition.kickstart_ip, :timeout => @definition.kickstart_timeout,
-                  :web_dir => File.join(@environment.definition_dir,@box_name)})
-                end
-              end
-            end
+        handle_kickstart
+        transfer_buildinfo_file
+
+        handle_postinstall
+
+        puts "#{@box_name} was build succesfully. "
+        puts ""
+        puts "Now you can: "
+        puts "- verify your box by running              : vagrant basebox validate #{@box_name}"
+        puts "- export your vm to a .box fileby running : vagrant basebox export   #{@box_name}"
+
+      end
 
 
-
-
-            Veewee::Util::Ssh.when_ssh_login_works("localhost",ssh_options) do
-              #Transfer version of Virtualbox to $HOME/.vbox_version            
-              versionfile=Tempfile.open("vbox.version")
-              versionfile.puts "#{VirtualBox::Global.global.lib.virtualbox.version.split('_')[0]}"
-              versionfile.rewind
-              begin
-                Veewee::Util::Ssh.transfer_file("localhost",versionfile.path,".vbox_version", ssh_options)
-              rescue RuntimeError
-                puts "error transfering file, possible not enough permissions to write?"
-                exit
-              end
-              puts ""
-              versionfile.close
-              versionfile.delete
-            end
-
-            #            end #initial Transaction
-
-
-            counter=1
-            @definition.postinstall_files.each do |postinstall_file|
-
-              filename=File.join(@environment.definition_dir,@box_name,postinstall_file)   
-
-              #transaction(box_name,"#{counter}-#{postinstall_file}-#{checksums[counter]}",checksums) do
-
-              Veewee::Util::Ssh.when_ssh_login_works("localhost",ssh_options) do
-                begin
-                  Veewee::Util::Ssh.transfer_file("localhost",filename,File.basename(filename),ssh_options)
-                rescue RuntimeError
-                  puts "error transfering file, possible not enough permissions to write?"
-                  exit
-                end
-                command=@definition.sudo_cmd
-                newcommand=command.gsub(/%p/,"#{@definition.ssh_password}")
-                newcommand.gsub!(/%u/,"#{@definition.ssh_user}")
-                newcommand.gsub!(/%f/,"#{postinstall_file}")
-                puts "***#{newcommand}"
-                Veewee::Util::Ssh.execute("localhost","#{newcommand}",ssh_options)
-              end
-
-              #end Other Transactions
-              counter+=1
-
-            end  
-
-            puts "#{@box_name} was build succesfully. "
-            puts ""
-            puts "Now you can: "
-            puts "- verify your box by running              : vagrant basebox validate #{@box_name}"
-            puts "- export your vm to a .box fileby running : vagrant basebox export   #{@box_name}"
-
-          end
-
-          def start_vm(mode)
-            vm=VirtualBox::VM.find(@box_name)
-            vm.start(mode)
-          end
-
-        end #Module
-      end #Module
     end #Module
+  end #Module
+end #Module
