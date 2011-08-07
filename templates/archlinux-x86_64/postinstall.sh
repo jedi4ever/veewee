@@ -70,7 +70,7 @@ pacman-db-upgrade
 pacman -Syy
 
 # install some packages
-pacman -S --noconfirm glibc git
+pacman -S --noconfirm glibc git pkg-config
 gem install --no-ri --no-rdoc chef facter
 cd /tmp
 git clone https://github.com/puppetlabs/puppet.git

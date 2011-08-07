@@ -1,3 +1,13 @@
+# package-query
+wget http://aur.archlinux.org/packages/package-query/PKGBUILD
+makepkg -sfci --noconfirm --asroot
+rm * -r
+
+# yaourt
+wget http://aur.archlinux.org/packages/yaourt/PKGBUILD
+makepkg -sfci --noconfirm --asroot
+rm * -r
+
 # install virtualbox guest additions
 VBOX_VERSION=$(cat /root/.vbox_version)
 cd /tmp
@@ -25,4 +35,4 @@ EOF
 dd if=/dev/zero of=/tmp/clean || rm /tmp/clean
 
 # and the final reboot!
-#reboot
+reboot
