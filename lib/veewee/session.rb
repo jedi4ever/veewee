@@ -111,7 +111,7 @@ module Veewee
 
     def self.list_templates( options = { :format => 'vagrant'})
       puts "The following templates are available:"
-      subdirs=Dir.glob("#{@template_dir}/*")
+      subdirs=Dir.glob("#{@template_dir}/*").sort_by {|f| File.basename f}
       subdirs.each do |sub|
         if File.directory?("#{sub}")
           definition=Dir.glob("#{sub}/definition.rb")
