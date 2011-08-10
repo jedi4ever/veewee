@@ -63,7 +63,7 @@ When /^I ssh to "([^\"]*)" with the following credentials:$/ do |hostname, table
     session_keys << session["keyfile"]
     session_auth_methods << "publickey"
   end
-  session_port = ENV['VEEWEE_SSH_PORT'] || 22
+  session_port = ENV['VEEWEE_SSH_PORT'] || 7222
   if session["port"]
      session_port=session["port"]  
   end
