@@ -37,6 +37,9 @@ vagrant
 vagrant
 EOF
 
+# create puppet group
+groupadd puppet
+
 # make sure ssh is allowed
 echo "sshd:	ALL" > /etc/hosts.allow
 
