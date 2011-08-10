@@ -1,0 +1,12 @@
+
+      logger=ANSI::Logger.new(settings['log_file']||STDOUT)
+      level=settings['log_level']||'INFO'
+      logger.level=Object.const_get('ANSI').const_get('Logger').const_get(level.upcase)
+      if settings['log_file'].nil?
+        logger.formatter do |severity, timestamp, progname, msg|
+          #  "#{progname}@#{timestamp} - #{severity}::#{msg}"
+          "#{msg}\n"
+        end
+      else
+        logger.ansicolor=false
+      end
