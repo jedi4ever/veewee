@@ -24,7 +24,7 @@ module Veewee
       end
 
       def self.define(definition_name, template_name,define_options={})
-        
+
         begin
           Veewee::Environment.new(define_options).define(definition_name,template_name,define_options)
         rescue TemplateError
@@ -34,7 +34,7 @@ module Veewee
           puts "The definition for #{definition_name} already exists. Use --force to overwrite"
           exit -1
         end
-                
+
         puts "The basebox '#{definition_name}' has been succesfully created from the template '#{template_name}'"
         puts "You can now edit the definition files stored in definitions/#{definition_name} or build the box with:"
         puts "vagrant basebox build '#{definition_name}'"
@@ -65,12 +65,12 @@ module Veewee
         box=Veewee::Environment.new(options).get_builder(:virtualbox,options).get_box(box_name,box_name,options)
         box.export_vagrant(options)
       end
-      
+
       def self.destroy(box_name,options={})
         box=Veewee::Environment.new(options).get_builder(:virtualbox,options).get_box(box_name,box_name,options)
         box.destroy(options)
       end
-      
+
     end
   end
 end

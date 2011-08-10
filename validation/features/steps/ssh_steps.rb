@@ -6,11 +6,11 @@ end
 
 Then /^I can ssh to "([^\"]*)" with the following credentials:$/ do |host, table|
   @auth_methods ||= %w(publickey password)
-  
+
   credentials = table.hashes
   credentials.each do |creds|
     lambda {
-	    Net::SSH.start(host, creds["username"], :password => creds["password"], :auth_methods => @auth_methods)
+      Net::SSH.start(host, creds["username"], :password => creds["password"], :auth_methods => @auth_methods)
     }.should_not raise_error(Net::SSH::AuthenticationFailed)
   end
 end
@@ -21,21 +21,21 @@ Then /^I can ssh to the following hosts with these credentials:$/ do |table|
   environment_details = table.hashes
 
   environment_details.each do |environment|
-    # initialize a list of keys and auth methods for just this environment, as 
+    # initialize a list of keys and auth methods for just this environment, as
     # environment can have environment-specific keys mixed with global keys
     environment_keys = Array.new(@keys)
-    environment_auth_methods = Array.new(@auth_methods) 
+    environment_auth_methods = Array.new(@auth_methods)
 
-    # you can pass in a keyfile in the environment details, so we need to 
+    # you can pass in a keyfile in the environment details, so we need to
     if environment["keyfile"]
       environment_keys << environment["keyfile"]
       environment_auth_methods << "publickey"
     end
-    
+
     lambda {
-	    Net::SSH.start(environment["hostname"], environment["username"], :password => environment["password"],
-                                                               :auth_methods => environment_auth_methods,
-                                                               :keys => environment_keys)
+      Net::SSH.start(environment["hostname"], environment["username"], :password => environment["password"],
+                     :auth_methods => environment_auth_methods,
+                     :keys => environment_keys)
     }.should_not raise_error(Net::SSH::AuthenticationFailed)
   end
 end
@@ -58,20 +58,20 @@ When /^I ssh to "([^\"]*)" with the following credentials:$/ do |hostname, table
   @auth_methods ||= %w(password)
   environment = table.hashes.first
   environment_keys = Array.new(@keys)
-  environment_auth_methods = Array.new(@auth_methods) 
+  environment_auth_methods = Array.new(@auth_methods)
   if environment["keyfile"]
     environment_keys << environment["keyfile"]
     environment_auth_methods << "publickey"
   end
   environment_port=ENV['VEEWEE_SSH_PORT'] || 7222
   if environment["port"]
-     environment_port=environment["port"]  
+    environment_port=environment["port"]
   end
-  
+
 
   lambda {
-         # This is the list of authorization methods to try. It defaults to “publickey”, “hostbased”, “password”, and “keyboard-interactive”. (These are also the only authorization methods that are supported.) If
-         # http://net-ssh.rubyforge.org/ssh/v1/chapter-2.html
+    # This is the list of authorization methods to try. It defaults to “publickey”, “hostbased”, “password”, and “keyboard-interactive”. (These are also the only authorization methods that are supported.) If
+    # http://net-ssh.rubyforge.org/ssh/v1/chapter-2.html
     key_auth_tried = false
     ssh_options = {:password => environment["password"], :auth_methods => environment_auth_methods, :port => environment_port, :keys => environment_keys}
     # ssh_options[:verbose] => :debug
@@ -83,9 +83,9 @@ When /^I ssh to "([^\"]*)" with the following credentials:$/ do |hostname, table
       ssh_options.delete(:password)
       ssh_options[:auth_methods] = ['publickey']
       if key_auth_tried
-         raise
+        raise
       else
-         key_auth_tried = true
+        key_auth_tried = true
         retry
       end
     rescue Net::SSH::Disconnect, Errno::ECONNREFUSED, Errno::EHOSTUNREACH, Errno::ECONNABORTED, Errno::ECONNRESET, Errno::ENETUNREACH
@@ -95,46 +95,46 @@ When /^I ssh to "([^\"]*)" with the following credentials:$/ do |hostname, table
 end
 
 #
-When /^I run "([^\"]*)"$/ do |command| 
+When /^I run "([^\"]*)"$/ do |command|
   @stdout=nil
   @stderr=nil
   @status=-9999
   channel = @connection.open_channel do |ch|
-	  ch.request_pty do |ch, success|
+    ch.request_pty do |ch, success|
       if success
-#		    puts "pty successfully obtained"
-		  else
-#		    puts "could not obtain pty"
-		  end
-	  end
+        #       puts "pty successfully obtained"
+      else
+        #       puts "could not obtain pty"
+      end
+    end
     ch.exec "#{command}" do |ch, success|
-       raise "could not execute command" unless success
+      raise "could not execute command" unless success
 
-       # "on_data" is called when the process writes something to stdout
+      # "on_data" is called when the process writes something to stdout
       ch.on_data do |c, data|
         if @stdout.nil?
           @stdout=data
-        else  
+        else
           @stdout+=data
         end
       end
 
       # "on_extended_data" is called when the process writes something to stderr
       ch.on_extended_data do |c, type, data|
-          if @stderr.nil?
-            @stderr=data
-          else  
-            @stderr+=data
-          end
+        if @stderr.nil?
+          @stderr=data
+        else
+          @stderr+=data
+        end
       end
-      
+
       #exit code
       #http://groups.google.com/group/comp.lang.ruby/browse_thread/thread/a806b0f5dae4e1e2
       channel.on_request("exit-status") do |ch, data|
         exit_code = data.read_long
         @status=exit_code
       end
-      
+
       channel.on_request("exit-signal") do |ch, data|
         puts "SIGNAL: #{data.read_long}"
       end
@@ -160,7 +160,7 @@ When /^I run "([^\"]*)"$/ do |command|
   end
   puts @output
 
-	#@output = @connection.exec!(command)
+  #@output = @connection.exec!(command)
 
 end
 

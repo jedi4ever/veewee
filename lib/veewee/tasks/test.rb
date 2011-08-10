@@ -1,4 +1,4 @@
 desc 'mama'
 task :mama do
-	puts "mama"
+  puts "mama"
 end

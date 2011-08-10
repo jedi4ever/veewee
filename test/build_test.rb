@@ -3,13 +3,13 @@ require 'lib/veewee'
 
 class TestVeeweeBuild < Test::Unit::TestCase
   def setup
-          @ve=Veewee::Environment.new({:definition_dir => File.expand_path(File.join(File.dirname(__FILE__),"definitions")) })  
-          template_name="test_definition"
-          @vm_name="test_definition"
-          @vd=@ve.get_definition(template_name)
-          @vd.postinstall_files=["_test_me.sh"]
+    @ve=Veewee::Environment.new({:definition_dir => File.expand_path(File.join(File.dirname(__FILE__),"definitions")) })
+    template_name="test_definition"
+    @vm_name="test_definition"
+    @vd=@ve.get_definition(template_name)
+    @vd.postinstall_files=["_test_me.sh"]
   end
-  
+
   def test_virtualbox_1_build
     assert_nothing_raised {
       @ve.builder(:virtualbox).get_box(@vm_name,@vd,{}).build({})
@@ -30,16 +30,16 @@ class TestVeeweeBuild < Test::Unit::TestCase
       assert_match(/bla/,result.stdout)
     }
   end
-  
+
   def test_virtualbox_4_destroy
     assert_nothing_raised {
       @ve.builder(:virtualbox).get_box(@vm_name,@vd,{}).destroy({})
     }
   end
-  
+
   def teardown
     #@ve.destroy(@vm_name,@vd)
-    
+
   end
-  
+
 end

@@ -5,16 +5,16 @@ module Veewee
       attr_accessor :stdout
       attr_accessor :stderr
       attr_accessor :status
-      
+
       def initialize(stdout,stderr,status)
         @stdout=stdout
         @stderr=stderr
         @status=status
       end
     end
-    
+
     class Ssh
-      
+
       require 'net/ssh'
       require 'net/scp'
 
@@ -52,10 +52,10 @@ module Veewee
 
 
       def self.transfer_file(host,filename,destination = '.' , options = {})
-        
+
         defaults={ :paranoid => false }
         options=defaults.merge(options)
-        
+
         Net::SSH.start( host,options[:user],options ) do |ssh|
           puts "Transferring #{filename} to #{destination} "
           ssh.scp.upload!( filename, destination ) do |ch, name, sent, total|
@@ -63,7 +63,7 @@ module Veewee
             print "."
 
           end
-        end 
+        end
         puts
       end
 
@@ -86,8 +86,8 @@ module Veewee
           channel = ssh.open_channel do |ch|
 
             #request pty for sudo stuff and so
-            ch.request_pty do |ch, success| 
-              raise "Error requesting pty" unless success 
+            ch.request_pty do |ch, success|
+              raise "Error requesting pty" unless success
             end
 
             ch.exec "#{command}" do |ch, success|

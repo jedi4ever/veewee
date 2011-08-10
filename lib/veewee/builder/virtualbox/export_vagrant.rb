@@ -3,7 +3,7 @@ module Veewee
   module Builder
     module Virtualbox
 
-      #    Shellutil.execute("vagrant package --base #{vmname} --include /tmp/Vagrantfile --output /tmp/#{vmname}.box", {:progress => "on"})    
+      #    Shellutil.execute("vagrant package --base #{vmname} --include /tmp/Vagrantfile --output /tmp/#{vmname}.box", {:progress => "on"})
 
       def export_vagrant(export_options={})
 
@@ -18,15 +18,15 @@ module Veewee
           puts "Vagrant requires the box to be shutdown, before it can export"
           puts "Sudo also needs to work for user #{@definition.ssh_user}"
           puts "Performing a clean shutdown now."
-          ssh_options={ :user => @definition.ssh_user, 
-            :port => @definition.ssh_host_port, 
+          ssh_options={ :user => @definition.ssh_user,
+            :port => @definition.ssh_host_port,
             :password => @definition.ssh_password,
-            :timeout => @definition.ssh_login_timeout}       
+            :timeout => @definition.ssh_login_timeout}
 
             Veewee::Util::Ssh.execute("localhost","sudo #{@definition.shutdown_cmd}",ssh_options)
 
             #Wait for state poweroff
-            while (vm.running?) do 
+            while (vm.running?) do
               print '.'
               sleep 1
             end
@@ -55,11 +55,11 @@ module Veewee
           Veewee::Util::Shell.execute("#{export_command}") #hmm, needs to get the gem_home set?
           puts
 
-          #add_ssh_nat_mapping back!!!!      
+          #add_ssh_nat_mapping back!!!!
           #vagrant removes the mapping
           #we need to restore it in order to be able to login again
           add_ssh_nat_mapping
-          
+
           puts "To import it into vagrant type:"
           puts "vagrant box add '#{@box_name}' '#{box_path}'"
           puts ""
@@ -75,13 +75,13 @@ module Veewee
 
 
   #      #currently vagrant has a problem with the machine up, it calculates the wrong port to ssh to poweroff the system
-  #      thebox.execute("shutdown -h now") 
+  #      thebox.execute("shutdown -h now")
   #      thebox.wait_for_state("poweroff")
 
-  #      Shellutil.execute("echo 'Vagrant::Config.run do |config|' > /tmp/Vagrantfile")    
-  #      Shellutil.execute("echo '   config.ssh.forwarded_port_key = \"ssh\"' >> /tmp/Vagrantfile")    
-  #      Shellutil.execute("echo '   config.vm.forward_port(\"ssh\",22,#{host_port})' >> /tmp/Vagrantfile")    
-  #      Shellutil.execute("echo 'end' >> /tmp/Vagrantfile") 
+  #      Shellutil.execute("echo 'Vagrant::Config.run do |config|' > /tmp/Vagrantfile")
+  #      Shellutil.execute("echo '   config.ssh.forwarded_port_key = \"ssh\"' >> /tmp/Vagrantfile")
+  #      Shellutil.execute("echo '   config.vm.forward_port(\"ssh\",22,#{host_port})' >> /tmp/Vagrantfile")
+  #      Shellutil.execute("echo 'end' >> /tmp/Vagrantfile")
 
 
   #vagrant export disables the machine
