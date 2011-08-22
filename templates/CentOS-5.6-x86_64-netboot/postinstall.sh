@@ -54,6 +54,7 @@ rm VBoxGuestAdditions_$VBOX_VERSION.iso
 
 
 sed -i "s/^.*requiretty/#Defaults requiretty/" /etc/sudoers
+sed -i "s/^\(.*env_keep = \"\)/\1PATH /" /etc/sudoers
 
 #poweroff -h
 
