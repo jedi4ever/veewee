@@ -639,7 +639,7 @@ module Veewee
 
     def self.add_sata_controller(boxname)
       #unless => "${vboxcmd} showvminfo '${vname}' | grep 'SATA Controller' ";
-      command ="#{@vboxcmd} storagectl '#{boxname}' --name 'SATA Controller' --add sata --hostiocache #{@definition[:hostiocache]}"
+      command ="#{@vboxcmd} storagectl '#{boxname}' --name 'SATA Controller' --add sata --sataportcount 1 --hostiocache #{@definition[:hostiocache]}"
       Veewee::Shell.execute("#{command}")
     end
 
