@@ -24,6 +24,7 @@ Gem::Specification.new do |s|
   s.add_dependency "cucumber", "~> 1.0.2"
   s.add_dependency "rspec", "~> 2.5.0"
   s.add_dependency "ansi", "~> 1.3.0"
+  s.add_dependency "ruby-vnc", "~> 1.0.0"
   #s.add_dependency "simon", "~> 0.1.1"
 
   s.add_development_dependency "bundler", ">= 1.0.0"

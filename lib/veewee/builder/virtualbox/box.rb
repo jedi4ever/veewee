@@ -18,6 +18,7 @@ require 'veewee/builder/virtualbox/helper/floppy'
 require 'veewee/builder/virtualbox/helper/dvd'
 require 'veewee/builder/virtualbox/helper/network'
 require 'veewee/builder/virtualbox/helper/shared_folder'
+require 'veewee/builder/virtualbox/helper/path'
 
 require 'veewee/builder/virtualbox/helper/console_type'
 require 'veewee/builder/virtualbox/helper/buildinfo'

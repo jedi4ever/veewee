@@ -26,7 +26,7 @@ module Veewee
           @definition.postinstall_files.each do |postinstall_file|
 
             # Filenames of postinstall_files are relative to their definition
-            filename=File.join(@environment.definition_dir,@box_name,postinstall_file)   
+            filename=File.join(@environment.definition_dir,@box_name,postinstall_file)
 
             Veewee::Util::Ssh.when_ssh_login_works(ip_address,ssh_options) do
               begin
@@ -40,7 +40,7 @@ module Veewee
               newcommand.gsub!(/%u/,"#{@definition.ssh_user}")
               newcommand.gsub!(/%f/,"#{postinstall_file}")
               Veewee::Util::Ssh.execute(ip_address,"#{newcommand}",ssh_options)
-            end 
+            end
 
           end
         end
@@ -52,7 +52,7 @@ module Veewee
           if kickstartfiles.nil? || kickstartfiles.length == 0
             puts "Skipping webserver as no kickstartfile was specified"
           end
-          
+
           puts "Starting a webserver on port #{@definition.kickstart_port}"
           #:kickstart_port => "7122", :kickstart_ip => self.local_ip, :kickstart_timeout => 1000,:kickstart_file => "preseed.cfg",
           if kickstartfiles.is_a?(String)
@@ -63,10 +63,10 @@ module Veewee
           kickstartfiles.each do |kickfile|
             Veewee::Util::Web.wait_for_request(kickfile,{
               :port => @definition.kickstart_port,
-              :host => @definition.kickstart_ip, 
+              :host => @definition.kickstart_ip,
               :timeout => @definition.kickstart_timeout,
               :web_dir => File.join(@environment.definition_dir,@box_name)
-              })
+            })
           end
         end
 

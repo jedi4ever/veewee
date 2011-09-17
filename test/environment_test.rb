@@ -3,7 +3,7 @@ require 'lib/veewee'
 
 class TestVeeweeEnvironment < Test::Unit::TestCase
   def test_environment_default_to_currentdir
-    
+
     tempdir = Dir.mktmpdir
     Dir.chdir(tempdir)
     tempdir=Dir.pwd
@@ -13,7 +13,7 @@ class TestVeeweeEnvironment < Test::Unit::TestCase
     ensure
       FileUtils.remove_entry_secure tempdir
     end
-    
+
   end
 
   # If a environment_dir is passed, it take precendence over currentdir
@@ -31,7 +31,7 @@ class TestVeeweeEnvironment < Test::Unit::TestCase
     ensure
       FileUtils.remove_entry_secure tempdir
     end
-    
+
   end
 
   # parent of isodir or definitiondir not writeable should raise an error
@@ -52,7 +52,7 @@ class TestVeeweeEnvironment < Test::Unit::TestCase
     ensure
       FileUtils.remove_entry_secure tempdir
     end
-    
+
   end
 
   # definition_dir , iso_dir  by default are relative to the environmentdir

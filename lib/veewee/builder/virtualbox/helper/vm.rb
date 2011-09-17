@@ -1,9 +1,9 @@
 module Veewee
   module Builder
     module Virtualbox
-      
+
       def verify_ostype
-        
+
         #Verifying the os.id with the :os_type_id specified
         matchfound=false
         VirtualBox::Global.global.lib.virtualbox.guest_os_types.collect { |os|
@@ -15,9 +15,9 @@ module Veewee
           puts "The ostype: #{@definition.os_type_id} is not available in your Virtualbox version"
           exit
         end
-        
+
       end
-      
+
       # This function creates a basic vm
       def create_vm
         verify_ostype
@@ -28,9 +28,9 @@ module Veewee
           puts "shutting down box"
           #We force it here, maybe vm.shutdown is cleaner
           vm.stop
-        end     
+        end
 
-        if !vm.nil? 
+        if !vm.nil?
           puts "Box already exists"
           #vm.stop
           #vm.destroy
@@ -49,7 +49,7 @@ module Veewee
           vm_flags.each do |vm_flag|
             if @definition.instance_variable_defined?("@#{vm_flag}")
               #vm_flag_value=@definition.instance_variable_get(vm_flag.to_sym)
-              
+
               vm_flag_value=@definition.instance_variable_get("@#{vm_flag}")
               puts "Setting VM Flag #{vm_flag} to #{vm_flag_value}"
               command="#{@vboxcmd} modifyvm #{@box_name} --#{vm_flag.to_s} #{vm_flag_value}"
@@ -67,14 +67,14 @@ module Veewee
           exit
         end
 
-        #Set all params we know 
+        #Set all params we know
         vm.memory_size=@definition.memory_size.to_i
         vm.os_type_id=@definition.os_type_id
         vm.cpu_count=@definition.cpu_count.to_i
         vm.name=@box_name
 
         puts "Creating vm #{vm.name} : #{vm.memory_size}M - #{vm.cpu_count} CPU - #{vm.os_type_id}"
-        #setting bootorder 
+        #setting bootorder
         vm.boot_order[0]=:hard_disk
         vm.boot_order[1]=:dvd
         vm.boot_order[2]=:null
@@ -84,8 +84,8 @@ module Veewee
 
 
       end
-      
-      
+
+
       def start_vm(mode)
         vm=VirtualBox::VM.find(@box_name)
         vm.start(mode)
@@ -95,4 +95,4 @@ module Veewee
   end
 end
 
-      
+

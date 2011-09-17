@@ -1,234 +1,151 @@
-require 'tempfile'
+require 'veewee/config'
 
-require 'veewee/error'
-require 'veewee/definition'
-require 'veewee/builderfactory'
+require 'logger'
 
 module Veewee
 
-  # This class represents the environment used for building boxes, it's mostly pointing to the correct directories
-  # so that it finds the templates, definitions and other parts
+  # Represents a single Veewee environment. A "Veewee environment" is
+  # defined as basically a folder with a "Veeweefile". This class allows
+  # access to the VMs, CLI, etc. all in the scope of this environment
   class Environment
 
-    include Veewee::Logger
+    # The `cwd` that this environment represents
+    attr_reader :cwd
 
-    attr_accessor :environment_dir
-    attr_accessor :definition_dir
-    attr_accessor :iso_dir
-    attr_accessor :tmp_dir
-    attr_accessor :box_dir
-    attr_accessor :veewee_dir
-    attr_accessor :template_dir
-    attr_accessor :validation_dir
-    attr_accessor :log
+    # The valid name for a Mccloudfile for this environment
+    attr_reader :veeweefile_name
 
-    # This initializes a new Veewee Environment
-    # settings argument is a hash with the following options
-    # - :environment_dir : base directory where all other directories are relative to, default to the current directory unless another path is specified
-    # - :definition_dir  : the directory to look for definitions, defaults to $environment_dir/definitions
-    # - :iso_dir         : directory to look for iso files, defaults to $environment_dir/iso
-    # - :box_dir         : directory where box files are exported to, defaults to $environment_dir/boxes
-    # - :veewee          : top directory of the veewee gem files
-    # - :validation_dir  : directory that contains a list of validation tests, that can be run after building a box
-    # - :template_dir    : directory that contains the template definitions that come with the veewee gem, defaults to the path relative to the gemfiles
-    # - :tmp_dir         : directory that will be used for creating temporary files, needs to be rewritable, default to $environment_dir/tmp
-    #
-    # returns a new Veewee::Environment
-    def initialize(settings={},envlogger=nil)
-      logger=envlogger unless envlogger.nil?
+    # The {UI} Object to communicate with the outside world
+    attr_writer :ui
 
-      logger.debug("[Environment] Initalizing new Veewee Environment:")
+    # The configuration as loaded by the Mccloudfile
+    attr_accessor :config
 
-      @environment_dir=settings[:environment_dir]||Dir.pwd
-      @definition_dir=settings[:definition_dir]||File.join(@environment_dir,"definitions")
-      @iso_dir=settings[:iso_dir]||File.join(@environment_dir,"iso")
-      @box_dir=settings[:box_dir]||File.join(@environment_dir,"boxes")
-      @veewee_dir=File.expand_path(File.join(File.dirname(__FILE__),"..",".."))
-      @validation_dir=settings[:validation_dir]|| File.join(@veewee_dir,"validation")
-      @template_dir=settings[:template_dir]||File.expand_path(File.join(File.dirname(__FILE__),"..","..", "templates"))
-      @tmp_dir=settings[:tmp_dir]||File.join(@environment_dir,"tmp")
+#    attr_accessor :providers
 
-      # Output the variables for debugging
-      arguments=[:environment_dir, :definition_dir, :iso_dir, :box_dir,:veewee_dir, :validation_dir, :template_dir, :tmp_dir]
-      arguments.each do |key|
-        logger.debug("[Environment] - #{key}: #{self.instance_variable_get("@"+key.to_s)}")
+
+    def initialize(options=nil)
+      options = {
+        :cwd => nil,
+        :veeweefile_name => nil}.merge(options || {})
+
+      # Set the default working directory to look for the Veeweefile
+      options[:veeweefile_name] ||=["Veeweefile"]
+
+      logger.info("environment") { "Environment initialized (#{self})" }
+      logger.info("environment") { " - cwd : #{cwd}" }
+
+      options.each do |key, value|
+        instance_variable_set("@#{key}".to_sym, options[key])
       end
 
       return self
     end
 
+    #---------------------------------------------------------------
+    # Config Methods
+    #---------------------------------------------------------------
 
-    # Based on the definition_dir set in the current Environment object
-    # it will load the definition based on the name
+    # The configuration object represented by this environment. This
+    # will trigger the environment to load if it hasn't loaded yet (see
+    # {#load!}).
     #
-    # returns a Veewee::Definition
-    def get_definition(name)
-
-      logger.debug("[Definition - '#{name}'] Trying to load from directory #{@definition_dir}")
-      begin
-        definition=Veewee::Definition.load(name,@definition_dir,logger)
-        logger.debug("[Definition - '#{name}'] Succesfully loaded")
-      rescue Exception => ex
-        logger.fatal("[Definition - '#{name}'] Loading failed from #{@definition_dir} : #{ex}")
-      end
-      return definition
+    # @return [Config::Top]
+    def config
+      load! if !loaded?
+      @config
     end
 
-
-    # This function retrieves all the templates given the @template_dir in the current Environment object
-    # A valid template has to contain the file definition.rb
-    # The name of the template is the name of the parent directory of the definition.rb file
+    # Returns the {UI} for the environment, which is responsible
+    # for talking with the outside world.
     #
-    # returns a sorted Array of template names
-    def get_templates
-      template_names=Array.new
-
-      logger.debug("[Template] Searching #{@template_dir} for templates")
-
-      subdirs=Dir.glob("#{@template_dir}/*")
-      subdirs.each do |sub|
-        if File.directory?("#{sub}")
-          definition=Dir.glob("#{sub}/definition.rb")
-          if definition.length!=0
-            name=sub.sub(/#{@template_dir}\//,'')
-              logger.debug("[Template] template '#{name}' found")
-            template_names << name
-          end
-        end
-      end
-
-      return template_names.sort
+    # @return [UI]
+    def ui
+      @ui ||=  UI.new(self)
     end
+    
+    #---------------------------------------------------------------
+    # Load Methods
+    #---------------------------------------------------------------
 
-
-
-    # This function returns a sorted Array of names of all the definitions that are in the @definition_dir,
-    # given the @definition_dir in the current Environment object
-    # The name of the definition is the name of a sub-directory in the @definition_dir
-    def get_definitions
-      definition_names=Array.new
-
-      logger.debug("[Definition] Searching #{@definition_dir} for definitions:")
-
-      subdirs=Dir.glob("#{@definition_dir}/*")
-      subdirs.each do |sub|
-        name=File.basename(sub)
-        logger.debug("[Definition] definition '#{name}' found")
-        definition_names << name
-      end
-
-      logger.debug("[Definition] no definitions found") if definition_names.length==0
-
-      return definition_names.sort
-    end
-
-
-    # This function returns a builder, of type Veewee::Builder that can manage boxes
-    # The generated object is a class from the builder_type specified and has a link to this environment
-    def get_builder(builder_type,builder_options={})
-
-      logger.debug("[Builder] Requesting a builder of type '#{builder_type}' with options:")
-      builder_options.each do |key,value|
-        logger.debug("[Builder] - #{key}: #{value}")
-      end
-
-      builder=Veewee::BuilderFactory.instantiate(builder_type,builder_options,self)
-      return builder
-    end
-
-
-    # This function 'defines'/'clones'/'instantiates a template
-    # by copying the template directory to a directory with the definitionname under the @defintion_dir
-    # Options are : :force => true to overwrite an existing definition
+    # Returns a boolean representing if the environment has been
+    # loaded or not.
     #
-    # Returns nothing
-    def define(definition_name,template_name,define_options = {})
-      # Default is not to overwrite
-      define_options = {'force' => false}.merge(define_options)
+    # @return [Bool]
+    def loaded?
+      !!@loaded
+    end
 
-      logger.debug("Forceflag : #{define_options['force']}")
+    # Loads this entire environment, setting up the instance variables
+    # such as `vm`, `config`, etc. on this environment. The order this
+    # method calls its other methods is very particular.
+    def load!
+      if !loaded?
+        @loaded = true
 
-      # Check if template exists
-      template_exists=get_templates.include?(template_name)
-      template_dir=File.join(@template_dir,template_name,'.')
+        logger.info("environment") { "Loading configuration..." }
+        load_config!
 
-      unless template_exists
-        logger.fatal("Template '#{template_name}' does not exist")
-        raise TemplateError, "Template '#{template_name}' does not exist"
-      else
-        logger.debug("Template '#{template_name}' exists")
+        self
+      end
+    end
+
+    def load_config!
+        @config=Config.new({:env => self}).load_veewee_config()
+        @config.load_definitions
+        @ui.info "Loaded #{@config.builders.length} builders + #{@config.templates.length} templates +  #{@config.definitions.length} definitions "
+
+        return self
+    end
+
+      # Reloads the configuration of this environment.
+      def reload_config!
+        @config = nil
+        load_config!
+        self
       end
 
-      # Check if definition exists
-      definition_exists=get_definitions.include?(definition_name)
-      definition_dir=File.join(@definition_dir,definition_name)
+      # Makes a call to the CLI with the given arguments as if they
+      # came from the real command line (sometimes they do!). An example:
+      #
+      #     env.cli("package", "--veeweefile", "Mccloudfile")
+      #
+      def cli(*args)
+        CLI.start(args.flatten, :env => self)
+      end
 
-      if definition_exists
-        logger.debug("Definition '#{definition_name}' already exists")
+      def resource
+        "veewee"
+      end
 
-        if !define_options['force']
-          logger.fatal("No force was specified, bailing out")
-          raise DefinitionError, "Definition '#{definition_name}' already exists"
+      # Accesses the logger for Vagrant. This logger is a _detailed_
+      # logger which should be used to log internals only. For outward
+      # facing information, use {#ui}.
+      #
+      # @return [Logger]
+      def logger
+        return @logger if @logger
+
+        # Figure out where the output should go to.
+        output = nil
+        if ENV["VEEWEE_LOG"] == "STDOUT"
+          output = STDOUT
+        elsif ENV["VEEWEE_LOG"] == "NULL"
+          output = nil
+        elsif ENV["VEEWEE_LOG"]
+          output = ENV["VEEWEE_LOG"]
         else
-          logger.debug("Force option specified, cleaning existing directory")
-          undefine(definition_name)
+          output = nil #log_path.join("#{Time.now.to_i}.log")
         end
 
-      else
-        logger.debug("Definition '#{definition_name}' does not yet exist")
-
-      end
-
-      # Check if writeable
-      if File.writable?(@definition_dir)
-        logger.debug("DefinitionDir '#{@definition_dir}' is writable")
-        if File.exists?("#{@definition_dir}")
-          logger.debug("DefinitionDir '#{@definition_dir}' already exists")
-        else
-          logger.debug("DefinitionDir '#{@definition_dir}' does not exist, creating it")
-          FileUtils.mkdir(@definition_dir)
-          logger.debug("DefinitionDir '#{@definition_dir}' succesfuly created")
+        # Create the logger and custom formatter
+        @logger = ::Logger.new(output)
+        @logger.formatter = Proc.new do |severity, datetime, progname, msg|
+          "#{datetime} - #{progname} - [#{resource}] #{msg}\n"
         end
-        logger.debug("Creating definition #{definition_name} in directory '#{definition_dir}' ")
-        FileUtils.mkdir(File.join(@definition_dir,definition_name))
-        logger.debug("Definition Directory '#{definition_dir}' succesfuly created")
 
-      else
-        logger.fatal("DefinitionDir '#{@definition_dir}' is not writable")
-        raise DefinitionDirError, "DefinitionDirectory #{@definition_dir} is not writable"
+        @logger
       end
 
-      # Start copying/cloning the directory of the template to the definition directory
-      begin
-        logger.debug("Starting copy '#{template_dir}' to '#{definition_dir}'")
-        FileUtils.cp_r(template_dir,definition_dir)
-        logger.debug("Copy '#{template_dir}' to '#{definition_dir}' succesful")
-      rescue Exception => ex
-        logger.fatal("Copy '#{template_dir}' to '#{definition_dir}' failed: #{ex}")
-        raise DefinitionError, "Copy '#{template_dir}' to '#{definition_dir}' failed: #{ex}"
-      end
-    end
-
-
-
-    # This function undefines/removes the definition by removing the directoy with definition_name
-    # under @definition_dir
-    def undefine(definition_name,undefine_options = {})
-      definition_dir=File.join(@definition_dir,definition_name)
-      if File.directory?(definition_dir)
-        #TODO: Needs to be more defensive!!
-        logger.debug("[Undefine] About to remove '#{definition_dir} for '#{definition_name}'")
-        begin
-          FileUtils.rm_rf(definition_dir)
-        rescue Exception => ex
-          logger.fatal("[Undefine] Removing '#{definition_dir} for '#{definition_name}' failed")
-        end
-        logger.debug("[Undefine] Removing '#{definition_dir} for '#{definition_name}' succesful")
-      else
-        logger.fatal("[Undefine] Directory '#{definition_dir} for '#{definition_name}' does not exist")
-        raise DefinitionError, "Can not undefine '#{definition_name}': '#{definition_dir}' does not exist"
-      end
-    end
-
-  end #End Class
-end #End Module
+    end #Class
+  end #Module

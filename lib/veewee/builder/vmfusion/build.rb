@@ -6,7 +6,7 @@ module Veewee
       def build(build_options={})
         defaults= {  "force" => false, "nogui" => false }
         options=defaults.merge(build_options)
-        
+
         if is_running?
           if options["force"]==true
             stop_vm
@@ -14,7 +14,7 @@ module Veewee
           else
             puts "Machine is running, we can't build it, unless you have the --force option"
           end
-          
+
         end
 
         #Check iso file

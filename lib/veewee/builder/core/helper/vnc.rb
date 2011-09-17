@@ -1,61 +1,42 @@
-require 'veewee/util/scancode'
-require 'veewee/util/tcp'
-require 'veewee/util/shell'
 require 'net/vnc'
 
 module Veewee
   module Builder
-    module Kvm
-      def console_type(command,type_options={})
-        send_sequence(command)
-      end
+    module Core
 
-      def send_sequence(sequence)
+      def vnc_type(sequence,host,display=20)
         puts
         counter=0
+        vnc=Net::VNC.open("#{host}:#{display}",{:wait => 0.01})
         sequence.each { |s|
           counter=counter+1
 
-          s.gsub!(/%IP%/,@web_ip_address);
-
-          s.gsub!(/%PORT%/,@definition.kickstart_port);
-
-          s.gsub!(/%NAME%/, @box_name);
 
           puts "Typing:[#{counter}]: "+s
 
           keycodes=string_to_vnccode(s)
-          Net::VNC.open "localhost:8" do |vnc|
 
             keycodes.each do |keycode|
               if keycode==:wait
-                  sleep 1
+                sleep 1
               else
-                send_keycode(vnc,keycode)
+                send_vnc_keycode(vnc,keycode)    
               end
             end
-          end
         }
-
+        vnc.close
         puts "Done typing."
         puts
 
       end
 
-      def send_keycode(vnc,keycode)
-        uppercase=%w{: _ & " >}
+      def send_vnc_keycode(vnc,keycode)
 
         if keycode.is_a?(Symbol)
           vnc.key_press keycode
+          sleep 0.3
         else
-          if uppercase.include?(keycode)
-            vnc.key_down :shift
-            vnc.key_down keycode
-            vnc.key_up :shift
-          else
-            vnc.type keycode
-          end
-
+            vnc.type_string keycode,{:wait => 0.01}
         end
 
       end
@@ -128,8 +109,10 @@ module Veewee
 
         return keycodes
       end
+      
+      
 
+      end #Module
     end #Module
-  end #Module
 end #Module
 

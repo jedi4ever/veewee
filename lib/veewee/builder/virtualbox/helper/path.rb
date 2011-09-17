@@ -8,7 +8,7 @@ module Veewee
         place=shell_results.stdout.split(/\n/).grep(/Default machine/)[0].split(":")[1].strip
         return place
       end
-      
+
     end
   end
 end

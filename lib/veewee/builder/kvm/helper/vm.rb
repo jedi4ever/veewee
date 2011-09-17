@@ -1,35 +1,41 @@
-
 module Veewee
   module Builder
     module Kvm
 
       def destroy_vm(destroy_options={})
-        @connection.servers.all(:name => @box_name).first.destroy
+        matched_servers=@connection.servers.all(:name => @box_name)
+        matched_servers.first.destroy unless matched_servers.nil?
       end
 
       def start_vm
-        @connection.servers.all(:name => @box_name).first.start
+        matched_servers=@connection.servers.all(:name => @box_name)
+        matched_servers.first.start unless matched_servers.nil?
       end
 
       def halt_vm
-        @connection.servers.all(:name => @box_name).first.halt
+        matched_servers=@connection.servers.all(:name => @box_name)
+        matched_servers.first.halt unless matched_servers.nil?
       end
-      
+
       def stop_vm
-        @connection.servers.all(:name => @box_name).first.stop
+        matched_servers=@connection.servers.all(:name => @box_name)
+        matched_servers.first.stop unless matched_servers.nil?
       end
-      
+
       def create_vm
         # Assemble the Virtualmachine and set all the memory and other stuff
-        
-        s=@connection.servers.create(:template_options => { 
+
+        # If local it's just currentdir+iso or the one specified
+        iso_dir="iso"
+
+        # If remote, request homedir + iso?
+
+        s=@connection.servers.create(
           :name => @box_name,
-          :interface_type => "bridge",
+          :network_interface_type => "bridge",
           :iso_file => @definition.iso_file ,
           :iso_dir => "/home/patrick.debois/iso",
-          :type => "raw"
-        })
-
+          :type => "raw")
         end
 
       end

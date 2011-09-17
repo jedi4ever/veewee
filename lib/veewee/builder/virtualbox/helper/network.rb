@@ -11,9 +11,14 @@ module Veewee
          port.hostport = @definition.ssh_host_port.to_i
          vm.network_adapters[0].nat_driver.forwarded_ports << port
          port.save
-         vm.save  
+         vm.save
+       end
+
+       # The IP-address required to connect is localhost
+       # as ssh login is provider to an NAT forwarding
+       def ip_address
+          return "127.0.0.1"
        end
      end
    end
  end
- 

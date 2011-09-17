@@ -33,13 +33,13 @@ module Veewee
         def initialize(environment,box_name,definition_name,box_options={})
           super(environment,box_name,definition_name,box_options)
           @vmrun_cmd=determine_vmrun_cmd
-        end    
+        end
 
 
         # Translate the definition ssh options to ssh options that can be passed to Net::Ssh calls
         def ssh_options
-          ssh_options={ 
-            :user => @definition.ssh_user, 
+          ssh_options={
+            :user => @definition.ssh_user,
             :port => 22,
             :password => @definition.ssh_password,
             :timeout => @definition.ssh_login_timeout.to_i
@@ -47,7 +47,7 @@ module Veewee
           return ssh_options
 
         end
- 
+
         def is_running?
           shellresult=Veewee::Util::Shell.execute("#{fusion_path.shellescape}/vmrun -T ws list")
           return shellresult.stdout.include?("#{vmx_file_path}")

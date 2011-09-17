@@ -3,25 +3,25 @@ module Veewee
     module Virtualbox
 
       def create_disk
-        #Now check the disks
-        #Maybe one day we can use the name, now we have to check location
-        #disk=VirtualBox::HardDrive.find(box_name)
+        # Now check the disks
+        # Maybe one day we can use the name, now we have to check location
+        # disk=VirtualBox::HardDrive.find(box_name)
         location=@box_name+"."+@definition.disk_format.downcase
-        found=false       
+        found=false
         VirtualBox::HardDrive.all.each do |d|
           if !d.location.match(/#{location}/).nil?
             found=true
             break
           end
-        end   
+        end
 
-        #Sometimes the above doesn't find a registered harddisk, but the vdi files is still there
+        # Sometimes the above doesn't find a registered harddisk, but the vdi files is still there
         if File.exists?(location)
           puts "#{location} file still exists but isn't registered"
           puts "Let me clean up that mess for you."
           FileUtils.rm(location)
         end
-        
+
         if !found
           puts "Creating new harddrive of size #{@definition.disk_size.to_i} "
 
@@ -42,7 +42,7 @@ module Veewee
       end
 
       def attach_disk
-        
+
         place=get_vm_location
         location=@box_name+"."+@definition.disk_format.downcase
 
@@ -54,7 +54,7 @@ module Veewee
         Veewee::Util::Shell.execute("#{command}")
 
       end
-      
+
     end
   end
 end
