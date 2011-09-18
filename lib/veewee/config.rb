@@ -21,7 +21,6 @@ module Veewee
       @env=options[:env]
       env.logger.info("config") { "Initializing empty list of definitions in config" }
       
-
       @builders=Hash.new
       @definitions=Hash.new
       @templates=Hash.new
