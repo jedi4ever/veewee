@@ -1,6 +1,4 @@
-require 'veewee/builder/virtualbox/box'
-require 'veewee/builder/vmfusion/box'
-require 'veewee/builder/kvm/box'
+require 'veewee/builder/core/builder/build.rb'
 
 module Veewee  
   module Builder
@@ -15,6 +13,8 @@ module Veewee
 
         attr_accessor :boxes
 
+        include ::Veewee::Builder::Core::BuilderCommand
+        
         def initialize(name,options,env)
           
           @name=name

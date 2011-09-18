@@ -16,7 +16,6 @@ module Veewee
       def define(name)
         # We do this for vagrant syntax
         # Depending on type, we create a variable of that type
-        # f.i. component_stub.vm or component_stub.lb
         builder_stub=OpenStruct.new
         builder_stub.builder=OpenStruct.new
 

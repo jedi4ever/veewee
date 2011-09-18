@@ -1,3 +1,5 @@
+require 'veewee/builder/core/builder'
+
 module Veewee
   module Builder
     module Kvm

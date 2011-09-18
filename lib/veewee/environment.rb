@@ -92,7 +92,10 @@ module Veewee
 
     def load_config!
         @config=Config.new({:env => self}).load_veewee_config()
+        
+        @config.load_builders
         @config.load_definitions
+        
         @ui.info "Loaded #{@config.builders.length} builders + #{@config.templates.length} templates +  #{@config.definitions.length} definitions "
 
         return self

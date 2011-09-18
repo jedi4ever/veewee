@@ -13,7 +13,7 @@ begin
 	# Attach the UI
 	env.ui = ::Veewee::UI::Shell.new(env, shell)
 	env.load!
-	
+		
 	# Start the CLI
   ::Veewee::CLI.start(ARGV,:env => env)
 	

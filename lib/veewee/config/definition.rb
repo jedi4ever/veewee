@@ -14,11 +14,23 @@ module Veewee
       end
 
       def declare(name,options)
-        
-        # Initialize options via hash
-
-        definition_stub=OpenStruct.new
+     
         env.logger.debug("config definition"){ "Start declaring definition"}
+        
+        self.define(name) do |definition|
+          # we need to inject all keys as instance variables & attr_accessors
+          options.keys.each do |key|
+            definition.send("#{key.to_s}=",options[key])
+          end
+        end
+        
+        env.logger.debug("config definition"){ "End declaring definition"}
+             
+      end
+      
+      def define(name)
+        # Depending on type, we create a variable of that type
+        definition_stub=OpenStruct.new
 
         builder_type="vmfusion"
         
@@ -26,31 +38,15 @@ module Veewee
         # Load required builder
         require_path='veewee/builder/'+builder_type.to_s.downcase+"/definition.rb"
         require require_path
+        
 
         # Get a real definition object from the builder
         real_definition=Object.const_get("Veewee").const_get("Builder").const_get(builder_type.to_s.capitalize).const_get("Definition").new(name,env)
-        
-        definition_stub.definition=real_definition
-        
-        env.logger.debug("config definition"){ "End declaring definition #{definition_stub.definition.name}"}
-        
-        components[name.to_s]=definition_stub.definition
-        
-        # we need to inject all keys as instance variables & attr_accessors
-        options.keys.each do |key|
-          definition_stub.definition.send("#{key.to_s}=",options[key])
-        end      
-        
         rescue Error => e
           env.ui.error "Error loading provider with #{name},#{$!}"
         end
-                
-      end
-      
-      def define(name)
-        # Depending on type, we create a variable of that type
-        definition_stub=OpenStruct.new
-        definition_stub.definition=::Veewee::Definition.new(name,env)
+        
+        definition_stub.definition=real_definition
 
         env.logger.debug("config definition"){ "Start defining definition"}
 

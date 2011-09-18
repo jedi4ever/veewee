@@ -9,3 +9,6 @@ end
 
 # The built-in commands must always be loaded
 require 'veewee/command/version'
+require 'veewee/command/kvm'
+require 'veewee/command/virtualbox'
+require 'veewee/command/vmfusion'

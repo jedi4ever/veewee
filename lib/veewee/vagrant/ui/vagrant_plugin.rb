@@ -1,4 +1,5 @@
 module Veewee
+  module Vagrant
   module UI
     class VagrantPlugin
 
@@ -22,6 +23,7 @@ module Veewee
           puts "- #{name}"
         end
       end
+
 
       def self.define(definition_name, template_name,define_options={})
 
@@ -73,4 +75,5 @@ module Veewee
 
     end
   end
+end
 end

@@ -1,3 +1,5 @@
+require 'veewee/builder/core/builder'
+
 require 'virtualbox'
 #require 'virtualbox/abstract_model'
 #require 'virtualbox/ext/byte_normalizer'

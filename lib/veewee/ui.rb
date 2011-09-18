@@ -1,4 +1,5 @@
 module Veewee
+
   # Vagrant UIs handle communication with the outside world (typically
   # through a shell). They must respond to the typically logger methods
   # of `warn`, `error`, `info`, and `confirm`.

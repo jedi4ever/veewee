@@ -2,7 +2,6 @@ module Veewee
   module Builder
     module Vmfusion
 
-
       def build(build_options={})
         defaults= {  "force" => false, "nogui" => false }
         options=defaults.merge(build_options)

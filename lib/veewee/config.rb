@@ -1,6 +1,8 @@
 require 'veewee/config/veewee'
 require 'veewee/config/collection'
 require 'veewee/config/definition'
+require 'veewee/config/builder'
+
 require 'fileutils'
 
 module Veewee
@@ -77,9 +79,26 @@ module Veewee
       end
       return self
     end
+    
+    
+    # Loading the builders
+    def load_builders()
+      %w{vmfusion kvm virtualbox}.each do |name|
+        config=OpenStruct.new
+        config.env=env
+        config.builder=::Veewee::Config::Builder.new(config)
+        config.builder.define(name) do |config|          
+          config.builder.name="#{name}"
+          config.builder.type="#{name}"
+        end
+        env.config.builders.merge!(config.builder.components)
 
-
-
+      end
+      
+    end
+    
+    
+    # Loading the definitions directories
     def load_definitions()
       # Read definitions from definitionspath
       env.ui.info "Loading definitions from definition path"
