@@ -102,7 +102,7 @@ module Veewee
         end
 
         def exists?
-          exists_disks? || exists_vm?
+          exists_disk? || exists_vm?
         end
         
         def exists_disk?
