@@ -1,8 +1,3 @@
-require 'veewee/util/shell'
-require 'veewee/util/tcp'
-require 'veewee/util/web'
-require 'veewee/util/ssh'
-
 require 'veewee/builder/core/box'
 require 'veewee/builder/core/box/vnc'
 
