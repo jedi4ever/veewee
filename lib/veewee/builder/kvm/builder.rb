@@ -6,6 +6,8 @@ module Veewee
       class Builder < Veewee::Builder::Core::Builder
 
         # Translate the definition ssh options to ssh options that can be passed to Net::Ssh calls
+        # We expect plain ssh for a connection
+
         def ssh_options(definition)
           ssh_options={
             :user => definition.ssh_user,

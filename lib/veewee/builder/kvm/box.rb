@@ -30,18 +30,6 @@ module Veewee
                   vnc_type(sequence,"localhost",vnc_port)
         end
                 
-        # Translate the definition ssh options to ssh options that can be passed to Net::Ssh calls
-        # We expect plain ssh for a connection
-        def ssh_options(definition)
-          ssh_options={
-            :user => definition.ssh_user,
-            :port => 22,
-            :password => definition.ssh_password,
-            :timeout => definition.ssh_login_timeout.to_i
-          }
-          return ssh_options
-
-        end
         
         # Create a new vm
         def create(definition)
