@@ -108,10 +108,10 @@ module Veewee
       valid_paths=expanded_paths.collect { |path|
         if File.exists?(path) && File.directory?(path)
           env.logger.info "Definition path #{path} exists"
-          return File.expand_path(path)
+          File.expand_path(path)
         else
           env.logger.info "Definition path #{path} does not exist, skipping"
-          return nil
+          nil
         end
       }
 
