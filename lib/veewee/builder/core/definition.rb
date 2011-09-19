@@ -26,6 +26,12 @@ module Veewee::Builder
     attr_accessor :floppy_files
     
     attr_accessor :path
+    
+    attr_accessor :os_type_id,:use_hw_virt_ext,:use_pae,:hostiocache
+    
+    attr_accessor :iso_dowload_timeout, :iso_src,:iso_md5
+    
+    
 
     def initialize(name,env)
 

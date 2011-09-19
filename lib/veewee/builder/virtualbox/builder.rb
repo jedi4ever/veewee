@@ -1,18 +1,39 @@
 require 'veewee/builder/core/builder'
 
-require 'virtualbox'
-#require 'virtualbox/abstract_model'
-#require 'virtualbox/ext/byte_normalizer'
-
-require 'veewee/builder/core/builder'
-
 module Veewee
   module Builder
     module Virtualbox
     class Builder < Veewee::Builder::Core::Builder
 
       def list_ostypes(list_options={})
+        require 'virtualbox'
           return VirtualBox::Global.global.lib.virtualbox.guest_os_types
+      end
+
+      def ssh_options(definition) 
+        ssh_options={ 
+          :user => definition.ssh_user, 
+          :port => definition.ssh_host_port,
+          :password => definition.ssh_password,
+          :timeout => definition.ssh_login_timeout.to_i
+        }
+        return ssh_options
+        
+      end
+      
+      def build(definition_name,box_name,options)
+      
+        super(definition_name,box_name,options)
+
+        # w00t, we have succesfully reach this point
+        # so we let user know , the vm is ready to be exported
+
+        env.ui.info "#{box_name} was build succesfully. "
+        env.ui.info ""
+        env.ui.info "Now you can: "
+        env.ui.info "- verify your box by running              : vagrant basebox validate #{box_name}"
+        env.ui "- export your vm to a .box fileby running : vagrant basebox export   #{box_name}"
+        
       end
 
       def transfer_buildinfo_file

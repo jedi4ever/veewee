@@ -25,7 +25,7 @@ module Veewee
         puts "Executing #{command}" unless options[:mute]
         escaped_command=command
         #        puts "#{escaped_command}"
-        IO.popen("#{escaped_command}") { |p|
+        IO.popen("#{escaped_command}"+ " 2>&1") { |p|
           p.each_line{ |l|
             result.stdout+=l
             print l unless options[:mute]

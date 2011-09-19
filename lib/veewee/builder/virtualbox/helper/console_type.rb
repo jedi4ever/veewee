@@ -5,21 +5,20 @@ require 'veewee/util/shell'
 module Veewee
   module Builder
     module Virtualbox
-      def console_type(command,type_options={})
-        send_sequence(command)
+      module BoxHelper
+      def console_type(sequence)
+        send_virtualbox_sequence(sequence)
       end
       
-      def send_sequence(sequence)
-        puts
+      def send_virtualbox_sequence(sequence)
+
+        env.ui.info ""
+
         counter=0
         sequence.each { |s|
           counter=counter+1
 
-          s.gsub!(/%IP%/,Veewee::Util::Tcp.local_ip);
-
-          s.gsub!(/%PORT%/,@definition.kickstart_port);
-          s.gsub!(/%NAME%/, name);
-          puts "Typing:[#{counter}]: "+s
+          env.ui.info "Typing:[#{counter}]: "+s
 
           keycodes=Veewee::Util::Scancode.string_to_keycode(s)
 
@@ -36,20 +35,28 @@ module Veewee
             end
           end
           #sleep after each sequence (needs to be param)
-          sleep 1
+          sleep 0.05
         }
 
-        puts "Done typing."
-        puts
+        env.ui.info "Done typing."
+        env.ui.info ""
 
       end
 
       def send_keycode(keycode)
-        command= "#{@vboxcmd} controlvm '#{@box_name}' keyboardputscancode #{keycode}"
-        #puts "#{command}"
-        Veewee::Util::Shell.execute("#{command}",{:mute => true})
+        command= "#{@vboxcmd} controlvm '#{name}' keyboardputscancode #{keycode}"
+        env.logger.info "#{command}"
+        sshresult=Veewee::Util::Shell.execute("#{command}",{:mute => true})
+        unless sshresult.stdout.index("E_ACCESSDENIED").nil?
+          env.ui.error "There was an error typing the commands on the console"
+          env.ui.error "Probably the VM did not get started."
+          env.ui.error ""
+          env.ui.error "#{sshresult.stdout}"
+          exit -1
+        end
       end
       
+end #Module
 end #Module
 end #Module
 end #Module

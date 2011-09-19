@@ -12,42 +12,9 @@ module Veewee
           @name=name
         end
 
-        def raw
-          if @raw.nil?
-            # Try to fetch raw
-            @raw=nil
-          else
-            return @raw
-          end
-        end
-
-        def exists?
-          !raw.nil?
-        end
-
-        def create(definition)
-        end
-
         def reload
           @raw=nil
         end
-
-        def destroy
-        end
-
-        def start
-        end
-
-        def stop
-        end
-
-        def poweroff
-        end
-
-        def set_definition(definition_name)
-          @definition=@environment.get_definition(definition_name)
-        end
-
 
 
       end #End Class

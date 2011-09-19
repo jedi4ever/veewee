@@ -1,96 +1,114 @@
 require 'veewee/builder/core/box'
 
-require 'veewee/builder/virtualbox/assemble'
-require 'veewee/builder/virtualbox/build'
-require 'veewee/builder/virtualbox/destroy'
 require 'veewee/builder/virtualbox/export_vagrant'
 require 'veewee/builder/virtualbox/validate_vagrant'
 
-require 'veewee/builder/virtualbox/helper/vm'
-require 'veewee/builder/virtualbox/helper/disk'
-require 'veewee/builder/virtualbox/helper/controller'
-require 'veewee/builder/virtualbox/helper/floppy'
-require 'veewee/builder/virtualbox/helper/dvd'
-require 'veewee/builder/virtualbox/helper/network'
-require 'veewee/builder/virtualbox/helper/shared_folder'
-require 'veewee/builder/virtualbox/helper/path'
-
+require 'veewee/builder/virtualbox/helper/create'
 require 'veewee/builder/virtualbox/helper/console_type'
-require 'veewee/builder/virtualbox/helper/buildinfo'
-require 'veewee/builder/virtualbox/helper/supress_messages'
+require 'veewee/builder/virtualbox/helper/destroy'
 
 module Veewee
   module Builder
     module Virtualbox
-    class Box < Veewee::Builder::Core::Box
-      include Veewee::Builder::Core
-      include Veewee::Builder::Virtualbox
-      
-      def initialize(environment,box_name,definition_name,builder_options={})
-        super(environment,box_name,definition_name,builder_options)
-        @vboxcmd=determine_vboxcmd
-      end    
+      class Box < Veewee::Builder::Core::Box
+        
+        include ::Veewee::Builder::Virtualbox::BoxHelper
+        
+        def initialize(name,env)
 
+          require 'virtualbox'
+          @vboxcmd=determine_vboxcmd
+          super(name,env)
+          
+        end
+                      
       def determine_vboxcmd
          return "VBoxManage"
       end   
 
-      def create(definition)
-         command="#{@vboxcmd} createvm --name '#{@box_name}' --ostype '#{definition.os_type_id}' --register"
-
-          #Exec and system stop the execution here
-          Veewee::Util::Shell.execute("#{command}")
-
-          # Modify the vm to enable or disable hw virtualization extensions
-          vm_flags=%w{pagefusion acpi ioapic pae hpet hwvirtex hwvirtexcl nestedpaging largepages vtxvpid synthxcpu rtcuseutc}
-
-          vm_flags.each do |vm_flag|
-            if @definition.instance_variable_defined?("@#{vm_flag}")
-              #vm_flag_value=@definition.instance_variable_get(vm_flag.to_sym)
-
-              vm_flag_value=@definition.instance_variable_get("@#{vm_flag}")
-              puts "Setting VM Flag #{vm_flag} to #{vm_flag_value}"
-              command="#{@vboxcmd} modifyvm #{@box_name} --#{vm_flag.to_s} #{vm_flag_value}"
-              Veewee::Util::Shell.execute("#{command}")
-            end
-          end
-
-        end
-
-        vm=VirtualBox::VM.find(@box_name)
-        if vm.nil?
-          puts "we tried to create a box or a box was here before"
-          puts "but now it's gone"
-          exit
-        end
-
-        #Set all params we know
-        vm.memory_size=definition.memory_size.to_i
-        vm.os_type_id=definition.os_type_id
-        vm.cpu_count=definition.cpu_count.to_i
-        vm.name=name
-
-        puts "Creating vm #{vm.name} : #{vm.memory_size}M - #{vm.cpu_count} CPU - #{vm.os_type_id}"
-        #setting bootorder
-        vm.boot_order[0]=:hard_disk
-        vm.boot_order[1]=:dvd
-        vm.boot_order[2]=:null
-        vm.boot_order[3]=:null
-        vm.validate
-        vm.save
+      def exists?
+        vm=VirtualBox::VM.find(name)
+        env.logger.info ("Vm exists? #{!vm.nil?}")
+        return !vm.nil?
       end
       
-      def ssh_options 
-        ssh_options={ 
-          :user => @definition.ssh_user, 
-          :port => @definition.ssh_host_port,
-          :password => @definition.ssh_password,
-          :timeout => @definition.ssh_login_timeout.to_i
-        }
-        return ssh_options
+      def running?
+        return 
+      end
+      
+      def create(definition)
+        
+        #Suppress those annoying virtualbox messages
+        suppress_messages
+        
+        create_vm(definition)
+        
+        # Adds a folder to the vm for testing purposes
+        add_shared_folder(definition)
+
+        #Create a disk with the same name as the box_name
+        create_disk(definition)
+
+        add_ide_controller(definition)
+        attach_isofile(definition)
+        
+        add_sata_controller(definition)
+        attach_disk(definition)
+        
+        create_floppy(definition)
+        add_floppy_controller(definition)
+        attach_floppy(definition)
+        
+        add_ssh_nat_mapping(definition)
         
       end
+      
+      def start(mode)
+        # Once assembled we start the machine
+        if (mode)
+          raw.start("vrdp")
+        else
+          raw.start("gui")
+        end
+      end
+    
+      def stop
+        # If the vm is not powered off, perform a shutdown
+        if (!raw.nil? && !(raw.powered_off?))
+          env.ui.info "Shutting down vm #{name}"
+          #We force it here, maybe vm.shutdown is cleaner
+          begin
+            raw.stop
+            sleep 3
+          rescue VirtualBox::Exceptions::InvalidVMStateException
+            env.ui.error "There was problem sending the stop command because the machine is in an Invalid state"
+            env.ui.error "Please verify leftovers from a previous build in your vm folder"
+            exit -1
+          end
+        end
+        
+      end
+      
+      def halt
+        if (!raw.nil? && !(raw.powered_off?))
+          env.ui.info "Halting vm #{name}"
+          #We force it here, maybe vm.shutdown is cleaner
+          # VBoxManage controlvm  'lucid64' poweroff
+          begin
+            raw.halt
+          rescue VirtualBox::Exceptions::InvalidVMStateException
+            env.ui.error "There was problem sending the stop command because the machine is in an Invalid state"
+            env.ui.error "Please verify leftovers from a previous build in your vm folder"
+            exit -1
+          end
+          sleep 3
+        end
+      end
 
+      # Get the IP address of the box
+      def ip_address
+        return "127.0.0.1"
+      end
 
 
     end # End Class

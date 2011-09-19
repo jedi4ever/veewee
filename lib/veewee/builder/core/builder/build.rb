@@ -21,6 +21,10 @@ module Veewee
           
           env.ui.info "Building #{definition_name} #{box_name} #{options}"
           
+          # Check the iso file we need to build the box
+          #verify_iso(definition.iso_file)
+          
+          
           box=get_box(box_name)
 
           if box.exists?
@@ -40,6 +44,14 @@ module Veewee
             exit -1
           end
 
+          # By now the machine if it existed, should have been shutdown
+          # The last thing to check is if the power we are supposed to ssh to, is still open
+
+          if Veewee::Util::Tcp.is_port_open?("localhost", definition.ssh_host_port)
+            puts "Hmm, the port #{definition.ssh_host_port} is open. And we shut down?"
+            exit -1
+          end
+          
           box.create(definition)
           box.start(options[:gui])
 
@@ -57,7 +69,7 @@ module Veewee
           box.console_type(boot_sequence)
           
           until !box.ip_address.nil?
-            env.logger.info "wait for Ip address"
+            env.logger.info "wait for Ip addres"
             sleep 2
           end
           
