@@ -56,6 +56,11 @@ module Veewee
           
           box.console_type(boot_sequence)
           
+          until !box.ip_address.nil?
+            env.logger.info "wait for Ip address"
+            sleep 2
+          end
+          
           handle_kickstart(definition)
           
           handle_postinstall(box,definition)
@@ -82,6 +87,7 @@ module Veewee
             # Filenames of postinstall_files are relative to their definition
             filename=File.join(definition.path,postinstall_file)
 
+            begin
             Veewee::Util::Ssh.when_ssh_login_works(box.ip_address,ssh_options(definition).merge({:timeout => definition.postinstall_timeout.to_i})) do
               begin
                 Veewee::Util::Ssh.transfer_file(box.ip_address,filename,File.basename(filename),ssh_options(definition))
@@ -100,7 +106,10 @@ module Veewee
                 exit -1
               end
             end
-
+          rescue Net::SSH::AuthenticationFailed
+            env.ui.error "Authentication failure"
+            exit -1
+          end
           end
         end
 
