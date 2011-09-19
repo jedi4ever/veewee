@@ -114,7 +114,7 @@ module Veewee
         end
 
         def exists?
-          (!@connection.servers.all(:name => name).nil?) || (@connection.volumes.all(:name => "#{name}.img").nil?)
+          (!@connection.servers.all(:name => name).nil?) || (!@connection.volumes.all(:name => "#{name}.img").nil?)
         end
 
       end # End Class
