@@ -26,7 +26,6 @@ module Veewee
         def get_definition(name)
           env.logger.info("fetching definition #{name}")
           definition=env.config.definitions[name]
-          env.logger.info(definition.iso_file)
           return definition
         end
 
