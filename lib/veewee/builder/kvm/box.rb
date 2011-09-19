@@ -70,7 +70,7 @@ module Veewee
           destroy_vm if exists?
           
           vol_exists=!@connection.volumes.all(:name => "#{name}.img").nil?
-          
+          env.logger.info "Volume exists? : #{vol_exists}"
           destroy_disk if self.vol_exists
         end
         
