@@ -5,15 +5,20 @@ module Veewee
 
         def build(definition_name,box_name,options)
 
+          definition=get_definition(definition_name)
+          
+          if definition.nil?
+            env.ui.error "The definition #{definition_name} does not exist. Sorry"
+            exit -1
+          end
+          
           # If no box_name was given, let's give the box the same name as the definition
           if box_name.nil?
             box_name=definition_name
           end
-
+          
           env.ui.info "Building #{definition_name} #{box_name} #{options}"
-
-          definition=get_definition(definition_name)
-
+          
           box=get_box(box_name)
 
           if box.exists?
