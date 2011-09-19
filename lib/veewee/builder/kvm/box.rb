@@ -26,7 +26,7 @@ module Veewee
         
         # Type on the console
         def console_type(sequence,type_options={})
-                  vnc_port=raw.vnc_port
+                  vnc_port=@connection.servers.all(:name => name).first.vnc_port
                   vnc_type(sequence,"localhost",vnc_port)
         end
                 
