@@ -41,7 +41,7 @@ module Veewee
             :name => name,
             :network_interface_type => "nat",
             :iso_file => definition.iso_file ,
-            #:arch => ""
+            #:arch => "" x86_64 / x86
             :iso_dir => env.config.veewee.iso_dir,
             #:volume_format_type => "img"
             )

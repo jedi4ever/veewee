@@ -1,3 +1,8 @@
+require 'veewee/util/shell'
+require 'veewee/util/tcp'
+require 'veewee/util/web'
+require 'veewee/util/ssh'
+
 require 'veewee/builder/core/builder/build.rb'
 
 module Veewee
