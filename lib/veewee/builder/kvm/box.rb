@@ -35,7 +35,7 @@ module Veewee
         def create(definition)
           # Assemble the Virtualmachine and set all the memory and other stuff"
 
-          #memory_size,cpu_count, disk_size
+          #memory_size,cpu_count, volume_size
 
           s=@connection.servers.create(
             :name => name,
@@ -47,19 +47,19 @@ module Veewee
             )
         end
         
-        # Create the disk of a new vm
-        def create_disk
-          # Creating the disk is part of the server creation
+        # Create the volume of a new vm
+        def create_volume
+          # Creating the volume is part of the server creation
         end
         
         # Destroy a vm
         def destroy
           halt if running?
-          destroy_vm if exists?
+          destroy_vm if exists_vm?
           
           vol_exists=!@connection.volumes.all(:name => "#{name}.img").nil?
           env.logger.info "Volume exists? : #{vol_exists}"
-          destroy_disk if self.vol_exists
+          destroy_volume if exists_volume?
         end
         
         def destroy_vm
@@ -67,7 +67,7 @@ module Veewee
           matched_servers.first.destroy() unless matched_servers.nil?
         end
 
-        def destroy_disk
+        def destroy_volume
           vol=@connection.volumes.all(:name => "#{name}.img").first
           vol.destroy
         end
@@ -102,10 +102,10 @@ module Veewee
         end
 
         def exists?
-          exists_disk? || exists_vm?
+          exists_volume? || exists_vm?
         end
         
-        def exists_disk?
+        def exists_volume?
           !@connection.volumes.all(:name => "#{name}.img").nil?
         end
         
