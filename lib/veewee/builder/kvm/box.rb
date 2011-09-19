@@ -53,8 +53,10 @@ module Veewee
             :name => name,
             :network_interface_type => "nat",
             :iso_file => definition.iso_file ,
+            #:arch => ""
             :iso_dir => env.config.veewee.iso_dir,
-            :type => "raw")
+            #:volume_format_type => "img"
+            )
         end
         
         # Create the disk of a new vm
