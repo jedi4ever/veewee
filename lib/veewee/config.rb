@@ -108,9 +108,10 @@ module Veewee
       valid_paths=expanded_paths.collect { |path|
         if File.exists?(path) && File.directory?(path)
           env.logger.info "Definition path #{path} exists"
-          File.expand_path(path)
+          return File.expand_path(path)
         else
           env.logger.info "Definition path #{path} does not exist, skipping"
+          return nil
         end
       }
 
@@ -122,7 +123,7 @@ module Veewee
       veewee_configurator=config
 
       # For all paths that exist
-      valid_paths.each do |path|
+      valid_paths.compact.each do |path|
 
         # Read subdirectories
         definition_dirs=Dir[File.join(path,"**")].reject{|d| not File.directory?(d)}
