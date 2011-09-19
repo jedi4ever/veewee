@@ -94,7 +94,7 @@ module Veewee
         end
         
         def running?
-          if exists?
+          if exists_vm?
             @connection.servers.all(:name => name).first.ready?
           else
             false
@@ -102,7 +102,15 @@ module Veewee
         end
 
         def exists?
-          (!@connection.servers.all(:name => name).nil?) || (!@connection.volumes.all(:name => "#{name}.img").nil?)
+          exists_disks? || exists_vm?
+        end
+        
+        def exists_disk?
+          !@connection.volumes.all(:name => "#{name}.img").nil?
+        end
+        
+        def exists_vm?
+          !@connection.servers.all(:name => name).nil?
         end
 
       end # End Class
