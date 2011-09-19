@@ -21,6 +21,9 @@ module Veewee
 
       attr_accessor :template_path
       attr_accessor :definition_path
+      
+      attr_accessor :environment_dir
+      attr_accessor :iso_dir,:box_dir,:tmp_dir
 
       def initialize(config)
         @env=config.env
@@ -30,6 +33,15 @@ module Veewee
         @template_path=[:internal,"templates"]
         @definition_path=["definitions"]
 
+        @environment_dir=Dir.pwd
+        @definition_dir=File.join(@environment_dir,"definitions")
+        @iso_dir=File.join(@environment_dir,"iso")
+        @box_dir=File.join(@environment_dir,"boxes")
+        @veewee_dir=File.expand_path(File.join(File.dirname(__FILE__),"..",".."))
+        @validation_dir=File.join(@veewee_dir,"validation")
+        @template_dir=File.expand_path(File.join(File.dirname(__FILE__),"..","..", "templates"))
+        @tmp_dir=File.join(@environment_dir,"tmp")
+
         env.logger.debug("done")
 
       end
@@ -38,3 +50,6 @@ module Veewee
     end #Class
   end #Module
 end #Module
+
+
+

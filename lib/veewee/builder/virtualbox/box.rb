@@ -40,6 +40,51 @@ module Veewee
          return "VBoxManage"
       end   
 
+      def create(definition)
+         command="#{@vboxcmd} createvm --name '#{@box_name}' --ostype '#{definition.os_type_id}' --register"
+
+          #Exec and system stop the execution here
+          Veewee::Util::Shell.execute("#{command}")
+
+          # Modify the vm to enable or disable hw virtualization extensions
+          vm_flags=%w{pagefusion acpi ioapic pae hpet hwvirtex hwvirtexcl nestedpaging largepages vtxvpid synthxcpu rtcuseutc}
+
+          vm_flags.each do |vm_flag|
+            if @definition.instance_variable_defined?("@#{vm_flag}")
+              #vm_flag_value=@definition.instance_variable_get(vm_flag.to_sym)
+
+              vm_flag_value=@definition.instance_variable_get("@#{vm_flag}")
+              puts "Setting VM Flag #{vm_flag} to #{vm_flag_value}"
+              command="#{@vboxcmd} modifyvm #{@box_name} --#{vm_flag.to_s} #{vm_flag_value}"
+              Veewee::Util::Shell.execute("#{command}")
+            end
+          end
+
+        end
+
+        vm=VirtualBox::VM.find(@box_name)
+        if vm.nil?
+          puts "we tried to create a box or a box was here before"
+          puts "but now it's gone"
+          exit
+        end
+
+        #Set all params we know
+        vm.memory_size=definition.memory_size.to_i
+        vm.os_type_id=definition.os_type_id
+        vm.cpu_count=definition.cpu_count.to_i
+        vm.name=name
+
+        puts "Creating vm #{vm.name} : #{vm.memory_size}M - #{vm.cpu_count} CPU - #{vm.os_type_id}"
+        #setting bootorder
+        vm.boot_order[0]=:hard_disk
+        vm.boot_order[1]=:dvd
+        vm.boot_order[2]=:null
+        vm.boot_order[3]=:null
+        vm.validate
+        vm.save
+      end
+      
       def ssh_options 
         ssh_options={ 
           :user => @definition.ssh_user, 

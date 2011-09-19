@@ -12,7 +12,7 @@ module Veewee
 
     attr_reader :env
 
-    attr_accessor :definitions 
+    attr_accessor :definitions
     attr_accessor :builders
     attr_accessor :definitions
     attr_accessor :templates
@@ -20,7 +20,7 @@ module Veewee
     def initialize(options)
       @env=options[:env]
       env.logger.info("config") { "Initializing empty list of definitions in config" }
-      
+
       @builders=Hash.new
       @definitions=Hash.new
       @templates=Hash.new
@@ -78,25 +78,25 @@ module Veewee
       end
       return self
     end
-    
-    
+
+
     # Loading the builders
     def load_builders()
       %w{vmfusion kvm virtualbox}.each do |name|
         config=OpenStruct.new
         config.env=env
         config.builder=::Veewee::Config::Builder.new(config)
-        config.builder.define(name) do |config|          
+        config.builder.define(name) do |config|
           config.builder.name="#{name}"
           config.builder.type="#{name}"
         end
         env.config.builders.merge!(config.builder.components)
 
       end
-      
+
     end
-    
-    
+
+
     # Loading the definitions directories
     def load_definitions()
       # Read definitions from definitionspath
@@ -120,7 +120,7 @@ module Veewee
       config.definition=::Veewee::Config::Definition.new(config)
 
       veewee_configurator=config
-      
+
       # For all paths that exist
       valid_paths.each do |path|
 
@@ -130,15 +130,17 @@ module Veewee
           definition_file=File.join(dir,"definition.rb")
           if File.exists?(definition_file)
             definition=File.read(definition_file)
-            
-            definition["Veewee::Session.declare("]="veewee_configurator.definition.declare(\"#{File.basename(dir)}\","
-            
+            name=File.basename(dir)
+            definition["Veewee::Session.declare("]="veewee_configurator.definition.declare(\"#{name}\","
+
             env.logger.info(definition)
-            config.basedir=File.dirname(definition_file)
-            begin           
+
+            begin
               cwd=FileUtils.pwd
-              FileUtils.cd(dir)  
+              FileUtils.cd(dir)
               config.instance_eval(definition)
+              config.definition.components[name].path=File.dirname(definition_file)
+              env.logger.info("Setting definition path for definition #{name} to #{File.dirname(definition_file)}")
               FileUtils.cd(cwd)
             rescue NameError => ex
               env.ui.error("NameError reading definition from file #{definition_file} #{ex}")
@@ -149,8 +151,9 @@ module Veewee
             env.logger.info "#{definition_file} not found"
           end
         end
+
       end
-      
+
       env.config.definitions.merge!(config.definition.components)
     end
 

@@ -19,10 +19,10 @@ module Veewee
         env.logger.debug("config definition"){ "Start declaring definition"}
       
         # So we first register the defintion
-        self.define(name) do |definition|
+        self.define(name) do |config|
           # we need to inject all keys as instance variables & attr_accessors
           options.keys.each do |key|
-            definition.send("#{key.to_s}=",options[key])
+            config.definition.send("#{key.to_s}=",options[key])
           end
         end
         

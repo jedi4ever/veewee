@@ -1,9 +1,31 @@
+require 'ostruct'
+
 module Veewee::Builder
   module Core
   class Definition
 
     attr_accessor :name
     attr_accessor :env
+    
+    attr_accessor :cpu_count,:memory_size,:iso_file
+    attr_accessor :disk_size, :disk_format
+    
+    attr_accessor :os_typ_id
+    
+    attr_accessor :boot_wait,:boot_cmd_sequence
+    
+    attr_accessor :kickstart_port,:kickstart_ip,:kickstart_timeout, :kickstart_file
+
+    attr_accessor :ssh_login_timeout, :ssh_user , :ssh_password, :ssh_key, :ssh_host_port, :ssh_guest_port 
+    
+    attr_accessor :sudo_cmd
+    attr_accessor :shutdown_cmd
+
+    attr_accessor :postinstall_files, :postinstall_timeout
+    
+    attr_accessor :floppy_files
+    
+    attr_accessor :path
 
     def initialize(name,env)
 
@@ -11,7 +33,7 @@ module Veewee::Builder
       @env=env
 
       # Default is 1 CPU + 256 Mem of memory
-      @cpu_count='1' ; @memory_size='256';
+      @cpu_count='1' ; @memory_size='256';      
       
       # Default there is no ISO file mounted
       @iso_file = nil, @iso_src = nil ; @iso_md5 = nil ; @iso_download_timeout=1000 ; @iso_download_instructions = nil
@@ -22,7 +44,8 @@ module Veewee::Builder
       # Default there are no post install files
       @postinstall_files=[]; @postinstall_timeout = 10000;
 
-#        :disk_size => '10240', :disk_format => 'VDI',
+      @iso_file=""
+      @disk_size = '10240'; @disk_format = 'VDI'
 
 #        :hostiocache => 'off' ,
 #        :os_type_id => 'Ubuntu',

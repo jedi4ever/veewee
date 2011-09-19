@@ -20,31 +20,33 @@ module Veewee
 
       def self.when_ssh_login_works(ip="localhost", options = {  } , &block)
 
-        defaults={ :port => '22', :timeout => 200 , :user => 'vagrant', :password => 'vagrant'}
+        defaults={ :port => '22', :timeout => 20000 , :user => 'vagrant', :password => 'vagrant'}
 
         options=defaults.merge(options)
 
-        puts
-        puts "Waiting for ssh login on #{ip} with user #{options[:user]} to sshd on port => #{options[:port]} to work, timeout=#{options[:timeout]} min"
+        puts  "Waiting for ssh login on #{ip} with user #{options[:user]} to sshd on port => #{options[:port]} to work, timeout=#{options[:timeout]} sec"
 
         begin
-          Timeout::timeout(options[:timeout]*60) do
+          Timeout::timeout(options[:timeout]) do
             connected=false
             while !connected do
               begin
                 print "."
-                Net::SSH.start(ip, options[:user], { :port => options[:port] , :password => options[:password], :paranoid => false , :timeout => 60 }) do |ssh|
+                Net::SSH.start(ip, options[:user], { :port => options[:port] , :password => options[:password], :paranoid => false , :timeout => options[:timeout] }) do |ssh|
+                  print "\n"
+
                   block.call(ip);
                   puts ""
                   return true
                 end
-              rescue Net::SSH::Disconnect,Errno::ECONNREFUSED, Errno::EHOSTUNREACH, Errno::ECONNABORTED, Errno::ECONNRESET, Errno::ENETUNREACH,Errno::ETIMEDOUT
-                sleep 1
+              rescue Net::SSH::Disconnect,Errno::ECONNREFUSED, Errno::EHOSTUNREACH, Errno::ECONNABORTED, Errno::ECONNRESET, Errno::ENETUNREACH,Errno::ETIMEDOUT, Errno::ENETUNREACH
+                sleep 5
               end
             end
           end
         rescue Timeout::Error
-          raise 'ssh timeout'
+          puts "Ssh timeout #{options[:timeout]} min has been reached."
+          exit -1
         end
         puts ""
         return false

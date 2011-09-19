@@ -29,16 +29,12 @@ module Veewee
           super(environment,box_name,definition_name,box_options)
         end
 
+        # Type on the console
         def console_type(sequence,type_options={})
-
-          s.gsub!(/%IP%/,@web_ip_address);
-          s.gsub!(/%PORT%/,@definition.kickstart_port);
-          s.gsub!(/%NAME%/, name);
-
-          send_vn_sequence(sequence,"localhost",raw.vnc_port)
-          
+                  vnc_port=raw.vnc_port
+                  vnc_type(sequence,"localhost",vnc_port)
         end
-        
+                
         # Translate the definition ssh options to ssh options that can be passed to Net::Ssh calls
         # We expect plain ssh for a connection
         def ssh_options
@@ -76,18 +72,6 @@ module Veewee
           ip=@connection.servers.all(:name => "#{@box_name}").first.addresses[:public]
           return ip.first unless ip.nil?
           return ip
-        end
-
-        def web_ip_address
-          unless @connection.uri.ssh_enabled?
-            ip=Veewee::Util::Tcp.local_ip
-          else
-            # Not supported yet but these are some ideas
-            # Try to figure out the remote IP address
-            # ip -4 -o addr show  br0
-            ip=Veewee::Util::Ssh.execute(@connection.uri.host,"ip -4 -o addr show br0",options ={ :user => "#{connection.uri.user}"}).stdout.split("inet ")[1].split("/").first
-            return ip
-          end
         end
         
 

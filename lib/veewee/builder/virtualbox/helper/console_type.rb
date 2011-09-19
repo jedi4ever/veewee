@@ -16,8 +16,9 @@ module Veewee
           counter=counter+1
 
           s.gsub!(/%IP%/,Veewee::Util::Tcp.local_ip);
+
           s.gsub!(/%PORT%/,@definition.kickstart_port);
-          s.gsub!(/%NAME%/, @box_name);
+          s.gsub!(/%NAME%/, name);
           puts "Typing:[#{counter}]: "+s
 
           keycodes=Veewee::Util::Scancode.string_to_keycode(s)

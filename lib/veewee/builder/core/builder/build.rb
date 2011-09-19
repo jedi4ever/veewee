@@ -1,32 +1,16 @@
-module Veewee  
+module Veewee
   module Builder
     module Core
       module BuilderCommand
 
-        def get_definition(name)
-          return env.config.definitions[name]
-        end
-        
-        def get_box(name)
-          begin
-            require_path='veewee/builder/'+type.to_s.downcase+"/box.rb"
-            require require_path
-
-            # Get a real box object from the builder
-            box=Object.const_get("Veewee").const_get("Builder").const_get(type.to_s.capitalize).const_get("Box").new(name,env)
-          rescue Error => ex
-            env.ui.error "Could not instante the box #{name} with provider #{type} ,#{ex}"            
-          end
-        end
-        
         def build(definition_name,box_name,options)
-      
+
           # If no box_name was given, let's give the box the same name as the definition
           if box_name.nil?
             box_name=definition_name
           end
-          
-          env.ui.info "building #{definition_name} #{box_name} #{options}"
+
+          env.ui.info "Building #{definition_name} #{box_name} #{options}"
 
           definition=get_definition(definition_name)
 
@@ -39,68 +23,110 @@ module Veewee
               box.reload
             else
               env.ui.error "you need to provide --force because the box #{box_name} already exists"
-            end            
+              exit -1
+            end
           end
-          
-          # By now the box should have been gone, just checking again          
-          if box.exists?
-            env.ui.error "The box should have been deleted by now. Something went terribly wrong. Sorry"            
-          end
-          
-          box.create(definition)         
-          
-        end
-           
-        def handle_postinstall
 
-          @definition.postinstall_files.each do |postinstall_file|
+          # By now the box should have been gone, just checking again
+          if box.exists?
+            env.ui.error "The box should have been deleted by now. Something went terribly wrong. Sorry"
+            exit -1
+          end
+
+          box.create(definition)
+          box.start(options[:gui])
+
+          #waiting for it to boot
+          env.ui.info "Waiting #{definition.boot_wait.to_i} seconds for the machine to boot"
+          sleep definition.boot_wait.to_i
+
+          # Let fill's in the variable we need
+          boot_sequence=fill_sequence(definition.boot_cmd_sequence,{
+            :ip =>Veewee::Util::Tcp.local_ip,
+            :port => definition.kickstart_port,
+            :name => box.name
+          })
+          
+          box.console_type(boot_sequence)
+          
+          handle_kickstart(definition)
+          
+          handle_postinstall(box,definition)
+        end
+
+        # This will take a sequence and fill in the variables specified in the options
+        # f.i. options={:ip => "name"} will substitute "%IP%" -> "name"
+        def fill_sequence(sequence,options)
+          filled=sequence.dup
+          options.each do |key,value|  
+            filled.each do |s|
+              s.gsub!("%#{key.upcase}%",value)
+            end
+          end
+          return filled
+        end
+
+        # This function handles all the post-install scripts
+        # It requires a box(to login to) and a definition(listing the postinstall files) 
+        def handle_postinstall(box,definition)
+
+          definition.postinstall_files.each do |postinstall_file|
 
             # Filenames of postinstall_files are relative to their definition
-            filename=File.join(@environment.definition_dir,@box_name,postinstall_file)
+            filename=File.join(definition.path,postinstall_file)
 
-            Veewee::Util::Ssh.when_ssh_login_works(ip_address,ssh_options) do
+            Veewee::Util::Ssh.when_ssh_login_works(box.ip_address,ssh_options(definition).merge({:timeout => definition.postinstall_timeout.to_i})) do
               begin
-                Veewee::Util::Ssh.transfer_file(ip_address,filename,File.basename(filename),ssh_options)
+                Veewee::Util::Ssh.transfer_file(box.ip_address,filename,File.basename(filename),ssh_options(definition))
               rescue RuntimeError
-                puts "error transfering file, possible not enough permissions to write?"
-                exit
+                env.ui.error "error transfering file #{File.basename(filename)}, possible not enough permissions to write?"
+                exit -1
               end
-              command=@definition.sudo_cmd
-              newcommand=command.gsub(/%p/,"#{@definition.ssh_password}")
-              newcommand.gsub!(/%u/,"#{@definition.ssh_user}")
+              command=definition.sudo_cmd
+              newcommand=command.gsub(/%p/,"#{definition.ssh_password}")
+              newcommand.gsub!(/%u/,"#{definition.ssh_user}")
               newcommand.gsub!(/%f/,"#{postinstall_file}")
-              Veewee::Util::Ssh.execute(ip_address,"#{newcommand}",ssh_options)
+              begin
+                Veewee::Util::Ssh.execute(box.ip_address,"#{newcommand}",ssh_options(definition))
+              rescue RuntimeError
+                env.ui.error "Error executing the command #{newcommand}"
+                exit -1
+              end
             end
 
           end
         end
 
-        def handle_kickstart
+        # This function handles all the post-install scripts
+        # It requires a definition to find all the necessary information 
+        def handle_kickstart(definition)
+
           # Handling the kickstart by web
           kickstartfiles=definition.kickstart_file
 
           if kickstartfiles.nil? || kickstartfiles.length == 0
-            puts "Skipping webserver as no kickstartfile was specified"
+            env.ui.info "Skipping webserver as no kickstartfile was specified"
           end
 
-          puts "Starting a webserver on port #{@definition.kickstart_port}"
-          #:kickstart_port => "7122", :kickstart_ip => self.local_ip, :kickstart_timeout => 1000,:kickstart_file => "preseed.cfg",
+          env.ui.info "Starting a webserver #{definition.kickstart_ip}:#{definition.kickstart_port}\n"
+
+          # Check if the kickstart is an array or a single string
           if kickstartfiles.is_a?(String)
             # Let's turn it into an array
             kickstartfiles=kickstartfiles.split
           end
 
+          # For each kickstart file spinup a webserver and wait for the file to be fetched
           kickstartfiles.each do |kickfile|
             Veewee::Util::Web.wait_for_request(kickfile,{
               :port => definition.kickstart_port,
               :host => definition.kickstart_ip,
               :timeout => definition.kickstart_timeout,
-              :web_dir => File.join(@environment.definition_dir,@box_name)
+              :web_dir => definition.path
             })
           end
         end
-        
-        
+
       end
     end
   end
