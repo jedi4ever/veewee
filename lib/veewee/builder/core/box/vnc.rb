@@ -7,6 +7,7 @@ module Veewee
         
       def vnc_type(sequence,host,display=20)
         counter=0
+        env.logger.info "Opening VNC #{host} on display #{display}"
         vnc=Net::VNC.open("#{host}:#{display}",{:wait => 0.01})
         sequence.each { |s|
           counter=counter+1
