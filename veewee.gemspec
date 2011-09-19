@@ -21,6 +21,7 @@ Gem::Specification.new do |s|
   s.add_dependency "thor", "~> 0.14.6"
   s.add_dependency "highline", "~> 1.6.1"
   s.add_dependency "progressbar"
+  s.add_dependency "i18n"
   s.add_dependency "cucumber", "~> 1.0.2"
   s.add_dependency "rspec", "~> 2.5.0"
   s.add_dependency "ansi", "~> 1.3.0"
