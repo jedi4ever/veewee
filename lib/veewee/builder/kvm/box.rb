@@ -59,7 +59,7 @@ module Veewee
         
         # Destroy a vm
         def destroy
-          if raw.nil?
+          if @connection.servers.all(:name => name).nil?
             env.ui.error "Error:: You tried to destroy a non-existing box '#{name}'"
             exit -1
           end
