@@ -78,23 +78,19 @@ module Veewee
       end
             
             desc "validate [NAME]", "Validates a box against vagrant compliancy rules"
-            method_option :log_level, :default => 'info', :desc => "info,warning,debug"
-            method_option :log_file, :desc => "file to output log"
-            method_option :ssh_user,:default => "vagrant", :aliases => "-u", :desc => "user to login with"
-            method_option :ssh_password, :default => "vagrant", :desc => "password to login with"
-            method_option :ssh_key, :aliases => "-k", :desc => "ssh key to login with"
-            method_option :ssh_port, :aliases => "-p", :desc => "ssh port to login to"
-            method_option :box_name ,  :aliases => "-n", :desc => "name to use for the box"
-            method_option :definition_dir , :aliases => "-d", :desc => "directory where definitions are found"
+            
             def validate(box_name)
-              Veewee::Vagrant::UI::VagrantPlugin.validate(box_name,options)
+              venv=Veewee::Environment.new(options)
+              venv.ui=env.ui
+            
+              venv.config.builders["virtualbox"].validate_vagrant(box_name,options)
             end
 
     desc "export [NAME]", "Exports the basebox to the vagrant box format" 
     def export(box_name)
       venv=Veewee::Environment.new(options)
       venv.ui=env.ui
-      venv.config.builders["virtualbox"].export_vagrant(box_name)
+      venv.config.builders["virtualbox"].export_vagrant(box_name,options)
     end 
 
     end

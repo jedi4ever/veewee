@@ -6,7 +6,7 @@ module Veewee
 
       #    Shellutil.execute("vagrant package --base #{vmname} --include /tmp/Vagrantfile --output /tmp/#{vmname}.box", {:progress => "on"})
 
-      def export_vagrant(box_name)
+      def export_vagrant(box_name,options)
         definition=env.get_definition(box_name)
         box=get_box(box_name)
         

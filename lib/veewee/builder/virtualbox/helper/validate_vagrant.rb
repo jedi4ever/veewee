@@ -1,20 +1,19 @@
 module Veewee
   module Builder
     module Virtualbox
-      module BoxHelper
+      module BuilderHelper
 
-      def validate_vagrant(validate_options={})
+      def validate_vagrant(box_name,options)
         require 'cucumber'
 
         require 'cucumber/rspec/disable_option_parser'
         require 'cucumber/cli/main'
 
         ENV['veewee_user']=options[:user]
-        feature_path=File.join(File.dirname(__FILE__),"..","..","..","..","validation","vagrant.feature")
+        feature_path=File.join(File.dirname(__FILE__),"..","..","..","..","..","validation","vagrant.feature")
 
         features=Array.new
         features[0]=feature_path
-
 
         begin
           # The dup is to keep ARGV intact, so that tools like ruby-debug can respawn.
