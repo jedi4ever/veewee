@@ -42,11 +42,13 @@ module Veewee
 
           s=@connection.servers.create(
             :name => name,
+            :memory_size => definition.memory_size.to_i*1024,
+            :cpus => definition.cpu_count.to_i,
+            :volume_capacity => "#{definition.disk_size}M",
             :network_interface_type => "nat",
-            :iso_file => definition.iso_file ,
-            #:arch => "" x86_64 / x86
+            :iso_file => definition.iso_file,
+            :arch => definition.os_type_id.end_with?("_64") ? "x86_64" : "i686"
             :iso_dir => env.config.veewee.iso_dir,
-            #:volume_format_type => "img"
             )
         end
         
