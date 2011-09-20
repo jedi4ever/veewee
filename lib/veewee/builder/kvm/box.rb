@@ -47,8 +47,8 @@ module Veewee
             :volume_capacity => "#{definition.disk_size}M",
             :network_interface_type => "nat",
             :iso_file => definition.iso_file,
-            :arch => definition.os_type_id.end_with?("_64") ? "x86_64" : "i686"
-            :iso_dir => env.config.veewee.iso_dir,
+            :arch => definition.os_type_id.end_with?("_64") ? "x86_64" : "i686",
+            :iso_dir => env.config.veewee.iso_dir
             )
         end
         
