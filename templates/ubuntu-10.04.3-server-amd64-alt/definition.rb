@@ -1,7 +1,7 @@
 require 'digest/md5'
 CURRENT_DIR       = File.dirname(__FILE__)
 PRESEED_MD5       = "#{Digest::MD5.file("#{CURRENT_DIR}/preseed.cfg").hexdigest}"
-#ISO_MD5           = "#{Digest::MD5.file("#{CURRENT_DIR}/../../iso/ubuntu-10.04.2-alternate-amd64.iso").hexdigest}"
+#ISO_MD5           = "#{Digest::MD5.file("#{CURRENT_DIR}/../../iso/ubuntu-10.04.3-alternate-amd64.iso").hexdigest}"
 
 Veewee::Session.declare( {
   :boot_cmd_sequence    => [
@@ -34,9 +34,9 @@ Veewee::Session.declare( {
   :disk_format          => 'VMDK',
   :hostiocache          => 'on',
   :iso_download_timeout => "60",
-  :iso_file             => "ubuntu-10.04.2-alternate-amd64.iso",
-  :iso_src              => "http://releases.ubuntu.com/10.04.2/ubuntu-10.04.2-alternate-amd64.iso",
-  :iso_md5              => "21929bb7caebcc600d92adb3e95a1229",
+  :iso_file             => "ubuntu-10.04.3-alternate-amd64.iso",
+  :iso_src              => "http://releases.ubuntu.com/10.04.3/ubuntu-10.04.3-alternate-amd64.iso",
+  :iso_md5              => "e38e5cf4cc02c9a3fa4ecd88832d120c",
   :kickstart_file       => "preseed.cfg",
   :kickstart_port       => "7122",
   :kickstart_timeout    => "60",
