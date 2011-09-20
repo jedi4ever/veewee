@@ -19,7 +19,7 @@ gpgcheck=0
 EOM
 
 yum -y install puppet facter ruby-devel rubygems
-yum -y erase wireless-tools gtk2 libX11 hicolor-icon-theme avahi freetype bitstream-vera-fonts
+yum -y erase  gtk2 libX11 hicolor-icon-theme avahi freetype bitstream-vera-fonts
 yum -y clean all
 rm /etc/yum.repos.d/{puppetlabs,epel}.repo
 

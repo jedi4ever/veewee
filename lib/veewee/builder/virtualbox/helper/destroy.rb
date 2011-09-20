@@ -5,6 +5,11 @@ module Veewee
         
       def destroy
         
+        if raw.nil?
+          env.ui.error "Error:: You tried to destroy a non-existing box '#{name}'"
+          exit -1
+        end
+        
         # If it has a save state,remove that first
         if raw.saved?
           env.ui.info "Removing save state"
@@ -12,10 +17,13 @@ module Veewee
           raw.reload
         end
         
-        # If the machine was in pause it is locked
-        # The we must do a poweroff
-          
-        env.logger.info "anything here?"
+        env.logger.info "Checking state: #{raw.state}"
+        if raw.state.to_s=="running"
+          # Poweroff
+          raw.stop
+          # Wait for it to happen
+          sleep 2
+        end
         #:destroy_medium => :delete,  will delete machine + all media attachments
         #vm.destroy(:destroy_medium => :delete)
         ##vm.destroy(:destroy_image => true)

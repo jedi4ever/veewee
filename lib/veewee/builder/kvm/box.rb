@@ -59,6 +59,11 @@ module Veewee
         
         # Destroy a vm
         def destroy
+          if raw.nil?
+            env.ui.error "Error:: You tried to destroy a non-existing box '#{name}'"
+            exit -1
+          end
+          
           halt if running?
           destroy_vm if exists_vm?
           

@@ -2,7 +2,7 @@
 
 date > /etc/vagrant_box_build_time
 
-yum -y erase wireless-tools gtk2 libX11 hicolor-icon-theme avahi freetype bitstream-vera-fonts
+yum -y erase  gtk2 libX11 hicolor-icon-theme avahi freetype bitstream-vera-fonts
 yum -y clean all
 
 gem install --no-ri --no-rdoc chef

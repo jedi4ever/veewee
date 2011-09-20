@@ -45,6 +45,11 @@ module Veewee
         end
 
         def destroy
+          if raw.nil?
+            env.ui.error "Error:: You tried to destroy a non-existing box '#{name}'"
+            exit -1
+          end
+          
           raw.halt if raw.state=="running"
           ::Fission::VM.delete(name)
         end

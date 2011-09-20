@@ -35,7 +35,7 @@ module Veewee
             end
           end
           #sleep after each sequence (needs to be param)
-          sleep 0.05
+          sleep 0.5
         }
 
         env.ui.info "Done typing."

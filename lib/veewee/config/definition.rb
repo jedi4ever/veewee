@@ -38,11 +38,7 @@ module Veewee
         # Depending on type, we create a variable of that type
         definition_stub=OpenStruct.new
 
-        builder_type="vmfusion"
-        
-        begin
-        # Load required builder
-        
+        begin        
         # Get a real definition object
         real_definition=::Veewee::Definition.new(name,env)
         rescue Error => e
