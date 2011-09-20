@@ -14,26 +14,9 @@ module Veewee
         @env=config.env
         @components=Hash.new
       end
-
-      # This is the old syntax (it defines a box + definition using the same name)
-      def declare(name,options)
-     
-        env.logger.debug("config definition"){ "Start declaring definition"}
       
-        # So we first register the defintion
-        self.define(name) do |config|
-          # we need to inject all keys as instance variables & attr_accessors
-          options.keys.each do |key|
-            config.definition.send("#{key.to_s}=",options[key])
-          end
-        end
-        
-        # And now register a box with the same name
-        
-        env.logger.debug("config definition"){ "End declaring definition"}
-             
-      end
-      
+      # Currently not used, this is in case we will specify the a definition in the Veeweefile
+      # This is for future needs
       def define(name)
         # Depending on type, we create a variable of that type
         definition_stub=OpenStruct.new

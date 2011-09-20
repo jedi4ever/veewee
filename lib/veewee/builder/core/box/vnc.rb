@@ -12,7 +12,6 @@ module Veewee
         sequence.each { |s|
           counter=counter+1
 
-
           env.ui.info "Typing:[#{counter}]: "+s
 
           keycodes=string_to_vnccode(s)

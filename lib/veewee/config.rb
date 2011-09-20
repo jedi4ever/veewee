@@ -79,7 +79,6 @@ module Veewee
       return self
     end
 
-
     # Loading the builders
     def load_builders()
       %w{vmfusion kvm virtualbox}.each do |name|
@@ -96,67 +95,6 @@ module Veewee
 
     end
 
-
-    # Loading the definitions directories
-    def load_definitions()
-      # Read definitions from definitionspath
-      env.ui.info "Loading definitions from definition path"
-      paths=env.config.veewee.definition_path
-
-      expanded_paths=paths.collect { |t| t==:internal ?  File.join(File.dirname(__FILE__),"..","..","definitions") : t }
-
-      valid_paths=expanded_paths.collect { |path|
-        if File.exists?(path) && File.directory?(path)
-          env.logger.info "Definition path #{path} exists"
-          File.expand_path(path)
-        else
-          env.logger.info "Definition path #{path} does not exist, skipping"
-          nil
-        end
-      }
-
-      # Create a dummy config
-      config=OpenStruct.new
-      config.env=env
-      config.definition=::Veewee::Config::Definition.new(config)
-
-      veewee_configurator=config
-
-      # For all paths that exist
-      valid_paths.compact.each do |path|
-
-        # Read subdirectories
-        definition_dirs=Dir[File.join(path,"**")].reject{|d| not File.directory?(d)}
-        definition_dirs.each do |dir|
-          definition_file=File.join(dir,"definition.rb")
-          if File.exists?(definition_file)
-            definition=File.read(definition_file)
-            name=File.basename(dir)
-            definition["Veewee::Session.declare("]="veewee_configurator.definition.declare(\"#{name}\","
-
-            env.logger.info(definition)
-
-            begin
-              cwd=FileUtils.pwd
-              FileUtils.cd(dir)
-              config.instance_eval(definition)
-              config.definition.components[name].path=File.dirname(definition_file)
-              env.logger.info("Setting definition path for definition #{name} to #{File.dirname(definition_file)}")
-              FileUtils.cd(cwd)
-            rescue NameError => ex
-              env.ui.error("NameError reading definition from file #{definition_file} #{ex}")
-            rescue Exception => ex
-              env.ui.error("Error reading definition from file #{definition_file}#{ex}")
-            end
-          else
-            env.logger.info "#{definition_file} not found"
-          end
-        end
-
-      end
-
-      env.config.definitions.merge!(config.definition.components)
-    end
 
   end #End Class
 end #End Module

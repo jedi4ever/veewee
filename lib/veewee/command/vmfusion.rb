@@ -12,7 +12,8 @@ module Veewee
       desc "destroy [BOXNAME]", "Destroys the virtualmachine that was build"
       def destroy(box_name)
         env.config.builders["vmfusion"].get_box(box_name).destroy
-      end
+      end    
+
       
     end
 

@@ -1,7 +1,7 @@
 require 'thor'
 
 module Veewee
-  # Entrypoint for the Mccloud CLI. This class should never be
+  # Entrypoint for the Veewee CLI. This class should never be
   # initialized directly (like a typical Thor class). Instead,
   # use {Environment#cli} to invoke the CLI.
   #
@@ -52,4 +52,4 @@ module Veewee
       end
     end
   end
-end #Mccloud
+end #Veewee

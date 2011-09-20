@@ -1,4 +1,4 @@
-module Mccloud
+module Veewee
   class Config
     class Component
 
@@ -16,4 +16,4 @@ module Mccloud
              
     end
   end
-end #Module Mccloud
+end #Module Veewee

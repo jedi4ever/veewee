@@ -1,4 +1,4 @@
-module Mccloud
+module Veewee
   module Command
     # Same as {Base} except adds the `name` argument for you. This superclass
     # is useful if you're creating a command which should be able to target

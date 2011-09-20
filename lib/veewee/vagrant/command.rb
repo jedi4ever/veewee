@@ -14,21 +14,6 @@ module Veewee
               Veewee::Vagrant::UI::VagrantPlugin.list_ostypes(options)
             end
 
-            desc "templates", "List the currently available basebox templates"
-            method_option :log_level, :default => 'info', :desc => "info,warning,debug"
-            method_option :log_file, :desc => "file to output log"
-            method_option :template_dir , :aliases => "-t", :desc => "directory where templates are found"
-            def templates
-              Veewee::Vagrant::UI::VagrantPlugin.list_templates(options)
-            end
-
-            desc "list", "Lists all defined baseboxes"
-            method_option :log_level, :default => 'info', :desc => "info,warning,debug"
-            method_option :log_file, :desc => "file to output log"
-            method_option :definition_dir , :aliases => "-d", :desc => "directory where definitions are found"
-            def list
-              Veewee::Vagrant::UI::VagrantPlugin.list_definitions(options)
-            end
 
             desc "define [BOXNAME] [TEMPLATE]", "Define a new basebox starting from a template"
             method_option :log_level, :default => 'info', :desc => "info,warning,debug"

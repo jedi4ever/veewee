@@ -26,13 +26,19 @@ module Veewee
           # so we let user know , the vm is ready to be exported
 
           definition=get_definition(definition_name)
-          box=get_box(box_name)
+          
+          # If no box_name was given, let's give the box the same name as the definition
+          if box_name.nil?
+            box_name=definition_name
+          end
+          
+          #box=get_box(box_name)
 
-          env.ui.info "#{box.name} was build succesfully. "
-          env.ui.info ""
-          env.ui.info "Now you can ssh into the machine (password:#{definition.ssh_passsword})"
-          env.ui.info "ssh #{definition.ssh_user}@#{box.ip_address} -p #{ssh_options(definition)[:port]}"
-          env.ui.info ""
+          #env.ui.info "#{box.name} was build succesfully. "
+          #env.ui.info ""
+          #env.ui.info "Now you can ssh into the machine (password:#{definition.ssh_password})"
+          #env.ui.info "ssh #{definition.ssh_user}@#{box.ip_address} -p #{ssh_options(definition)[:port]}"
+          #env.ui.info ""
 
         end
         

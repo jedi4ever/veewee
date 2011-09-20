@@ -1,5 +1,6 @@
 require 'test/unit'
 require 'lib/veewee'
+require 'tempfile'
 
 class TestVeeweeEnvironment < Test::Unit::TestCase
   def test_environment_default_to_currentdir
@@ -9,14 +10,14 @@ class TestVeeweeEnvironment < Test::Unit::TestCase
     tempdir=Dir.pwd
     begin
       ve=Veewee::Environment.new()
-      assert_equal(ve.environment_dir,tempdir)
+      assert_equal(ve.cwd,tempdir)
     ensure
       FileUtils.remove_entry_secure tempdir
     end
 
   end
 
-  # If a environment_dir is passed, it take precendence over currentdir
+  # If a cwd is passed, it take precendence over currentdir
   def test_environment_override_environmentdir
 
     # Create a temp directory to simulate a currentdir
@@ -26,8 +27,8 @@ class TestVeeweeEnvironment < Test::Unit::TestCase
     # Now change to another dir
     Dir.chdir("/tmp")
     begin
-      ve=Veewee::Environment.new({:environment_dir => tempdir})
-      assert_equal(ve.environment_dir,tempdir)
+      ve=Veewee::Environment.new({:cwd => tempdir})
+      assert_equal(ve.cwd,tempdir)
     ensure
       FileUtils.remove_entry_secure tempdir
     end
@@ -46,8 +47,8 @@ class TestVeeweeEnvironment < Test::Unit::TestCase
     Dir.chdir(tempdir)
     tempdir=Dir.pwd
     begin
-      ve=Veewee::Environment.new({:environment_dir => tempdir})
-      assert_equal(ve.definition_dir,File.join(tempdir,"definitions"))
+      ve=Veewee::Environment.new({:cwd => tempdir})
+      assert(ve.definition_path.include?(File.join(tempdir,"definitions")))
       assert_equal(ve.iso_dir,File.join(tempdir,"iso"))
     ensure
       FileUtils.remove_entry_secure tempdir
@@ -59,7 +60,7 @@ class TestVeeweeEnvironment < Test::Unit::TestCase
   def test_environment_definition_dir_relative_to_environmentdir
     # Goto top dir , to make pwd another dir
     Dir.chdir("/")
-    ve=Veewee::Environment.new({:definition_dir => "/tmp"})
+    ve=Veewee::Environment.new({:definition_path => ["/tmp"]})
     assert_equal(ve.definition_dir,"/tmp")
   end
 
