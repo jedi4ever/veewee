@@ -1,4 +1,6 @@
 require 'veewee/config/component'
+require 'veewee/definition'
+
 require 'ostruct'
 
 module Veewee
@@ -40,11 +42,9 @@ module Veewee
         
         begin
         # Load required builder
-        require_path='veewee/builder/'+builder_type.to_s.downcase+"/definition.rb"
-        require require_path
         
-        # Get a real definition object from the builder
-        real_definition=Object.const_get("Veewee").const_get("Builder").const_get(builder_type.to_s.capitalize).const_get("Definition").new(name,env)
+        # Get a real definition object
+        real_definition=::Veewee::Definition.new(name,env)
         rescue Error => e
           env.ui.error "Error loading provider with #{name},#{$!}"
         end

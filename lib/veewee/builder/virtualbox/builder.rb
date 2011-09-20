@@ -32,7 +32,7 @@ module Veewee
         env.ui.info ""
         env.ui.info "Now you can: "
         env.ui.info "- verify your box by running              : vagrant basebox validate #{box_name}"
-        env.ui "- export your vm to a .box fileby running : vagrant basebox export   #{box_name}"
+        env.ui.info "- export your vm to a .box fileby running : vagrant basebox export   #{box_name}"
         
       end
 

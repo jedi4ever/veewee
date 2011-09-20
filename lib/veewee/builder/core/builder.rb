@@ -4,6 +4,7 @@ require 'veewee/util/web'
 require 'veewee/util/ssh'
 
 require 'veewee/builder/core/builder/build.rb'
+require 'veewee/builder/core/builder/iso.rb'
 
 module Veewee
   module Builder

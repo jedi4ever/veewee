@@ -2,7 +2,9 @@
 
 module Veewee
   module Builder
-    module Kvm
+    module Core
+      module BuilderCommand
+      
 
       def ssh_tunnel_start(forwardings)
         #ssh_options={ :keys => [ vm.private_key ], :paranoid => false, :keys_only => true}
@@ -23,7 +25,7 @@ module Veewee
               puts
               ssh_session.forward.local(forwarding[:local_port], "127.0.0.1",forwarding[:remote_port])
             rescue Errno::EACCES
-              puts "  Error - Access denied to forward remote port #{forwarding[:remote_port]} from #{box_name} to local port #{forwarding[:local_port]}"
+              puts "  Error - Access denied to forward remote port #{forwarding[:remote_port]} from #{name} to local port #{forwarding[:local_port]}"
             end
           end
           ssh_session.loop {true}
@@ -38,7 +40,7 @@ module Veewee
       def ssh_tunnel_stop
         Thread.kill(@forward_threads.first)
       end
-
+    end
     end
   end
 end

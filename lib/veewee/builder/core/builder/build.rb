@@ -1,5 +1,3 @@
-
-
 module Veewee
   module Builder
     module Core
@@ -22,8 +20,7 @@ module Veewee
           env.ui.info "Building #{definition_name} #{box_name} #{options}"
           
           # Check the iso file we need to build the box
-          #verify_iso(definition.iso_file)
-          
+          verify_iso(definition,options)
           
           box=get_box(box_name)
 

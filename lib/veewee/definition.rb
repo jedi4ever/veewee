@@ -1,7 +1,6 @@
 require 'ostruct'
 
-module Veewee::Builder
-  module Core
+module Veewee
   class Definition
 
     attr_accessor :name
@@ -29,7 +28,7 @@ module Veewee::Builder
     
     attr_accessor :os_type_id,:use_hw_virt_ext,:use_pae,:hostiocache
     
-    attr_accessor :iso_dowload_timeout, :iso_src,:iso_md5
+    attr_accessor :iso_dowload_timeout, :iso_src,:iso_md5 ,:iso_download_instructions
     
     
 
@@ -81,5 +80,4 @@ module Veewee::Builder
 
 
   end #End Class
-end #End Module
 end #End Module
