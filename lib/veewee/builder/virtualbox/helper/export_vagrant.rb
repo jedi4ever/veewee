@@ -2,18 +2,21 @@ require 'pathname'
 module Veewee
   module Builder
     module Virtualbox
+      module BuilderHelper
 
       #    Shellutil.execute("vagrant package --base #{vmname} --include /tmp/Vagrantfile --output /tmp/#{vmname}.box", {:progress => "on"})
 
-      def export_vagrant(export_options={})
-
+      def export_vagrant(box_name)
+        definition=env.get_definition(box_name)
+        box=get_box(box_name)
+        
         #Check if box already exists
-        if raw.nil?
-          env.ui.info "#{name} is not found, maybe you need to build first?"
+        unless box.exists?
+          env.ui.info "#{name} is not found, maybe you need to build it first?"
           exit
         end
         #We need to shutdown first
-        if raw.running?
+        if box.raw.state==:running
           env.ui.info "Vagrant requires the box to be shutdown, before it can export"
           env.ui.info "Sudo also needs to work for user #{definition.ssh_user}"
           env.ui.info "Performing a clean shutdown now."
@@ -21,7 +24,7 @@ module Veewee
             Veewee::Util::Ssh.execute("localhost","sudo #{definition.shutdown_cmd}",ssh_options(definition))
 
             #Wait for state poweroff
-            while (raw.running?) do
+            while (box.raw.state==:running) do
               print '.'
               sleep 1
             end
@@ -34,7 +37,7 @@ module Veewee
           #4.0.x. not using boxes as a subdir
           boxdir=Pathname.new(Dir.pwd)
 
-          full_path=File.join(boxdir,name+".box")
+          full_path=File.join(boxdir,box.name+".box")
           path1=Pathname.new(full_path)
           path2=Pathname.new(Dir.pwd)
           box_path=path1.relative_path_from(path2).to_s
@@ -45,7 +48,7 @@ module Veewee
           end
 
           env.ui.info "Excuting vagrant voodoo:"
-          export_command="vagrant package --base '#{name}' --output '#{box_path}'"
+          export_command="vagrant package --base '#{box_name}' --output '#{box_path}'"
           env.ui.info "#{export_command}"
           Veewee::Util::Shell.execute("#{export_command}") #hmm, needs to get the gem_home set?
           env.ui.info ""
@@ -53,13 +56,13 @@ module Veewee
           #add_ssh_nat_mapping back!!!!
           #vagrant removes the mapping
           #we need to restore it in order to be able to login again
-          add_ssh_nat_mapping(definition)
+          box.add_ssh_nat_mapping(definition)
 
           env.ui.info "To import it into vagrant type:"
-          env.ui.info "vagrant box add '#{name}' '#{box_path}'"
+          env.ui.info "vagrant box add '#{box_name}' '#{box_path}'"
           env.ui.info ""
           env.ui.info "To use it:"
-          env.ui.info "vagrant init '#{name}'"
+          env.ui.info "vagrant init '#{box_name}'"
           env.ui.info "vagrant up"
           env.ui.info "vagrant ssh"
         end
@@ -67,6 +70,7 @@ module Veewee
       end #Module
     end #Module
   end #Module
+end #Module
 
 
   #      #currently vagrant has a problem with the machine up, it calculates the wrong port to ssh to poweroff the system

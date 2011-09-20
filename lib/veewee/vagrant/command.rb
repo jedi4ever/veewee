@@ -8,7 +8,9 @@ module Veewee
       desc "build [TEMPLATE_NAME] [BOX_NAME]", "Build box"
       method_option :force,:type => :boolean , :default => false, :aliases => "-f", :desc => "force the build"
       def build(definition_name,box_name=nil)
-        Veewee::Environment.new(options).config.builders["virtualbox"].build(definition_name,box_name,options)
+        venv=Veewee::Environment.new(options)
+        venv.ui=env.ui
+        venv.config.builders["virtualbox"].build(definition_name,box_name,options)
       end
       
       desc "destroy [BOXNAME]", "Destroys the virtualmachine that was build"
@@ -90,7 +92,9 @@ module Veewee
 
     desc "export [NAME]", "Exports the basebox to the vagrant box format" 
     def export(box_name)
-        Veewee::Vagrant::UI::VagrantPlugin.export(box_name,options)
+      venv=Veewee::Environment.new(options)
+      venv.ui=env.ui
+      venv.config.builders["virtualbox"].export_vagrant(box_name)
     end 
 
     end

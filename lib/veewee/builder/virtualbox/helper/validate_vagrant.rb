@@ -1,6 +1,7 @@
 module Veewee
   module Builder
     module Virtualbox
+      module BoxHelper
 
       def validate_vagrant(validate_options={})
         require 'cucumber'
@@ -28,6 +29,7 @@ module Veewee
         end
 
       end
+    end #Module
       
     end #Module
   end #Module

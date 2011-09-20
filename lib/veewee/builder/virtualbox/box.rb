@@ -1,8 +1,5 @@
 require 'veewee/builder/core/box'
 
-require 'veewee/builder/virtualbox/export_vagrant'
-require 'veewee/builder/virtualbox/validate_vagrant'
-
 require 'veewee/builder/virtualbox/helper/create'
 require 'veewee/builder/virtualbox/helper/console_type'
 require 'veewee/builder/virtualbox/helper/destroy'

@@ -1,9 +1,13 @@
 require 'veewee/builder/core/builder'
+require 'veewee/builder/virtualbox/helper/export_vagrant'
+require 'veewee/builder/virtualbox/helper/validate_vagrant'
 
 module Veewee
   module Builder
     module Virtualbox
     class Builder < Veewee::Builder::Core::Builder
+
+      include ::Veewee::Builder::Virtualbox::BuilderHelper
 
       def ssh_options(definition) 
         ssh_options={ 

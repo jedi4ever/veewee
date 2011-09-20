@@ -10,7 +10,7 @@ module Veewee
 end
 
 # # Default I18n to load the en locale
-I18n.load_path << File.expand_path("templates/locales/en.yml", Veewee.source_root)
+I18n.load_path << File.expand_path("lib/veewee/templates/locales/en.yml", Veewee.source_root)
 
 # Load the things which must be loaded before anything else
 require 'veewee/cli'
