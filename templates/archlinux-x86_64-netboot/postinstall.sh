@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # var to determine package source
-PKGSRC=cd
+PKGSRC=net
 
 date > /etc/vagrant_box_build_time
 
@@ -70,7 +70,7 @@ pacman-db-upgrade
 pacman -Syy
 
 # install some packages
-pacman -S --noconfirm glibc git pkg-config fakeroot
+pacman -S --noconfirm glibc git
 gem install --no-ri --no-rdoc chef facter
 cd /tmp
 git clone https://github.com/puppetlabs/puppet.git

@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# var to determine package source
-PKGSRC=cd
-
 date > /etc/vagrant_box_build_time
 
 # launch automated install
@@ -62,15 +59,15 @@ chown -R vagrant /home/vagrant/.ssh
 sed -i 's/^#\(.*leaseweb.*\)/\1/' /etc/pacman.d/mirrorlist
 
 # update pacman
-[[ $PKGSRC == 'cd' ]] && pacman -Syy
-[[ $PKGSRC == 'cd' ]] && pacman -S --noconfirm pacman
+pacman -Syy
+pacman -S --noconfirm pacman
 
 # upgrade pacman db
 pacman-db-upgrade
 pacman -Syy
 
 # install some packages
-pacman -S --noconfirm glibc git pkg-config fakeroot
+pacman -S --noconfirm glibc git
 gem install --no-ri --no-rdoc chef facter
 cd /tmp
 git clone https://github.com/puppetlabs/puppet.git
@@ -78,7 +75,7 @@ cd puppet
 ruby install.rb --bindir=/usr/bin --sbindir=/sbin
 
 # set up networking
-[[ $PKGSRC == 'net' ]] && sed -i 's/^\(interface=*\)/\1eth0/' /etc/rc.conf
+sed -i 's/^\(interface=*\)/\1eth0/' /etc/rc.conf
 
 # leave the chroot
 ENDCHROOT
