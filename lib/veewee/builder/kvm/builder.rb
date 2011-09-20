@@ -18,6 +18,24 @@ module Veewee
           return ssh_options
         end
         
+        def build(definition_name,box_name,options)
+
+          super(definition_name,box_name,options)
+
+          # w00t, we have succesfully reach this point
+          # so we let user know , the vm is ready to be exported
+
+          definition=get_definition(definition_name)
+          box=get_box(box_name)
+
+          env.ui.info "#{box.name} was build succesfully. "
+          env.ui.info ""
+          env.ui.info "Now you can ssh into the machine (password:#{definition.ssh_passsword})"
+          env.ui.info "ssh #{definition.ssh_user}@#{box.ip_address} -p #{ssh_options(definition)[:port]}"
+          env.ui.info ""
+
+        end
+        
       end #End Class
     end # End Module
   end # End Module
