@@ -5,11 +5,6 @@ module Veewee
     module Virtualbox
     class Builder < Veewee::Builder::Core::Builder
 
-      def list_ostypes(list_options={})
-        require 'virtualbox'
-          return VirtualBox::Global.global.lib.virtualbox.guest_os_types
-      end
-
       def ssh_options(definition) 
         ssh_options={ 
           :user => definition.ssh_user, 

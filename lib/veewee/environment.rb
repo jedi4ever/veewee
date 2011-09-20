@@ -111,6 +111,17 @@ module Veewee
       return templates
     end
 
+    def list_ostypes
+      @ui.info "The following are possible os_types you can use in your definition.rb files"
+    
+        require 'virtualbox'
+          os_types=VirtualBox::Global.global.lib.virtualbox.guest_os_types
+      
+      os_types.each { |os|
+        @ui.info "#{os.id}: #{os.description}"
+      }
+    end
+    
      # This function returns a hash of names of all the definitions that are in the @definition_dir,
      # given the @definition_dir in the current Environment object
      # The name of the definition is the name of a sub-directory in the @definition_dir

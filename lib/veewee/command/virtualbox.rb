@@ -1,17 +1,17 @@
 module Veewee
   module Command
     class Virtualbox< Veewee::Command::GroupBase
-      register "vbox", "Subcommand for Virtualbox"
-
+      
+      register "vbox", "Subcommand for virtualbox"
       desc "build [TEMPLATE_NAME] [BOX_NAME]", "Build box"
       method_option :force,:type => :boolean , :default => false, :aliases => "-f", :desc => "force the build"
       def build(definition_name,box_name=nil)
-        env.config.builders["virtualbox"].build(definition_name,box_name,options)
+        Veewee::Environment.new(options).config.builders["virtualbox"].build(definition_name,box_name,options)
       end
       
       desc "destroy [BOXNAME]", "Destroys the virtualmachine that was build"
       def destroy(box_name)
-        env.config.builders["virtualbox"].get_box(box_name).destroy
+        Veewee::Environment.new(options).config.builders["virtualbox"].get_box(box_name).destroy
       end   
 
       desc "define [BOXNAME] [TEMPLATE]", "Define a new basebox starting from a template"
@@ -33,8 +33,7 @@ module Veewee
           puts "#{ex}"
           exit -1
         end
-      end
-      
+      end   
    
       desc "templates", "List the currently available templates"
       def templates
