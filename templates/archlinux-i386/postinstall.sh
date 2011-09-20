@@ -37,6 +37,9 @@ vagrant
 vagrant
 EOF
 
+# create puppet group
+groupadd puppet
+
 # make sure ssh is allowed
 echo "sshd:	ALL" > /etc/hosts.allow
 
@@ -79,6 +82,14 @@ mount -o loop VBoxGuestAdditions_"$VBOX_VERSION".iso /mnt
 sh /mnt/VBoxLinuxAdditions.run
 umount /mnt
 rm VBoxGuestAdditions_"$VBOX_VERSION".iso
+
+# host-only networking
+cat <<EOF
+# enable DHCP at boot on eth0
+# See https://wiki.archlinux.org/index.php/Network#DHCP_fails_at_boot
+dhcpcd -k eth0
+dhcpcd -nd eth0
+EOF >> /etc/rc.local
 
 # clean out pacman cache
 pacman -Scc<<EOF

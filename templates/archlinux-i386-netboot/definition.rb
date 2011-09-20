@@ -1,10 +1,10 @@
-Veewee::Definition.declare({
+Veewee::Session.declare({
   :cpu_count => '1', :memory_size=> '256', 
   :disk_size => '10140', :disk_format => 'VDI',:hostiocache => 'off',
-  :os_type_id => 'ArchLinux_64',
-  :iso_file => "archlinux-2010.05-core-x86_64.iso",
-  :iso_src => "http://archlinux.mirror.kangaroot.net/iso/2010.05/archlinux-2010.05-core-x86_64.iso",
-  :iso_md5 => "9e9057702af5826a3b924233bf44fe66",
+  :os_type_id => 'ArchLinux',
+  :iso_file => "archlinux-2010.05-netinstall-i686.iso",
+  :iso_src => "http://archlinux.mirror.kangaroot.net/iso/latest/archlinux-2010.05-netinstall-i686.iso",
+  :iso_md5 => "00df751d287d01821e0123c10056d020",
   :iso_download_timeout => "1000",
   :boot_wait => "5", :boot_cmd_sequence => [
     '<Enter>',
@@ -18,7 +18,7 @@ Veewee::Definition.declare({
     'vagrant<Enter>',
     'vagrant<Enter>',
     '/etc/rc.d/sshd start<Enter><Wait>',
-	'sleep 3 && wget http://%IP%:%PORT/aif.cfg<Enter>',
+	'sleep 3 && wget 10.0.2.2:7122/aif.cfg<Enter>',
   ],
   :kickstart_port => "7122", :kickstart_timeout => "10000", :kickstart_file => "aif.cfg",
   :ssh_login_timeout => "10000", :ssh_user => "root", :ssh_password => "vagrant", :ssh_key => "",
