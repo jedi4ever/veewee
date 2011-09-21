@@ -41,7 +41,8 @@ module Veewee
         end
 
         def shutdown
-          raw.shutdown unless raw.nil?
+          # Should be clean shutdown
+          raw.stop unless raw.nil?
         end
 
         def destroy
@@ -58,7 +59,8 @@ module Veewee
 
         # Check if box is running
         def ready?
-          return @raw.ready?
+          return false if raw.nil?
+          return raw.state=="running"
         end
 
         # Check if the box already exists

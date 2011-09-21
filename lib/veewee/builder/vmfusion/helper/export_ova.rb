@@ -11,8 +11,11 @@ module Veewee
         flags="--compress=9"
 
         # Need to check binary first
+        if ready?
+          shutdown
+        end
         
-        #before exporting the system needs to be shut down
+        # before exporting the system needs to be shut down
         
         # otherwise the debug log will show - The specified virtual disk needs repair
         Veewee::Util::Shell.execute("#{fusion_path.shellescape}/ovftool/ovftool.bin #{debug} #{flags} #{vmx_file_path.shellescape} #{name}.ova")
