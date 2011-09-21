@@ -3,7 +3,7 @@ require 'veewee/builder/core/box/vnc'
 
 require 'veewee/builder/vmfusion/helper/template'
 require 'veewee/builder/vmfusion/helper/create'
-require 'veewee/builder/vmfusion/export_ova'
+require 'veewee/builder/vmfusion/helper/export_ova'
 
 
 module Veewee
@@ -52,6 +52,8 @@ module Veewee
           
           raw.halt if raw.state=="running"
           ::Fission::VM.delete(name)
+          # remove it from memory
+          @raw=nil
         end
 
         # Check if box is running

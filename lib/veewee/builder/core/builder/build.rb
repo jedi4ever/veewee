@@ -99,9 +99,10 @@ module Veewee
             begin
             Veewee::Util::Ssh.when_ssh_login_works(box.ip_address,ssh_options(definition).merge({:timeout => definition.postinstall_timeout.to_i})) do
               begin
+                env.logger.info "About to transfer #{filename} to the box #{box.name} - #{box.ip_address} - #{ssh_options(definition)}"
                 Veewee::Util::Ssh.transfer_file(box.ip_address,filename,File.basename(filename),ssh_options(definition))
-              rescue RuntimeError
-                env.ui.error "error transfering file #{File.basename(filename)}, possible not enough permissions to write?"
+              rescue RuntimeError => ex
+                env.ui.error "error transfering file #{File.basename(filename)}, possible not enough permissions to write? #{ex}"
                 exit -1
               end
               command=definition.sudo_cmd
@@ -110,8 +111,8 @@ module Veewee
               newcommand.gsub!(/%f/,"#{postinstall_file}")
               begin
                 Veewee::Util::Ssh.execute(box.ip_address,"#{newcommand}",ssh_options(definition))
-              rescue RuntimeError
-                env.ui.error "Error executing the command #{newcommand}"
+              rescue RuntimeError => ex
+                env.ui.error "Error executing the command #{newcommand}: #{ex}"
                 exit -1
               end
             end

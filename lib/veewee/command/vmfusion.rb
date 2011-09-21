@@ -6,7 +6,9 @@ module Veewee
       desc "build [TEMPLATE_NAME] [BOX_NAME]", "Build box"
       method_option :force,:type => :boolean , :default => false, :aliases => "-f", :desc => "force the build"
       def build(definition_name,box_name=nil)
-        Veewee::Environment.new(options).config.builders["vmfusion"].build(definition_name,box_name,options)
+        venv=Veewee::Environment.new(options)
+        
+        venv.config.builders["vmfusion"].build(definition_name,box_name,options)
       end
       
       desc "destroy [BOXNAME]", "Destroys the virtualmachine that was build"
@@ -34,6 +36,13 @@ module Veewee
           exit -1
         end
       end   
+   
+      desc "export [NAME]", "Exports the basebox to the ova format" 
+      def export(box_name)
+        venv=Veewee::Environment.new(options)
+        venv.config.builders["vmfusion"].get_box(box_name).export_ova(options)
+      end 
+   
    
       desc "templates", "List the currently available templates"
       def templates

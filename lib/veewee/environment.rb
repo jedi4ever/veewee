@@ -305,7 +305,7 @@ module Veewee
 
         @config.load_builders
 
-        @ui.info "Loaded #{@config.builders.length} builders"
+        ui.info "Loaded #{@config.builders.length} builders"
 
         return self
     end
