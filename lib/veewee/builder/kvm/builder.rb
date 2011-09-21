@@ -32,13 +32,13 @@ module Veewee
             box_name=definition_name
           end
           
-          #box=get_box(box_name)
+          box=get_box(box_name)
 
-          #env.ui.info "#{box.name} was build succesfully. "
-          #env.ui.info ""
-          #env.ui.info "Now you can ssh into the machine (password:#{definition.ssh_password})"
-          #env.ui.info "ssh #{definition.ssh_user}@#{box.ip_address} -p #{ssh_options(definition)[:port]}"
-          #env.ui.info ""
+          env.ui.info "#{box.name} was build succesfully. "
+          env.ui.info ""
+          env.ui.info "Now you can ssh into the machine (password:#{definition.ssh_password})"
+          env.ui.info "ssh #{definition.ssh_user}@#{box.ip_address} -p #{ssh_options(definition)[:port]}"
+          env.ui.info ""
 
         end
         
