@@ -20,6 +20,11 @@ module Veewee
         
       end
       
+      def build_info
+        info=super
+        info << {:filename => ".vbox_version",:content => "#{VirtualBox::Global.global.lib.virtualbox.version.split('_')[0]}"}
+      end
+      
       def build(definition_name,box_name,options)
       
         super(definition_name,box_name,options)
@@ -33,25 +38,6 @@ module Veewee
         env.ui.info "- verify your box by running              : vagrant basebox validate #{box_name}"
         env.ui.info "- export your vm to a .box fileby running : vagrant basebox export   #{box_name}"
         
-      end
-
-      def transfer_buildinfo_file
-
-        Veewee::Util::Ssh.when_ssh_login_works("localhost",ssh_options) do
-          #Transfer version of Virtualbox to $HOME/.vbox_version            
-          versionfile=Tempfile.open("vbox.version")
-          versionfile.puts "#{VirtualBox::Global.global.lib.virtualbox.version.split('_')[0]}"
-          versionfile.rewind
-          begin
-            Veewee::Util::Ssh.transfer_file("localhost",versionfile.path,".vbox_version", ssh_options)
-          rescue RuntimeError
-            puts "error transfering file, possible not enough permissions to write?"
-          ensure
-            versionfile.close
-            versionfile.delete                
-          end
-          puts ""
-        end
       end
       
     end #End Class

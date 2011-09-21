@@ -5,11 +5,15 @@ module Veewee
     module Vmfusion
       class Builder < Veewee::Builder::Core::Builder
           
-          def buildinfo()
-#            ".vagrant_version"
-#            3.1.2 build-332101
+          def build_info
+            info=super                        
+            command="/Library/Application Support/VMware Fusion/vmrun |head -2|tail -1| cut -d ' ' -f 3-"
+            sshresult=Veewee::Util::Shell.execute("#{command}")
+
+            info << {:filename => ".vmfusion_version",:content => sshresult.stdout.strip}
+            
           end
-          
+                    
           # Translate the definition ssh options to ssh options that can be passed to Net::Ssh calls
           def ssh_options(definition)
             ssh_options={

@@ -6,22 +6,22 @@ module Veewee
         def build(definition_name,box_name,options)
 
           definition=get_definition(definition_name)
-          
+
           if definition.nil?
             env.ui.error "The definition #{definition_name} does not exist. Sorry"
             exit -1
           end
-          
+
           # If no box_name was given, let's give the box the same name as the definition
           if box_name.nil?
             box_name=definition_name
           end
-          
+
           env.ui.info "Building #{definition_name} #{box_name} #{options}"
-          
+
           # Check the iso file we need to build the box
           verify_iso(definition,options)
-          
+
           box=get_box(box_name)
 
           if box.exists?
@@ -48,7 +48,7 @@ module Veewee
             puts "Hmm, the port #{definition.ssh_host_port} is open. And we shut down?"
             exit -1
           end
-          
+
           box.create(definition)
           box.start(options[:gui])
 
@@ -62,16 +62,18 @@ module Veewee
             :port => definition.kickstart_port,
             :name => box.name
           })
-          
+
           box.console_type(boot_sequence)
-          
+
           until !box.ip_address.nil?
             env.logger.info "wait for Ip addres"
             sleep 2
           end
-          
+
           handle_kickstart(definition)
-          
+
+          transfer_buildinfo(box,definition)
+
           handle_postinstall(box,definition)
         end
 
@@ -79,7 +81,7 @@ module Veewee
         # f.i. options={:ip => "name"} will substitute "%IP%" -> "name"
         def fill_sequence(sequence,options)
           filled=sequence.dup
-          options.each do |key,value|  
+          options.each do |key,value|
             filled.each do |s|
               s.gsub!("%#{key.upcase}%",value)
             end
@@ -87,44 +89,12 @@ module Veewee
           return filled
         end
 
-        # This function handles all the post-install scripts
-        # It requires a box(to login to) and a definition(listing the postinstall files) 
-        def handle_postinstall(box,definition)
-
-          definition.postinstall_files.each do |postinstall_file|
-
-            # Filenames of postinstall_files are relative to their definition
-            filename=File.join(definition.path,postinstall_file)
-
-            begin
-            Veewee::Util::Ssh.when_ssh_login_works(box.ip_address,ssh_options(definition).merge({:timeout => definition.postinstall_timeout.to_i})) do
-              begin
-                env.logger.info "About to transfer #{filename} to the box #{box.name} - #{box.ip_address} - #{ssh_options(definition)}"
-                Veewee::Util::Ssh.transfer_file(box.ip_address,filename,File.basename(filename),ssh_options(definition))
-              rescue RuntimeError => ex
-                env.ui.error "error transfering file #{File.basename(filename)}, possible not enough permissions to write? #{ex}"
-                exit -1
-              end
-              command=definition.sudo_cmd
-              newcommand=command.gsub(/%p/,"#{definition.ssh_password}")
-              newcommand.gsub!(/%u/,"#{definition.ssh_user}")
-              newcommand.gsub!(/%f/,"#{postinstall_file}")
-              begin
-                Veewee::Util::Ssh.execute(box.ip_address,"#{newcommand}",ssh_options(definition))
-              rescue RuntimeError => ex
-                env.ui.error "Error executing the command #{newcommand}: #{ex}"
-                exit -1
-              end
-            end
-          rescue Net::SSH::AuthenticationFailed
-            env.ui.error "Authentication failure"
-            exit -1
-          end
-          end
+        def build_info
+          [ {:filename => ".veewee_version",:content => "#{Veewee::VERSION}"}]
         end
 
         # This function handles all the post-install scripts
-        # It requires a definition to find all the necessary information 
+        # It requires a definition to find all the necessary information
         def handle_kickstart(definition)
 
           # Handling the kickstart by web
@@ -153,7 +123,73 @@ module Veewee
           end
         end
 
-      end
-    end
-  end
-end
+
+        # This function handles all the post-install scripts
+        # It requires a box(to login to) and a definition(listing the postinstall files)
+        def handle_postinstall(box,definition)
+
+          definition.postinstall_files.each do |postinstall_file|
+
+            # Filenames of postinstall_files are relative to their definition
+            filename=File.join(definition.path,postinstall_file)
+
+            begin
+              Veewee::Util::Ssh.when_ssh_login_works(box.ip_address,ssh_options(definition).merge({:timeout => definition.postinstall_timeout.to_i})) do
+                begin
+                  env.logger.info "About to transfer #{filename} to the box #{box.name} - #{box.ip_address} - #{ssh_options(definition)}"
+                  Veewee::Util::Ssh.transfer_file(box.ip_address,filename,File.basename(filename),ssh_options(definition))
+                rescue RuntimeError => ex
+                  env.ui.error "error transfering file #{File.basename(filename)}, possible not enough permissions to write? #{ex}"
+                  exit -1
+                end
+                command=definition.sudo_cmd
+                newcommand=command.gsub(/%p/,"#{definition.ssh_password}")
+                newcommand.gsub!(/%u/,"#{definition.ssh_user}")
+                newcommand.gsub!(/%f/,"#{postinstall_file}")
+                begin
+                  Veewee::Util::Ssh.execute(box.ip_address,"#{newcommand}",ssh_options(definition))
+                rescue RuntimeError => ex
+                  env.ui.error "Error executing the command #{newcommand}: #{ex}"
+                  exit -1
+                end
+              end
+            rescue Net::SSH::AuthenticationFailed
+              env.ui.error "Authentication failure"
+              exit -1
+            end
+          end
+        end
+
+
+          # Transfer information provide by the builder to the box
+          #
+          #
+          def transfer_buildinfo(box,definition)
+            begin
+              Veewee::Util::Ssh.when_ssh_login_works(box.ip_address,ssh_options(definition).merge({:timeout => definition.postinstall_timeout.to_i})) do
+                build_info.each do |info|
+                  begin
+                    infofile=Tempfile.open("#{info[:filename]}")
+                    infofile.puts "#{info[:content]}"
+                    infofile.rewind
+                    env.logger.info "About to transfer buildinfo #{info[:content]} into #{info[:filename]} to the box #{box.name} - #{box.ip_address} - #{ssh_options(definition)}"
+                    Veewee::Util::Ssh.transfer_file(box.ip_address,infofile.path,info[:filename],ssh_options(definition))
+                    infofile.close
+                    infofile.delete
+                  rescue RuntimeError => ex
+                    env.ui.error "Error transfering file #{info[:filename]} failed, possible not enough permissions to write? #{ex}"
+                    exit -1
+                  end
+                end
+              end
+            rescue Net::SSH::AuthenticationFailed
+              env.ui.error "Authentication failure"
+              exit -1
+            end
+
+          end
+
+        end #Module
+      end #Module
+    end #Module
+  end #Module
