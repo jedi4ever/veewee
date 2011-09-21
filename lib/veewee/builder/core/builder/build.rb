@@ -50,7 +50,7 @@ module Veewee
           end
 
           box.create(definition)
-          box.start(options[:gui])
+          box.start(options["gui"])
 
           #waiting for it to boot
           env.ui.info "Waiting #{definition.boot_wait.to_i} seconds for the machine to boot"

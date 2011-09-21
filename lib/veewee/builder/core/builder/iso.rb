@@ -42,7 +42,7 @@ module Veewee
         end
 
 
-        def verify_iso(definition,autodownload = false)
+        def verify_iso(definition,options)
           filename=definition.iso_file
           full_path=File.join(env.config.veewee.iso_dir,filename)
 
@@ -72,9 +72,14 @@ module Veewee
               env.ui.info ""
               exit -1
             else
-
-              question=env.ui.ask("Download? (Yes/No)") {|q| q.default="No"}
-              if question.downcase == "yes"
+              answer=nil
+              answer="yes" if options["auto"]==true
+              env.logger.info "Auto download enabled?#{answer} #{!options['auto'].nil?}"
+              if answer.nil?
+                answer=ask("Download? (Yes/No)") {|q| q.default="No"}
+              end
+              
+              if answer.downcase == "yes"
                 if !File.exists?(env.config.veewee.iso_dir)
                   env.ui.info "Creating an iso directory"
                   FileUtils.mkdir(env.config.veewee.iso_dir)
