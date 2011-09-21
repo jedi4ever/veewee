@@ -7,10 +7,9 @@ module Veewee
           
           def build_info
             info=super                        
-            command="/Library/Application Support/VMware Fusion/vmrun |head -2|tail -1| cut -d ' ' -f 3-"
-            sshresult=Veewee::Util::Shell.execute("#{command}")
-
-            info << {:filename => ".vmfusion_version",:content => sshresult.stdout.strip}
+            command="/Library/Application Support/VMware Fusion/vmrun"
+            output=IO.popen("#{command.shellescape}").readlines
+            info << {:filename => ".vmfusion_version",:content => output[1].split(/ /)[2..3].join.strip}
             
           end
                     
