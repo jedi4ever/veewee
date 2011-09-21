@@ -50,15 +50,24 @@ module Veewee
         :tmp_dir => File.join(Dir.pwd,"tmp")
       }
 
+
+      # We need to set this variable before the first call to the logger object
+      if options.has_key?("debug")
+        ENV['VEEWEE_LOG']="STDOUT"
+        ui.info "Debugging enabled"
+      end
+
       options = defaults.merge(options)
 
       logger.info("environment") { "Environment initialized (#{self})" }
-
+      
+      # Injecting all variables of the options and assign the variables
       options.each do |key, value|
         instance_variable_set("@#{key}".to_sym, options[key])
         logger.info("environment") { " - #{key} : #{options[key]}" }
 
       end
+
       return self
     end
 
