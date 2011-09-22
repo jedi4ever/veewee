@@ -26,13 +26,14 @@ module Veewee
       @box_dir=env[:box_dir]
       @iso_dir=env[:iso_dir]
       @tmp_dir=env[:tmp_dir]
+      @vbox_version=VirtualBox::Global.global.lib.virtualbox.version.split('_')[0]
     end
 
     def self.declare(options)
       defaults={
         :cpu_count => '1', :memory_size=> '256',
         :disk_size => '10240', :disk_format => 'VDI', :hostiocache => 'off' ,
-        :os_type_id => 'Ubuntu',
+        :os_type_id => 'Ubuntu', :use_vbox_guest_add => false,
         :iso_file => "ubuntu-10.10-server-i386.iso", :iso_src => "", :iso_md5 => "", :iso_download_timeout => 1000,
         :boot_wait => "10", :boot_cmd_sequence => [ "boot"],
         :kickstart_port => "7122", :kickstart_ip => self.local_ip, :kickstart_timeout => 10000,
@@ -144,7 +145,7 @@ module Veewee
         puts "Not yet implemented"
     end
 
-    def self.verify_iso(filename,autodownload = false)
+    def self.verify_iso(filename, options = @definition)
       if File.exists?(File.join(@iso_dir,filename))
         puts
         puts "Verifying the isofile #{filename} is ok."
@@ -157,14 +158,19 @@ module Veewee
 
         puts
         puts "We did not find an isofile in <currentdir>/iso. \n\nThe definition provided the following download information:"
-        unless "#{@definition[:iso_src]}"==""
-          puts "- Download url: #{@definition[:iso_src]}"
+        unless "#{options[:iso_src]}"==""
+          puts "- Download url: #{options[:iso_src]}"
         end
-        puts "- Md5 Checksum: #{@definition[:iso_md5]}"
-        puts "#{@definition[:iso_download_instructions]}"
+
+        unless "#{options[:iso_md5]}"==""
+          puts "- Md5 Checksum: #{options[:iso_md5]}"
+        end
+        unless "#{options[:iso_download_instructions]}"==""
+          puts "#{options[:iso_download_instructions]}"
+        end
         puts
 
-        if @definition[:iso_src] == ""
+        if options[:iso_src] == ""
           puts "Please follow the instructions above:"
           puts "- to get the ISO"
           puts" - put it in <currentdir>/iso"
@@ -180,10 +186,10 @@ module Veewee
             FileUtils.mkdir(@iso_dir)
           end
 
-          download_progress(@definition[:iso_src],full_path)
+          download_progress(options[:iso_src],full_path)
         else
           puts "You have choosen for manual download: "
-          puts "curl -C - -L '#{@definition[:iso_src]}' -o '#{rel_path}'"
+          puts "curl -C - -L '#{options[:iso_src]}' -o '#{rel_path}'"
           puts "md5 '#{rel_path}' "
           puts
           exit
@@ -250,6 +256,11 @@ module Veewee
 
 
         verify_iso(@definition[:iso_file])
+        if @definition[:use_vbox_guest_add]
+          vbox_add_iso_file = "VBoxGuestAdditions_#{@vbox_version}.iso"
+          iso_options = { :iso_src => "http://download.virtualbox.org/virtualbox/#{@vbox_version}/VBoxGuestAdditions_#{@vbox_version}.iso" }
+          verify_iso(vbox_add_iso_file,iso_options)
+        end
 
         if (options["force"]==false)
         else
@@ -319,7 +330,7 @@ module Veewee
             Veewee::Ssh.when_ssh_login_works("localhost",ssh_options) do
               #Transfer version of Virtualbox to $HOME/.vbox_version
               versionfile=Tempfile.open("vbox.version")
-              versionfile.puts "#{VirtualBox::Global.global.lib.virtualbox.version.split('_')[0]}"
+              versionfile.puts "#{@vbox_version}"
               versionfile.rewind
               begin
                 Veewee::Ssh.transfer_file("localhost",versionfile.path,".vbox_version", ssh_options)
@@ -342,6 +353,9 @@ module Veewee
 
                  transaction(boxname,"#{counter}-#{postinstall_file}-#{checksums[counter]}",checksums) do
 
+                   if @definition[:use_vbox_guest_add]
+                     mount_isofile(boxname,vbox_add_iso_file)
+                   end
                    Veewee::Ssh.when_ssh_login_works("localhost",ssh_options) do
                     begin
                       Veewee::Ssh.transfer_file("localhost",filename,File.basename(filename),ssh_options)
