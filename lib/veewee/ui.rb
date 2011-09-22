@@ -68,6 +68,7 @@ module Veewee
 
       def format_message(message, opts=nil)
         opts = { :prefix => true }.merge(opts || {})
+        opts[:prefix]=false if env.resource=="veewee"
         message = "[#{env.resource}] #{message}" if opts[:prefix]
         message
       end

@@ -10,65 +10,76 @@ module Veewee
       method_option :auto,:type => :boolean , :default => false, :aliases => "-a", :desc => "auto answers"
       def build(definition_name,box_name=nil)
         venv=Veewee::Environment.new(options)
-        
+        venv.ui=env.ui
         venv.config.builders["vmfusion"].build(definition_name,box_name,options)
       end
-      
+
       desc "destroy [BOXNAME]", "Destroys the virtualmachine that was build"
       def destroy(box_name)
-        Veewee::Environment.new(options).config.builders["vmfusion"].get_box(box_name).destroy
-      end   
+        venv=Veewee::Environment.new(options)
+        venv.ui=env.ui
+        venv.config.builders["vmfusion"].get_box(box_name).destroy
+      end
 
       desc "define [BOXNAME] [TEMPLATE]", "Define a new basebox starting from a template"
-      method_option :force,:type => :boolean , :default => false, :aliases => "-f", :desc => "overwrite the definition" 
-      method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging" 
+      method_option :force,:type => :boolean , :default => false, :aliases => "-f", :desc => "overwrite the definition"
+      method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging"
       def define(definition_name, template_name)
-        Veewee::Environment.new(options).define(definition_name,template_name,options)
+        venv=Veewee::Environment.new(options)
+        venv.ui=env.ui
+        venv.define(definition_name,template_name,options)
         puts "The basebox '#{definition_name}' has been succesfully created from the template '#{template_name}'"
         puts "You can now edit the definition files stored in definitions/#{definition_name} or build the box with:"
         puts "veewee fusion build '#{definition_name}'"
       end
 
       desc "undefine [BOXNAME]", "Removes the definition of a basebox "
-      method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging" 
+      method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging"
       def undefine(definition_name)
-        puts "Removing definition #{definition_name}"
+        env.ui.info "Removing definition #{definition_name}" , :prefix => false
         begin
-          Veewee::Environment.new(options).undefine(definition_name,options)
-          puts "Definition #{definition_name} succesfully removed"
+          venv=Veewee::Environment.new(options)
+          venv.ui=env.ui
+          venv.undefine(definition_name,options)
+          env.ui.info "Definition #{definition_name} succesfully removed",:prefix => false
         rescue Error => ex
-          puts "#{ex}"
+          env.ui.error "#{ex}" , :prefix => false
           exit -1
         end
-      end   
-   
-      desc "export [NAME]", "Exports the basebox to the ova format" 
-      method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging" 
+      end
+
+      desc "export [NAME]", "Exports the basebox to the ova format"
+      method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging"
       def export(box_name)
         venv=Veewee::Environment.new(options)
+        venv.ui=env.ui
         venv.config.builders["vmfusion"].get_box(box_name).export_ova(options)
-      end 
-   
-   
+      end
+
+
       desc "templates", "List the currently available templates"
-      method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging" 
+      method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging"
       def templates
-        env.ui.info "The following templates are available:"
-        Veewee::Environment.new(options).get_template_paths.keys.each do |name|
-          env.ui.info "veewee fusion define '<box_name>' '#{name}'"
-        end        
+        env.ui.info "The following templates are available:",:prefix => false
+        venv=Veewee::Environment.new(options)
+        venv.ui=env.ui
+        venv.get_template_paths.keys.each do |name|
+          env.ui.info "veewee fusion define '<box_name>' '#{name}'",:prefix => false
+        end
       end
 
       desc "list", "Lists all defined boxes"
-      method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging" 
+      method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging"
       def list
-        env.ui.info "The following local definitions are available:"
-        Veewee::Environment.new(options).get_definition_paths.keys.each do |name|
-          env.ui.info "- #{name}"
+        env.ui.info "The following local definitions are available:",:prefix => false
+        venv=Veewee::Environment.new(options)
+        venv.ui=env.ui
+        venv.get_definition_paths.keys.each do |name|
+          env.ui.info "- #{name}",:prefix => false
         end
-      end  
+      end
 
-      
+
     end
 
   end

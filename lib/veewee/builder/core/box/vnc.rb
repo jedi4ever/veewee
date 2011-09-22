@@ -1,10 +1,10 @@
 require 'net/vnc'
 
-module Veewee  
+module Veewee
   module Builder
     module Core
       module BoxCommand
-        
+
       def vnc_type(sequence,host,display=20)
         counter=0
         env.logger.info "Opening VNC #{host} on display #{display}"
@@ -20,7 +20,7 @@ module Veewee
               if keycode==:wait
                 sleep 1
               else
-                send_vnc_keycode(vnc,keycode)    
+                send_vnc_keycode(vnc,keycode)
               end
             end
         }
@@ -109,8 +109,8 @@ module Veewee
 
         return keycodes
       end
-      
-      
+
+
         end #Module
       end #Module
     end #Module

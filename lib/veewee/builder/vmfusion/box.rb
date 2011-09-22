@@ -50,7 +50,7 @@ module Veewee
             env.ui.error "Error:: You tried to destroy a non-existing box '#{name}'"
             exit -1
           end
-          
+
           raw.halt if raw.state=="running"
           ::Fission::VM.delete(name)
           # remove it from memory
@@ -75,7 +75,7 @@ module Veewee
 
         # Type on the console
         def console_type(sequence,type_options={})
-#          vnc_port=raw.vnc_port
+          #          vnc_port=raw.vnc_port
           vnc_port=20
           vnc_type(sequence,"localhost",vnc_port)
         end

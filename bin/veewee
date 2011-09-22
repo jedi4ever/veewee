@@ -4,19 +4,19 @@ require 'veewee'
 env = Veewee::Environment.new
 
 begin
-	# Begin logging
-	# env.logger.info("veewee")
-	
-	# Disable color if the proper argument was passed
-	shell = ARGV.include?("--no-color") ? Thor::Shell::Basic.new : Thor::Base.shell.new
-	
-	# Attach the UI
-	env.ui = ::Veewee::UI::Shell.new(env, shell)
-	env.load!
-		
-	# Start the CLI
+  # Begin logging
+  env.ui.info("veewee") { "`veewee` invoked: #{ARGV.inspect}" }
+
+  # Disable color if the proper argument was passed
+  shell = ARGV.include?("--no-color") ? Thor::Shell::Basic.new : Thor::Base.shell.new
+
+  # Attach the UI
+  env.ui = ::Veewee::UI::Shell.new(env, shell)
+  env.load!
+
+  # Start the CLI
   ::Veewee::CLI.start(ARGV,:env => env)
-	
+
 rescue Veewee::Error => e
   puts "#{e}"
 end

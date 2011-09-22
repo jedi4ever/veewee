@@ -60,7 +60,7 @@ module Veewee
       options = defaults.merge(options)
 
       logger.info("environment") { "Environment initialized (#{self})" }
-      
+
       # Injecting all variables of the options and assign the variables
       options.each do |key, value|
         instance_variable_set("@#{key}".to_sym, options[key])
