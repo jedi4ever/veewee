@@ -13,9 +13,9 @@ end
 I18n.load_path << File.expand_path("lib/veewee/templates/locales/en.yml", Veewee.source_root)
 
 # Load the things which must be loaded before anything else
+require 'veewee/error'
 require 'veewee/cli'
 require 'veewee/ui'
 require 'veewee/command'
-require 'veewee/error'
 require 'veewee/environment'
 require 'veewee/version'

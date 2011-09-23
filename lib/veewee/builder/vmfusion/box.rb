@@ -60,7 +60,7 @@ module Veewee
         # Check if box is running
         def ready?
           return false if raw.nil?
-          return raw.state=="running"
+          return raw.running?
         end
 
         # Check if the box already exists

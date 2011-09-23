@@ -8,6 +8,14 @@ module Veewee
         # Translate the definition ssh options to ssh options that can be passed to Net::Ssh calls
         # We expect plain ssh for a connection
 
+        def check_requirements
+          ["ruby-libvirt","fog"].each do |gemname|
+            unless gem_available?(gemname)
+              raise Veewee::Error,"The kvm Builder requires the gem '#{gemname}' to be installed\n"    + "gem install #{gemname}"
+            end
+          end
+        end
+
         def ssh_options(definition)
           ssh_options={
             :user => definition.ssh_user,
@@ -17,7 +25,7 @@ module Veewee
           }
           return ssh_options
         end
-        
+
         def build(definition_name,box_name,options)
 
           super(definition_name,box_name,options)
@@ -26,12 +34,12 @@ module Veewee
           # so we let user know , the vm is ready to be exported
 
           definition=get_definition(definition_name)
-          
+
           # If no box_name was given, let's give the box the same name as the definition
           if box_name.nil?
             box_name=definition_name
           end
-          
+
           box=get_box(box_name)
 
           env.ui.info "#{box.name} was build succesfully. "
@@ -41,7 +49,7 @@ module Veewee
           env.ui.info ""
 
         end
-        
+
       end #End Class
     end # End Module
   end # End Module

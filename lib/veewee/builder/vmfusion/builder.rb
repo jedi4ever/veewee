@@ -5,6 +5,12 @@ module Veewee
     module Vmfusion
       class Builder < Veewee::Builder::Core::Builder
 
+        def check_requirements
+          unless gem_available?("fission")
+            raise ::Veewee::Error, "The Vmfusion Builder requires the gem 'fission' to be installed\n"+ "gem install fission"
+          end
+        end
+
         def build_info
           info=super
           command="/Library/Application Support/VMware Fusion/vmrun"

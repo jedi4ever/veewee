@@ -21,12 +21,11 @@ module Veewee
 
         def initialize(name,options,env)
 
+          @env=env
           @name=name
           @options=options
-          @env=env
-
           @type=self.class.to_s.split("::")[-2]
-
+          check_requirements
         end
 
         def get_definition(name)
@@ -47,22 +46,37 @@ module Veewee
           end
         end
 
-        def check_gem_availability(gems)
-          gems.each do |gemname|
-            availability_gem=false
-            begin
-              availability_gem=true unless Gem::Specification::find_by_name("#{gemname}").nil?
-            rescue Gem::LoadError
-              availability_gem=false
-            rescue
-              availability_gem=Gem.available?("#{gemname}")
-            end
-            unless availability_gem
-              env.ui.error "The #{gemname} gem is not installed and is required by the #{@name.to_sym} provider"
-            end
+        def self.available?
+          begin
+            self.check_requirements
+            return true
+          rescue Error
+            return false
           end
         end
-        
+
+        def gem_available?(gemname)
+            env.logger.info "Checking for gem #{gemname}"
+            available=false
+            begin
+              available=true unless Gem::Specification::find_by_name("#{gemname}").nil?
+            rescue Gem::LoadError
+              env.logger.info "Error loading gem #{gemname}"
+              available=false
+            rescue
+              env.logger.info "Falling back to old syntax for #{gemname}"
+              available=Gem.available?("#{gemname}")
+              env.logger.info "Old syntax #{gemname}.available? #{available}"
+            end
+            return available
+        end
+
+        def gems_available?(names)
+          names.each do |gemname|
+            return false if !gem_available?(gemname)
+          end
+          return true
+        end
 
       end #End Class
 
