@@ -312,10 +312,6 @@ module Veewee
     def load_config!
         @config=Config.new({:env => self}).load_veewee_config()
 
-        @config.load_builders
-
-        ui.info "Loaded #{@config.builders.length} builders"
-
         return self
     end
 

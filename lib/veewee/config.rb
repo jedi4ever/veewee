@@ -1,7 +1,7 @@
 require 'veewee/config/veewee'
 require 'veewee/config/collection'
 require 'veewee/config/definition'
-require 'veewee/config/builder'
+require 'veewee/config/builders'
 
 require 'fileutils'
 
@@ -21,7 +21,7 @@ module Veewee
       @env=options[:env]
       env.logger.info("config") { "Initializing empty list of definitions in config" }
 
-      @builders=Hash.new
+      @builders=::Veewee::Config::Builders.new(env)
       @definitions=Hash.new
       @templates=Hash.new
 
@@ -40,13 +40,12 @@ module Veewee
       config.definition=::Veewee::Config::Definition.new(self)
 
       # Assign builders
-      config.builder=::Veewee::Config::Builder.new(self)
+      #config.builder=::Veewee::Config::Builder.new(self)
 
       # Process config file
       yield config
 
       @definitions=config.definition.components
-      @builders=config.builder.components
 
     end
 
@@ -79,21 +78,6 @@ module Veewee
       return self
     end
 
-    # Loading the builders
-    def load_builders()
-      %w{vmfusion kvm virtualbox}.each do |name|
-        config=OpenStruct.new
-        config.env=env
-        config.builder=::Veewee::Config::Builder.new(config)
-        config.builder.define(name) do |config|
-          config.builder.name="#{name}"
-          config.builder.type="#{name}"
-        end
-        env.config.builders.merge!(config.builder.components)
-
-      end
-
-    end
 
 
   end #End Class
