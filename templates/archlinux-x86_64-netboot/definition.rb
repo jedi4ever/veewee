@@ -3,7 +3,7 @@ Veewee::Session.declare({
   :disk_size => '10140', :disk_format => 'VDI',:hostiocache => 'off',
   :os_type_id => 'ArchLinux_64',
   :iso_file => "archlinux-2010.05-netinstall-x86_64.iso",
-  :iso_src => "http://archlinux.mirror.kangaroot.net/iso/latest/archlinux-2010.05-netinstall-x86_64.iso",
+  :iso_src => "http://archlinux.mirror.kangaroot.net/iso/2010.05/archlinux-2010.05-netinstall-x86_64.iso",
   :iso_md5 => "577ca8026a9997f7cecb430276d78793",
   :iso_download_timeout => "1000",
   :boot_wait => "5", :boot_cmd_sequence => [

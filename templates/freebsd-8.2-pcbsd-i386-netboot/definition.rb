@@ -1,6 +1,7 @@
 # Many thanks to @draco2002
 # http://dracosplace.com/veewee_and_freebsd
 
+<<<<<<< HEAD
 #  :iso_src => "ftp://mirrors.isc.org/pub/pcbsd/8.2/i386/PCBSD8.2-x86-bootonly.iso",
 #  :iso_file => "PCBSD8.2-x86-bootonly.iso",
 
