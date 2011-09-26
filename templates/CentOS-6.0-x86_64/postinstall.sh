@@ -5,7 +5,7 @@ date > /etc/vagrant_box_build_time
 cat > /etc/yum.repos.d/puppetlabs.repo << EOM
 [puppetlabs]
 name=puppetlabs
-baseurl=http://yum.puppetlabs.com/el/6/products/\$basearch
+baseurl=http://stahnma.fedorapeople.org/puppetlabs/6/\$basearch
 enabled=1
 gpgcheck=0
 EOM
