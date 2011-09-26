@@ -1,11 +1,6 @@
 # Many thanks to @draco2002
 # http://dracosplace.com/veewee_and_freebsd
 
-#  :iso_src => "ftp://mirrors.isc.org/pub/pcbsd/8.2/i386/PCBSD8.2-x86-bootonly.iso",
-#  :iso_file => "PCBSD8.2-x86-bootonly.iso",
-
-#Based on https://gist.github.com/911058
-
 Veewee::Definition.declare( {
   :cpu_count => '1', :memory_size=> '768',
   :disk_size => '10140', :disk_format => 'VDI',:hostiocache => 'off',

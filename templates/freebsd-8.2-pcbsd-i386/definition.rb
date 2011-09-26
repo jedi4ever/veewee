@@ -9,7 +9,7 @@ Veewee::Definition.declare({
   :disk_size => '10140', :disk_format => 'VDI', :hostiocache => 'off',
   :os_type_id => 'FreeBSD',
   :iso_file => "PCBSD8.2-x86-DVD.iso",
-  :iso_src => "ftp://mirrors.isc.org/pub/pcbsd/8.2/i386/PCBSD8.2-x86-DVD.iso",
+  :iso_src => "http://mirror.xenserv.net/PC-BSD/8.2/i386/PCBSD8.2-x86-DVD.iso",
   :iso_md5 => "6433a8abf6073b177750d48398bed341",
   :iso_download_timeout => "1000",
   :boot_wait => "70", :boot_cmd_sequence => [
