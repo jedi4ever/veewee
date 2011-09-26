@@ -32,13 +32,39 @@ end
 
 desc 'Verify ISO'
 task :iso, [:box_name] do |t,args|
-    #if args.to_hash.size!=1
-      #puts "needs one arguments: rake iso [\"yourname\"]"
-      #exit
-    #end
-    Dir.glob("templates/*").each do |name|
-      definition_name=File.basename(name)
-      definition=Veewee::Environment.new(:cwd => ".",:definition_dir => "templates",:definition_path => "templates").get_definition(definition_name)
-      puts definition.iso_src
+  require 'net/http'
+  #if args.to_hash.size!=1
+  #puts "needs one arguments: rake iso [\"yourname\"]"
+  #exit
+  #end
+  Dir.glob("templates/*").each do |name|
+    definition_name=File.basename(name)
+    definition=Veewee::Environment.new(:cwd => ".",:definition_dir => "templates",:definition_path => "templates").get_definition(definition_name)
+    next if definition.iso_src.nil? || definition.iso_src==""
+    begin
+      url=definition.iso_src
+      found=false
+      response = nil
+      while found==false
+        uri=URI.parse(url)
+        Net::HTTP.start(uri.host,uri.port) {|http|
+          response = http.head(uri.path)
+        }
+        unless response['location'].nil?
+          #puts "Redirecting to "+response['location']
+          url=response['location']
+        else
+          found=true
+        end
+      end
+      length=response['content-length']
+      if length.to_i < 10000
+        puts definition.iso_src
+        p response['content-type']
+        puts uri.host,uri.port, uri.path
+      end
+    rescue Exception => ex
+      puts "Error"+ex.to_s+definition.iso_src
     end
+  end
 end
