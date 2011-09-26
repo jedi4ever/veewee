@@ -4,21 +4,21 @@ require 'lib/veewee'
 class TestVeeweeBuild < Test::Unit::TestCase
   def setup
     @ve=Veewee::Environment.new({:definition_dir => File.expand_path(File.join(File.dirname(__FILE__),"definitions")) })
-    @definition_name="test_definition"
-    @box_name="test_definition"
-    @vd=@ve.get_definition(@definition_name)
+    template_name="test_definition"
+    @vm_name="test_definition"
+    @vd=@ve.get_definition(template_name)
     @vd.postinstall_files=["_test_me.sh"]
   end
 
   def test_virtualbox_1_build
     assert_nothing_raised {
-      @ve.config.builders["virtualbox"].build(@definition_name,{})
+      @ve.builder(:virtualbox).get_box(@vm_name,@vd,{}).build({})
     }
   end
 
   def test_virtualbox_2_ssh
     assert_nothing_raised {
-      result=@ve.config.builders["virtualbox"].get_box(@box_name).ssh("who am i")
+      result=@ve.builder(:virtualbox).get_box(@vm_name,@vd,{}).ssh("who am i")
       assert_match(/root/,result.stdout)
     }
   end

@@ -30,6 +30,30 @@ module Veewee
           return ssh_options
         end
 
+          # Transfer information provide by the builder to the box
+          #
+          #
+          def transfer_buildinfo(box,definition)
+            super(box,definition)
+
+            begin
+              Veewee::Util::Ssh.when_ssh_login_works(box.ip_address,ssh_options(definition).merge({:timeout => definition.postinstall_timeout.to_i})) do
+                  begin
+                    env.logger.info "About to transfer vmware tools iso buildinfo to the box #{box.name} - #{box.ip_address} - #{ssh_options(definition)}"
+                    Veewee::Util::Ssh.transfer_file(box.ip_address,"/Library/Application Support/VMware Fusion/isoimages/linux.iso","linux.iso",ssh_options(definition))
+                  rescue RuntimeError => ex
+                    env.ui.error "Error transfering vmware tools iso , possible not enough permissions to write? #{ex}"
+                    exit -1
+                  end
+              end
+            rescue Net::SSH::AuthenticationFailed
+              env.ui.error "Authentication failure"
+              exit -1
+            end
+
+          end
+
+
 
 
       end #End Class

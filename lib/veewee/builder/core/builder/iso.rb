@@ -34,7 +34,7 @@ module Veewee
             counter = 0
             while (!io.eof)
               readBuf = io.readpartial(buflen)
-              env.ui.info '.' if ((counter+=1) % 20000 == 0)
+              env.ui.info('.',{:new_line => false}) if ((counter+=1) % 20000 == 0)
               checksum.update(readBuf)
             end
           end
@@ -76,9 +76,9 @@ module Veewee
               answer="yes" if options["auto"]==true
               env.logger.info "Auto download enabled?#{answer} #{!options['auto'].nil?}"
               if answer.nil?
-                answer=ask("Download? (Yes/No)") {|q| q.default="No"}
+                answer=env.ui.ask("Download? (Yes/No)") {|q| q.default="No"}
               end
-              
+
               if answer.downcase == "yes"
                 if !File.exists?(env.config.veewee.iso_dir)
                   env.ui.info "Creating an iso directory"
@@ -98,7 +98,7 @@ module Veewee
                 env.ui.info ""
                 exit
               end
-              
+
               env.ui.info "Verifying md5 checksum : #{definition.iso_md5}"
               file_md5=hashsum(full_path)
 

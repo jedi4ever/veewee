@@ -17,6 +17,7 @@ module Veewee
         data = {
           :cpu_count => definition.cpu_count, :memory_size => definition.memory_size,
           :controller_type => "lsilogic",
+          :fusion_os_type => definition.os_type_id,
           :mac_addres => "auto generated",
           :iso_file => "#{File.join(env.config.veewee.iso_dir,definition.iso_file)}",
           :box_name => name,

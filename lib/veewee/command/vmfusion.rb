@@ -75,7 +75,7 @@ module Veewee
         venv=Veewee::Environment.new(options)
         venv.ui=env.ui
         venv.get_definition_paths.keys.each do |name|
-          env.ui.info "- #{name}",:prefix => false
+          env.ui.info "- #{name}"
         end
       end
 

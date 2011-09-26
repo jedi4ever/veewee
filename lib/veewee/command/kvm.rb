@@ -1,8 +1,6 @@
 module Veewee
   module Command
     class Kvm< Veewee::Command::GroupBase
-      register "kvm", "Subcommand for kvm"
-
 
       register "kvm", "Subcommand for kvm"
       desc "build [TEMPLATE_NAME] [BOX_NAME]", "Build box"
@@ -38,8 +36,8 @@ module Veewee
       desc "undefine [BOXNAME]", "Removes the definition of a basebox "
       method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging"
       def undefine(definition_name)
-        begin
          env.ui.info "Removing definition #{definition_name}"
+        begin
          venv=Veewee::Environment.new(options)
          venv.ui=env.ui
          venv.undefine(definition_name,options)

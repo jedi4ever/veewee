@@ -61,7 +61,7 @@ class TestVeeweeEnvironment < Test::Unit::TestCase
     # Goto top dir , to make pwd another dir
     Dir.chdir("/")
     ve=Veewee::Environment.new({:definition_path => ["/tmp"]})
-    assert_equal(ve.definition_dir,"/definitions")
+    assert_equal(ve.definition_dir,"/tmp")
   end
 
 end

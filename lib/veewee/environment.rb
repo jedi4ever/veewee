@@ -38,17 +38,21 @@ module Veewee
 
     def initialize(options={})
 
+      cwd= options.has_key?(:cwd) ? options[:cwd] : Dir.pwd
+
       defaults={
-        :cwd => Dir.pwd,
+        :cwd => cwd,
         :veewee_filename => "Veeweefile",
         :loglevel => :info,
-        :definition_path => [File.join(Dir.pwd,"definitions")],
-        :definition_dir => File.join(Dir.pwd,"definitions"),
+        :definition_path => [File.join(cwd,"definitions")],
+        :definition_dir => File.join(cwd,"definitions"),
         :template_path => [File.expand_path(File.join(File.dirname(__FILE__),"..","..",'templates')),"templates"],
-        :iso_dir => File.join(Dir.pwd,"iso"),
+        :iso_dir => File.join(cwd,"iso"),
         :validation_dir => File.join(File.expand_path(File.join(File.dirname(__FILE__),"..","..")),"validation"),
-        :tmp_dir => File.join(Dir.pwd,"tmp")
+        :tmp_dir => File.join(cwd,"tmp")
       }
+
+      options = defaults.merge(options)
 
 
       # We need to set this variable before the first call to the logger object
@@ -57,7 +61,6 @@ module Veewee
         ui.info "Debugging enabled"
       end
 
-      options = defaults.merge(options)
 
       logger.info("environment") { "Environment initialized (#{self})" }
 
@@ -122,15 +125,15 @@ module Veewee
 
     def list_ostypes
       @ui.info "The following are possible os_types you can use in your definition.rb files"
-    
+
         require 'virtualbox'
           os_types=VirtualBox::Global.global.lib.virtualbox.guest_os_types
-      
+
       os_types.each { |os|
         @ui.info "#{os.id}: #{os.description}"
       }
     end
-    
+
      # This function returns a hash of names of all the definitions that are in the @definition_dir,
      # given the @definition_dir in the current Environment object
      # The name of the definition is the name of a sub-directory in the @definition_dir
