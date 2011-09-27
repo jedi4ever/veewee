@@ -22,7 +22,6 @@ apt-get -y install nfs-common
 # can install their own Rubies using packages or however.
 # We must install the 1.8.x series since Puppet doesn't support
 # Ruby 1.9 yet.
-wget http://ftp.ruby-lang.org/pub/ruby/1.8/ruby-1.8.7-p334.tar.gz
 wget http://ftp.ruby-lang.org/pub/ruby/1.8/ruby-1.8.7-p352.tar.gz
 tar xvzf ruby-1.8.7-p352.tar.gz
 cd ruby-1.8.7-p352
