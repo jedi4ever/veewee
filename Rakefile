@@ -61,7 +61,7 @@ task :iso, [:box_name] do |t,args|
       if length.to_i < 10000
         puts definition.iso_src
         p response['content-type']
-        puts uri.host,uri.port, uri.path
+        puts uri.host,uri.port, uri.path,response.code
       end
     rescue Exception => ex
       puts "Error"+ex.to_s+definition.iso_src

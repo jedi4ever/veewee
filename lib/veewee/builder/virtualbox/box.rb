@@ -60,12 +60,13 @@ module Veewee
         
       end
       
-      def start(mode)
+      def start(gui_enabled=true)
         # Once assembled we start the machine
-        if (mode)
-          raw.start("vrdp")
-        else
+        env.logger.info "Started the VM with GUI Enabled? #{gui_enabled}"
+        if (gui_enabled)
           raw.start("gui")
+        else
+          raw.start("vrdp")
         end
       end
     

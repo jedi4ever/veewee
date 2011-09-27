@@ -27,9 +27,13 @@ module Veewee
           create_disk(definition)
         end
 
-        def start(mode)
-          # mode can be gui or nogui
-          raw.start unless raw.nil?
+        def start(gui_enabled=true)
+          if gui_enabled
+            raw.start unless raw.nil?
+          else
+            raw.start({:headless => true}) unless raw.nil?
+          end
+          
         end
 
         def stop

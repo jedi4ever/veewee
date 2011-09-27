@@ -50,7 +50,11 @@ module Veewee
           end
 
           box.create(definition)
-          box.start(options["gui"])
+          
+          # Check the GUI mode required
+          env.logger.info "Builder asks the box to start: GUI enabled? #{!options[:nogui]}"
+          gui_enabled=options[:nogui]==true ? false : true
+          box.start(gui_enabled)
 
           #waiting for it to boot
           env.ui.info "Waiting #{definition.boot_wait.to_i} seconds for the machine to boot"
