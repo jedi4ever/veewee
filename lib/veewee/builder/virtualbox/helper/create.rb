@@ -47,21 +47,6 @@ def get_vm_location
   return location
 end
 
-def verify_ostype(definition)
-
-  #Verifying the os.id with the :os_type_id specified
-  matchfound=false
-  VirtualBox::Global.global.lib.virtualbox.guest_os_types.collect { |os|
-    if definition.os_type_id == os.id
-      matchfound=true
-    end
-  }
-  unless matchfound
-    env.ui.error "The ostype: #{definition.os_type_id} is not available in your Virtualbox version"
-    exit -1
-  end
-
-end
 
 def suppress_messages
   #Setting this annoying messages to register
@@ -177,13 +162,19 @@ end
     end
   end
 
+  def vbox_os_type_id(veewee_type_id)
+    type=env.config.ostypes[veewee_type_id][:vbox]
+    env.logger.info("Using VBOX os_type_id #{type}")
+    return type
+  end
+  
   def create_vm(definition)
-     command="#{@vboxcmd} createvm --name '#{name}' --ostype '#{definition.os_type_id}' --register"
+     command="#{@vboxcmd} createvm --name '#{name}' --ostype '#{vbox_os_type_id(definition.os_type_id)}' --register"
 
       #Exec and system stop the execution here
       Veewee::Util::Shell.execute("#{command}")
 
-      env.ui.info "Creating vm #{name} : #{definition.memory_size}M - #{definition.cpu_count} CPU - #{definition.os_type_id}"
+      env.ui.info "Creating vm #{name} : #{definition.memory_size}M - #{definition.cpu_count} CPU - #{vbox_os_type_id(definition.os_type_id)}"
 
       #setting cpu's    
       command="#{@vboxcmd} modifyvm '#{name}' --cpus #{definition.cpu_count}"

@@ -11,7 +11,14 @@ module Veewee
       def build(definition_name,box_name=nil)
         venv=Veewee::Environment.new(options)
         venv.ui=env.ui
-        venv.config.builders["vmfusion"].build(definition_name,box_name,options)
+        venv.config.builders["vmfusion"].build(definition_name,box_name,options)       
+        
+#        venv.ui.info "#{box_name} was build succesfully. "
+#        venv.ui.info ""
+#        venv.ui.info "Now you can: "
+#        venv.ui.info "- verify your box by running              : veewee fusion validate #{definition_name}"
+#        venv.ui.info "- export your vm to a .box fileby running : veewee fusion export   #{definition_name}"
+
       end
 
       desc "destroy [BOXNAME]", "Destroys the virtualmachine that was build"
@@ -48,6 +55,14 @@ module Veewee
         end
       end
 
+      desc "ostypes", "List the available Operating System types"
+      method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging" 
+      def ostypes
+        venv=Veewee::Environment.new(options)
+        venv.ui=env.ui
+        venv.list_ostypes
+      end
+      
       desc "export [NAME]", "Exports the basebox to the ova format"
       method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging"
       def export(box_name)

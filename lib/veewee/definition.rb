@@ -70,7 +70,9 @@ module Veewee
       options.each do |key, value|
         instance_variable_set("@#{key}".to_sym, options[key])
         env.logger.info("definition") { " - #{key} : #{options[key]}" }
-      end      
+      end 
+      verify_ostype
+           
     end
     
     # Loading a definition
@@ -105,12 +107,21 @@ module Veewee
             rescue NameError => ex
               env.ui.error("NameError reading definition from file #{definition_file} #{ex}")
             rescue Exception => ex
-              env.ui.error("Error reading definition from file #{definition_file}#{ex}")
+              env.ui.error("Error in the definition from file #{definition_file}\n#{ex}")
+              exit -1
             end
           else
             env.logger.info "#{definition_file} not found"
           end
         veewee_definition
+    end
+    
+    def verify_ostype
+
+      unless env.config.ostypes.has_key?(@os_type_id)
+        raise "The ostype: #{@os_type_id} is not available"
+      end
+
     end
 
 

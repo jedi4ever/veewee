@@ -39,12 +39,6 @@ module Veewee
           # w00t, we have succesfully reach this point
           # so we let user know , the vm is ready to be exported
 
-          env.ui.info "#{box_name} was build succesfully. "
-          env.ui.info ""
-          env.ui.info "Now you can: "
-          env.ui.info "- verify your box by running              : vagrant basebox validate #{box_name}"
-          env.ui.info "- export your vm to a .box fileby running : vagrant basebox export   #{box_name}"
-
         end
 
       end #End Class

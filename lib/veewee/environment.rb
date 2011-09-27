@@ -125,12 +125,9 @@ module Veewee
 
     def list_ostypes
       @ui.info "The following are possible os_types you can use in your definition.rb files"
-
-        require 'virtualbox'
-          os_types=VirtualBox::Global.global.lib.virtualbox.guest_os_types
-
-      os_types.each { |os|
-        @ui.info "#{os.id}: #{os.description}"
+      
+      config.ostypes.each { |key,value|
+        @ui.info "#{key}"
       }
     end
 

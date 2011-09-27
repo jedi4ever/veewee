@@ -16,6 +16,7 @@ module Veewee
     attr_accessor :builders
     attr_accessor :definitions
     attr_accessor :templates
+    attr_reader   :ostypes
 
     def initialize(options)
       @env=options[:env]
@@ -25,6 +26,11 @@ module Veewee
       @definitions=Hash.new
       @templates=Hash.new
 
+      # Read ostypes
+      yamlfile=File.join(File.dirname(__FILE__),"config","ostypes.yml")
+      env.logger.info "Reading ostype yamlfile #{yamlfile}"
+      @ostypes=YAML.load_file(yamlfile)
+      
       # Initialize with defaults
       @veewee=::Veewee::Config::Veewee.new(self)
 

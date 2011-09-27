@@ -24,19 +24,9 @@ module Veewee
 
         def fusion_os_type(type_id)
           env.logger.info "Translating #{type_id} into fusion type"
-          types={
-            "ArchLinux" => "Linux",
-            "ArchLinux_64" => "Linux",
-            "RedHat"=> "centos",
-            "RedHat_64"=>"centos-64",
-            "RedHat"=>"centos",
-            "Ubuntu_64"=>"ubuntu-64",
-            "Ubuntu"=>"ubuntu",
-            "Fedora"=>"fedora",
-            "Fedora_64"=>"Fedora_64",
-          }
-          env.logger.info "Found fusion type #{types[type_id]}"
-          return types[type_id]
+          fusiontype=env.config.ostypes[type_id][:fusion]
+          env.logger.info "Found fusion type #{fusiontype}"
+          return fusiontype
         end
 
         def create_vm(definition)
