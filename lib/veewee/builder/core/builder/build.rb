@@ -49,6 +49,9 @@ module Veewee
 #            exit -1
 #          end
 
+          # Filtering post install files based upon --postinstall-include and --postinstall--exclude
+          definition.postinstall_files=filter_postinstall_files(definition,options)
+                    
           box.create(definition)
           
           # Check the GUI mode required
@@ -109,6 +112,31 @@ module Veewee
           return guessed_port
         end
         
+        
+        def filter_postinstall_files(definition,options)
+          new_definition=definition.clone
+
+          env.logger.info "Applying the postinstall excludes"
+          options["postinstall_exclude"].each do |p|
+            env.logger.info "Exclude pattern #{p}"
+            new_definition.postinstall_files.collect! { |f| f.match(p) ? f.gsub(/^/,"_"): f}
+          end
+                    
+          env.logger.info "Applying the postinstall includes"
+          options["postinstall_include"].each do |p|
+            env.logger.info "Include pattern #{p}"
+            new_definition.postinstall_files.collect! { |f| f.match(p) ? f.gsub(/^_/,""): f}
+          end
+          
+          env.logger.info "filtered postinstall files:"
+          new_definition.postinstall_files.each do |p|
+            env.logger.info "- "+p
+          end
+          
+          return new_definition.postinstall_files
+        end
+
+
 
         # This will take a sequence and fill in the variables specified in the options
         # f.i. options={:ip => "name"} will substitute "%IP%" -> "name"
@@ -165,8 +193,8 @@ module Veewee
 
             # Filenames of postinstall_files are relative to their definition
             filename=File.join(definition.path,postinstall_file)
-
-            begin
+            unless File.basename(postinstall_file)=~/^_/
+              begin
               Veewee::Util::Ssh.when_ssh_login_works(box.ip_address,ssh_options(definition).merge({:timeout => definition.postinstall_timeout.to_i})) do
                 begin
                   env.logger.info "About to transfer #{filename} to the box #{box.name} - #{box.ip_address} - #{ssh_options(definition)}"
@@ -189,6 +217,9 @@ module Veewee
             rescue Net::SSH::AuthenticationFailed
               env.ui.error "Authentication failure"
               exit -1
+            end
+            else
+              env.logger.info "Skipping postinstallfile #{postinstall_file}"
             end
           end
         end
