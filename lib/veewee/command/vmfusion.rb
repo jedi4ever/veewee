@@ -54,6 +54,15 @@ module Veewee
           exit -1
         end
       end
+      
+      desc "validate [NAME]", "Validates a box against vmfusion compliancy rules"
+      method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging" 
+      def validate(box_name)
+        venv=Veewee::Environment.new(options)
+        venv.ui=env.ui
+        venv.config.builders["vmfusion"].validate_vmfusion(box_name,options)
+      end
+      
 
       desc "ostypes", "List the available Operating System types"
       method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging" 

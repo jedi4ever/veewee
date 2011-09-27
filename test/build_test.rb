@@ -33,7 +33,7 @@ class TestVeeweeBuild < Test::Unit::TestCase
 
   def test_virtualbox_4_destroy
     assert_nothing_raised {
-      @ve.builder(:virtualbox).get_box(@vm_name,@vd,{}).destroy({})
+      @ve.config.builders["virtualbox"].get_box(@vm_name,@vd,{}).destroy({})
     }
   end
 

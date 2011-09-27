@@ -44,10 +44,10 @@ module Veewee
           # By now the machine if it existed, should have been shutdown
           # The last thing to check is if the power we are supposed to ssh to, is still open
 
-          if Veewee::Util::Tcp.is_port_open?("localhost", definition.ssh_host_port)
-            puts "Hmm, the port #{definition.ssh_host_port} is open. And we shut down?"
-            exit -1
-          end
+#          if Veewee::Util::Tcp.is_port_open?(box.ip_address, ssh_options(definition)[:port])
+#            puts "Hmm, the  #{box.ip_address}:#{ssh_options(definition)[:port]} is open. And we shut down?"
+#            exit -1
+#          end
 
           box.create(definition)
           
@@ -66,7 +66,7 @@ module Veewee
           # Let fill's in the variable we need
           boot_sequence=fill_sequence(definition.boot_cmd_sequence,{
             :ip =>Veewee::Util::Tcp.local_ip,
-            :port => definition.kickstart_port,
+            :port => definition.kickstart_port.to_s,
             :name => box.name
           })
 
@@ -116,7 +116,7 @@ module Veewee
           filled=sequence.dup
           options.each do |key,value|
             filled.each do |s|
-              s.gsub!("%#{key.upcase}%",value)
+              s.gsub!("%#{key.to_s.upcase}%",value)
             end
           end
           return filled
