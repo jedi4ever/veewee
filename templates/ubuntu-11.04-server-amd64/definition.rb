@@ -4,7 +4,7 @@ Veewee::Definition.declare({
   :os_type_id => 'Ubuntu_64',
   :iso_file => "ubuntu-11.04-server-amd64.iso",
   :iso_src => "http://releases.ubuntu.com/11.04/ubuntu-11.04-server-amd64.iso",
-  :iso_md5 => "ce1cee108de737d7492e37069eed538e",
+  :iso_md5 => "355ca2417522cb4a77e0295bf45c5cd5",
   :iso_download_timeout => "1000",
   :boot_wait => "10", :boot_cmd_sequence => [
     '<Esc><Esc><Enter>',
