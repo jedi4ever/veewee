@@ -56,9 +56,12 @@ module Veewee
           gui_enabled=options[:nogui]==true ? false : true
           box.start(gui_enabled)
 
-          #waiting for it to boot
+          # Waiting for it to boot
           env.ui.info "Waiting #{definition.boot_wait.to_i} seconds for the machine to boot"
           sleep definition.boot_wait.to_i
+
+          # Calculate an available kickstart port
+          definition.kickstart_port=guess_web_port(definition.kickstart_port).to_s
 
           # Let fill's in the variable we need
           boot_sequence=fill_sequence(definition.boot_cmd_sequence,{
@@ -80,6 +83,32 @@ module Veewee
 
           handle_postinstall(box,definition)
         end
+
+        # This tries to guess a port for the disposable Webserver
+        def guess_web_port(hint)
+          env.ui.info "Received Web port hint - #{hint}"
+
+          min_port=hint.to_i
+          max_port=7200
+          guessed_port=nil
+          
+          for port in (min_port..max_port)
+            unless Veewee::Util::Tcp.is_port_open?(Veewee::Util::Tcp.local_ip, port)
+              guessed_port=port
+              break
+            end
+          end
+
+          if guessed_port.nil?
+            env.ui.info "No free Web port available: tried #{min_port}..#{max_port}"
+            exit -1
+          else
+            env.ui.info "Found Web port #{guessed_port} available"            
+          end
+  
+          return guessed_port
+        end
+        
 
         # This will take a sequence and fill in the variables specified in the options
         # f.i. options={:ip => "name"} will substitute "%IP%" -> "name"

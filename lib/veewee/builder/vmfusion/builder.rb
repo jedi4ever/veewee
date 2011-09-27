@@ -30,12 +30,17 @@ module Veewee
           return ssh_options
         end
 
-          # Transfer information provide by the builder to the box
-          #
-          #
+
+        #
+        
+        # Transfer information provide by the builder to the box
+        #
+        #
           def transfer_buildinfo(box,definition)
             super(box,definition)
 
+            # When we get here, ssh is available and no postinstall scripts have been executed yet
+            # So we begin by transferring the ISO file of the vmware tools
             begin
               Veewee::Util::Ssh.when_ssh_login_works(box.ip_address,ssh_options(definition).merge({:timeout => definition.postinstall_timeout.to_i})) do
                   begin
@@ -49,7 +54,7 @@ module Veewee
             rescue Net::SSH::AuthenticationFailed
               env.ui.error "Authentication failure"
               exit -1
-            end
+            end            
 
           end
 

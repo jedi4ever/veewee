@@ -21,6 +21,7 @@ module Veewee
           :mac_addres => "auto generated",
           :iso_file => "#{File.join(env.config.veewee.iso_dir,definition.iso_file)}",
           :box_name => name,
+          :vnc_port => vnc_port
         }
 
         vars = ErbBinding.new(data)
