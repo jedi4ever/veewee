@@ -7,7 +7,7 @@ Veewee::Definition.declare( {
                            "<Esc><Esc><Enter>",
                            "/install/vmlinuz ",
                            "noapic ",
-                           "auto-install/enable",
+                           "auto-install/enable ",
                            "console-setup/ask_detect=false ",
                            "console-setup/modelcode=pc105 ",
                            "console-setup/layoutcode=us ",
