@@ -4,7 +4,7 @@ module Veewee
   module Builder
     module Core
       module BuilderCommand
-      
+
 
       def ssh_tunnel_start(forwardings)
         #ssh_options={ :keys => [ vm.private_key ], :paranoid => false, :keys_only => true}
@@ -22,7 +22,7 @@ module Veewee
               env.ui.info "Forwarding remote port #{forwarding[:remote_port]} from #{box_name} to local port #{forwarding[:local_port]}"
               env.ui.info host
               env.ui.info user
-              env.ui.info
+              env.ui.info ""
               ssh_session.forward.local(forwarding[:local_port], "127.0.0.1",forwarding[:remote_port])
             rescue Errno::EACCES
               env.ui.info "  Error - Access denied to forward remote port #{forwarding[:remote_port]} from #{name} to local port #{forwarding[:local_port]}"
