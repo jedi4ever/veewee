@@ -44,7 +44,7 @@ module Veewee
       end
 
       def send_keycode(keycode)
-        command= "#{@vboxcmd} controlvm '#{name}' keyboardenv.ui.infocancode #{keycode}"
+        command= "#{@vboxcmd} controlvm '#{name}' keyboardputscancode #{keycode}"
         env.logger.info "#{command}"
         sshresult=shell_exec("#{command}",{:mute => true})
         unless sshresult.stdout.index("E_ACCESSDENIED").nil?

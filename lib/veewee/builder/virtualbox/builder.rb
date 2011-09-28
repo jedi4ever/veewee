@@ -16,6 +16,7 @@ module Veewee
         end
 
         def ssh_options(definition)
+
           ssh_options={
             :user => definition.ssh_user,
             :port => definition.ssh_host_port,

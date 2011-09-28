@@ -22,6 +22,29 @@ module Veewee
         return false
       end
 
+      # This tries to guess a local free tcp port 
+      def guess_free_port(min_port,max_port)
+        env.ui.info "Received port hint - #{min_port}"
+
+        guessed_port=nil
+
+        for port in (min_port..max_port)
+          unless is_tcp_port_open?(get_local_ip, port)
+            guessed_port=port
+            break
+          end
+        end
+
+        if guessed_port.nil?
+          env.ui.info "No free port available: tried #{min_port}..#{max_port}"
+          exit -1
+        else
+          env.ui.info "Found port #{guessed_port} available"
+        end
+
+        return guessed_port
+      end
+
       def execute_when_tcp_available(ip="localhost", options = { } , &block)
 
         defaults={ :port => 22, :timeout => 2 , :pollrate => 5}

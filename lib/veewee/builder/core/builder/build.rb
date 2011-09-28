@@ -44,6 +44,7 @@ module Veewee
           # By now the machine if it existed, should have been shutdown
           # The last thing to check is if the power we are supposed to ssh to, is still open
 
+
           #          if is_tcp_port_open?(box.ip_address, ssh_options(definition)[:port])
           #            env.ui.info "Hmm, the  #{box.ip_address}:#{ssh_options(definition)[:port]} is open. And we shut down?"
           #            exit -1
@@ -64,7 +65,11 @@ module Veewee
           sleep definition.boot_wait.to_i
 
           # Calculate an available kickstart port
-          definition.kickstart_port=guess_web_port(definition.kickstart_port).to_s
+          guessed_port=guess_free_port(definition.kickstart_port.to_i,7199).to_s
+          if guessed_port.to_s!=definition.kickstart_port
+            env.ui.warn "Changing kickstart port from #{definition.kickstart_port} to #{guessed_port}"
+            definition.kickstart_port=guessed_port.to_s
+          end
 
           # Let fill's in the variable we need
           boot_sequence=fill_sequence(definition.boot_cmd_sequence,{
@@ -85,33 +90,12 @@ module Veewee
           transfer_buildinfo(box,definition)
 
           handle_postinstall(box,definition)
+
+          env.ui.confirm "The box #{box_name} was build succesfully!"
+          env.ui.info "You can now login to the box with:"
+          env.ui.info "\nssh -p #{ssh_options(definition)[:port]} -l #{definition.ssh_user} #{box.ip_address}"
+
         end
-
-        # This tries to guess a port for the disposable Webserver
-        def guess_web_port(hint)
-          env.ui.info "Received Web port hint - #{hint}"
-
-          min_port=hint.to_i
-          max_port=7200
-          guessed_port=nil
-
-          for port in (min_port..max_port)
-            unless is_tcp_port_open?(get_local_ip, port)
-              guessed_port=port
-              break
-            end
-          end
-
-          if guessed_port.nil?
-            env.ui.info "No free Web port available: tried #{min_port}..#{max_port}"
-            exit -1
-          else
-            env.ui.info "Found Web port #{guessed_port} available"
-          end
-
-          return guessed_port
-        end
-
 
         def filter_postinstall_files(definition,options)
           new_definition=definition.clone

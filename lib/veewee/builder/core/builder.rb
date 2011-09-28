@@ -23,7 +23,7 @@ module Veewee
         include ::Veewee::Util::Web
         include ::Veewee::Util::Ssh
         include ::Veewee::Util::Shell
-        
+
         def initialize(name,options,env)
 
           @env=env

@@ -8,38 +8,44 @@ module Veewee
   module Builder
     module Virtualbox
       class Box < Veewee::Builder::Core::Box
-        
+
         include ::Veewee::Builder::Virtualbox::BoxHelper
-        
+
         def initialize(name,env)
 
           require 'virtualbox'
           @vboxcmd=determine_vboxcmd
           super(name,env)
-          
+
         end
-                      
+
       def determine_vboxcmd
          return "VBoxManage"
-      end   
+      end
 
       def exists?
         vm=VirtualBox::VM.find(name)
         env.logger.info ("Vm exists? #{!vm.nil?}")
         return !vm.nil?
       end
-      
+
       def running?
-        return 
+        return
       end
-      
+
       def create(definition)
-        
+
+          guessed_port=guess_free_port(definition.ssh_host_port.to_i,definition.ssh_host_port.to_i+40).to_s
+          if guessed_port.to_s!=definition.ssh_host_port
+            env.ui.warn "Changing ssh port from #{definition.ssh_host_port} to #{guessed_port}"
+            definition.ssh_host_port=guessed_port.to_s
+          end
+
         #Suppress those annoying virtualbox messages
         suppress_messages
-        
+
         create_vm(definition)
-        
+
         # Adds a folder to the vm for testing purposes
         add_shared_folder(definition)
 
@@ -48,18 +54,18 @@ module Veewee
 
         add_ide_controller(definition)
         attach_isofile(definition)
-        
+
         add_sata_controller(definition)
         attach_disk(definition)
-        
+
         create_floppy(definition)
         add_floppy_controller(definition)
         attach_floppy(definition)
-        
+
         add_ssh_nat_mapping(definition)
-        
+
       end
-      
+
       def start(gui_enabled=true)
         # Once assembled we start the machine
         env.logger.info "Started the VM with GUI Enabled? #{gui_enabled}"
@@ -69,7 +75,7 @@ module Veewee
           raw.start("vrdp")
         end
       end
-    
+
       def stop
         # If the vm is not powered off, perform a shutdown
         if (!raw.nil? && !(raw.powered_off?))
@@ -84,9 +90,9 @@ module Veewee
             exit -1
           end
         end
-        
+
       end
-      
+
       def halt
         if (!raw.nil? && !(raw.powered_off?))
           env.ui.info "Halting vm #{name}"
