@@ -10,17 +10,17 @@ module Veewee
       method_option :auto,:type => :boolean , :default => false, :aliases => "-a", :desc => "auto answers"      
       method_option :postinstall_include, :type => :array, :default => [], :aliases => "-i", :desc => "patterns of postinstall filenames to additionally include"
       method_option :postinstall_exclude, :type => :array, :default => [], :aliases => "-e", :desc => "patterns of postinstall filenames to exclude"
-      
+
       def build(definition_name,box_name=nil)
         venv=Veewee::Environment.new(options)
         venv.ui=env.ui
         venv.config.builders["vmfusion"].build(definition_name,box_name,options)       
-        
-#        venv.ui.info "#{box_name} was build succesfully. "
-#        venv.ui.info ""
-#        venv.ui.info "Now you can: "
-#        venv.ui.info "- verify your box by running              : veewee fusion validate #{definition_name}"
-#        venv.ui.info "- export your vm to a .box fileby running : veewee fusion export   #{definition_name}"
+
+        #        venv.ui.info "#{box_name} was build succesfully. "
+        #        venv.ui.info ""
+        #        venv.ui.info "Now you can: "
+        #        venv.ui.info "- verify your box by running              : veewee fusion validate #{definition_name}"
+        #        venv.ui.info "- export your vm to a .box fileby running : veewee fusion export   #{definition_name}"
 
       end
 
@@ -57,7 +57,7 @@ module Veewee
           exit -1
         end
       end
-      
+
       desc "validate [NAME]", "Validates a box against vmfusion compliancy rules"
       method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging" 
       def validate(box_name)
@@ -65,7 +65,7 @@ module Veewee
         venv.ui=env.ui
         venv.config.builders["vmfusion"].validate_vmfusion(box_name,options)
       end
-      
+
 
       desc "ostypes", "List the available Operating System types"
       method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging" 
@@ -74,7 +74,7 @@ module Veewee
         venv.ui=env.ui
         venv.list_ostypes
       end
-      
+
       desc "export [NAME]", "Exports the basebox to the ova format"
       method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging"
       def export(box_name)

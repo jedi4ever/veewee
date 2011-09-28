@@ -18,7 +18,9 @@ module Veewee
 
       desc "destroy [BOXNAME]", "Destroys the virtualmachine that was build"
       def destroy(box_name)
-        Veewee::Environment.new(options).config.builders["virtualbox"].get_box(box_name).destroy
+        venv=Veewee::Environment.new(options)
+        venv.ui=env.ui
+        venv.config.builders["virtualbox"].get_box(box_name).destroy
       end
 
       desc "define [BOXNAME] [TEMPLATE]", "Define a new basebox starting from a template"

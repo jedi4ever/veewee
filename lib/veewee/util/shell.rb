@@ -26,7 +26,7 @@ module Veewee
         IO.popen("#{escaped_command}"+ " 2>&1") { |p|
           p.each_line{ |l|
             result.stdout+=l
-            env.ui.info l,{:new_line => false}  unless options[:mute]
+            env.ui.info(l,{:new_line => false})  unless options[:mute]
           }
           result.status=Process.waitpid2(p.pid)[1].exitstatus
           if result.status!=0

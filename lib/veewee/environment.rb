@@ -54,7 +54,6 @@ module Veewee
 
       options = defaults.merge(options)
 
-
       # We need to set this variable before the first call to the logger object
       if options.has_key?("debug")
         ENV['VEEWEE_LOG']="STDOUT"
@@ -125,7 +124,7 @@ module Veewee
 
     def list_ostypes
       @ui.info "The following are possible os_types you can use in your definition.rb files"
-      
+
       config.ostypes.each { |key,value|
         @ui.info "#{key}"
       }
