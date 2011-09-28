@@ -27,7 +27,7 @@ module Veewee
         # When we create a new box
         # We assume the box is not running
         def create(definition)
-          
+
           @vnc_port=guess_vnc_port
           create_vm(definition)
           create_disk(definition)
@@ -39,7 +39,7 @@ module Veewee
           else
             raw.start({:headless => true}) unless raw.nil?
           end
-          
+
         end
 
         def stop
@@ -56,7 +56,7 @@ module Veewee
         end
 
         def destroy
-          if raw.nil?
+          unless raw.exists?
             env.ui.error "Error:: You tried to destroy a non-existing box '#{name}'"
             exit -1
           end
@@ -86,17 +86,17 @@ module Veewee
         # Type on the console
         def console_type(sequence,type_options={})
           vnc_type(sequence,"localhost",vnc_display_port)
-          
+
           # Once this is over, we can remove the vnc port from the config file
           remove_vnc_port
         end
-        
+
         # This tries to guess a port for the VNC Display
         def guess_vnc_port
           min_port=5920
           max_port=6000
           guessed_port=nil
-          
+
           for port in (min_port..max_port)
             unless is_tcp_port_open?("127.0.0.1", port)
               guessed_port=port
@@ -110,20 +110,20 @@ module Veewee
           else
             env.ui.info "Found VNC port #{guessed_port} available"            
           end
-  
+
           return guessed_port
         end
-        
+
         def vnc_display_port
           vnc_port - 5900
         end
-        
+
         def remove_vnc_port
-            env.ui.info "Removing vnc_port from #{raw.vmx_path}"
-            lines=File.readlines(raw.vmx_path).reject{|l| l =~ /^RemoteDisplay.vnc/}
-            File.open(raw.vmx_path, 'w') do |f|  
-              f.puts lines 
-            end
+          env.ui.info "Removing vnc_port from #{raw.vmx_path}"
+          lines=File.readlines(raw.vmx_path).reject{|l| l =~ /^RemoteDisplay.vnc/}
+          File.open(raw.vmx_path, 'w') do |f|  
+            f.puts lines 
+          end
         end
 
         private
