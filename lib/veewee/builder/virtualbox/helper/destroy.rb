@@ -38,7 +38,7 @@ module Veewee
         env.ui.info "Deleting vm #{name}"
 
         #Exec and system stop the execution here
-        Veewee::Util::Shell.execute("#{command}")
+        shell_exec("#{command}")
         sleep 1
 
         #if the disk was not attached when the machine was destroyed we also need to delete the disk
@@ -58,7 +58,7 @@ module Veewee
             env.ui.info "Deleting disk #{d.location}"
             env.ui.info "#{command}"
 
-            Veewee::Util::Shell.execute("#{command}") 
+            shell_exec("#{command}") 
 
             if File.exists?(d.location) 
               env.ui.info "We tried to delete the disk file via virtualbox '#{d.location} but failed"

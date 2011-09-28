@@ -1,22 +1,25 @@
 module Veewee
   module Util
-    class Web
-
       require 'webrick'
       include WEBrick
+    module Servlet
+
 
       class FileServlet < WEBrick::HTTPServlet::AbstractServlet
 
-        def initialize(server,localfile)
+        attr_reader :env
+
+        def initialize(server,localfile,env)
           super(server)
           @server=server
           @localfile=localfile
+          @env=env
         end
+
         def do_GET(request,response)
           response['Content-Type']='text/plain'
-          #response['peeraddr']=["AF_INET", 55009, "10.100.1.100", "10.100.1.100"],
           response.status = 200
-          puts "Serving file #{@localfile}"
+          env.ui.info "Serving file #{@localfile}"
           displayfile=File.open(@localfile,'r')
           content=displayfile.read()
           response.body=content
@@ -26,7 +29,11 @@ module Veewee
         end
       end
 
-      def self.wait_for_request(filename,options={:timeout => 10, :web_dir => "", :port => 7125})
+    end
+    module Web
+
+      def wait_for_http_request(filename,options={:timeout => 10, :web_dir => "", :port => 7125})
+
 
         # Calculate the OS equivalent of /dev/null , on windows this is NUL:
         # http://www.ruby-forum.com/topic/115472
@@ -36,15 +43,16 @@ module Veewee
 
         web_dir=options[:web_dir]
         filename=filename
-        s= HTTPServer.new(
+        s= ::WEBrick::HTTPServer.new(
           :Port => options[:port],
           :Logger => webrick_logger,
           :AccessLog => webrick_logger
         )
-        s.mount("/#{filename}", FileServlet,File.join(web_dir,filename))
+        env.logger.debug ("mounting file /#{filename}")
+        s.mount("/#{filename}", Veewee::Util::Servlet::FileServlet,File.join(web_dir,filename),env)
         trap("INT"){
           s.shutdown
-          puts "Stopping webserver"
+          env.ui.info "Stopping webserver"
           exit
         }
         s.start

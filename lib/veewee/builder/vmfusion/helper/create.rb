@@ -18,7 +18,7 @@ module Veewee
           FileUtils.chdir(vm_path)
           env.ui.info "Creating disk"
           command="#{fusion_path.shellescape}/vmware-vdiskmanager -c -s #{definition.disk_size}M -a lsilogic -t #{disk_type} #{name}.vmdk"
-          shell_results=Veewee::Util::Shell.execute("#{command}",{:mute => true})
+          shell_results=shell_exec("#{command}",{:mute => true})
           FileUtils.chdir(current_dir)
         end
 

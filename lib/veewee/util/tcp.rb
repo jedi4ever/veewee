@@ -3,8 +3,9 @@ require 'timeout'
 
 module Veewee
   module Util
-    class Tcp
-      def self.is_port_open?(ip, port)
+    module Tcp
+
+      def is_tcp_port_open?(ip, port)
         begin
           Timeout::timeout(1) do
             begin
@@ -21,9 +22,7 @@ module Veewee
         return false
       end
 
-      #we need to try the actual login because vbox gives us a connect
-      #after the machine boots
-      def self.execute_when_tcp_available(ip="localhost", options = { } , &block)
+      def execute_when_tcp_available(ip="localhost", options = { } , &block)
 
         defaults={ :port => 22, :timeout => 2 , :pollrate => 5}
 
@@ -34,7 +33,7 @@ module Veewee
             connected=false
             while !connected do
               begin
-                puts "trying connection"
+                env.ui.info "trying connection"
                 s = TCPSocket.new(ip, options[:port])
                 s.close
                 block.call(ip);
@@ -51,7 +50,7 @@ module Veewee
         return false
       end
 
-      def self.local_ip
+      def get_local_ip
         orig, Socket.do_not_reverse_lookup = Socket.do_not_reverse_lookup, true  # turn off reverse DNS resolution temporarily
 
         UDPSocket.open do |s|
@@ -61,6 +60,6 @@ module Veewee
       ensure
         Socket.do_not_reverse_lookup = orig
       end
-    end #Class
+    end #Module
   end #Module
 end #Module

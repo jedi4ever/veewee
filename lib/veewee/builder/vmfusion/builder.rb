@@ -53,10 +53,10 @@ module Veewee
             iso_image="/Library/Application Support/VMware Fusion/isoimages/windows.iso" if definition.os_type_id=~/^Win/
             
             begin
-              Veewee::Util::Ssh.when_ssh_login_works(box.ip_address,ssh_options(definition).merge({:timeout => definition.postinstall_timeout.to_i})) do
+              when_ssh_login_works(box.ip_address,ssh_options(definition).merge({:timeout => definition.postinstall_timeout.to_i})) do
                   begin
                     env.logger.info "About to transfer vmware tools iso buildinfo to the box #{box.name} - #{box.ip_address} - #{ssh_options(definition)}"
-                    Veewee::Util::Ssh.transfer_file(box.ip_address,iso_image,File.basename(iso_image),ssh_options(definition))
+                    ssh_transfer_file(box.ip_address,iso_image,File.basename(iso_image),ssh_options(definition))
                   rescue RuntimeError => ex
                     env.ui.error "Error transfering vmware tools iso , possible not enough permissions to write? #{ex}"
                     exit -1

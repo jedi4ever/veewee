@@ -38,7 +38,7 @@ module Veewee
     # The command will be available for that project!
     #
     # Also note that the above example uses `env.ui` to output. It is recommended
-    # you use this instead of raw "puts" since it is configurable and provides
+    # you use this instead of raw "env.ui.info" since it is configurable and provides
     # additional functionality, such as colors and asking for user input. See
     # the {UI} class for more information.
     #

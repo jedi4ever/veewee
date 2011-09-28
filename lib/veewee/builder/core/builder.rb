@@ -1,7 +1,8 @@
-require 'veewee/util/shell'
 require 'veewee/util/tcp'
 require 'veewee/util/web'
 require 'veewee/util/ssh'
+require 'veewee/util/shell'
+
 
 require 'veewee/builder/core/builder/build.rb'
 require 'veewee/builder/core/builder/iso.rb'
@@ -18,7 +19,11 @@ module Veewee
         attr_accessor :name
 
         include ::Veewee::Builder::Core::BuilderCommand
-
+        include ::Veewee::Util::Tcp
+        include ::Veewee::Util::Web
+        include ::Veewee::Util::Ssh
+        include ::Veewee::Util::Shell
+        
         def initialize(name,options,env)
 
           @env=env

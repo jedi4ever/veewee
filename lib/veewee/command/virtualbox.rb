@@ -28,9 +28,9 @@ module Veewee
         venv=Veewee::Environment.new(options)
         venv.ui=env.ui
         venv.define(definition_name,template_name,options)
-        puts "The basebox '#{definition_name}' has been succesfully created from the template '#{template_name}'"
-        puts "You can now edit the definition files stored in definitions/#{definition_name} or build the box with:"
-        puts "veewee vbox build '#{definition_name}'"
+        env.ui.info "The basebox '#{definition_name}' has been succesfully created from the template '#{template_name}'"
+        env.ui.info "You can now edit the definition files stored in definitions/#{definition_name} or build the box with:"
+        env.ui.info "veewee vbox build '#{definition_name}'"
       end
 
       desc "undefine [BOXNAME]", "Removes the definition of a basebox "
@@ -47,9 +47,9 @@ module Veewee
           exit -1
         end
       end
-      
+
       desc "ostypes", "List the available Operating System types"
-      method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging" 
+      method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging"
       def ostypes
         venv=Veewee::Environment.new(options)
         venv.ui=env.ui

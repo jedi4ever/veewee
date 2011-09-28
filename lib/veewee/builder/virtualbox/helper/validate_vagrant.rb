@@ -22,8 +22,8 @@ module Veewee
         rescue SystemExit => e
           Kernel.exit(e.status)
         rescue Exception => e
-          STDERR.puts("#{e.message} (#{e.class})")
-          STDERR.puts(e.backtrace.join("\n"))
+          env.ui.error("#{e.message} (#{e.class})")
+          env.ui.error(e.backtrace.join("\n"))
           Kernel.exit(1)
         end
 

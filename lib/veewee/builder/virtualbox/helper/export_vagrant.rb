@@ -21,7 +21,7 @@ module Veewee
           env.ui.info "Sudo also needs to work for user #{definition.ssh_user}"
           env.ui.info "Performing a clean shutdown now."
           
-            Veewee::Util::Ssh.execute("localhost","sudo #{definition.shutdown_cmd}",ssh_options(definition))
+            ssh_exec("localhost","sudo #{definition.shutdown_cmd}",ssh_options(definition))
 
             #Wait for state poweroff
             while (box.raw.state==:running) do
@@ -50,7 +50,7 @@ module Veewee
           env.ui.info "Excuting vagrant voodoo:"
           export_command="vagrant package --base '#{box_name}' --output '#{box_path}'"
           env.ui.info "#{export_command}"
-          Veewee::Util::Shell.execute("#{export_command}") #hmm, needs to get the gem_home set?
+          shell_exec("#{export_command}") #hmm, needs to get the gem_home set?
           env.ui.info ""
 
           #add_ssh_nat_mapping back!!!!

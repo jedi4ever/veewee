@@ -11,7 +11,7 @@ module Veewee
       end
 
       def method_missing(m, *args, &block)  
-#         puts "There's no method called #{m} here -- please try again."  
+#         env.ui.info "There's no method called #{m} here -- please try again."  
        end
              
     end

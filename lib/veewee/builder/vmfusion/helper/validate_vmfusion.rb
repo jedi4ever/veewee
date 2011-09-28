@@ -14,6 +14,8 @@ module Veewee
 
         features=Array.new
         features[0]=feature_path
+        features << "-t"
+        features << "@vmfusion"
 
         begin
           # The dup is to keep ARGV intact, so that tools like ruby-debug can respawn.
@@ -22,8 +24,8 @@ module Veewee
         rescue SystemExit => e
           Kernel.exit(e.status)
         rescue Exception => e
-          STDERR.puts("#{e.message} (#{e.class})")
-          STDERR.puts(e.backtrace.join("\n"))
+          env.ui.error("#{e.message} (#{e.class})")
+          env.ui.error(e.backtrace.join("\n"))
           Kernel.exit(1)
         end
 

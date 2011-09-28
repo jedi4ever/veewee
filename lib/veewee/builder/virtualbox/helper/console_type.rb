@@ -44,9 +44,9 @@ module Veewee
       end
 
       def send_keycode(keycode)
-        command= "#{@vboxcmd} controlvm '#{name}' keyboardputscancode #{keycode}"
+        command= "#{@vboxcmd} controlvm '#{name}' keyboardenv.ui.infocancode #{keycode}"
         env.logger.info "#{command}"
-        sshresult=Veewee::Util::Shell.execute("#{command}",{:mute => true})
+        sshresult=shell_exec("#{command}",{:mute => true})
         unless sshresult.stdout.index("E_ACCESSDENIED").nil?
           env.ui.error "There was an error typing the commands on the console"
           env.ui.error "Probably the VM did not get started."

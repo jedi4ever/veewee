@@ -15,6 +15,6 @@ end
 #     raise MyError, "Error B"
 #   end
 #rescue => error 
-#   puts "Current failure: #{error.inspect}"
-#   puts "Original failure: #{error.original.inspect}"
+#   env.ui.info "Current failure: #{error.inspect}"
+#   env.ui.info "Original failure: #{error.original.inspect}"
 #end

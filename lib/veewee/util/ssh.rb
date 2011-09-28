@@ -13,18 +13,18 @@ module Veewee
       end
     end
 
-    class Ssh
+    module Ssh
 
       require 'net/ssh'
       require 'net/scp'
 
-      def self.when_ssh_login_works(ip="localhost", options = {  } , &block)
+      def when_ssh_login_works(ip="localhost", options = {  } , &block)
 
         defaults={ :port => '22', :timeout => 20000 , :user => 'vagrant', :password => 'vagrant'}
 
         options=defaults.merge(options)
 
-        puts  "Waiting for ssh login on #{ip} with user #{options[:user]} to sshd on port => #{options[:port]} to work, timeout=#{options[:timeout]} sec"
+        env.ui.info  "Waiting for ssh login on #{ip} with user #{options[:user]} to sshd on port => #{options[:port]} to work, timeout=#{options[:timeout]} sec"
 
         begin
           Timeout::timeout(options[:timeout]) do
@@ -36,7 +36,7 @@ module Veewee
                   print "\n"
 
                   block.call(ip);
-                  puts ""
+                  env.ui.info ""
                   return true
                 end
               rescue Net::SSH::Disconnect,Errno::ECONNREFUSED, Errno::EHOSTUNREACH, Errno::ECONNABORTED, Errno::ECONNRESET, Errno::ENETUNREACH,Errno::ETIMEDOUT, Errno::ENETUNREACH
@@ -45,32 +45,32 @@ module Veewee
             end
           end
         rescue Timeout::Error
-          puts "Ssh timeout #{options[:timeout]} min has been reached."
+          env.ui.info "Ssh timeout #{options[:timeout]} min has been reached."
           exit -1
         end
-        puts ""
+        env.ui.info ""
         return false
       end
 
 
-      def self.transfer_file(host,filename,destination = '.' , options = {})
+      def ssh_transfer_file(host,filename,destination = '.' , options = {})
 
         defaults={ :paranoid => false }
         options=defaults.merge(options)
 
         Net::SSH.start( host,options[:user],options ) do |ssh|
-          puts "Transferring #{filename} to #{destination} "
+          env.ui.info "Transferring #{filename} to #{destination} "
           ssh.scp.upload!( filename, destination ) do |ch, name, sent, total|
             #   print "\r#{destination}: #{(sent.to_f * 100 / total.to_f).to_i}%"
             print "."
 
           end
         end
-        puts
+        env.ui.info
       end
 
 
-      def self.execute(host,command, options = { :progress => "on"} )
+      def ssh_exec(host,command, options = { :progress => "on"} )
         defaults= { :port => "22", :exitcode => "0", :user => "root"}
         options=defaults.merge(options)
         pid=""
@@ -79,7 +79,7 @@ module Veewee
         stderr=""
         status=-99999
 
-        puts "Executing command: #{command}"
+        env.ui.info "Executing command: #{command}"
 
         Net::SSH.start(host, options[:user], { :port => options[:port], :password => options[:password], :paranoid => false }) do |ssh|
 
@@ -118,18 +118,18 @@ module Veewee
                 exit_code = data.read_long
                 status=exit_code
                 if exit_code > 0
-                  puts "ERROR: exit code #{exit_code}"
+                  env.ui.info "ERROR: exit code #{exit_code}"
                 else
-                  #puts "Successfully executed"
+                  #env.ui.info "Successfully executed"
                 end
               end
 
               channel.on_request("exit-signal") do |ch, data|
-                puts "SIGNAL: #{data.read_long}"
+                env.ui.info "SIGNAL: #{data.read_long}"
               end
 
               ch.on_close {
-                #puts "done!"
+                #env.ui.info "done!"
               }
               #status=ch.exec "echo $?"
             end

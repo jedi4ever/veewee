@@ -98,7 +98,7 @@ module Veewee
           guessed_port=nil
           
           for port in (min_port..max_port)
-            unless Veewee::Util::Tcp.is_port_open?("127.0.0.1", port)
+            unless is_tcp_port_open?("127.0.0.1", port)
               guessed_port=port
               break
             end

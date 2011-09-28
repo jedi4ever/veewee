@@ -21,7 +21,7 @@ module Veewee
           counter=0
 
           while (snapshot!=nil)
-            #puts "#{counter}:#{snapshot.name}"
+            #env.ui.info "#{counter}:#{snapshot.name}"
             snapnames[counter]=snapshot.name
             counter=counter+1  
             snapshot=snapshot.children[0]
@@ -32,38 +32,38 @@ module Veewee
         counter=[snapnames.length, checksums.length].min-1
         last_good_state=counter
         for c in 0..counter do
-          #puts "#{c}- #{snapnames[c]} - #{checksums[c]}"
+          #env.ui.info "#{c}- #{snapnames[c]} - #{checksums[c]}"
           if !snapnames[c].match("#{c}.*-#{checksums[c]}")
-            #        puts "we found a bad state"
+            #        env.ui.info "we found a bad state"
             last_good_state=c-1
             break
           end  
         end
-        #puts "Last good state: #{last_good_state}"
+        #env.ui.info "Last good state: #{last_good_state}"
 
         if (current_step_nr < last_good_state)
-          #puts "fast forwarding #{step_name}"
+          #env.ui.info "fast forwarding #{step_name}"
           return
         end
 
-        #puts "Current step: #{current_step_nr}"
+        #env.ui.info "Current step: #{current_step_nr}"
         if (current_step_nr == last_good_state)
           if vm.running?
             vm.stop
           end
 
           #invalidate later snapshots
-          #puts "remove old snapshots"
+          #env.ui.info "remove old snapshots"
 
           for s in (last_good_state+1)..(snapnames.length-1)
-            puts "Removing step [#{s}] snapshot as it is no more valid"
+            env.ui.info "Removing step [#{s}] snapshot as it is no more valid"
             snapshot=vm.find_snapshot(snapnames[s])
             snapshot.destroy
-            #puts snapshot
+            #env.ui.info snapshot
           end
 
           vm.reload
-          puts "Loading step #{current_step_nr} snapshots as it has not changed"
+          env.ui.info "Loading step #{current_step_nr} snapshots as it has not changed"
           sleep 2
           goodsnap=vm.find_snapshot(snapnames[last_good_state])
           goodsnap.restore
@@ -71,10 +71,10 @@ module Veewee
           #TODO:Restore snapshot!!!
           vm.start
           sleep 4
-          puts "Starting machine"
+          env.ui.info "Starting machine"
         end
 
-        #puts "last good state #{last_good_state}"
+        #env.ui.info "last good state #{last_good_state}"
 
 
         if (current_step_nr > last_good_state)
@@ -85,7 +85,7 @@ module Veewee
 
             if !vm.nil?
               if vm.running?
-                puts "Stopping machine"
+                env.ui.info "Stopping machine"
                 vm.stop
                 while vm.running?
                   sleep 1
@@ -95,29 +95,29 @@ module Veewee
               #detaching cdroms (used to work in 3.x)
               #              vm.medium_attachments.each do |m|
               #                if m.type==:dvd
-              #                  #puts "Detaching dvd"
+              #                  #env.ui.info "Detaching dvd"
               #                  m.detach
               #                end
               #              end
 
               vm.reload
-              puts "We found no good state so we are destroying the previous machine+disks"
+              env.ui.info "We found no good state so we are destroying the previous machine+disks"
               destroy
             end
 
           end
 
-          #puts "(re-)executing step #{step_name}"
+          #env.ui.info "(re-)executing step #{step_name}"
 
 
           yield
 
           #Need to look it up again because if it was an initial load
           vm=VirtualBox::VM.find(@box_name) 
-          puts "Step [#{current_step_nr}] was succesfully - saving state"
+          env.ui.info "Step [#{current_step_nr}] was succesfully - saving state"
           vm.save_state
           sleep 2 #waiting for it to be ok
-          #puts "about to snapshot #{vm}"
+          #env.ui.info "about to snapshot #{vm}"
           #take snapshot after succesful execution
           vm.take_snapshot(step_name,"snapshot taken by veewee")
           sleep 2 #waiting for it to be started again
