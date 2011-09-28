@@ -8,12 +8,21 @@ Veewee::Definition.declare({
   :iso_download_timeout => "1000",
   :boot_wait => "10", :boot_cmd_sequence => [
     '<Esc><Esc><Enter>',
-    '/install/vmlinuz noapic preseed/url=http://%IP%:%PORT%/preseed.cfg ',
-    'debian-installer=en_US auto locale=en_US kbd-chooser/method=us ',
-    'hostname=%NAME% ',
-    'fb=false debconf/frontend=noninteractive ',
-    'keyboard-configuration/layout=USA keyboard-configuration/variant=USA console-setup/ask_detect=false ',
-    'initrd=/install/initrd.gz -- <Enter>'
+    '/install/vmlinuz ',
+    'initrd=/install/initrd.gz ',
+    'noapic ',
+    'fb=false ', # don't bother using a framebuffer
+    'locale=en_US ', # Start installer in English
+    'console-setup/ask_detect=false ', # Don't ask to detect keyboard
+    'keyboard-configuration/layout=USA ', # set it to US qwerty
+    'keyboard-configuration/variant=USA ',
+    'hostname=%NAME% ', # Set the hostname
+    'preseed/url=http://%IP%:%PORT%/preseed.cfg ', # Fetch the rest from here
+    'auto ',
+    'debconf/frontend=noninteractive ',
+    'debian-installer=en_US ',
+    'kbd-chooser/method=us ',
+    '-- <Enter>'
   ],
   :kickstart_port => "7122", :kickstart_timeout => "10000", :kickstart_file => "preseed.cfg",
   :ssh_login_timeout => "10000", :ssh_user => "vagrant", :ssh_password => "vagrant", :ssh_key => "",
