@@ -31,9 +31,9 @@ module Veewee
             connected=false
             while !connected do
               begin
-                print "."
+                env.ui.info ".",{:new_line => false}
                 Net::SSH.start(ip, options[:user], { :port => options[:port] , :password => options[:password], :paranoid => false , :timeout => options[:timeout] }) do |ssh|
-                  print "\n"
+                  env.ui.info "\n"
 
                   block.call(ip);
                   env.ui.info ""
@@ -45,7 +45,7 @@ module Veewee
             end
           end
         rescue Timeout::Error
-          env.ui.info "Ssh timeout #{options[:timeout]} min has been reached."
+          env.ui.error "Ssh timeout #{options[:timeout]} min has been reached."
           exit -1
         end
         env.ui.info ""
@@ -62,7 +62,7 @@ module Veewee
           env.ui.info "Transferring #{filename} to #{destination} "
           ssh.scp.upload!( filename, destination ) do |ch, name, sent, total|
             #   print "\r#{destination}: #{(sent.to_f * 100 / total.to_f).to_i}%"
-            print "."
+            env.ui.info ".",{:new_line => false}
 
           end
         end
@@ -100,7 +100,7 @@ module Veewee
               ch.on_data do |c, data|
                 stdout+=data
 
-                print data
+                env.ui.info data,{:new_line => false}
 
               end
 
@@ -108,7 +108,7 @@ module Veewee
               ch.on_extended_data do |c, type, data|
                 stderr+=data
 
-                print data
+                env.ui.info data,{:new_line => false}
 
               end
 

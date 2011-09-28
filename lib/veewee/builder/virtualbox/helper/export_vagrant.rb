@@ -9,7 +9,7 @@ module Veewee
       def export_vagrant(box_name,options)
         definition=env.get_definition(box_name)
         box=get_box(box_name)
-        
+
         #Check if box already exists
         unless box.exists?
           env.ui.info "#{name} is not found, maybe you need to build it first?"
@@ -20,12 +20,12 @@ module Veewee
           env.ui.info "Vagrant requires the box to be shutdown, before it can export"
           env.ui.info "Sudo also needs to work for user #{definition.ssh_user}"
           env.ui.info "Performing a clean shutdown now."
-          
+
             ssh_exec("localhost","sudo #{definition.shutdown_cmd}",ssh_options(definition))
 
             #Wait for state poweroff
             while (box.raw.state==:running) do
-              print '.'
+              env.ui.info ".",{:new_line => false} 
               sleep 1
             end
             env.ui.info
