@@ -93,7 +93,7 @@ module Veewee
 
           env.ui.confirm "The box #{box_name} was build succesfully!"
           env.ui.info "You can now login to the box with:"
-          env.ui.info "\nssh -p #{ssh_options(definition)[:port]} -l #{definition.ssh_user} #{box.ip_address}"
+          env.ui.info "\nssh -o UserKnowHostsFile=/dev/null -o StrictHostKeyChecking=no -p #{ssh_options(definition)[:port]} -l #{definition.ssh_user} #{box.ip_address}"
 
         end
 
