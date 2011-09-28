@@ -29,5 +29,19 @@ Veewee::Definition.declare({
   :ssh_host_port => "7222", :ssh_guest_port => "22",
   :sudo_cmd => "echo '%p'|sudo -S sh '%f'",
   :shutdown_cmd => "shutdown -P now",
-  :postinstall_files => [ "postinstall.sh"], :postinstall_timeout => "10000"
+  :postinstall_files => [
+                          "timestamp.sh",
+                          "apt-upgrade.sh",
+                          "sudo.sh",
+                          "nfs-client.sh",
+                          "ruby.sh",
+                          "chef.sh",
+                          "puppet.sh",
+                          "ssh-keys.sh",
+                          "vbox_additions.sh",
+                          "network-cleanup.sh",
+                          "remove-build-essentials.sh",
+                          "zero-disk.sh",
+                        ],
+  :postinstall_timeout => "10000"
 })
