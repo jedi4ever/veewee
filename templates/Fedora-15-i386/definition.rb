@@ -5,7 +5,7 @@ Veewee::Definition.declare({
   :os_type_id => 'Fedora',
   :iso_file => "Fedora-15-i386-DVD.iso",
   :iso_src => "http://download.fedoraproject.org/pub/fedora/linux/releases/15/Fedora/i386/iso/Fedora-15-i386-DVD.iso",
-  :iso_md5 => "eea96f0d780687a73fdbc78137b38584",
+  :iso_md5 => "9a91492ac84dde9ceff0cb346a079487",
   :iso_download_timeout => 1000,
   :boot_wait => "10", :boot_cmd_sequence => [ '<Tab> linux text ks=http://%IP%:%PORT%/ks.cfg<Enter><Enter>' ],
   :kickstart_port => "7122", :kickstart_timeout => 10000, :kickstart_file => "ks.cfg",
