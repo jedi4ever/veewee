@@ -31,6 +31,7 @@ module Veewee
         k['$']='2a 05 aa 85';
         k['+']='2a 0d aa 8d';
 
+        k['?']='2a 35 aa b5';
         k['z'] = '2c ac'; k['x']  = '2d ad' ; k['c']  = '2e ae' ; k['v']  = '2f af'; k['b'] = '30 b0' ; k['n'] = '31 b1' ;
         k['m'] = '32 b2';
         k['Z'] = '2a 2c aa ac'; k['X']  = '2a 2d aa ad' ; k['C']  = '2a 2e aa ae' ; k['V']  = '2a 2f aa af';
