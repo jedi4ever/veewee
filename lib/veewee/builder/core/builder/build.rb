@@ -101,15 +101,19 @@ module Veewee
           new_definition=definition.clone
 
           env.logger.info "Applying the postinstall excludes"
-          options["postinstall_exclude"].each do |p|
-            env.logger.info "Exclude pattern #{p}"
-            new_definition.postinstall_files.collect! { |f| f.match(p) ? f.gsub(/^/,"_"): f}
+          unless options["postinstall_exclude"].nil?
+            options["postinstall_exclude"].each do |p|
+              env.logger.info "Exclude pattern #{p}"
+              new_definition.postinstall_files.collect! { |f| f.match(p) ? f.gsub(/^/,"_"): f}
+            end
           end
 
           env.logger.info "Applying the postinstall includes"
-          options["postinstall_include"].each do |p|
-            env.logger.info "Include pattern #{p}"
-            new_definition.postinstall_files.collect! { |f| f.match(p) ? f.gsub(/^_/,""): f}
+          unless options["postinstall_include"].nil?
+            options["postinstall_include"].each do |p|
+              env.logger.info "Include pattern #{p}"
+              new_definition.postinstall_files.collect! { |f| f.match(p) ? f.gsub(/^_/,""): f}
+            end
           end
 
           env.logger.info "filtered postinstall files:"
@@ -158,13 +162,15 @@ module Veewee
           end
 
           # For each kickstart file spinup a webserver and wait for the file to be fetched
-          kickstartfiles.each do |kickfile|
-            wait_for_http_request(kickfile,{
-              :port => definition.kickstart_port,
-              :host => definition.kickstart_ip,
-              :timeout => definition.kickstart_timeout,
-              :web_dir => definition.path
-            })
+          unless kickstartfiles.nil?
+            kickstartfiles.each do |kickfile|
+              wait_for_http_request(kickfile,{
+                :port => definition.kickstart_port,
+                :host => definition.kickstart_ip,
+                :timeout => definition.kickstart_timeout,
+                :web_dir => definition.path
+              })
+            end
           end
         end
 

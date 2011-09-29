@@ -23,13 +23,6 @@ Rake::TestTask.new do |t|
   t.pattern = 'test/**/*_realtest.rb'
 end
 
-desc 'Tests requiring an real box'
-Rake::TestTask.new do |t|
-  t.name="realtest"
-  t.libs << "test"
-  t.pattern = 'test/**/*_realtest.rb'
-end
-
 desc 'Verify ISO'
 task :iso, [:box_name] do |t,args|
   require 'net/http'
