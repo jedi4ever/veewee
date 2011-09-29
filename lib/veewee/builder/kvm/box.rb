@@ -30,6 +30,7 @@ module Veewee
         def console_type(sequence,type_options={})
                   vnc_port=@connection.servers.all(:name => name).first.vnc_port
                   display_port=vnc_port.to_i - 5900
+                  env.ui.confirm "Sending keystrokes to VNC port :#{display_port} - TCP port: #{vnc_port}"
                   vnc_type(sequence,"localhost",display_port)
         end
 
