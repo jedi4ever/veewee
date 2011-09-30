@@ -28,7 +28,7 @@ module Veewee
               env.ui.info ".",{:new_line => false} 
               sleep 1
             end
-            env.ui.info
+            env.ui.info ""
             env.ui.info "Machine #{name} is powered off cleanly"
           end
 

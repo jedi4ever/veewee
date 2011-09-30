@@ -3,106 +3,106 @@ require 'veewee'
 module Veewee
   module Vagrant
     class Command < ::Vagrant::Command::GroupBase
-      
+
       register "basebox", "Commands to manage baseboxes"
       desc "build [TEMPLATE_NAME] [BOX_NAME]", "Build box"
       method_option :force,:type => :boolean , :default => false, :aliases => "-f", :desc => "force the build"
       method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging"
       method_option :nogui,:type => :boolean , :default => false, :aliases => "-n", :desc => "no gui"
-      method_option :auto,:type => :boolean , :default => false, :aliases => "-a", :desc => "auto answers" 
+      method_option :auto,:type => :boolean , :default => false, :aliases => "-a", :desc => "auto answers"
       method_option :postinstall_include, :type => :array, :default => [], :aliases => "-i", :desc => "patterns of postinstall filenames to additionally include"
       method_option :postinstall_exclude, :type => :array, :default => [], :aliases => "-e", :desc => "patterns of postinstall filenames to exclude"
       def build(definition_name,box_name=nil)
         venv=Veewee::Environment.new(options)
-        venv.ui=env.ui
+        venv.ui = ::Veewee::UI::Shell.new(venv, shell)
         venv.config.builders["virtualbox"].build(definition_name,box_name,options)
       end
-      
+
       desc "destroy [BOXNAME]", "Destroys the virtualmachine that was build"
-      method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging" 
+      method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging"
       def destroy(box_name)
         venv=Veewee::Environment.new(options)
-        venv.ui=env.ui
+        venv.ui = ::Veewee::UI::Shell.new(venv, shell)
         venv.config.builders["virtualbox"].get_box(box_name).destroy
-      end   
+      end
 
       desc "define [BOXNAME] [TEMPLATE]", "Define a new basebox starting from a template"
-      method_option :force,:type => :boolean , :default => false, :aliases => "-f", :desc => "overwrite the definition" 
-      method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging" 
+      method_option :force,:type => :boolean , :default => false, :aliases => "-f", :desc => "overwrite the definition"
+      method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging"
       def define(definition_name, template_name)
         venv=Veewee::Environment.new(options)
-        venv.ui=env.ui
-        
+        venv.ui = ::Veewee::UI::Shell.new(venv, shell)
+
         venv.define(definition_name,template_name,options)
-        env.ui "The basebox '#{definition_name}' has been succesfully created from the template '#{template_name}'"
-        env.ui "You can now edit the definition files stored in definitions/#{definition_name} or build the box with:"
-        env.ui "vagrant basebox build '#{definition_name}'"
+        venv.ui.info "The basebox '#{definition_name}' has been succesfully created from the template '#{template_name}'"
+        venv.ui.info "You can now edit the definition files stored in definitions/#{definition_name} or build the box with:"
+        venv.ui.info "vagrant basebox build '#{definition_name}'"
       end
 
       desc "undefine [BOXNAME]", "Removes the definition of a basebox "
-      method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging" 
+      method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging"
       def undefine(definition_name)
-        env.ui "Removing definition #{definition_name}"
+        venv=Veewee::Environment.new(options)
+        venv.ui = ::Veewee::UI::Shell.new(venv, shell)
         begin
-          venv=Veewee::Environment.new(options)
-          venv.ui=env.ui
+          venv.ui.info "Removing definition #{definition_name}"
           venv.undefine(definition_name,options)
-          env.ui "Definition #{definition_name} succesfully removed"
+          venv.ui.info "Definition #{definition_name} succesfully removed"
         rescue Error => ex
-          env.ui "#{ex}"
+          venv.ui.error"#{ex}"
           exit -1
         end
-      end   
-   
+      end
+
       desc "templates", "List the currently available templates"
-      method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging" 
+      method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging"
       def templates
-        env.ui.info "The following templates are available:"
         venv=Veewee::Environment.new(options)
-        venv.ui=env.ui
-        
+        venv.ui = ::Veewee::UI::Shell.new(venv, shell)
+        venv.ui.info "The following templates are available:"
+
         venv.get_template_paths.keys.each do |name|
-          env.ui.info "vagrant basebox define '<box_name>' '#{name}'"
-        end        
+          venv.ui.info "vagrant basebox define '<box_name>' '#{name}'"
+        end
       end
 
       desc "list", "Lists all defined boxes"
-      method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging" 
+      method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging"
       def list
-        env.ui.info "The following local definitions are available:"
         venv=Veewee::Environment.new(options)
-        venv.ui=env.ui
-        
+        venv.ui = ::Veewee::UI::Shell.new(venv, shell)
+        venv.ui.info "The following local definitions are available:"
+
         venv.get_definition_paths.keys.each do |name|
-          env.ui.info "- #{name}"
+          venv.ui.info "- #{name}"
         end
-      end  
+      end
 
       desc "ostypes", "List the available Operating System types"
-      method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging" 
+      method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging"
       def ostypes
         venv=Veewee::Environment.new(options)
-        venv.ui=env.ui
+        venv.ui = ::Veewee::UI::Shell.new(venv, shell)
         venv.list_ostypes
       end
-            
-            desc "validate [NAME]", "Validates a box against vagrant compliancy rules"
-            method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging" 
-            def validate(box_name)
-              venv=Veewee::Environment.new(options)
-              venv.ui=env.ui
-            
-              venv.config.builders["virtualbox"].validate_vagrant(box_name,options)
-            end
 
-    desc "export [NAME]", "Exports the basebox to the vagrant box format" 
-    method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging" 
-    def export(box_name)
-      venv=Veewee::Environment.new(options)
-      venv.ui=env.ui
-      venv.config.builders["virtualbox"].export_vagrant(box_name,options)
-    end 
+      desc "validate [NAME]", "Validates a box against vagrant compliancy rules"
+      method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging"
+      def validate(box_name)
+        venv=Veewee::Environment.new(options)
+        venv.ui = ::Veewee::UI::Shell.new(venv, shell)
+
+        venv.config.builders["virtualbox"].validate_vagrant(box_name,options)
+      end
+
+      desc "export [NAME]", "Exports the basebox to the vagrant box format"
+      method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging"
+      def export(box_name)
+        venv=Veewee::Environment.new(options)
+        venv.ui = ::Veewee::UI::Shell.new(venv, shell)
+        venv.config.builders["virtualbox"].export_vagrant(box_name,options)
+      end
 
     end
-end
+  end
 end
