@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    veewee (0.3.0.alpha1)
+    veewee (0.3.0.alpha2)
       CFPropertyList (~> 2.0.17)
       ansi (~> 1.3.0)
       cucumber (~> 1.0.2)
