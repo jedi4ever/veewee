@@ -33,7 +33,7 @@ mkdir -p /home/vagrant/.ssh
 chmod 700 /home/vagrant/.ssh
 cd /home/vagrant/.ssh
 curl -Lo /home/vagrant/.ssh/authorized_keys \
-  'http://github.com/mitchellh/vagrant/raw/master/keys/vagrant.pub'
+  'https://raw.github.com/mitchellh/vagrant/master/keys/vagrant.pub'
 chmod 0600 /home/vagrant/.ssh/authorized_keys
 chown -R vagrant:vagrant /home/vagrant/.ssh
 

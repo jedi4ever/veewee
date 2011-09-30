@@ -55,7 +55,7 @@ export PATH=/opt/csw/gcc4/bin:$PATH
 mkdir /export/home/vagrant/.ssh
 chmod 700 /export/home/vagrant/.ssh
 cd /export/home/vagrant/.ssh
-/usr/bin/wget --no-check-certificate 'http://github.com/mitchellh/vagrant/raw/master/keys/vagrant.pub' -O authorized_keys
+/usr/bin/wget --no-check-certificate 'https://raw.github.com/mitchellh/vagrant/master/keys/vagrant.pub' -O authorized_keys
 chown -R vagrant /export/home/vagrant/.ssh
 
 #Installing the virtualbox guest additions

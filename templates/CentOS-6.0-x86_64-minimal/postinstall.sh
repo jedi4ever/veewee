@@ -30,7 +30,7 @@ gem install --no-ri --no-rdoc chef
 mkdir /home/vagrant/.ssh
 chmod 700 /home/vagrant/.ssh
 cd /home/vagrant/.ssh
-curl -L -o authorized_keys http://github.com/mitchellh/vagrant/raw/master/keys/vagrant.pub
+curl -L -o authorized_keys https://raw.github.com/mitchellh/vagrant/master/keys/vagrant.pub
 chown -R vagrant /home/vagrant/.ssh
 
 # Installing the virtualbox guest additions
