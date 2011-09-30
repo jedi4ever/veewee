@@ -1,5 +1,7 @@
 require 'json'
 require 'i18n'
+require 'yaml'
+require 'pathname'
 
 module Veewee
   # The source root is the path to the root directory of
