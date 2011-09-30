@@ -135,7 +135,7 @@ echo "creating vagrant ssh keys"
 chroot /mnt/gentoo mkdir /home/vagrant/.ssh
 chroot /mnt/gentoo chmod 700 /home/vagrant/.ssh
 chroot /mnt/gentoo cd /home/vagrant/.ssh
-chroot /mnt/gentoo wget --no-check-certificate 'http://github.com/mitchellh/vagrant/raw/master/keys/vagrant.pub' -O /home/vagrant/.ssh/authorized_keys
+chroot /mnt/gentoo wget --no-check-certificate 'https://raw.github.com/mitchellh/vagrant/master/keys/vagrant.pub' -O /home/vagrant/.ssh/authorized_keys
 chroot /mnt/gentoo chmod 600 /home/vagrant/.ssh/authorized_keys
 chroot /mnt/gentoo chown -R vagrant /home/vagrant/.ssh
 
