@@ -1,47 +1,20 @@
-GIT
-  remote: git://github.com/geemus/fog.git
-  revision: a90eb43bd26139596a6146c2f242b7997fb87bc5
-  branch: master
-  specs:
-    fog (0.11.0)
-      builder
-      excon (~> 0.7.3)
-      formatador (~> 0.2.0)
-      mime-types
-      multi_json (~> 1.0.3)
-      net-scp (~> 1.0.4)
-      net-ssh (~> 2.1.4)
-      nokogiri (~> 1.5.0)
-      ruby-hmac
-
-GIT
-  remote: git://github.com/jedi4ever/fission.git
-  revision: c7db61e84c77677b7ed591f1c0fe81e52e980fef
-  branch: enhance_use_as_lib
-  specs:
-    fission (0.4.0a)
-      CFPropertyList (~> 2.0.17)
-
-GIT
-  remote: git://github.com/jedi4ever/ruby-vnc.git
-  revision: f4c1ebc3ce02086505d7e92c9bb526a1130f8740
-  branch: master
-  specs:
-    ruby-vnc (1.0.1)
-
 PATH
   remote: .
   specs:
-    veewee (0.3.0)
+    veewee (0.3.0a)
+      CFPropertyList (~> 2.0.17)
       ansi (~> 1.3.0)
       cucumber (~> 1.0.2)
+      fog (~> 1.0.0)
       highline (~> 1.6.1)
       i18n
       net-ssh (~> 2.1.0)
       popen4 (~> 0.1.2)
       progressbar
       rspec (~> 2.5.0)
+      ruby-vnc (~> 1.0.0)
       thor (~> 0.14.6)
+      vagrant (~> 0.8.2)
 
 GEM
   remote: http://rubygems.org/
@@ -63,12 +36,22 @@ GEM
     erubis (2.7.0)
     excon (0.7.3)
     ffi (1.0.9)
+    fog (1.0.0)
+      builder
+      excon (~> 0.7.3)
+      formatador (~> 0.2.0)
+      mime-types
+      multi_json (~> 1.0.3)
+      net-scp (~> 1.0.4)
+      net-ssh (~> 2.1.4)
+      nokogiri (~> 1.5.0)
+      ruby-hmac
     formatador (0.2.1)
     gherkin (2.4.21)
       json (>= 1.4.6)
     highline (1.6.2)
-    i18n (0.5.0)
-    json (1.5.3)
+    i18n (0.6.0)
+    json (1.5.4)
     libxml-ruby (2.2.2)
     mime-types (1.16)
     multi_json (1.0.3)
@@ -91,19 +74,19 @@ GEM
       diff-lcs (~> 1.1.2)
     rspec-mocks (2.5.0)
     ruby-hmac (0.4.0)
-    ruby-libvirt (0.4.0)
+    ruby-vnc (1.0.1)
     term-ansicolor (1.0.6)
     thor (0.14.6)
-    vagrant (0.8.2)
+    vagrant (0.8.7)
       archive-tar-minitar (= 0.5.2)
       erubis (~> 2.7.0)
-      i18n (~> 0.5.0)
+      i18n (~> 0.6.0)
       json (~> 1.5.1)
       net-scp (~> 1.0.4)
       net-ssh (~> 2.1.4)
       thor (~> 0.14.6)
       virtualbox (~> 0.9.1)
-    virtualbox (0.9.1)
+    virtualbox (0.9.2)
       ffi (~> 1.0.9)
 
 PLATFORMS
@@ -111,10 +94,5 @@ PLATFORMS
 
 DEPENDENCIES
   bundler (>= 1.0.0)
-  fission (~> 0.4.0a)!
-  fog!
   rake
-  ruby-libvirt
-  ruby-vnc!
-  vagrant
   veewee!
