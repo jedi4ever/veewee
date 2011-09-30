@@ -6,7 +6,7 @@ date > /etc/vagrant_box_build_time
 
 # Create the user vagrant with password vagrant
 
-useradd -G admin -p $(perl -e'print crypt("vagrant", "vagrant")') -m -N vagrant
+useradd -G admin -p $(perl -e'print crypt("vagrant", "vagrant")') -m /bin/bash -N vagrant
 
 # Installing vagrant keys
 mkdir /home/vagrant/.ssh
