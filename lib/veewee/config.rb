@@ -30,7 +30,7 @@ module Veewee
       yamlfile=File.join(File.dirname(__FILE__),"config","ostypes.yml")
       env.logger.info "Reading ostype yamlfile #{yamlfile}"
       @ostypes=YAML.load_file(yamlfile)
-      
+
       # Initialize with defaults
       @veewee=::Veewee::Config::Veewee.new(self)
 

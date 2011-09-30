@@ -38,12 +38,12 @@ module Veewee
       desc "undefine [BOXNAME]", "Removes the definition of a basebox "
       method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging"
       def undefine(definition_name)
-         env.ui.info "Removing definition #{definition_name}"
+        env.ui.info "Removing definition #{definition_name}"
         begin
-         venv=Veewee::Environment.new(options)
-         venv.ui=env.ui
-         venv.undefine(definition_name,options)
-         venv.info "Definition #{definition_name} succesfully removed"
+          venv=Veewee::Environment.new(options)
+          venv.ui=env.ui
+          venv.undefine(definition_name,options)
+          venv.info "Definition #{definition_name} succesfully removed"
         rescue Error => ex
           env.ui.error "#{ex}"
           exit -1
@@ -51,13 +51,13 @@ module Veewee
       end
 
       desc "ostypes", "List the available Operating System types"
-      method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging" 
+      method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging"
       def ostypes
         venv=Veewee::Environment.new(options)
         venv.ui=env.ui
         venv.list_ostypes
       end
-      
+
       desc "templates", "List the currently available templates"
       method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging"
       def templates

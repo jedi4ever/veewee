@@ -7,14 +7,14 @@ module Veewee
       method_option :force,:type => :boolean , :default => false, :aliases => "-f", :desc => "force the build"
       method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging"
       method_option :nogui,:type => :boolean , :default => false, :aliases => "-n", :desc => "no gui"
-      method_option :auto,:type => :boolean , :default => false, :aliases => "-a", :desc => "auto answers"      
+      method_option :auto,:type => :boolean , :default => false, :aliases => "-a", :desc => "auto answers"
       method_option :postinstall_include, :type => :array, :default => [], :aliases => "-i", :desc => "patterns of postinstall filenames to additionally include"
       method_option :postinstall_exclude, :type => :array, :default => [], :aliases => "-e", :desc => "patterns of postinstall filenames to exclude"
 
       def build(definition_name,box_name=nil)
         venv=Veewee::Environment.new(options)
         venv.ui=env.ui
-        venv.config.builders["vmfusion"].build(definition_name,box_name,options)       
+        venv.config.builders["vmfusion"].build(definition_name,box_name,options)
 
         #        venv.ui.info "#{box_name} was build succesfully. "
         #        venv.ui.info ""
@@ -59,7 +59,7 @@ module Veewee
       end
 
       desc "validate [NAME]", "Validates a box against vmfusion compliancy rules"
-      method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging" 
+      method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging"
       def validate(box_name)
         venv=Veewee::Environment.new(options)
         venv.ui=env.ui
@@ -68,7 +68,7 @@ module Veewee
 
 
       desc "ostypes", "List the available Operating System types"
-      method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging" 
+      method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging"
       def ostypes
         venv=Veewee::Environment.new(options)
         venv.ui=env.ui
