@@ -1,3 +1,34 @@
+GIT
+  remote: git://github.com/geemus/fog.git
+  revision: a90eb43bd26139596a6146c2f242b7997fb87bc5
+  branch: master
+  specs:
+    fog (0.11.0)
+      builder
+      excon (~> 0.7.3)
+      formatador (~> 0.2.0)
+      mime-types
+      multi_json (~> 1.0.3)
+      net-scp (~> 1.0.4)
+      net-ssh (~> 2.1.4)
+      nokogiri (~> 1.5.0)
+      ruby-hmac
+
+GIT
+  remote: git://github.com/jedi4ever/fission.git
+  revision: c7db61e84c77677b7ed591f1c0fe81e52e980fef
+  branch: enhance_use_as_lib
+  specs:
+    fission (0.4.0a)
+      CFPropertyList (~> 2.0.17)
+
+GIT
+  remote: git://github.com/jedi4ever/ruby-vnc.git
+  revision: f4c1ebc3ce02086505d7e92c9bb526a1130f8740
+  branch: master
+  specs:
+    ruby-vnc (1.0.1)
+
 PATH
   remote: .
   specs:
@@ -10,46 +41,35 @@ PATH
       popen4 (~> 0.1.2)
       progressbar
       rspec (~> 2.5.0)
-      ruby-vnc (~> 1.0.0)
       thor (~> 0.14.6)
-
-PATH
-  remote: /Users/patrick/imac/fog
-  specs:
-    fog (0.11.0)
-      builder
-      excon (~> 0.6.5)
-      formatador (~> 0.2.0)
-      mime-types
-      multi_json (~> 1.0.3)
-      net-scp (~> 1.0.4)
-      net-ssh (~> 2.1.4)
-      nokogiri (~> 1.5.0)
-      ruby-hmac
 
 GEM
   remote: http://rubygems.org/
   specs:
+    CFPropertyList (2.0.17)
+      libxml-ruby (>= 1.1.0)
+      rake (>= 0.7.0)
     Platform (0.4.0)
     ansi (1.3.0)
     archive-tar-minitar (0.5.2)
     builder (3.0.0)
-    cucumber (1.0.2)
+    cucumber (1.0.6)
       builder (>= 2.1.2)
       diff-lcs (>= 1.1.2)
-      gherkin (~> 2.4.5)
+      gherkin (~> 2.4.18)
       json (>= 1.4.6)
-      term-ansicolor (>= 1.0.5)
-    diff-lcs (1.1.2)
+      term-ansicolor (>= 1.0.6)
+    diff-lcs (1.1.3)
     erubis (2.7.0)
-    excon (0.6.5)
+    excon (0.7.3)
     ffi (1.0.9)
-    formatador (0.2.0)
-    gherkin (2.4.5)
+    formatador (0.2.1)
+    gherkin (2.4.21)
       json (>= 1.4.6)
     highline (1.6.2)
     i18n (0.5.0)
     json (1.5.3)
+    libxml-ruby (2.2.2)
     mime-types (1.16)
     multi_json (1.0.3)
     net-scp (1.0.4)
@@ -72,7 +92,6 @@ GEM
     rspec-mocks (2.5.0)
     ruby-hmac (0.4.0)
     ruby-libvirt (0.4.0)
-    ruby-vnc (1.0.0)
     term-ansicolor (1.0.6)
     thor (0.14.6)
     vagrant (0.8.2)
@@ -92,9 +111,10 @@ PLATFORMS
 
 DEPENDENCIES
   bundler (>= 1.0.0)
+  fission (~> 0.4.0a)!
   fog!
   rake
-  ruby-libvirt (~> 0.4.0)
-  ruby-vnc
+  ruby-libvirt
+  ruby-vnc!
   vagrant
   veewee!

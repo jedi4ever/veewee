@@ -95,6 +95,7 @@ module Veewee
           env.ui.info "You can now login to the box with:"
           env.ui.info "\nssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -p #{ssh_options(definition)[:port]} -l #{definition.ssh_user} #{box.ip_address}"
 
+          return box
         end
 
         def filter_postinstall_files(definition,options)

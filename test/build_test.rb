@@ -22,19 +22,19 @@ class TestVeeweeBuild < Test::Unit::TestCase
   end
 
 #  def test_virtualbox_2_ssh
-#    assert_nothing_raised {
-#      result=@ve.config.builders["virtualbox"].get_box(@box_name).ssh("who am i")
-#      assert_match(/root/,result.stdout)
-#    }
-#  end
+    #assert_nothing_raised {
+      #result=@ve.config.builders["virtualbox"].get_box(@box_name).ssh("who am i")
+      #assert_match(/root/,result.stdout)
+    #}
+  #end
 #
-#  def test_virtualbox_3_console_type
-#    assert_nothing_raised {
-#      @ve.builder(:virtualbox).get_box(@vm_name,@vd,{}).console_type('echo "bla" > console.txt<Enter>')
-#      result=@ve.builder(:virtualbox).get_box(@vm_name,@vd,{}).ssh("cat console.txt")
-#      assert_match(/bla/,result.stdout)
-#    }
-#  end
+  def test_virtualbox_3_console_type
+    assert_nothing_raised {
+      @ve.config.builders["virtualbox"].get_box(@box_name).console_type('echo "bla" > console.txt<Enter>')
+      result=@ve.builder["virtualbox"].get_box(@box_name).ssh("cat console.txt")
+      assert_match(/bla/,result.stdout)
+    }
+  end
 #
 #  def test_virtualbox_4_destroy
 #    assert_nothing_raised {

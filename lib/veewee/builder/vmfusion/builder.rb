@@ -11,9 +11,9 @@ module Veewee
 
 
         def check_requirements
-          unless gem_available?("fission")
-            raise ::Veewee::Error, "The Vmfusion Builder requires the gem 'fission' to be installed\n"+ "gem install fission"
-          end
+          #unless gem_available?("fission")
+            #raise ::Veewee::Error, "The Vmfusion Builder requires the gem 'fission' to be installed\n"+ "gem install fission"
+          #end
         end
 
         def build_info
@@ -37,37 +37,37 @@ module Veewee
 
 
         #
-        
+
         # Transfer information provide by the builder to the box
         #
         #
-          def transfer_buildinfo(box,definition)
-            super(box,definition)
+        def transfer_buildinfo(box,definition)
+          super(box,definition)
 
-            # When we get here, ssh is available and no postinstall scripts have been executed yet
-            # So we begin by transferring the ISO file of the vmware tools
-            
-            iso_image="/Library/Application Support/VMware Fusion/isoimages/linux.iso"
-            iso_image="/Library/Application Support/VMware Fusion/isoimages/darwin.iso" if definition.os_type_id=~/^Darwin/
+          # When we get here, ssh is available and no postinstall scripts have been executed yet
+          # So we begin by transferring the ISO file of the vmware tools
+
+          iso_image="/Library/Application Support/VMware Fusion/isoimages/linux.iso"
+          iso_image="/Library/Application Support/VMware Fusion/isoimages/darwin.iso" if definition.os_type_id=~/^Darwin/
             iso_image="/Library/Application Support/VMware Fusion/isoimages/freebsd.iso" if definition.os_type_id=~/^Free/
             iso_image="/Library/Application Support/VMware Fusion/isoimages/windows.iso" if definition.os_type_id=~/^Win/
-            
+
             begin
               when_ssh_login_works(box.ip_address,ssh_options(definition).merge({:timeout => definition.postinstall_timeout.to_i})) do
-                  begin
-                    env.logger.info "About to transfer vmware tools iso buildinfo to the box #{box.name} - #{box.ip_address} - #{ssh_options(definition)}"
-                    ssh_transfer_file(box.ip_address,iso_image,File.basename(iso_image),ssh_options(definition))
-                  rescue RuntimeError => ex
-                    env.ui.error "Error transfering vmware tools iso , possible not enough permissions to write? #{ex}"
-                    exit -1
-                  end
+                begin
+                  env.logger.info "About to transfer vmware tools iso buildinfo to the box #{box.name} - #{box.ip_address} - #{ssh_options(definition)}"
+                  ssh_transfer_file(box.ip_address,iso_image,File.basename(iso_image),ssh_options(definition))
+                rescue RuntimeError => ex
+                  env.ui.error "Error transfering vmware tools iso , possible not enough permissions to write? #{ex}"
+                  exit -1
+                end
               end
             rescue Net::SSH::AuthenticationFailed
               env.ui.error "Authentication failure"
               exit -1
             end            
 
-          end
+        end
 
 
 

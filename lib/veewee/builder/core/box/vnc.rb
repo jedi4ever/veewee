@@ -1,4 +1,8 @@
+# Include the gem library
 require 'net/vnc'
+
+# Monkey patch the vnc
+require 'net/vnc/vnc.rb'
 
 module Veewee
   module Builder

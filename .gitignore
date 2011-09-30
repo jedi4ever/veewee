@@ -13,3 +13,4 @@ pkg/*
 *.box
 .vagrant
 virtualfloppy.vfd
+*.swp
