@@ -34,9 +34,13 @@ curl -L -o authorized_keys https://raw.github.com/mitchellh/vagrant/master/keys/
 chown -R vagrant /home/vagrant/.ssh
 
 # Installing the virtualbox guest additions
-mount /dev/sr0 /mnt
+cd /tmp
+curl -L -o VBoxGuestAdditions_$VBOX_VERSION.iso http://download.virtualbox.org/virtualbox/$VBOX_VERSION/VBoxGuestAdditions_$VBOX_VERSION.iso
+mount -o loop VBoxGuestAdditions_$VBOX_VERSION.iso /mnt
 sh /mnt/VBoxLinuxAdditions.run
 umount /mnt
+
+rm VBoxGuestAdditions_$VBOX_VERSION.iso
 
 sed -i "s/^.*requiretty/#Defaults requiretty/" /etc/sudoers
 
