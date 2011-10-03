@@ -39,6 +39,12 @@ cd rubygems-1.7.2
 cd ..
 rm -rf rubygems-1.7.2*
 
+# Installing make tool for chef
+apt-get install make
+
+# Installing dependencies for chef
+/opt/ruby/bin/gem install polyglot net-ssh-gateway mime-types
+
 # Installing chef & Puppet
 /opt/ruby/bin/gem install chef --no-ri --no-rdoc
 /opt/ruby/bin/gem install puppet --no-ri --no-rdoc
