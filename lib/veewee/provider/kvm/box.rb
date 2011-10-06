@@ -36,7 +36,7 @@ module Veewee
 
 
         # Create a new vm
-        def create(definition)
+        def create(options={})
           # Assemble the Virtualmachine and set all the memory and other stuff"
 
           #memory_size,cpu_count, volume_size
