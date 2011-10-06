@@ -48,7 +48,7 @@ class TestVeeweeEnvironment < Test::Unit::TestCase
     tempdir=Dir.pwd
     begin
       ve=Veewee::Environment.new({:cwd => tempdir})
-      assert(ve.definition_path.include?(File.join(tempdir,"definitions")))
+      assert_equal(ve.definition_dir,File.join(tempdir,"definitions"))
       assert_equal(ve.iso_dir,File.join(tempdir,"iso"))
     ensure
       FileUtils.remove_entry_secure tempdir
@@ -60,8 +60,8 @@ class TestVeeweeEnvironment < Test::Unit::TestCase
   def test_environment_definition_dir_relative_to_environmentdir
     # Goto top dir , to make pwd another dir
     Dir.chdir("/")
-    ve=Veewee::Environment.new({:definition_path => ["/tmp"]})
-    assert_equal(ve.definition_dir,"/definitions")
+    ve=Veewee::Environment.new({:definition_dir => "/tmp"})
+    assert_equal(ve.definition_dir,"/tmp")
   end
 
 end
