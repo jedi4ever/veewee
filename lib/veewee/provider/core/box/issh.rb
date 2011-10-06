@@ -25,7 +25,7 @@ module Veewee
         def ssh_commandline_options(options)
 
           command_options = [
-            "-q", #Suppress warning messages
+            #"-q", #Suppress warning messages
             #            "-T", #Pseudo-terminal will not be allocated because stdin is not a terminal.
             "-p #{ssh_options[:port]}",
             "-o UserKnownHostsFile=/dev/null",
