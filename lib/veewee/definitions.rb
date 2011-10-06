@@ -35,7 +35,6 @@ module Veewee
           definitions[name]=Veewee::Definition.load(name,env)
         rescue Veewee::DefinitionError => ex
           env.logger.debug("[Definition] failed to load definition from directory '#{name}' #{ex}")
-          return nil
         end
       end
 
