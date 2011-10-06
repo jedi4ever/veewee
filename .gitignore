@@ -3,6 +3,7 @@
 gems/*
 iso/*
 iso
+*.ova
 tmp/*
 definitions/*
 Vagrantfile
