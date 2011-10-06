@@ -3,7 +3,7 @@ module Veewee
     module Virtualbox
       module BoxCommand
 
-        def destroy
+        def destroy(option={})
 
           if raw.nil?
             env.ui.error "Error:: You tried to destroy a non-existing box '#{name}'"

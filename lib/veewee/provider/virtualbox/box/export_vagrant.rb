@@ -16,7 +16,7 @@ module Veewee
         # We need to shutdown first
         if self.running?
           env.ui.info "Vagrant requires the box to be shutdown, before it can export"
-          env.ui.info "Sudo also needs to work for user #{box.definition.ssh_user}"
+          env.ui.info "Sudo also needs to work for user #{definition.ssh_user}"
           env.ui.info "Performing a clean shutdown now."
 
             self.shutdown
@@ -35,7 +35,7 @@ module Veewee
           #4.0.x. not using boxes as a subdir
           boxdir=Pathname.new(Dir.pwd)
 
-          full_path=File.join(boxdir,box.name+".box")
+          full_path=File.join(boxdir,name+".box")
           path1=Pathname.new(full_path)
           path2=Pathname.new(Dir.pwd)
           box_path=path1.relative_path_from(path2).to_s

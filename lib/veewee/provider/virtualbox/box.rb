@@ -3,6 +3,8 @@ require 'veewee/provider/core/box'
 require 'veewee/provider/virtualbox/box/create'
 require 'veewee/provider/virtualbox/box/console_type'
 require 'veewee/provider/virtualbox/box/destroy'
+require 'veewee/provider/virtualbox/box/validate_vagrant'
+require 'veewee/provider/virtualbox/box/export_vagrant'
 
 module Veewee
   module Provider
