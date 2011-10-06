@@ -20,6 +20,7 @@ desc 'Tests requiring an real box'
 Rake::TestTask.new do |t|
   t.name="realtest"
   t.libs << "test"
+  t.libs << "."
   t.pattern = 'test/**/*_realtest.rb'
 end
 
@@ -32,8 +33,9 @@ task :iso, [:box_name] do |t,args|
   #end
   Dir.glob("templates/*").each do |name|
     definition_name=File.basename(name)
-    definition=Veewee::Environment.new(:cwd => ".",:definition_dir => "templates",:definition_path => "templates").get_definition(definition_name)
-    next if definition.iso_src.nil? || definition.iso_src==""
+    puts name
+    definition=Veewee::Environment.new(:cwd => ".",:definition_dir => "templates").definitions[definition_name]
+    next if definition.nil? || definition.iso_src.nil? || definition.iso_src==""
     begin
       url=definition.iso_src
       found=false

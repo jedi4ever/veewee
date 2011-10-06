@@ -1,5 +1,5 @@
 require 'test/unit'
-require 'lib/veewee'
+require 'veewee'
 
 class TestVeeweeBuild < Test::Unit::TestCase
   def setup
@@ -35,7 +35,7 @@ class TestVeeweeBuild < Test::Unit::TestCase
   # Type on console
   def test_box_3_console_type
     assert_nothing_raised {
-      @box.console_type('echo "bla" > console.txt<Enter>')
+      @box.console_type(['echo "bla" > console.txt<Enter>'])
       result=@box.ssh("cat console.txt")
       assert_match(/bla/,result.stdout)
     }

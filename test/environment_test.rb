@@ -1,5 +1,5 @@
 require 'test/unit'
-require 'lib/veewee'
+require 'veewee'
 require 'tempfile'
 
 class TestVeeweeEnvironment < Test::Unit::TestCase

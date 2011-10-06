@@ -1,5 +1,5 @@
 require 'test/unit'
-require 'lib/veewee'
+require 'veewee'
 
 class TestVeeweeDefinition < Test::Unit::TestCase
   def test_environment_load_definition
