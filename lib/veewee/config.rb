@@ -1,7 +1,5 @@
 require 'veewee/config/veewee'
 require 'veewee/config/collection'
-require 'veewee/config/definition'
-require 'veewee/config/builders'
 
 require 'fileutils'
 
@@ -9,27 +7,10 @@ module Veewee
   class Config
 
     attr_accessor :veewee
-
     attr_reader :env
-
-    attr_accessor :definitions
-    attr_accessor :builders
-    attr_accessor :definitions
-    attr_accessor :templates
-    attr_reader   :ostypes
 
     def initialize(options)
       @env=options[:env]
-      env.logger.info("config") { "Initializing empty list of definitions in config" }
-
-      @builders=::Veewee::Config::Builders.new(env)
-      @definitions=Hash.new
-      @templates=Hash.new
-
-      # Read ostypes
-      yamlfile=File.join(File.dirname(__FILE__),"config","ostypes.yml")
-      env.logger.info "Reading ostype yamlfile #{yamlfile}"
-      @ostypes=YAML.load_file(yamlfile)
 
       # Initialize with defaults
       @veewee=::Veewee::Config::Veewee.new(self)
@@ -42,16 +23,8 @@ module Veewee
       # Expose the veewee config
       config.veewee=@veewee
 
-      # Assign definitions
-      config.definition=::Veewee::Config::Definition.new(self)
-
-      # Assign builders
-      #config.builder=::Veewee::Config::Builder.new(self)
-
       # Process config file
       yield config
-
-      @definitions=config.definition.components
 
     end
 

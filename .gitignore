@@ -2,6 +2,7 @@
 .bundle
 gems/*
 iso/*
+iso
 tmp/*
 definitions/*
 Vagrantfile

@@ -5,6 +5,18 @@ module Veewee
         super(msg)
         @original = original; end
     end
+
+    class DefinitionError < Error
+    end
+
+    class DefinitionNotExist < DefinitionError
+    end
+
+    class TemplateError < Error
+    end
+
+    class SshError < Error
+    end
 end
 
 #Usage (from the exceptional ruby book)

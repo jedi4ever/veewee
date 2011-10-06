@@ -34,7 +34,7 @@ GEM
       term-ansicolor (>= 1.0.6)
     diff-lcs (1.1.3)
     erubis (2.7.0)
-    excon (0.7.3)
+    excon (0.7.6)
     ffi (1.0.9)
     fog (1.0.0)
       builder
@@ -59,7 +59,7 @@ GEM
       net-ssh (>= 1.99.1)
     net-ssh (2.1.4)
     nokogiri (1.5.0)
-    open4 (1.1.0)
+    open4 (1.2.0)
     popen4 (0.1.2)
       Platform (>= 0.4.0)
       open4 (>= 0.4.0)

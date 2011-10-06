@@ -1,15 +1,19 @@
 require 'ostruct'
+require 'veewee/provider/core/helper/iso'
 
 module Veewee
   class Definition
 
+    include ::Veewee::Provider::Core::Helper::Iso
+
     attr_accessor :name
     attr_accessor :env
+    attr_accessor :path
 
     attr_accessor :cpu_count,:memory_size,:iso_file
     attr_accessor :disk_size, :disk_format
 
-    attr_accessor :os_typ_id
+    attr_accessor :os_type_id
 
     attr_accessor :boot_wait,:boot_cmd_sequence
 
@@ -24,16 +28,22 @@ module Veewee
 
     attr_accessor :floppy_files
 
-    attr_accessor :path
 
-    attr_accessor :os_type_id,:use_hw_virt_ext,:use_pae,:hostiocache
+    attr_accessor :use_hw_virt_ext,:use_pae,:hostiocache
 
     attr_accessor :iso_dowload_timeout, :iso_src,:iso_md5 ,:iso_download_instructions
 
-    def initialize(name,env)
+
+    def initialize(name,path,env)
 
       @name=name
       @env=env
+
+      if path.nil? 
+        @path=File.join(env.definition_dir,name)
+      else
+        @path=path
+      end
 
       # Default is 1 CPU + 256 Mem of memory
       @cpu_count='1' ; @memory_size='256';
@@ -62,69 +72,98 @@ module Veewee
     end
 
 
-    def method_missing(m, *args, &block)
-      env.logger.info "There's no attribute #{m} defined for builder #{@name}-- ignoring it"
-    end
-
+    # This function takes a hash of options and injects them into the definition
     def declare(options)
       options.each do |key, value|
         instance_variable_set("@#{key}".to_sym, options[key])
         env.logger.info("definition") { " - #{key} : #{options[key]}" }
       end
-      verify_ostype
 
     end
 
-    # Loading a definition
+    # Class method to loading a definition
     def self.load(name,env)
 
-      dir=env.get_definition_paths[name]
+      # Construct the path to the definition
 
-      if dir.nil?
-        env.ui.error "Error loading definition."
-        env.ui.error "could not find the directory of definition #{name}"
-        exit -1
-
+      path=File.join(env.definition_dir,name)
+      definition=Veewee::Definition.new(name,path,env)
+      env.logger.info "Loading definition directory #{definition.path}"
+      unless definition.exists?
+        raise Veewee::DefinitionNotExist,"Error: Definition #{name} does not seem to exist"
       end
 
-      veewee_definition=Veewee::Definition.new(name,env)
-      veewee_definition.path=dir
+      # We create this longer name to avoid clashes
+      veewee_definition=definition
 
-      definition_file=File.join(dir,"definition.rb")
-      if File.exists?(definition_file)
-        definition_content=File.read(definition_file)
+      if definition.exists?
+        definition_file=File.join(definition.path,"definition.rb")
+        content=File.read(definition_file)
 
-        definition_content.gsub!("Veewee::Session.declare","veewee_definition.declare")
-        definition_content.gsub!("Veewee::Definition.declare","veewee_definition.declare")
+        content.gsub!("Veewee::Session.declare","veewee_definition.declare")
+        content.gsub!("Veewee::Definition.declare","veewee_definition.declare")
 
-        env.logger.info(definition_content)
+        env.logger.info(content)
 
         begin
           cwd=FileUtils.pwd
-          FileUtils.cd(dir)
-          self.instance_eval(definition_content)
-          env.logger.info("Setting definition path for definition #{name} to #{File.dirname(definition_file)}")
+          env.logger.info("Entering path #{definition.path}")
+          FileUtils.cd(definition.path)
+          self.instance_eval(content)
+          env.logger.info("Returning to  path #{cwd}")
           FileUtils.cd(cwd)
         rescue NameError => ex
-          env.ui.error("NameError reading definition from file #{definition_file} #{ex}")
+          raise Veewee::DefinitionError,"NameError reading definition from file #{definition_file} #{ex}"
         rescue Exception => ex
-          env.ui.error("Error in the definition from file #{definition_file}\n#{ex}")
-          exit -1
+          raise Veewee::DefinitionError,"Error in the definition from file #{definition_file}\n#{ex}"
         end
       else
-        env.logger.info "#{definition_file} not found"
-      end
-      veewee_definition
-    end
-
-    def verify_ostype
-
-      unless env.config.ostypes.has_key?(@os_type_id)
-        raise "The ostype: #{@os_type_id} is not available"
+        env.logger.fatal("#{definition_file} not found")
+        raise Veewee::DefinitionNotExist,"#{definition_file} not found"
       end
 
+      if definition.valid?
+        return definition
+      else
+        env.logger.fatal("Invalid Definition")
+        raise Veewee::DefinitionError,"Invalid Definition"
+      end
     end
 
+    def exists?
+      filename=File.join(path,"definition.rb")
+      unless File.exists?(filename)
+        return false
+      end
+
+      return true
+    end
+
+    def valid?
+      unless exists?
+        return false
+      end
+
+      unless ostype_valid?
+        return false
+      end
+
+      return true
+    end
+
+    private
+    def ostype_valid?
+      unless env.ostypes.has_key?(@os_type_id)
+        env.logger.info("The ostype: #{@os_type_id} is not available")
+        return false
+      else
+        return true
+      end
+    end
+
+    def method_missing(m, *args, &block)
+      puts "There's no attribute #{m} defined for definition #{@name}-- ignoring it"
+    end
 
   end #End Class
 end #End Module

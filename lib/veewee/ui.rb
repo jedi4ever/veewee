@@ -11,7 +11,9 @@ module Veewee
     end
 
     [:warn, :error, :info, :confirm].each do |method|
-      define_method(method,opts=nil) do |message|
+      define_method(method) do |message, *argv|
+        opts , *argv = argv
+        opts ||= {}
         # Log normal console messages
         env.logger.info("ui") { message }
       end
@@ -19,7 +21,7 @@ module Veewee
 
     [:clear_line, :report_progress, :ask, :no?, :yes?].each do |method|
       # By default do nothing, these aren't logged
-      define_method(method, opts=nil) { |*args| }
+      define_method(method) { |*args| }
     end
 
     # A shell UI, which uses a `Thor::Shell` object to talk with
