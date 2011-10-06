@@ -115,10 +115,17 @@ module Veewee
         end
 
         def ssh_options
+          port=definition.ssh_host_port
+          if self.exists?
+            forward=raw.network_adapters[0].nat_driver.forwarded_ports.reject{|x| x.name!="guestssh"}.first
+            unless forward.nil?
+              port=forward.hostport
+            end
+          end
 
           ssh_options={
             :user => definition.ssh_user,
-            :port => definition.ssh_host_port,
+            :port => port,
             :password => definition.ssh_password,
             :timeout => definition.ssh_login_timeout.to_i
           }
