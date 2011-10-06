@@ -16,15 +16,6 @@ module Veewee
           end
         end
 
-        def ssh_options(definition)
-          ssh_options={
-            :user => definition.ssh_user,
-            :port => 22,
-            :password => definition.ssh_password,
-            :timeout => definition.ssh_login_timeout.to_i
-          }
-          return ssh_options
-        end
 
         def build(definition_name,box_name,options)
 

@@ -98,6 +98,16 @@ module Veewee
           matched_servers.first.stop unless matched_servers.nil?
         end
 
+        def ssh_options
+          ssh_options={
+            :user => definition.ssh_user,
+            :port => 22,
+            :password => definition.ssh_password,
+            :timeout => definition.ssh_login_timeout.to_i
+          }
+          return ssh_options
+        end
+
         def ip_address
           ip=@connection.servers.all(:name => "#{name}").first.addresses[:public]
           return ip.first unless ip.nil?
