@@ -5,6 +5,7 @@ module Veewee
       module BoxCommand
 
         def scp(localfile,remotefile,options={})
+          raise Veewee::Error,"Box is not running" unless self.running?
           begin
             new_options=ssh_options.merge(options)
             self.when_ssh_login_works(self.ip_address,new_options) do

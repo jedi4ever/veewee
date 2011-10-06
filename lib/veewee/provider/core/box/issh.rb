@@ -7,6 +7,7 @@ module Veewee
 
         def issh(command=nil,options={})
 
+          raise Veewee::Error,"Box is not running" unless self.running?
           # Command line options
           extended_command="#{command}"
           host_ip=self.ip_address

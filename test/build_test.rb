@@ -45,18 +45,6 @@ class TestVeeweeBuild < Test::Unit::TestCase
   def test_box_4_shutdown
     assert_nothing_raised {
       @box.shutdown
-      # Wait for the shutdown to complete
-      begin
-        Timeout::timeout(20) do
-          status=@box.running?
-          unless status
-            return
-          end
-          sleep 2
-        end
-      rescue TimeoutError::Error => ex
-          raise
-      end
     }
   end
 

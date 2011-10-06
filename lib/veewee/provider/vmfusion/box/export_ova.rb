@@ -11,8 +11,20 @@ module Veewee
           flags="--compress=9"
 
           # Need to check binary first
-          if running?
-            shutdown
+          if self.running?
+            # Wait for the shutdown to complete
+            begin
+              Timeout::timeout(20) do
+                self.shutdown(options)
+                status=self.running?
+                unless status
+                  return
+                end 
+                sleep 2
+              end 
+            rescue TimeoutError::Error => ex
+              raise Veewee::Error,ex
+            end
           end
 
           # before exporting the system needs to be shut down

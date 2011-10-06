@@ -70,7 +70,25 @@ module Veewee
 
         def start(options)
           gui_enabled=options[:nogui]==true ? false : true
+
           raise Veewee::Error,"Box is already running" if self.running?
+
+          # Before we start,correct the ssh port if needed
+          forward=raw.network_adapters[0].nat_driver.forwarded_ports.reject{|x| x.name!="guestssh"}.first
+          guessed_port=guess_free_port(definition.ssh_host_port.to_i,definition.ssh_host_port.to_i+40).to_s
+          definition.ssh_host_port=guessed_port.to_s
+
+          unless forward.nil?
+            if guessed_port!=forward.hostport
+              # Remove the existing one
+              forward.destroy
+              env.ui.warn "Changing ssh port from #{forward.hostport} to #{guessed_port}"
+              add_ssh_nat_mapping
+            end
+          else
+              add_ssh_nat_mapping
+          end
+
           # Once assembled we start the machine
           env.logger.info "Started the VM with GUI Enabled? #{gui_enabled}"
           if (gui_enabled)
