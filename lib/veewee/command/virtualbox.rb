@@ -19,7 +19,7 @@ module Veewee
       method_option :force,:type => :boolean , :default => false, :aliases => "-f", :desc => "force the destroy" 
       method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging"
       method_option :nogui,:type => :boolean , :default => false, :aliases => "-n", :desc => "no gui"
-      desc "destroy [BOXNAME]", "Destroys the virtualmachine that was build"
+      desc "destroy [BOXNAME]", "Destroys the basebox that was build"
       def destroy(box_name)
         venv=Veewee::Environment.new(options)
         venv.ui=env.ui
@@ -28,7 +28,7 @@ module Veewee
 
       method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging"
       method_option :force,:type => :boolean , :default => false, :aliases => "-f", :desc => "force the shutdown" 
-      desc "halt [BOXNAME]", "Activates a shutdown the virtualmachine"
+      desc "halt [BOXNAME]", "Activates a shutdown on the basebox"
       def halt(box_name)
         venv=Veewee::Environment.new(options)
         venv.ui=env.ui

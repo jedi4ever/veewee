@@ -33,8 +33,7 @@ module Veewee
 
           # Check the GUI mode required
           env.logger.info "Provider asks the box to start: GUI enabled? #{!options[:nogui]}"
-          gui_enabled=options[:nogui]==true ? false : true
-          self.start(gui_enabled)
+          self.start(options)
 
           # Waiting for it to boot
           env.ui.info "Waiting #{definition.boot_wait.to_i} seconds for the machine to boot"

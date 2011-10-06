@@ -5,7 +5,16 @@ module Veewee
       module BoxCommand
 
         def shutdown(options={})
-          self.ssh(sudo(definition.shutdown_cmd))
+          if self.running?
+            require 'pp'
+            if options["force"]==true
+              self.halt
+            else
+              self.ssh(sudo(definition.shutdown_cmd))
+            end
+          else
+            raise Veewee::Error,"Box is not running"
+          end
         end
 
       end # Module

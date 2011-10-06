@@ -9,7 +9,6 @@ module Veewee
           require 'cucumber/rspec/disable_option_parser'
           require 'cucumber/cli/main'
 
-          ENV['veewee_user']=options[:user]
           feature_path=File.join(File.dirname(__FILE__),"..","..","..","..","..","validation","vagrant.feature")
 
           features=Array.new

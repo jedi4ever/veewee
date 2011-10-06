@@ -31,7 +31,8 @@ module Veewee
           create_disk
         end
 
-        def start(gui_enabled=true)
+        def start(options)
+          gui_enabled=options[:nogui]==true ? false : true
           if gui_enabled
             raw.start unless raw.nil?
           else

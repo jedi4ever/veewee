@@ -14,7 +14,7 @@ module Veewee
           exit
         end
         # We need to shutdown first
-        if raw.state==:running
+        if self.running?
           env.ui.info "Vagrant requires the box to be shutdown, before it can export"
           env.ui.info "Sudo also needs to work for user #{box.definition.ssh_user}"
           env.ui.info "Performing a clean shutdown now."
@@ -22,7 +22,7 @@ module Veewee
             self.shutdown
 
             #Wait for state poweroff
-            while (raw.state==:running) do
+            while (self.running?) do
               env.ui.info ".",{:new_line => false} 
               sleep 1
             end

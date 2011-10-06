@@ -83,7 +83,7 @@ module Veewee
           vol.destroy
         end
 
-        def start(mode)
+        def start(options={})
           matched_servers=@connection.servers.all(:name => name)
           matched_servers.first.start unless matched_servers.nil?
         end

@@ -66,7 +66,9 @@ module Veewee
 
         end
 
-        def start(gui_enabled=true)
+        def start(options)
+          gui_enabled=options[:nogui]==true ? false : true
+          raise Veewee::Error,"Box is already running" if self.running?
           # Once assembled we start the machine
           env.logger.info "Started the VM with GUI Enabled? #{gui_enabled}"
           if (gui_enabled)
@@ -76,7 +78,7 @@ module Veewee
           end
         end
 
-        def stop(options={})
+        def halt(options={})
           # If the vm is not powered off, perform a shutdown
           if (!raw.nil? && !(raw.powered_off?))
             env.ui.info "Shutting down vm #{name}"
@@ -91,22 +93,6 @@ module Veewee
             end
           end
 
-        end
-
-        def halt(options={})
-          if (!raw.nil? && !(raw.powered_off?))
-            env.ui.info "Halting vm #{name}"
-            #We force it here, maybe vm.shutdown is cleaner
-            # VBoxManage controlvm  'lucid64' poweroff
-            begin
-              raw.halt
-            rescue VirtualBox::Exceptions::InvalidVMStateException
-              env.ui.error "There was problem sending the stop command because the machine is in an Invalid state"
-              env.ui.error "Please verify leftovers from a previous build in your vm folder"
-              exit -1
-            end
-            sleep 3
-          end
         end
 
         # Get the IP address of the box
