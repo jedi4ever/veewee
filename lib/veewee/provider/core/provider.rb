@@ -21,7 +21,7 @@ module Veewee
 
         def get_box(name)
           begin
-            require_path='veewee/Provider/'+type.to_s.downcase+"/box.rb"
+            require_path='veewee/provider/'+type.to_s.downcase+"/box.rb"
             require require_path
 
             # Get a real box object from the Provider
