@@ -10,7 +10,7 @@ module Veewee
       method_option :auto,:type => :boolean , :default => false, :aliases => "-a", :desc => "auto answers"
       method_option :postinstall_include, :type => :array, :default => [], :aliases => "-i", :desc => "patterns of postinstall filenames to additionally include"
       method_option :postinstall_exclude, :type => :array, :default => [], :aliases => "-e", :desc => "patterns of postinstall filenames to exclude"
-      def build(definition_name,box_name=nil)
+      def build(box_name)
         venv=Veewee::Environment.new(options)
         venv.ui=env.ui
         venv.providers["kvm"].get_box(box_name).build(options)
