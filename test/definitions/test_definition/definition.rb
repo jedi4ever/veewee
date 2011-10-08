@@ -8,7 +8,7 @@ Veewee::Definition.declare({
   :iso_download_timeout => "1000",
   :boot_wait => "3", :boot_cmd_sequence => [
     '<Tab> ',
-   'setkmap=us dodhcp=eth0 dhcphostname=%NAME% rootpass=vagrant ar_source=http://%IP%:%PORT%/ autoruns=0 ar_nowait',
+   'setkmap=us dodhcp=eth0 dhcphostname=%NAME% rootpass=vagrant ar_source=http://%IP%:%PORT%/ autoruns=0 ar_nowait dns=127.0.0.1',
     '<Enter>'
   ],
   :kickstart_port => "7122", :kickstart_timeout => "10000",
