@@ -12,7 +12,7 @@ module Veewee
       def vnc_type(sequence,host,display=20)
         counter=0
         env.logger.info "Opening VNC #{host} on display #{display}"
-        vnc=Net::VNC.open("#{host}:#{display}",{:wait => 0.01})
+        vnc=Net::VNC.open("#{host}:#{display}",{:wait => 0.001})
         sequence.each { |s|
           counter=counter+1
 
@@ -38,9 +38,9 @@ module Veewee
 
         if keycode.is_a?(Symbol)
           vnc.key_press keycode
-          sleep 0.3
+          sleep 0.1
         else
-            vnc.type_string keycode,{:wait => 0.01}
+            vnc.type_string keycode,{:wait => 0.001}
         end
 
       end

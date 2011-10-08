@@ -4,13 +4,13 @@ require 'veewee'
 class TestVeeweeBuild < Test::Unit::TestCase
   def setup
     definition_dir=File.expand_path(File.join(File.dirname(__FILE__),"definitions"))
-    ENV['VEEWEE_LOG']="STDOUT"
+    #ENV['VEEWEE_LOG']="STDOUT"
     @ve=Veewee::Environment.new({ :definition_dir =>  definition_dir })
     @definition_name="test_definition"
     @vd=@ve.definitions[@definition_name]
     @box_name=@definition_name
     @vd.postinstall_files=["_test_me.sh"]
-    @box=@ve.providers["virtualbox"].get_box(@box_name)
+    @box=@ve.providers["vmfusion"].get_box(@box_name)
   end
 
   # First build of box
