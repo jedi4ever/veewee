@@ -68,6 +68,11 @@ module Veewee
 
         end
 
+        # http://www.virtualbox.org/manual/ch09.html#idp13716288
+        def get_local_ip
+          "10.0.2.2"
+        end
+
         def start(options)
           gui_enabled=options[:nogui]==true ? false : true
 
