@@ -77,6 +77,11 @@ module Veewee
           return raw.ip_address
         end
 
+        # http://www.thirdbit.net/articles/2008/03/04/dhcp-on-vmware-fusion/
+        def get_local_ip
+          File.open("/Library/Application Support/VMware Fusion/vmnet8/nat.conf").readlines.grep(/ip = /).first.split(" ")[2]
+        end
+
         # Type on the console
         def console_type(sequence,type_options={})
           if vnc_enabled?
