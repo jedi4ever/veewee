@@ -1,8 +1,14 @@
 #http://chrisadams.me.uk/2010/05/10/setting-up-a-centos-base-box-for-development-and-testing-with-vagrant/
-#kernel source is needed for vbox additions
 
 date > /etc/vagrant_box_build_time
 
+fail()
+{
+  echo "FATAL: $*"
+  exit 1
+}
+
+#kernel source is needed for vbox additions
 yum -y install gcc bzip2 make kernel-devel-`uname -r`
 #yum -y update
 #yum -y upgrade
@@ -25,8 +31,9 @@ ln -s /usr/local/bin/ruby /usr/bin/ruby # Create a sym link for the same path
 ln -s /usr/local/bin/gem /usr/bin/gem # Create a sym link for the same path
 
 #Installing chef & Puppet
-/opt/ruby/bin/gem install chef --no-ri --no-rdoc
-/opt/ruby/bin/gem install puppet --no-ri --no-rdoc
+echo "Installing chef and puppet"
+/usr/local/bin/gem install chef --no-ri --no-rdoc || fail "Could not install chef"
+/usr/local/bin/gem install puppet --no-ri --no-rdoc || fail "Could not install puppet"
 
 #Installing vagrant keys
 mkdir /home/vagrant/.ssh
