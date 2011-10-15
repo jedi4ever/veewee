@@ -438,7 +438,7 @@ module Veewee
       if host_vboxnet
         puts "Adding Hostonly NIC"
         vm=VirtualBox::VM.find(boxname)
-        nic = vm.network_adapters[2]
+        nic = vm.network_adapters[1]
         nic.attachment_type = :host_only
         nic.host_only_interface = host_vboxnet
         # enable when we need a host only interface?
