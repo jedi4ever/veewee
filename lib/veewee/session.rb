@@ -635,6 +635,7 @@ module Veewee
       #Maybe one day we can use the name, now we have to check location
       #disk=VirtualBox::HardDrive.find(boxname)
       location=boxname+"."+@definition[:disk_format].downcase
+      puts "Looking for harddrive #{location}"
 
       found=false
       VirtualBox::HardDrive.all.each do |d|
@@ -666,7 +667,8 @@ module Veewee
         command ="#{@vboxcmd} createhd --filename '#{place}/#{boxname}/#{boxname}.#{@definition[:disk_format].downcase}' --size '#{@definition[:disk_size].to_i}' --format #{@definition[:disk_format].downcase} > /dev/null"
         puts "#{command}"
         Veewee::Shell.execute("#{command}")
-
+      else
+        puts "Existing Harddrive found at #{location}"
       end
 
     end
