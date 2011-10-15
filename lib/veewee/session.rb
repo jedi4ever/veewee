@@ -40,7 +40,10 @@ module Veewee
         :ssh_host_port => "2222", :ssh_guest_port => "22",
         :sudo_cmd => "echo '%p'|sudo -S sh '%f'",
         :shutdown_cmd => "shutdown -h now",
-        :postinstall_files => [ "postinstall.sh"],:postinstall_timeout => 10000}
+        :postinstall_files => [ "postinstall.sh"],:postinstall_timeout => 10000,
+        :bridge_nic = nil,
+        :host_only_nic = nil
+      }
 
         @definition=defaults.merge(options)
 
@@ -279,6 +282,8 @@ module Veewee
             attach_disk(boxname)
             mount_isofile(boxname,@definition[:iso_file])
             add_ssh_nat_mapping(boxname)
+            add_host_only_nic(boxname)
+            add_bridge_nic(boxname)
 
             #Starting machine
 
@@ -408,6 +413,35 @@ module Veewee
       vm.network_adapters[0].nat_driver.forwarded_ports << port
       port.save
       vm.save
+    end
+
+    def self.add_bridge_nic(boxname)
+      #FIXME... what if this nic doesn't exist?
+      nicname =  @definition[:bridge_nic]
+      if nic
+        vm=VirtualBox::VM.find(boxname)
+        nic = vm.network_adapters[2]
+        nic.attachment_type = :bridge
+        nic.bridged_interface = nic
+        # enable when we need to bridge
+        nic.enabled = false
+        nic.save
+        vm.save
+      end
+    end
+
+    def self.add_host_only_nic(boxname)
+      host_vboxnet = @definition[:host_only_nic]
+      if host_vboxnet
+        vm=VirtualBox::VM.find(boxname)
+        nic = vm.network_adapters[2]
+        nic.attachment_type = :host_only
+        nic.host_only_interface = host_vboxnet
+        # enable when we need to bridge
+        nic.enabled = false
+        nic.save
+        vm.save
+      end
     end
 
     def self.destroy_vm(boxname)
