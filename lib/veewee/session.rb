@@ -422,7 +422,7 @@ module Veewee
         puts "Adding Bridge NIC"
         vm=VirtualBox::VM.find(boxname)
         nic = vm.network_adapters[2]
-        nic.attachment_type = :bridge
+        nic.attachment_type = :bridged
         nic.bridged_interface = bridge_nic
         # enable when we need to bridge
         nic.enabled = false
@@ -441,7 +441,7 @@ module Veewee
         nic = vm.network_adapters[2]
         nic.attachment_type = :host_only
         nic.host_only_interface = host_vboxnet
-        # enable when we need to bridge
+        # enable when we need a host only interface
         nic.enabled = false
         nic.save
         vm.save
