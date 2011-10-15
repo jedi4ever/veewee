@@ -41,8 +41,8 @@ module Veewee
         :sudo_cmd => "echo '%p'|sudo -S sh '%f'",
         :shutdown_cmd => "shutdown -h now",
         :postinstall_files => [ "postinstall.sh"],:postinstall_timeout => 10000,
-        :bridge_nic = nil,
-        :host_only_nic = nil
+        :bridge_nic => nil,
+        :host_only_nic => nil
       }
 
         @definition=defaults.merge(options)
