@@ -639,9 +639,9 @@ module Veewee
 
       found=false
       VirtualBox::HardDrive.all.each do |d|
-        if !d.location.match(/#{location}/).nil?
-          #Virtualbox disk detection/caching is flakey... look for the actual filef
-          found=true if File.exists? d.location 
+        #Virtualbox disk detection/caching is flakey... look for the actual filef
+        if !d.location.match(/#{location}/).nil? and File.exists? d.location 
+          found=true
           break
         end
       end
@@ -669,7 +669,7 @@ module Veewee
         puts "#{command}"
         Veewee::Shell.execute("#{command}")
       else
-        puts "Existing Harddrive found at #{location} because #{puts"
+        puts "Existing Harddrive found at #{location}"
       end
 
     end
