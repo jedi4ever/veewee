@@ -419,6 +419,7 @@ module Veewee
       #FIXME... what if this nic doesn't exist?
       nicname =  @definition[:bridge_nic]
       if nic
+        puts "Adding Bridge NIC"
         vm=VirtualBox::VM.find(boxname)
         nic = vm.network_adapters[2]
         nic.attachment_type = :bridge
@@ -427,12 +428,15 @@ module Veewee
         nic.enabled = false
         nic.save
         vm.save
+      else
+        puts "Not adding Bridge NIC"
       end
     end
 
     def self.add_host_only_nic(boxname)
       host_vboxnet = @definition[:host_only_nic]
       if host_vboxnet
+        puts "Adding Hostonly NIC"
         vm=VirtualBox::VM.find(boxname)
         nic = vm.network_adapters[2]
         nic.attachment_type = :host_only
@@ -441,6 +445,8 @@ module Veewee
         nic.enabled = false
         nic.save
         vm.save
+      else
+        puts "Not adding Hostonly NIC"
       end
     end
 
