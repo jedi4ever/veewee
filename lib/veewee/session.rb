@@ -417,13 +417,13 @@ module Veewee
 
     def self.add_bridge_nic(boxname)
       #FIXME... what if this nic doesn't exist?
-      nicname =  @definition[:bridge_nic]
-      if nic
+      bridge_nic =  @definition[:bridge_nic]
+      if bridge_nic
         puts "Adding Bridge NIC"
         vm=VirtualBox::VM.find(boxname)
         nic = vm.network_adapters[2]
         nic.attachment_type = :bridge
-        nic.bridged_interface = nic
+        nic.bridged_interface = bridge_nic
         # enable when we need to bridge
         nic.enabled = false
         nic.save
