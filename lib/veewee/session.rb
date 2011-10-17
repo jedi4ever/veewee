@@ -41,7 +41,7 @@ module Veewee
         :sudo_cmd => "echo '%p'|sudo -S sh '%f'",
         :shutdown_cmd => "shutdown -h now",
         :postinstall_files => [ "postinstall.sh"],:postinstall_timeout => 10000,
-        :interfaces => ["nat","hostonly"],:hostonly_network => "vboxnet0"}
+        :interfaces => ["nat"],:hostonly_network => "vboxnet0"}
 
         @definition=defaults.merge(options)
 
