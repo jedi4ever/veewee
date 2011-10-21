@@ -144,6 +144,13 @@ module Veewee
 
         end
 
+        def build_info
+          info=super
+          info << { :filename => ".vbox_version",
+                    :content => "#{VirtualBox::Global.global.lib.virtualbox.version.split('_')[0]}" }
+        end
+
+
 
       end # End Class
     end # End Module
