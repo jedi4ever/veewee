@@ -23,7 +23,8 @@ module Veewee
           port.name = "guestssh"
           port.guestport = definition.ssh_guest_port.to_i
           port.hostport = definition.ssh_host_port.to_i
-          raw.network_adapters[0].nat_driver.forwarded_ports << port
+          index=raw.network_adapters.index{|x| x.attachment_type==:nat}
+          raw.network_adapters[index].nat_driver.forwarded_ports << port
           port.save
           raw.save
         end
