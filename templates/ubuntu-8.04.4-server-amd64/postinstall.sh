@@ -5,7 +5,7 @@ date > /etc/vagrant_box_build_time
 #Updating the box
 apt-get -y update
 apt-get -y install linux-headers-$(uname -r) build-essential
-apt-get -y install zlib1g-dev libssl-dev libreadline5-dev
+apt-get -y install zlib1g-dev libssl-dev libreadline5-dev nfs-common
 apt-get clean
 
 #Setting up sudo
@@ -46,11 +46,6 @@ rm VBoxGuestAdditions_$VBOX_VERSION.iso
 apt-get -y remove linux-headers-$(uname -r) build-essential
 apt-get -y autoremove
 
-# Zero out the free space to save space in the final image:
-dd if=/dev/zero of=/EMPTY bs=1M
-rm -f /EMPTY
-
-exit
 # Not sure if this is needed for hardy too
 # Removing leftover leases and persistent rules
 echo "cleaning up dhcp leases"
@@ -66,3 +61,9 @@ rm /lib/udev/rules.d/75-persistent-net-generator.rules
 
 echo "Adding a 2 sec delay to the interface up, to make the dhclient happy"
 echo "pre-up sleep 2" >> /etc/network/interfaces
+
+# Zero out the free space to save space in the final image:
+dd if=/dev/zero of=/EMPTY bs=1M
+rm -f /EMPTY
+
+exit
