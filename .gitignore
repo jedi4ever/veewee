@@ -11,3 +11,4 @@ pkg/*
 *.box
 .vagrant
 virtualfloppy.vfd
+Gemfile.lock
