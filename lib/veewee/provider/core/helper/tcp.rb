@@ -14,7 +14,7 @@ module Veewee
                   s = TCPSocket.new(ip, port)
                   s.close
                   return true
-                rescue Errno::ECONNREFUSED, Errno::EHOSTUNREACH
+                rescue Errno::ECONNREFUSED, Errno::EHOSTUNREACH,Errno::ENETDOWN
                   return false
                 end
               end
@@ -63,7 +63,7 @@ module Veewee
                     s.close
                     block.call(ip);
                     return true
-                  rescue Errno::ECONNREFUSED, Errno::EHOSTUNREACH
+                  rescue Errno::ECONNREFUSED, Errno::EHOSTUNREACH,Errno::ENETDOWN
                     sleep options[:pollrate]
                   end
                 end
