@@ -21,9 +21,10 @@ module Veewee
               :progress_proc => lambda {|s|
               pbar.set s if pbar
             }) { |src|
-              open("#{localfile}","wb") { |dst|
-                dst.write(src.read)
-              }
+             # open("#{localfile}","wb") { |dst|
+                #dst.write(src.read)
+              #}
+              FileUtils.mv(src.path,dst.path)
             }
           end
 
