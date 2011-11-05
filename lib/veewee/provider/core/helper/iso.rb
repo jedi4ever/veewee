@@ -21,10 +21,8 @@ module Veewee
               :progress_proc => lambda {|s|
               pbar.set s if pbar
             }) { |src|
-             # open("#{localfile}","wb") { |dst|
-                #dst.write(src.read)
-              #}
-              FileUtils.mv(src.path,dst.path)
+              # We assume large 10K files, so this is tempfile object 
+              FileUtils.mv(src.path,localfile)
             }
           end
 
