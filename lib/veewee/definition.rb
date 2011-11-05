@@ -65,6 +65,7 @@ module Veewee
       #        :boot_wait => "10", :boot_cmd_sequence => [ "boot"],
       #        :kickstart_port => "7122", :kickstart_ip => "127.0.0.1", :kickstart_timeout => 10000,#
       #        :ssh_login_timeout => "10000", :ssh_user => "vagrant", :ssh_password => "vagrant",:ssh_key => "",
+      @ssh_host_port = "2222"; @ssh_guest_port = "22"
       #        :ssh_host_port => "2222", :ssh_guest_port => "22", :sudo_cmd => "echo '%p'|sudo -S sh '%f'",
       #       :shutdown_cmd => "shutdown -h now",
       #        :kickstart_file => nil,
