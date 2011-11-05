@@ -17,16 +17,18 @@ module Veewee
 
         def add_ssh_nat_mapping
 
-          #Map SSH Ports
-          #			command => "${vboxcmd} modifyvm '${vname}' --natpf1 'guestssh,tcp,,${hostsshport},,${guestsshport}'",
-          port = VirtualBox::NATForwardedPort.new
-          port.name = "guestssh"
-          port.guestport = definition.ssh_guest_port.to_i
-          port.hostport = definition.ssh_host_port.to_i
-          index=raw.network_adapters.index{|x| x.attachment_type==:nat}
-          raw.network_adapters[index].nat_driver.forwarded_ports << port
-          port.save
-          raw.save
+          unless definition.nil?
+            #Map SSH Ports
+            #			command => "${vboxcmd} modifyvm '${vname}' --natpf1 'guestssh,tcp,,${hostsshport},,${guestsshport}'",
+            port = VirtualBox::NATForwardedPort.new
+            port.name = "guestssh"
+            port.guestport = definition.ssh_guest_port.to_i
+            port.hostport = definition.ssh_host_port.to_i
+            index=raw.network_adapters.index{|x| x.attachment_type==:nat}
+            raw.network_adapters[index].nat_driver.forwarded_ports << port
+            port.save
+            raw.save
+          end
         end
 
         def raw
