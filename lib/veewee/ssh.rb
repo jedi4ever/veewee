@@ -24,7 +24,7 @@ module Veewee
                 return true
               end
             rescue Net::SSH::AuthenticationFailed
-              options[:keys] = File.join(File.dirname(__FILE__),'./../../validation/vagrant')
+              options[:keys] = File.join(File.dirname(__FILE__),'./../../validation/vagrant-private.key')
               options.delete(:password)
               ssh_options = options
               if @key_auth_tried
@@ -163,7 +163,7 @@ module Veewee
             channel.wait
           end
       rescue Net::SSH::AuthenticationFailed
-        ssh_options[:keys] = Array.new([File.join(File.dirname(__FILE__),'./../../validation/vagrant')])
+        ssh_options[:keys] = Array.new([File.join(File.dirname(__FILE__),'./../../validation/vagrant-private.key')])
         ssh_options.delete(:password)
         ssh_options[:auth_methods] = ['publickey']
         if @key_auth_tried
