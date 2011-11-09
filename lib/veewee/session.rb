@@ -323,8 +323,11 @@ module Veewee
               versionfile.rewind
               begin
                 Veewee::Ssh.transfer_file("localhost",versionfile.path,".vbox_version", ssh_options)
-              rescue RuntimeError
+              rescue RuntimeError => re
+                puts ssh_options.inspect
                 puts "error transfering file, possible not enough permissions to write?"
+                puts ssh_options.inspect
+                puts re.caller.join('/n')
                 exit
               end
               puts ""
@@ -345,8 +348,10 @@ module Veewee
                    Veewee::Ssh.when_ssh_login_works("localhost",ssh_options) do
                     begin
                       Veewee::Ssh.transfer_file("localhost",filename,File.basename(filename),ssh_options)
-                    rescue RuntimeError
-                      puts "error transferring file, possible not enough permissions to write?"
+                    rescue RuntimeError => re
+                      puts "error transfering file, possible not enough permissions to write?"
+                      puts ssh_options.inspect
+                      puts re.caller.join('/n')
                       exit
                     end
                     command=@definition[:sudo_cmd]
