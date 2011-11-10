@@ -86,6 +86,7 @@ If you don't use rvm, be sure to execute vagrant through bundle exec
     vagrant basebox define '<boxname>' 'ubuntu-11.04-server-amd64'
     vagrant basebox define '<boxname>' 'ubuntu-11.04-server-i386'
     vagrant basebox define '<boxname>' 'ubuntu-11.10-server-amd64'
+    vagrant basebox define '<boxname>' 'ubuntu-11.10-server-i386'
     vagrant basebox define '<boxname>' 'ubuntu-8.04.4-server-amd64'
     vagrant basebox define '<boxname>' 'ubuntu-8.04.4-server-i386'
     vagrant basebox define '<boxname>' 'windows-2008R2-amd64'
