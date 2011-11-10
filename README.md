@@ -57,6 +57,7 @@ If you don't use rvm, be sure to execute vagrant through bundle exec
     vagrant basebox define '<boxname>' 'Fedora-15-i386'
     vagrant basebox define '<boxname>' 'Fedora-15-i386-netboot'
     vagrant basebox define '<boxname>' 'Fedora-15-x86_64'
+    vagrant basebox define '<boxname>' 'Fedora-15-x86_64-netboot'
     vagrant basebox define '<boxname>' 'Sysrescuecd-2.0.0-experimental'
     vagrant basebox define '<boxname>' 'archlinux-i386'
     vagrant basebox define '<boxname>' 'archlinux-i386-netboot'
