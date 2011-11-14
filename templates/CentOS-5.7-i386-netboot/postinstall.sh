@@ -25,8 +25,8 @@ ln -s /usr/local/bin/ruby /usr/bin/ruby # Create a sym link for the same path
 ln -s /usr/local/bin/gem /usr/bin/gem # Create a sym link for the same path
 
 #Installing chef & Puppet
-/opt/ruby/bin/gem install chef --no-ri --no-rdoc
-/opt/ruby/bin/gem install puppet --no-ri --no-rdoc
+/usr/bin/gem install chef --no-ri --no-rdoc
+/usr/bin/gem install puppet --no-ri --no-rdoc
 
 #Installing vagrant keys
 mkdir /home/vagrant/.ssh
