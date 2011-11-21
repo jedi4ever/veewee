@@ -3,7 +3,7 @@ Veewee::Session.declare( {
   :disk_size => '10140', :disk_format => 'VDI',:hostiocache => 'off',
   :os_type_id => 'Gentoo',
   :iso_file => "install-x86-minimal-20110726.iso",
-  :iso_src => "http://ftp.halifax.rwth-aachen.de/gentoo/releases/x86/autobuilds/20110726/install-x86-minimal-20110726.iso"
+  :iso_src => "http://ftp.halifax.rwth-aachen.de/gentoo/releases/x86/autobuilds/20110726/install-x86-minimal-20110726.iso",
   :iso_md5 => "29fc74988e7f86417395e376afc1af47",
   :iso_download_timeout => "1000",
   :boot_wait => "120",:boot_cmd_sequence => [
