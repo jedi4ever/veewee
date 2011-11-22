@@ -194,11 +194,11 @@ module Veewee
 
     end
 
-    def self.export_box(boxname)
+    def self.export_box(boxname,options = {})
       #Now we have to load the definition (reads definition.rb)
       load_definition(boxname)
 
-      Veewee::Export.vagrant(boxname,@box_dir,@definition)
+      Veewee::Export.vagrant(boxname,@box_dir,@definition,options['force'])
       #vagrant removes the mapping
       #we need to restore it in order to be able to login again
       add_ssh_nat_mapping(boxname)
