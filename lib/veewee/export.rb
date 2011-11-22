@@ -47,9 +47,16 @@ module Veewee
       end
       
       puts "Excuting vagrant voodoo:"
-      export_command="vagrant package --base '#{boxname}' --output '#{box_path}'"
-      puts "#{export_command}"
-      Veewee::Shell.execute("#{export_command}") #hmm, needs to get the gem_home set?
+
+      export_command = "vagrant package --base '#{boxname}' --output '#{box_path}'"
+
+      export_command += " --vagrantfile '#{definition[:vagrantfile]}'" if definition[:vagrantfile]
+
+      include_files = [definition[:include_files]].flatten.compact
+      export_command += " --include #{include_files.join(' ')}"
+
+      puts export_command
+      Veewee::Shell.execute(export_command) #hmm, needs to get the gem_home set?
       puts
       
       #add_ssh_nat_mapping back!!!!      
