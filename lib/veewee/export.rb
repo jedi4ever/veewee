@@ -57,7 +57,8 @@ module Veewee
       export_command += " --vagrantfile '#{definition[:vagrantfile]}'" if definition[:vagrantfile]
 
       include_files = [definition[:include_files]].flatten.compact
-      export_command += " --include #{include_files.join(' ')}"
+      include_files.map! { |filename| "'#{filename}'" }
+      export_command += " --include #{include_files.join(' ')}" unless include_files.empty?
 
       puts export_command
       Veewee::Shell.execute(export_command) #hmm, needs to get the gem_home set?
