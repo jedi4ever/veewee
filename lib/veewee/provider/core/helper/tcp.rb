@@ -47,7 +47,7 @@ module Veewee
             return guessed_port
           end
 
-          def execute_when_tcp_available(ip="localhost", options = { } , &block)
+          def execute_when_tcp_available(ip="127.0.0.1", options = { } , &block)
 
             defaults={ :port => 22, :timeout => 2 , :pollrate => 5}
 
