@@ -20,7 +20,7 @@ module Veewee
           require 'net/ssh'
           require 'net/scp'
 
-          def when_ssh_login_works(ip="localhost", options = {  } , &block)
+          def when_ssh_login_works(ip="127.0.0.1", options = {  } , &block)
 
             defaults={ :port => '22', :timeout => 20000 }
 
