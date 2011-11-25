@@ -38,7 +38,8 @@ GEM
     popen4 (0.1.2)
       Platform (>= 0.4.0)
       open4 (>= 0.4.0)
-    progressbar (0.9.1)
+    progressbar (0.9.2)
+    rake (0.9.2.2)
     rspec (2.7.0)
       rspec-core (~> 2.7.0)
       rspec-expectations (~> 2.7.0)
@@ -66,4 +67,5 @@ PLATFORMS
 
 DEPENDENCIES
   bundler (>= 1.0.0)
+  rake
   veewee!
