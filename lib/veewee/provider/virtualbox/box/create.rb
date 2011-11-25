@@ -122,7 +122,7 @@ module Veewee
             #newdisk.save
 
             place=get_vm_location
-            command ="#{@vboxcmd} createhd --filename '#{place}/#{name}/#{name}.#{definition.disk_format.downcase}' --size '#{definition.disk_size.to_i}' --format #{definition.disk_format.downcase}"
+            command ="#{@vboxcmd} createhd --filename '#{File.join(File.new(place),name,name+"."+definition.disk_format.downcase)}' --size '#{definition.disk_size.to_i}' --format #{definition.disk_format.downcase}"
             shell_exec("#{command}")
           end
 
@@ -133,7 +133,7 @@ module Veewee
           place=get_vm_location
           location=name+"."+definition.disk_format.downcase
 
-          location="#{place}/#{name}/"+location
+          location="#{File.join(place,name,location)}"
           env.ui.info "Attaching disk: #{location}"
 
           #command => "${vboxcmd} storageattach '${vname}' --storagectl 'SATA Controller' --port 0 --device 0 --type hdd --medium '${vname}.vdi'",
