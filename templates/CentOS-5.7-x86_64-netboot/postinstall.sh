@@ -14,7 +14,7 @@ yum -y install gcc bzip2 make kernel-devel-`uname -r`
 #yum -y upgrade
 
 yum -y install gcc-c++ zlib-devel openssl-devel readline-devel sqlite3-devel
-yum -y erase gtk2 libX11 hicolor-icon-theme avahi freetype bitstream-vera-fonts
+yum -y erase wireless-tools gtk2 libX11 hicolor-icon-theme avahi freetype bitstream-vera-fonts
 yum -y clean all
 
 #Installing ruby
