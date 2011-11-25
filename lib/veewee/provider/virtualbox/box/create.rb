@@ -15,6 +15,13 @@ module Veewee
           shell_exec("#{command}")
         end
 
+        def attach_serial_console
+          command ="#{@vboxcmd} modifyvm '#{name}' --uart1 0x3F8 4"
+          shell_exec("#{command}")
+          command ="#{@vboxcmd} modifyvm '#{name}' --uartmode1 file '#{File.join(FileUtils.pwd,name+'.log')}'"
+          shell_exec("#{command}")
+        end
+
         def add_ssh_nat_mapping
 
           unless definition.nil?

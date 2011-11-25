@@ -43,10 +43,17 @@ module Veewee
             definition.ssh_host_port=guessed_port.to_s
           end
 
-          #Suppress those annoying virtualbox messages
+
+          # Suppress those annoying virtualbox messages
           suppress_messages
 
           create_vm
+
+          # Attach ttyS0 to the VM for console output
+          redirect_console=options[:redirectconsole]==true ? false : true
+          if redirect_console
+            attach_serial_console
+          end
 
           # Adds a folder to the vm for testing purposes
           add_shared_folder
