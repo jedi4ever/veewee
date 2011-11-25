@@ -34,6 +34,7 @@ curl -L -o authorized_keys https://raw.github.com/mitchellh/vagrant/master/keys/
 chown -R vagrant /home/vagrant/.ssh
 
 # Installing the virtualbox guest additions
+VBOX_VERSION=$(cat /home/vagrant/.vbox_version)
 cd /tmp
 curl -L -o VBoxGuestAdditions_$VBOX_VERSION.iso http://download.virtualbox.org/virtualbox/$VBOX_VERSION/VBoxGuestAdditions_$VBOX_VERSION.iso
 mount -o loop VBoxGuestAdditions_$VBOX_VERSION.iso /mnt
