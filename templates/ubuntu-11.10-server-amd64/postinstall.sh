@@ -7,11 +7,7 @@ date > /etc/vagrant_box_build_time
 apt-get -y update
 apt-get -y upgrade
 apt-get -y install linux-headers-$(uname -r) build-essential
-<<<<<<< HEAD
 apt-get -y install zlib1g-dev libssl-dev libreadline-gplv2-dev
-=======
-apt-get -y install zlib1g-dev libssl-dev libreadline5
->>>>>>> 34932ec8fc8d87efb3846e336400a726f381252e
 apt-get clean
 
 # Setup sudo to allow no-password sudo for "admin"
@@ -24,22 +20,13 @@ apt-get -y install nfs-common
 
 # Install Ruby from source in /opt so that users of Vagrant
 # can install their own Rubies using packages or however.
-<<<<<<< HEAD
 wget http://ftp.ruby-lang.org/pub/ruby/1.9/ruby-1.9.2-p290.tar.gz
 tar xvzf ruby-1.9.2-p290.tar.gz
 cd ruby-1.9.2-p290
-=======
-# We must install the 1.8.x series since Puppet doesn't support
-# Ruby 1.9 yet.
-wget http://ftp.ruby-lang.org/pub/ruby/1.8/ruby-1.8.7-p352.tar.gz
-tar xvzf ruby-1.8.7-p352.tar.gz
-cd ruby-1.8.7-p352
->>>>>>> 34932ec8fc8d87efb3846e336400a726f381252e
 ./configure --prefix=/opt/ruby
 make
 make install
 cd ..
-<<<<<<< HEAD
 rm -rf ruby-1.9.2-p290
 
 # Install RubyGems 1.7.2
@@ -49,17 +36,6 @@ cd rubygems-1.8.11
 /opt/ruby/bin/ruby setup.rb
 cd ..
 rm -rf rubygems-1.8.11
-=======
-rm -rf ruby-1.8.7-p352*
-
-# Install RubyGems 1.7.2
-wget http://production.cf.rubygems.org/rubygems/rubygems-1.7.2.tgz
-tar xzf rubygems-1.7.2.tgz
-cd rubygems-1.7.2
-/opt/ruby/bin/ruby setup.rb
-cd ..
-rm -rf rubygems-1.7.2*
->>>>>>> 34932ec8fc8d87efb3846e336400a726f381252e
 
 # Installing chef & Puppet
 /opt/ruby/bin/gem install chef --no-ri --no-rdoc
@@ -73,11 +49,7 @@ echo 'PATH=$PATH:/opt/ruby/bin/'> /etc/profile.d/vagrantruby.sh
 mkdir /home/vagrant/.ssh
 chmod 700 /home/vagrant/.ssh
 cd /home/vagrant/.ssh
-<<<<<<< HEAD
 wget --no-check-certificate 'https://raw.github.com/mitchellh/vagrant/master/keys/vagrant.pub' -O authorized_keys
-=======
-wget --no-check-certificate 'http://github.com/mitchellh/vagrant/raw/master/keys/vagrant.pub' -O authorized_keys
->>>>>>> 34932ec8fc8d87efb3846e336400a726f381252e
 chmod 600 /home/vagrant/.ssh/authorized_keys
 chown -R vagrant /home/vagrant/.ssh
 
@@ -96,13 +68,8 @@ apt-get -y remove linux-headers-$(uname -r) build-essential
 apt-get -y autoremove
 
 # Zero out the free space to save space in the final image:
-<<<<<<< HEAD
 dd if=/dev/zero of=/EMPTY bs=1M
 rm -f /EMPTY
-=======
-# dd if=/dev/zero of=/EMPTY bs=1M
-# rm -f /EMPTY
->>>>>>> 34932ec8fc8d87efb3846e336400a726f381252e
 
 # Removing leftover leases and persistent rules
 echo "cleaning up dhcp leases"
@@ -118,8 +85,4 @@ rm /lib/udev/rules.d/75-persistent-net-generator.rules
 
 echo "Adding a 2 sec delay to the interface up, to make the dhclient happy"
 echo "pre-up sleep 2" >> /etc/network/interfaces
-<<<<<<< HEAD
 exit
-=======
-exit
->>>>>>> 34932ec8fc8d87efb3846e336400a726f381252e
