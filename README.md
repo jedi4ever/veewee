@@ -131,7 +131,7 @@ Put your isofile inside the 'currentdir'/iso directory or if you don't run
 - Mount the ISO File :iso_file
 - Boot up the machine and wait for :boot_time
 - Send the keystrokes in :boot_cmd_sequence
-- Startup a webserver on :kickstart_port to wait for a request for the :kickstart_file
+- Startup a webserver on :kickstart_port to wait for a request for the :kickstart_file (don't navigate to the file in your browser or the server will stop and the installer will not be able to find your preseed)
 - Wait for ssh login to work with :ssh_user , :ssh_password
 - Sudo execute the :postinstall_files
 
