@@ -11,12 +11,12 @@ require 'virtualbox'
 module Veewee
   class Session
 
-      attr_accessor :veewee_dir
-      attr_accessor :definition_dir
-      attr_accessor :template_dir
-      attr_accessor :iso_dir
-      attr_accessor :name
-      attr_accessor :definition
+    attr_accessor :veewee_dir
+    attr_accessor :definition_dir
+    attr_accessor :template_dir
+    attr_accessor :iso_dir
+    attr_accessor :name
+    attr_accessor :definition
 
     def self.setenv(env)
       @veewee_dir=env[:veewee_dir]
@@ -73,23 +73,20 @@ module Veewee
       puts "You can now edit the definition files stored in definitions/#{boxname}"
       puts "or build the box with:"
       if (options["format"]=='vagrant')
-         puts "vagrant basebox build '#{boxname}'"
-       end
-       if (options["format"]=='veewee')
-         puts "veewee  build '#{boxname}'"
-       end
+        puts "vagrant basebox build '#{boxname}'"
+      end
+      if (options["format"]=='veewee')
+        puts "veewee  build '#{boxname}'"
+      end
 
     end
-
-
-
 
     def self.definition_exists?(boxname)
       if File.directory?(File.join(@definition_dir,boxname))
         if File.exists?(File.join(@definition_dir,boxname,'definition.rb'))
           return true
         else
-           return false
+          return false
         end
       else
         return false
@@ -129,19 +126,19 @@ module Veewee
     end
 
     def self.list_boxes
-        puts "Not yet implemented"
+      puts "Not yet implemented"
     end
 
     def self.list_definitions
-        puts "The following defined baseboxes exist:"
-        subdirs=Dir.glob("#{@definition_dir}/*")
-        subdirs.each do |sub|
-          puts "- "+File.basename(sub)
-        end
+      puts "The following defined baseboxes exist:"
+      subdirs=Dir.glob("#{@definition_dir}/*")
+      subdirs.each do |sub|
+        puts "- "+File.basename(sub)
+      end
     end
 
     def self.clean
-        puts "Not yet implemented"
+      puts "Not yet implemented"
     end
 
     def self.verify_iso(filename,autodownload = false)
@@ -173,23 +170,23 @@ module Veewee
           exit
         else
 
-        question=ask("Download? (Yes/No)") {|q| q.default="No"}
-        if question.downcase == "yes"
-          if !File.exists?(@iso_dir)
-            puts "Creating an iso directory"
-            FileUtils.mkdir(@iso_dir)
+          question=ask("Download? (Yes/No)") {|q| q.default="No"}
+          if question.downcase == "yes"
+            if !File.exists?(@iso_dir)
+              puts "Creating an iso directory"
+              FileUtils.mkdir(@iso_dir)
+            end
+
+            download_progress(@definition[:iso_src],full_path)
+          else
+            puts "You have choosen for manual download: "
+            puts "curl -C - -L '#{@definition[:iso_src]}' -o '#{rel_path}'"
+            puts "md5 '#{rel_path}' "
+            puts
+            exit
           end
 
-          download_progress(@definition[:iso_src],full_path)
-        else
-          puts "You have choosen for manual download: "
-          puts "curl -C - -L '#{@definition[:iso_src]}' -o '#{rel_path}'"
-          puts "md5 '#{rel_path}' "
-          puts
-          exit
         end
-
-      end
       end
 
     end
@@ -206,195 +203,188 @@ module Veewee
     end
 
     def self.remove_box(boxname)
-        puts "Not yet implemented"
+      puts "Not yet implemented"
     end
 
     def self.build(boxname,options)
 
-        options = {  "force" => false, "format" => "vagrant", "nogui" => false }.merge(options)
+      options = {  "force" => false, "format" => "vagrant", "nogui" => false }.merge(options)
 
-        #Now we have to load the definition (reads definition.rb)
-        load_definition(boxname)
+      #Now we have to load the definition (reads definition.rb)
+      load_definition(boxname)
 
-        #Command to execute locally
-        @vboxcmd=determine_vboxcmd
+      #Command to execute locally
+      @vboxcmd=determine_vboxcmd
 
-        ssh_options={ :user => @definition[:ssh_user], :port => @definition[:ssh_host_port], :password => @definition[:ssh_password],
-          :timeout => @definition[:ssh_timeout]}
+      ssh_options={ :user => @definition[:ssh_user], :port => @definition[:ssh_host_port], :password => @definition[:ssh_password],
+                    :timeout => @definition[:ssh_timeout]}
 
-        #Suppress those annoying virtualbox messages
-        suppress_messages
+      #Suppress those annoying virtualbox messages
+      suppress_messages
 
+      vm=VirtualBox::VM.find(boxname)
 
-        vm=VirtualBox::VM.find(boxname)
+      if (!vm.nil? && (vm.saved?))
+        puts "Removing save state"
+        vm.discard_state
+        vm.reload
+      end
 
-        if (!vm.nil? && (vm.saved?))
-          puts "Removing save state"
-          vm.discard_state
-          vm.reload
-        end
+      if (!vm.nil? && !(vm.powered_off?))
+        puts "Shutting down vm #{boxname}"
+        #We force it here, maybe vm.shutdown is cleaner
+        begin
 
-        if (!vm.nil? && !(vm.powered_off?))
-            puts "Shutting down vm #{boxname}"
-            #We force it here, maybe vm.shutdown is cleaner
-            begin
-
-                vm.stop
-            rescue VirtualBox::Exceptions::InvalidVMStateException
-              puts "There was problem sending the stop command because the machine is in an Invalid state"
-              puts "Please verify leftovers from a previous build in your vm folder"
-              exit
-            end
-            sleep 3
-        end
-
-
-        verify_iso(@definition[:iso_file])
-
-        if (options["force"]==false)
-        else
-          puts "Forcing build by destroying #{boxname} machine"
-          destroy_vm(boxname)
-        end
-
-        if Veewee::Utils.is_port_open?("localhost", @definition[:ssh_host_port])
-          puts "Hmm, the port #{@definition[:ssh_host_port]} is open. And we shut down?"
+          vm.stop
+        rescue VirtualBox::Exceptions::InvalidVMStateException
+          puts "There was problem sending the stop command because the machine is in an Invalid state"
+          puts "Please verify leftovers from a previous build in your vm folder"
           exit
         end
+        sleep 3
+      end
 
-        checksums=calculate_checksums(@definition,boxname)
+      verify_iso(@definition[:iso_file])
 
-        transaction(boxname,"0-initial-#{checksums[0]}",checksums) do
+      if (options["force"]==false)
+      else
+        puts "Forcing build by destroying #{boxname} machine"
+        destroy_vm(boxname)
+      end
 
-            #Create the Virtualmachine and set all the memory and other stuff
-            create_vm(boxname)
+      if Veewee::Utils.is_port_open?("localhost", @definition[:ssh_host_port])
+        puts "Hmm, the port #{@definition[:ssh_host_port]} is open. And we shut down?"
+        exit
+      end
 
-            #Create a disk with the same name as the boxname
-            create_disk(boxname)
+      checksums=calculate_checksums(@definition,boxname)
 
+      transaction(boxname,"0-initial-#{checksums[0]}",checksums) do
 
-            #These command actually call the commandline of Virtualbox, I hope to use the virtualbox-ruby library in the future
-            add_ide_controller(boxname)
-            add_sata_controller(boxname)
-            attach_disk(boxname)
-            mount_isofile(boxname,@definition[:iso_file])
-            add_ssh_nat_mapping(boxname)
+        #Create the Virtualmachine and set all the memory and other stuff
+        create_vm(boxname)
 
-            #Starting machine
+        #Create a disk with the same name as the boxname
+        create_disk(boxname)
 
-            if (options["nogui"]==true)
-              start_vm(boxname,"vrdp")
-            else
-              start_vm(boxname,"gui")
+        #These command actually call the commandline of Virtualbox, I hope to use the virtualbox-ruby library in the future
+        add_ide_controller(boxname)
+        add_sata_controller(boxname)
+        attach_disk(boxname)
+        mount_isofile(boxname,@definition[:iso_file])
+        add_ssh_nat_mapping(boxname)
+
+        #Starting machine
+
+        if (options["nogui"]==true)
+          start_vm(boxname,"vrdp")
+        else
+          start_vm(boxname,"gui")
+        end
+
+        #waiting for it to boot
+        puts "Waiting for the machine to boot"
+        sleep @definition[:boot_wait].to_i
+
+        Veewee::Scancode.send_sequence("#{@vboxcmd}","#{boxname}",@definition[:boot_cmd_sequence],@definition[:kickstart_port])
+
+        kickstartfile=@definition[:kickstart_file]
+        if kickstartfile.nil? || kickstartfile.length == 0
+          puts "Skipping webserver as no kickstartfile was specified"
+        else
+          puts "Starting a webserver on port #{@definition[:kickstart_port]}"
+          #:kickstart_port => "7122", :kickstart_ip => self.local_ip, :kickstart_timeout => 1000,:kickstart_file => "preseed.cfg",
+          if kickstartfile.is_a? String
+            Veewee::Web.wait_for_request(kickstartfile,{:port => @definition[:kickstart_port],
+                                                        :host => @definition[:kickstart_ip], :timeout => @definition[:kickstart_timeout],
+                                                        :web_dir => File.join(@definition_dir,boxname)})
+          end
+          if kickstartfile.is_a? Array
+            kickstartfiles=kickstartfile
+            kickstartfiles.each do |kickfile|
+              Veewee::Web.wait_for_request(kickfile,{:port => @definition[:kickstart_port],
+                                                     :host => @definition[:kickstart_ip], :timeout => @definition[:kickstart_timeout],
+                                                     :web_dir => File.join(@definition_dir,boxname)})
             end
+          end
+        end
 
-            #waiting for it to boot
-            puts "Waiting for the machine to boot"
-            sleep @definition[:boot_wait].to_i
-
-            Veewee::Scancode.send_sequence("#{@vboxcmd}","#{boxname}",@definition[:boot_cmd_sequence],@definition[:kickstart_port])
-
-            kickstartfile=@definition[:kickstart_file]
-            if kickstartfile.nil? || kickstartfile.length == 0
-                puts "Skipping webserver as no kickstartfile was specified"
-            else
-                puts "Starting a webserver on port #{@definition[:kickstart_port]}"
-                #:kickstart_port => "7122", :kickstart_ip => self.local_ip, :kickstart_timeout => 1000,:kickstart_file => "preseed.cfg",
-		if kickstartfile.is_a? String
-			Veewee::Web.wait_for_request(kickstartfile,{:port => @definition[:kickstart_port],
-                                          :host => @definition[:kickstart_ip], :timeout => @definition[:kickstart_timeout],
-                                          :web_dir => File.join(@definition_dir,boxname)})
-		end
-		if kickstartfile.is_a? Array
-			kickstartfiles=kickstartfile
-			kickstartfiles.each do |kickfile|
-				Veewee::Web.wait_for_request(kickfile,{:port => @definition[:kickstart_port],
-                                          :host => @definition[:kickstart_ip], :timeout => @definition[:kickstart_timeout],
-                                          :web_dir => File.join(@definition_dir,boxname)})
-			end
-		end
-            end
-
-
-            Veewee::Ssh.when_ssh_login_works("localhost",ssh_options) do
-              #Transfer version of Virtualbox to $HOME/.vbox_version
-              versionfile=Tempfile.open("vbox.version")
-              versionfile.puts "#{VirtualBox::Global.global.lib.virtualbox.version.split('_')[0]}"
-              versionfile.rewind
-              begin
-                Veewee::Ssh.transfer_file("localhost",versionfile.path,".vbox_version", ssh_options)
-              rescue RuntimeError
-                puts "error transfering file, possible not enough permissions to write?"
-                exit
-              end
-              puts ""
-              versionfile.close
-              versionfile.delete
-            end
-        end #initial Transaction
-
-
-               counter=1
-               @definition[:postinstall_files].each do |postinstall_file|
-
-
-                 filename=File.join(@definition_dir,boxname,postinstall_file)
-
-                 transaction(boxname,"#{counter}-#{postinstall_file}-#{checksums[counter]}",checksums) do
-
-                   Veewee::Ssh.when_ssh_login_works("localhost",ssh_options) do
-                    begin
-                      Veewee::Ssh.transfer_file("localhost",filename,File.basename(filename),ssh_options)
-                    rescue RuntimeError
-                      puts "error transferring file, possible not enough permissions to write?"
-                      exit
-                    end
-                    command=@definition[:sudo_cmd]
-                    newcommand=command.gsub(/%p/,"#{@definition[:ssh_password]}")
-                    newcommand.gsub!(/%u/,"#{@definition[:ssh_user]}")
-                    newcommand.gsub!(/%f/,"#{postinstall_file}")
-		    puts "***#{newcommand}"
-                    Veewee::Ssh.execute("localhost","#{newcommand}",ssh_options)
-                    end
-
-                 end
-                 counter+=1
-
-               end
-
-          puts "#{boxname} was built successfully. "
+        Veewee::Ssh.when_ssh_login_works("localhost",ssh_options) do
+          #Transfer version of Virtualbox to $HOME/.vbox_version
+          versionfile=Tempfile.open("vbox.version")
+          versionfile.puts "#{VirtualBox::Global.global.lib.virtualbox.version.split('_')[0]}"
+          versionfile.rewind
+          begin
+            Veewee::Ssh.transfer_file("localhost",versionfile.path,".vbox_version", ssh_options)
+          rescue RuntimeError
+            puts "error transfering file, possible not enough permissions to write?"
+            exit
+          end
           puts ""
-          puts "Now you can: "
-          puts "- verify your box by running               : vagrant basebox validate #{boxname}"
-          puts "- export your vm to a .box file by running : vagrant basebox export   #{boxname}"
+          versionfile.close
+          versionfile.delete
+        end
+      end #initial Transaction
+
+      counter=1
+      @definition[:postinstall_files].each do |postinstall_file|
+
+        filename=File.join(@definition_dir,boxname,postinstall_file)
+
+        transaction(boxname,"#{counter}-#{postinstall_file}-#{checksums[counter]}",checksums) do
+
+          Veewee::Ssh.when_ssh_login_works("localhost",ssh_options) do
+            begin
+              Veewee::Ssh.transfer_file("localhost",filename,File.basename(filename),ssh_options)
+            rescue RuntimeError
+              puts "error transferring file, possible not enough permissions to write?"
+              exit
+            end
+            command=@definition[:sudo_cmd]
+            newcommand=command.gsub(/%p/,"#{@definition[:ssh_password]}")
+            newcommand.gsub!(/%u/,"#{@definition[:ssh_user]}")
+            newcommand.gsub!(/%f/,"#{postinstall_file}")
+            puts "***#{newcommand}"
+            Veewee::Ssh.execute("localhost","#{newcommand}",ssh_options)
+          end
+
+        end
+        counter+=1
+
+      end
+
+      puts "#{boxname} was built successfully. "
+      puts ""
+      puts "Now you can: "
+      puts "- verify your box by running               : vagrant basebox validate #{boxname}"
+      puts "- export your vm to a .box file by running : vagrant basebox export   #{boxname}"
 
     end
-
 
     def self.determine_vboxcmd
       return "VBoxManage"
     end
 
     def self.start_vm(boxname,mode)
-          vm=VirtualBox::VM.find(boxname)
-          vm.start(mode)
+      vm=VirtualBox::VM.find(boxname)
+      vm.start(mode)
     end
 
     def self.load_definition(boxname)
 
       if definition_exists?(boxname)
-       definition_file=File.join(@definition_dir,boxname,"definition.rb")
-       begin
-         require definition_file
-       rescue LoadError
-         puts "Error loading definition of #{boxname}"
-         exit
-       end
+        definition_file=File.join(@definition_dir,boxname,"definition.rb")
+        begin
+          require definition_file
+        rescue LoadError
+          puts "Error loading definition of #{boxname}"
+          exit
+        end
       else
         puts "Error: definition for basebox '#{boxname}' does not exist."
         list_definitions
         exit
-     end
+      end
     end
 
     def self.add_ssh_nat_mapping(boxname)
@@ -423,23 +413,20 @@ module Veewee
       #PDB
       #vm.destroy()
 
-
-
       vm=VirtualBox::VM.find(boxname)
 
       if (!vm.nil? && !(vm.powered_off?))
-          puts "Shutting down vm #{boxname}"
-          #We force it here, maybe vm.shutdown is cleaner
-          begin
-            vm.stop
-          rescue VirtualBox::Exceptions::InvalidVMStateException
-            puts "There was problem sending the stop command because the machine is in an Invalid state"
-            puts "Please verify leftovers from a previous build in your vm folder"
-            exit
-          end
-          sleep 3
+        puts "Shutting down vm #{boxname}"
+        #We force it here, maybe vm.shutdown is cleaner
+        begin
+          vm.stop
+        rescue VirtualBox::Exceptions::InvalidVMStateException
+          puts "There was problem sending the stop command because the machine is in an Invalid state"
+          puts "Please verify leftovers from a previous build in your vm folder"
+          exit
+        end
+        sleep 3
       end
-
 
       command="#{@vboxcmd} unregistervm  '#{boxname}' --delete"
       puts command
@@ -494,13 +481,12 @@ module Veewee
         exit
       end
 
-
       vm=VirtualBox::VM.find(boxname)
 
       if (!vm.nil? && !(vm.powered_off?))
-          puts "shutting down box"
-          #We force it here, maybe vm.shutdown is cleaner
-          vm.stop
+        puts "shutting down box"
+        #We force it here, maybe vm.shutdown is cleaner
+        vm.stop
       end
 
       if !vm.nil?
@@ -532,30 +518,29 @@ module Veewee
 
         # Check for floppy
         unless @definition[:floppy_files].nil?
-            require 'tmpdir'
-            temp_dir=Dir.tmpdir
-            @definition[:floppy_files].each do |filename|
-              full_filename=full_filename=File.join(@definition_dir,boxname,filename)
-              FileUtils.cp("#{full_filename}","#{temp_dir}")
-            end
-            javacode_dir=File.expand_path(File.join(__FILE__,'..','..','java'))
-            floppy_file=File.join(@definition_dir,boxname,"virtualfloppy.vfd")
-            command="java -jar #{javacode_dir}/dir2floppy.jar '#{temp_dir}' '#{floppy_file}'"
-            puts "#{command}"
-            Veewee::Shell.execute("#{command}")
+          require 'tmpdir'
+          temp_dir=Dir.tmpdir
+          @definition[:floppy_files].each do |filename|
+            full_filename=full_filename=File.join(@definition_dir,boxname,filename)
+            FileUtils.cp("#{full_filename}","#{temp_dir}")
+          end
+          javacode_dir=File.expand_path(File.join(__FILE__,'..','..','java'))
+          floppy_file=File.join(@definition_dir,boxname,"virtualfloppy.vfd")
+          command="java -jar #{javacode_dir}/dir2floppy.jar '#{temp_dir}' '#{floppy_file}'"
+          puts "#{command}"
+          Veewee::Shell.execute("#{command}")
 
-            # Create floppy controller
-            command="#{@vboxcmd} storagectl '#{boxname}' --name 'Floppy Controller' --add floppy"
-            puts "#{command}"
-            Veewee::Shell.execute("#{command}")
+          # Create floppy controller
+          command="#{@vboxcmd} storagectl '#{boxname}' --name 'Floppy Controller' --add floppy"
+          puts "#{command}"
+          Veewee::Shell.execute("#{command}")
 
-            # Attach floppy to machine (the vfd extension is crucial to detect msdos type floppy)
-            command="#{@vboxcmd} storageattach '#{boxname}' --storagectl 'Floppy Controller' --port 0 --device 0 --type fdd --medium '#{floppy_file}'"
-            puts "#{command}"
-            Veewee::Shell.execute("#{command}")
+          # Attach floppy to machine (the vfd extension is crucial to detect msdos type floppy)
+          command="#{@vboxcmd} storageattach '#{boxname}' --storagectl 'Floppy Controller' --port 0 --device 0 --type fdd --medium '#{floppy_file}'"
+          puts "#{command}"
+          Veewee::Shell.execute("#{command}")
 
         end
-
 
         #Exec and system stop the execution here
         Veewee::Shell.execute("#{command}")
@@ -615,7 +600,7 @@ module Veewee
 
         #newdisk.location=location
         ##PDB: again problems with the virtualbox GEM
-	      ##VirtualBox::Global.global.max_vdi_size=1000000
+        ##VirtualBox::Global.global.max_vdi_size=1000000
         #newdisk.save
 
         command="#{@vboxcmd}  list  systemproperties|grep '^Default machine'|cut -d ':' -f 2|sed -e 's/^[ ]*//'"
@@ -634,15 +619,14 @@ module Veewee
     def self.add_ide_controller(boxname)
       #unless => "${vboxcmd} showvminfo '${vname}' | grep 'IDE Controller' "
       command ="#{@vboxcmd} storagectl '#{boxname}' --name 'IDE Controller' --add ide"
-       Veewee::Shell.execute("#{command}")
-     end
+      Veewee::Shell.execute("#{command}")
+    end
 
     def self.add_sata_controller(boxname)
       #unless => "${vboxcmd} showvminfo '${vname}' | grep 'SATA Controller' ";
       command ="#{@vboxcmd} storagectl '#{boxname}' --name 'SATA Controller' --add sata --sataportcount 1 --hostiocache #{@definition[:hostiocache]}"
       Veewee::Shell.execute("#{command}")
     end
-
 
     def self.attach_disk(boxname)
       location=boxname+"."+@definition[:disk_format].downcase
@@ -668,10 +652,8 @@ module Veewee
       puts "Mounting cdrom: #{full_iso_file}"
       #command => "${vboxcmd} storageattach '${vname}' --storagectl 'IDE Controller' --type dvddrive --port 1 --device 0 --medium '${isodst}' ";
       command ="#{@vboxcmd} storageattach '#{boxname}' --storagectl 'IDE Controller' --type dvddrive --port 1 --device 0 --medium '#{full_iso_file}'"
-     Veewee::Shell.execute("#{command}")
+      Veewee::Shell.execute("#{command}")
     end
-
-
 
     def self.suppress_messages
       #Setting this annoying messages to register
@@ -708,7 +690,6 @@ module Veewee
       features=Array.new
       features[0]=feature_path
 
-
       begin
         # The dup is to keep ARGV intact, so that tools like ruby-debug can respawn.
         failure = Cucumber::Cli::Main.execute(features.dup)
@@ -731,177 +712,173 @@ module Veewee
       }
     end
 
-
     def self.calculate_checksums(definition,boxname)
 
-        #TODO: get rid of definitiondir and so one
-        initial=definition.clone
+      #TODO: get rid of definitiondir and so one
+      initial=definition.clone
 
-        keys=[:postinstall_files,:sudo_cmd,:postinstall_timeout]
-        keys.each do |key|
-          initial.delete(key)
-        end
+      keys=[:postinstall_files,:sudo_cmd,:postinstall_timeout]
+      keys.each do |key|
+        initial.delete(key)
+      end
 
-        checksums=Array.new
-        checksums << Digest::MD5.hexdigest(initial.to_s)
+      checksums=Array.new
+      checksums << Digest::MD5.hexdigest(initial.to_s)
 
-        postinstall_files=definition[:postinstall_files]
-        unless postinstall_files.nil?
-          for filename in postinstall_files
-            begin
+      postinstall_files=definition[:postinstall_files]
+      unless postinstall_files.nil?
+        for filename in postinstall_files
+          begin
             full_filename=File.join(@definition_dir,boxname,filename)
 
             checksums << Digest::MD5.hexdigest(File.read(full_filename))
-            rescue
-              puts "Error reading postinstall file #{filename} - checksum"
-              exit
-            end
+          rescue
+            puts "Error reading postinstall file #{filename} - checksum"
+            exit
           end
         end
-
-        return checksums
-
       end
 
-      def self.download_progress(url,localfile)
-        pbar = nil
-        URI.parse(url).open(
-            :content_length_proc => lambda {|t|
-              if t && 0 < t
-                pbar = ProgressBar.new("Fetching file", t)
-                pbar.file_transfer_mode
-              end
-            },
-            :progress_proc => lambda {|s|
-              pbar.set s if pbar
-            }) { |src|
-              open("#{localfile}","wb") { |dst|
-                dst.write(src.read)
-              }
-            }
+      return checksums
 
-      end
+    end
 
-      def self.transaction(boxname,step_name,checksums,&block)
-
-        current_step_nr=step_name.split("-")[0].to_i
-
-        vm=VirtualBox::VM.find(boxname)
-        snapnames=Array.new
-
-        #If vm exists , look for snapshots
-        if !vm.nil?
-          start_snapshot=vm.root_snapshot
-          snapshot=start_snapshot
-          counter=0
-
-          while (snapshot!=nil)
-        	  #puts "#{counter}:#{snapshot.name}"
-         	  snapnames[counter]=snapshot.name
-            counter=counter+1
-            snapshot=snapshot.children[0]
+    def self.download_progress(url,localfile)
+      pbar = nil
+      URI.parse(url).open(
+        :content_length_proc => lambda {|t|
+          if t && 0 < t
+            pbar = ProgressBar.new("Fetching file", t)
+            pbar.file_transfer_mode
           end
+      },
+        :progress_proc => lambda {|s|
+          pbar.set s if pbar
+      }) { |src|
+        open("#{localfile}","wb") { |dst|
+          dst.write(src.read)
+        }
+      }
+
+    end
+
+    def self.transaction(boxname,step_name,checksums,&block)
+
+      current_step_nr=step_name.split("-")[0].to_i
+
+      vm=VirtualBox::VM.find(boxname)
+      snapnames=Array.new
+
+      #If vm exists , look for snapshots
+      if !vm.nil?
+        start_snapshot=vm.root_snapshot
+        snapshot=start_snapshot
+        counter=0
+
+        while (snapshot!=nil)
+          #puts "#{counter}:#{snapshot.name}"
+          snapnames[counter]=snapshot.name
+          counter=counter+1
+          snapshot=snapshot.children[0]
+        end
+      end
+
+      #find the last snapshot matching the state
+      counter=[snapnames.length, checksums.length].min-1
+      last_good_state=counter
+      for c in 0..counter do
+        #puts "#{c}- #{snapnames[c]} - #{checksums[c]}"
+        if !snapnames[c].match("#{c}.*-#{checksums[c]}")
+          #        puts "we found a bad state"
+          last_good_state=c-1
+          break
+        end
+      end
+      #puts "Last good state: #{last_good_state}"
+
+      if (current_step_nr < last_good_state)
+        #puts "fast forwarding #{step_name}"
+        return
+      end
+
+      #puts "Current step: #{current_step_nr}"
+      if (current_step_nr == last_good_state)
+        if vm.running?
+          vm.stop
         end
 
-        #find the last snapshot matching the state
-        counter=[snapnames.length, checksums.length].min-1
-        last_good_state=counter
-        for c in 0..counter do
-            #puts "#{c}- #{snapnames[c]} - #{checksums[c]}"
-            if !snapnames[c].match("#{c}.*-#{checksums[c]}")
-      #        puts "we found a bad state"
-              last_good_state=c-1
-              break
-            end
-        end
-        #puts "Last good state: #{last_good_state}"
+        #invalidate later snapshots
+        #puts "remove old snapshots"
 
-        if (current_step_nr < last_good_state)
-            #puts "fast forwarding #{step_name}"
-            return
+        for s in (last_good_state+1)..(snapnames.length-1)
+          puts "Removing step [#{s}] snapshot as it is no more valid"
+          snapshot=vm.find_snapshot(snapnames[s])
+          snapshot.destroy
+          #puts snapshot
         end
 
-        #puts "Current step: #{current_step_nr}"
-        if (current_step_nr == last_good_state)
+        vm.reload
+        puts "Loading step #{current_step_nr} snapshots as it has not changed"
+        sleep 2
+        goodsnap=vm.find_snapshot(snapnames[last_good_state])
+        goodsnap.restore
+        sleep 2
+        #TODO:Restore snapshot!!!
+        vm.start
+        sleep 4
+        puts "Starting machine"
+      end
+
+      #puts "last good state #{last_good_state}"
+
+      if (current_step_nr > last_good_state)
+
+        if (last_good_state==-1)
+          #no initial snapshot is found, clean machine!
+          vm=VirtualBox::VM.find(boxname)
+
+          if !vm.nil?
             if vm.running?
+              puts "Stopping machine"
               vm.stop
+              while vm.running?
+                sleep 1
+              end
             end
 
-            #invalidate later snapshots
-            #puts "remove old snapshots"
-
-            for s in (last_good_state+1)..(snapnames.length-1)
-              puts "Removing step [#{s}] snapshot as it is no more valid"
-              snapshot=vm.find_snapshot(snapnames[s])
-              snapshot.destroy
-              #puts snapshot
-            end
+            #detaching cdroms (used to work in 3.x)
+            #              vm.medium_attachments.each do |m|
+            #                if m.type==:dvd
+            #                  #puts "Detaching dvd"
+            #                  m.detach
+            #                end
+            #              end
 
             vm.reload
-            puts "Loading step #{current_step_nr} snapshots as it has not changed"
-            sleep 2
-            goodsnap=vm.find_snapshot(snapnames[last_good_state])
-            goodsnap.restore
-            sleep 2
-            #TODO:Restore snapshot!!!
-            vm.start
-            sleep 4
-            puts "Starting machine"
-        end
-
-        #puts "last good state #{last_good_state}"
-
-
-        if (current_step_nr > last_good_state)
-
-          if (last_good_state==-1)
-            #no initial snapshot is found, clean machine!
-            vm=VirtualBox::VM.find(boxname)
-
-            if !vm.nil?
-              if vm.running?
-                puts "Stopping machine"
-                vm.stop
-                while vm.running?
-                  sleep 1
-                end
-              end
-
-              #detaching cdroms (used to work in 3.x)
-#              vm.medium_attachments.each do |m|
-#                if m.type==:dvd
-#                  #puts "Detaching dvd"
-#                  m.detach
-#                end
-#              end
-
-              vm.reload
-              puts "We found no good state so we are destroying the previous machine+disks"
-              destroy_vm(boxname)
-            end
-
+            puts "We found no good state so we are destroying the previous machine+disks"
+            destroy_vm(boxname)
           end
 
-          #puts "(re-)executing step #{step_name}"
-
-
-          yield
-
-          #Need to look it up again because if it was an initial load
-          vm=VirtualBox::VM.find(boxname)
-          puts "Step [#{current_step_nr}] was successfully - saving state"
-          vm.save_state
-          sleep 2 #waiting for it to be ok
-          #puts "about to snapshot #{vm}"
-          #take snapshot after successful execution
-          vm.take_snapshot(step_name,"snapshot taken by veewee")
-          sleep 2 #waiting for it to be started again
-          vm.start
         end
 
-        #pp snapnames
+        #puts "(re-)executing step #{step_name}"
+
+        yield
+
+        #Need to look it up again because if it was an initial load
+        vm=VirtualBox::VM.find(boxname)
+        puts "Step [#{current_step_nr}] was successfully - saving state"
+        vm.save_state
+        sleep 2 #waiting for it to be ok
+        #puts "about to snapshot #{vm}"
+        #take snapshot after successful execution
+        vm.take_snapshot(step_name,"snapshot taken by veewee")
+        sleep 2 #waiting for it to be started again
+        vm.start
       end
 
+      #pp snapnames
+    end
 
   end #End Class
 end #End Module
