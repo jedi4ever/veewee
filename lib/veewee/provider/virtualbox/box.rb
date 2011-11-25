@@ -69,7 +69,7 @@ module Veewee
         end
 
         # http://www.virtualbox.org/manual/ch09.html#idp13716288
-        def get_local_ip
+        def host_ip_as_seen_by_guest
           "10.0.2.2"
         end
 

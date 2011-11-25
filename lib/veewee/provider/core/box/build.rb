@@ -48,7 +48,7 @@ module Veewee
 
           # Let fill's in the variable we need
           boot_sequence=fill_sequence(definition.boot_cmd_sequence,{
-            :ip =>get_local_ip,
+            :ip =>host_ip_as_seen_by_guest,
             :port => definition.kickstart_port.to_s,
             :name => name
           })

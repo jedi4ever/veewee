@@ -75,6 +75,10 @@ module Veewee
             return false
           end
 
+          def host_ip_as_seen_by_guest
+            get_local_ip
+          end
+
           def get_local_ip
             orig, Socket.do_not_reverse_lookup = Socket.do_not_reverse_lookup, true  # turn off reverse DNS resolution temporarily
 
