@@ -22,7 +22,9 @@ y
 EOF
 
 # zero out the fs
-dd if=/dev/zero of=/tmp/clean || rm /tmp/clean
+dd if=/dev/zero of=/clean bs=4M|| rm /clean
+dd if=/dev/zero of=/tmp/clean bs=4M|| rm /tmp/clean
+dd if=/dev/zero of=/boot/clean bs=4M|| rm /boot/clean
 
 # and the final reboot!
 #reboot
