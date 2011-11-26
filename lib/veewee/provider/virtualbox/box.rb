@@ -127,6 +127,19 @@ module Veewee
 
         end
 
+        def build(options={})
+          download_vbox_guest_additions_iso(options)
+          super(options)
+        end
+
+         def download_vbox_guest_additions_iso(options)
+          version="#{VirtualBox::Global.global.lib.virtualbox.version.split('_')[0]}"
+          isofile="VBoxGuestAdditions_#{version}.iso"
+          url="http://download.virtualbox.org/virtualbox/#{version}/#{isofile}"
+          env.ui.info "Downloading vbox guest additions iso v #{version} - #{url}"
+          download_iso(url,isofile)
+        end
+
         # Get the IP address of the box
         def ip_address
           return "127.0.0.1"
@@ -156,6 +169,16 @@ module Veewee
           info << { :filename => ".vbox_version",
                     :content => "#{VirtualBox::Global.global.lib.virtualbox.version.split('_')[0]}" }
         end
+
+         # Transfer information provide by the provider to the box
+         #
+         #
+         def transfer_buildinfo(options)
+           super(options)
+           iso_image="VBoxGuestAdditions_#{VirtualBox::Global.global.lib.virtualbox.version.split('_')[0]}.iso"
+           env.logger.info "About to transfer virtualbox guest additions iso to the box #{name} - #{ip_address} - #{ssh_options}"
+           self.scp("#{File.join(env.config.veewee.iso_dir,iso_image)}",File.basename(iso_image))
+         end
 
 
 

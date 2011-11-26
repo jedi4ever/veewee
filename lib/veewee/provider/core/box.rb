@@ -2,6 +2,7 @@ require 'veewee/provider/core/helper/tcp'
 require 'veewee/provider/core/helper/ssh'
 require 'veewee/provider/core/helper/web'
 require 'veewee/provider/core/helper/shell'
+require 'veewee/provider/core/helper/iso'
 
 require 'veewee/provider/core/box/build'
 require 'veewee/provider/core/box/scp'
@@ -22,6 +23,7 @@ module Veewee
         include ::Veewee::Provider::Core::Helper::Web
         include ::Veewee::Provider::Core::Helper::Shell
         include ::Veewee::Provider::Core::Helper::Ssh
+        include ::Veewee::Provider::Core::Helper::Iso
 
         include ::Veewee::Provider::Core::BoxCommand
 

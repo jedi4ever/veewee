@@ -9,6 +9,21 @@ module Veewee
           require 'highline/import'
           require 'digest/md5'
 
+          def download_iso(url,filename)
+            if !File.exists?(env.config.veewee.iso_dir)
+              env.ui.info "Creating an iso directory"
+              FileUtils.mkdir(env.config.veewee.iso_dir)
+            end
+            env.ui.info "Checking if isofile #{filename} already exists."
+            full_path=File.join(env.config.veewee.iso_dir,filename)
+            if File.exists?(full_path)
+              env.ui.info ""
+              env.ui.info "The isofile #{filename} already exists."
+            else
+              download_progress(url,filename)
+            end
+          end
+
           def download_progress(url,localfile)
             pbar = nil
             URI.parse(url).open(
@@ -80,12 +95,8 @@ module Veewee
                 end
 
                 if answer.downcase == "yes"
-                  if !File.exists?(env.config.veewee.iso_dir)
-                    env.ui.info "Creating an iso directory"
-                    FileUtils.mkdir(env.config.veewee.iso_dir)
-                  end
                   begin
-                    download_progress(self.iso_src,full_path)
+                    download_iso(self.iso_src,full_path)
                   rescue OpenURI::HTTPError => ex
                     env.ui.error "There was an error downloading #{self.iso_src}:"
                     env.ui.error "#{ex}"
