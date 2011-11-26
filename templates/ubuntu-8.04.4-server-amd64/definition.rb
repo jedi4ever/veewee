@@ -2,7 +2,7 @@ Veewee::Session.declare({
   :cpu_count => '1', :memory_size=> '384', 
   :disk_size => '10140', :disk_format => 'VDI', :hostiocache => 'off',
   :os_type_id => 'Ubuntu_64',
-  :pae => true, :io_apic_enabled => true,
+  :pae => "on", :ioapic => "on",
   :iso_file => "ubuntu-8.04.4-server-amd64.iso",
   :iso_src => "http://releases.ubuntu.com/8.04.4/ubuntu-8.04.4-server-amd64.iso",
   :iso_md5 => "89fdc8289630fceb036c9818ac19ca4",
