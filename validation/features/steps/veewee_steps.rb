@@ -3,7 +3,6 @@
 Given /^a veeweebox was build$/ do
   @environment=Veewee::Environment.new()
   @provider_name=ENV['VEEWEE_PROVIDER']
-  @provider_name="virtualbox"
   @definition_name=ENV['VEEWEE_BOXNAME']
   @box_name=ENV['VEEWEE_BOXNAME']
   @box=@environment.providers[@provider_name].get_box(@box_name)

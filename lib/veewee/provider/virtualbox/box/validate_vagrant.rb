@@ -18,6 +18,7 @@ module Veewee
 
           # Pass the name of the box
           ENV['VEEWEE_BOXNAME']=@name
+          ENV['VEEWEE_PROVIDER']="virtualbox"
 
           feature_path=File.join(File.dirname(__FILE__),"..","..","..","..","..","validation","veewee.feature")
 

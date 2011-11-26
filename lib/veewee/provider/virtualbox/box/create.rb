@@ -44,10 +44,8 @@ module Veewee
         end
 
         def add_shared_folder
-
-          #  command="#{@vboxcmd} sharedfolder add  '#{name}' --name 'veewee-validation' --hostpath '#{File.expand_path(@environment.validation_dir)}' --automount"
-          #  shell_exec("#{command}")
-
+          command="#{@vboxcmd} sharedfolder add  '#{name}' --name 'veewee-validation' --hostpath '#{File.expand_path(env.validation_dir)}' --automount"
+          shell_exec("#{command}")
         end
 
         def get_vm_location

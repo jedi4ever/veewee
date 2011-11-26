@@ -93,8 +93,8 @@ module Veewee
         # Transfer information provide by the provider to the box
         #
         #
-        def transfer_buildinfo(box,definition)
-          super(box,definition)
+        def transfer_buildinfo(options)
+          super(options)
 
           # When we get here, ssh is available and no postinstall scripts have been executed yet
           # So we begin by transferring the ISO file of the vmware tools
@@ -104,7 +104,7 @@ module Veewee
           iso_image="/Library/Application Support/VMware Fusion/isoimages/freebsd.iso" if definition.os_type_id=~/^Free/
           iso_image="/Library/Application Support/VMware Fusion/isoimages/windows.iso" if definition.os_type_id=~/^Win/
 
-          env.logger.info "About to transfer vmware tools iso buildinfo to the box #{box.name} - #{box.ip_address} - #{ssh_options}"
+          env.logger.info "About to transfer vmware tools iso buildinfo to the box #{name} - #{ip_address} - #{ssh_options}"
           self.scp(iso_image,File.basename(iso_image))
         end
 
