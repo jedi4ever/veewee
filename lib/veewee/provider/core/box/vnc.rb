@@ -38,9 +38,9 @@ module Veewee
 
         if keycode.is_a?(Symbol)
           vnc.key_press keycode
-          sleep 0.1
+          sleep 1
         else
-            vnc.type_string keycode,{:wait => 0.001}
+            vnc.type_string keycode,{:wait => 0.1}
         end
 
       end
