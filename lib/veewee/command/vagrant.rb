@@ -120,7 +120,7 @@ module Veewee
         venv=Veewee::Environment.new(options)
         venv.ui = ::Veewee::UI::Shell.new(venv, shell)
 
-        venv.providers["virtualbox"].get_box(box_name).validate_vagrant(box_name)
+        venv.providers["virtualbox"].get_box(box_name).validate_vagrant
       end
 
       desc "export [NAME]", "Exports the basebox to the vagrant box format"

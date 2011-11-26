@@ -6,11 +6,11 @@ module Veewee
 
         def shutdown(options={})
           if self.running?
-            require 'pp'
             if options["force"]==true
               self.halt
             else
-              self.ssh(sudo(definition.shutdown_cmd))
+              self.ssh("echo '#{definition.shutdown_cmd}' > /tmp/shutdown.sh")
+              self.ssh(sudo("/tmp/shutdown.sh"))
             end
           else
             raise Veewee::Error,"Box is not running"
