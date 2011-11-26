@@ -33,6 +33,9 @@ module Veewee
 
     attr_accessor :iso_dowload_timeout, :iso_src,:iso_md5 ,:iso_download_instructions
 
+    attr_accessor :virtualbox_options
+    attr_accessor :vmfusion_options
+    attr_accessor :kvm_options
 
     def initialize(name,path,env)
 
@@ -69,6 +72,10 @@ module Veewee
       #        :ssh_host_port => "2222", :ssh_guest_port => "22", :sudo_cmd => "echo '%p'|sudo -S sh '%f'",
       #       :shutdown_cmd => "shutdown -h now",
       #        :kickstart_file => nil,
+
+      @virtualbox_options=Hash.new
+      @vmfusion_options=Hash.new
+      @kvm_options=Hash.new
 
     end
 
