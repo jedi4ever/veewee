@@ -73,7 +73,7 @@ module Net
     attr_reader :server, :display, :options, :socket, :pointer
 
     def initialize display=':0', options={}
-      @server = 'localhost'
+      @server = '127.0.0.1'
       if display =~ /^(.*)(:\d+)$/
         @server, display = $1, $2
       end
