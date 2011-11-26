@@ -40,7 +40,8 @@ module Veewee
         :ssh_host_port => "2222", :ssh_guest_port => "22",
         :sudo_cmd => "echo '%p'|sudo -S sh '%f'",
         :shutdown_cmd => "shutdown -h now",
-        :postinstall_files => [ "postinstall.sh"],:postinstall_timeout => 10000}
+        :postinstall_files => [ "postinstall.sh"],:postinstall_timeout => 10000,
+        :interfaces => ["nat"],:hostonly_network => "vboxnet0"}
 
         @definition=defaults.merge(options)
 
@@ -278,6 +279,7 @@ module Veewee
             add_sata_controller(boxname)
             attach_disk(boxname)
             mount_isofile(boxname,@definition[:iso_file])
+            configure_network(boxname,@definition[:interfaces],@definition[:hostonly_network])
             add_ssh_nat_mapping(boxname)
 
             #Starting machine
@@ -671,7 +673,25 @@ module Veewee
      Veewee::Shell.execute("#{command}")
     end
 
-
+    def self.configure_network(boxname,interfaces,hostonly_network)
+      #VBox interface counter starts at 1
+      counter = 1
+      interfaces.each do |interface|
+        unless [ "null", "nat", "bridged", "intnet", "hostonly", "generic" ].include?(interface)
+          puts "#{interface} invalid: Interface must be one of null, nat, bridged, intnet, hostonly, or generic."
+          exit
+        end
+        command ="#{@vboxcmd} modifyvm '#{boxname}' --nic#{counter} #{interface}"
+        puts "executing #{command}"
+        Veewee::Shell.execute("#{command}")
+        if interface == "hostonly" then
+          command ="#{@vboxcmd} modifyvm '#{boxname}' --hostonlyadapter#{counter} #{hostonly_network}"
+          puts "executing #{command}"
+          Veewee::Shell.execute("#{command}")
+        end
+        counter += 1
+      end
+    end
 
     def self.suppress_messages
       #Setting this annoying messages to register
