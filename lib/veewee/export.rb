@@ -4,7 +4,7 @@ module Veewee
 
 #    Shellutil.execute("vagrant package --base #{vmname} --include /tmp/Vagrantfile --output /tmp/#{vmname}.box", {:progress => "on"})    
     
-    def self.vagrant(boxname,boxdir,definition)
+    def self.vagrant(boxname,boxdir,definition,force = false)
       
       #Check if box already exists
       vm=VirtualBox::VM.find(boxname)
@@ -41,9 +41,13 @@ module Veewee
       path2=Pathname.new(Dir.pwd)
       box_path=path1.relative_path_from(path2).to_s
       
-      if File.exists?("#{box_path}")
-        puts "box #{boxname}.box already exists"
-        exit
+      if File.exists?(box_path)
+        if force
+          File.delete(box_path)
+        else
+          puts "Box #{boxname}.box already exists. Use --force to overwrite"
+          exit
+        end
       end
       
       puts "Excuting vagrant voodoo:"

@@ -65,7 +65,7 @@ class Command < Vagrant::Command::GroupBase
   method_options :force => :boolean  
   def export(boxname)
       if (!boxname.nil?)
-        Veewee::Session.export_box(boxname)
+        Veewee::Session.export_box(boxname,options)
       end
   end
   
