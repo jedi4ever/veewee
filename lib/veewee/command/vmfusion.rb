@@ -99,6 +99,7 @@ module Veewee
 
       desc "export [NAME]", "Exports the basebox to the ova format"
       method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging"
+      method_option :force,:type => :boolean , :default => false, :aliases => "-f", :desc => "overwrite existing file"
       def export(box_name)
         venv=Veewee::Environment.new(options)
         venv.ui=env.ui

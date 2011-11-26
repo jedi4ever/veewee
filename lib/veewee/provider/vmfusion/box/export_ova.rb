@@ -10,6 +10,17 @@ module Veewee
           debug=""
           flags="--compress=9"
 
+          if File.exists?("#{name}.ova")
+            if options["force"]
+              env.logger.debug("#{name}.ova exists, but --force was provided")
+              env.logger.debug("removing #{name}.ova first")
+              FileUtils.rm("#{name}.ova")
+              env.logger.debug("#{name}.ova removed")
+            else
+              raise Veewee::Error, "export file #{name}.ova already exists. Use --force option to overwrite."
+            end
+          end
+
           # Need to check binary first
           if self.running?
             # Wait for the shutdown to complete
@@ -19,9 +30,9 @@ module Veewee
                 status=self.running?
                 unless status
                   return
-                end 
-                sleep 2
-              end 
+                end
+                sleep 4
+              end
             rescue TimeoutError::Error => ex
               raise Veewee::Error,ex
             end

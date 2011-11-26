@@ -4,26 +4,39 @@ module Veewee
     module Virtualbox
       module BoxCommand
 
-      #    Shellutil.execute("vagrant package --base #{vmname} --include /tmp/Vagrantfile --output /tmp/#{vmname}.box", {:progress => "on"})
+        #    Shellutil.execute("vagrant package --base #{vmname} --include /tmp/Vagrantfile --output /tmp/#{vmname}.box", {:progress => "on"})
 
-      def export_vagrant(options)
+        def export_vagrant(options)
 
-        # Check if box already exists
-        unless self.exists?
-          env.ui.info "#{name} is not found, maybe you need to build it first?"
-          exit
-        end
-        # We need to shutdown first
-        if self.running?
-          env.ui.info "Vagrant requires the box to be shutdown, before it can export"
-          env.ui.info "Sudo also needs to work for user #{definition.ssh_user}"
-          env.ui.info "Performing a clean shutdown now."
+          # Check if box already exists
+          unless self.exists?
+            env.ui.info "#{name} is not found, maybe you need to build it first?"
+            exit
+          end
+
+          if File.exists?("#{name}.box")
+            if options["force"]
+              env.logger.debug("#{name}.box exists, but --force was provided")
+              env.logger.debug("removing #{name}.box first")
+              FileUtils.rm("#{name}.box")
+              env.logger.debug("#{name}.box removed")
+            else
+              raise Veewee::Error, "export file #{name}.box already exists. Use --force option to overwrite."
+            end
+          end
+
+
+          # We need to shutdown first
+          if self.running?
+            env.ui.info "Vagrant requires the box to be shutdown, before it can export"
+            env.ui.info "Sudo also needs to work for user #{definition.ssh_user}"
+            env.ui.info "Performing a clean shutdown now."
 
             self.shutdown
 
             #Wait for state poweroff
             while (self.running?) do
-              env.ui.info ".",{:new_line => false} 
+              env.ui.info ".",{:new_line => false}
               sleep 1
             end
             env.ui.info ""
@@ -71,16 +84,16 @@ module Veewee
 end #Module
 
 
-  #      #currently vagrant has a problem with the machine up, it calculates the wrong port to ssh to poweroff the system
-  #      thebox.execute("shutdown -h now")
-  #      thebox.wait_for_state("poweroff")
+#      #currently vagrant has a problem with the machine up, it calculates the wrong port to ssh to poweroff the system
+#      thebox.execute("shutdown -h now")
+#      thebox.wait_for_state("poweroff")
 
 
-  #      Shellutil.execute("echo 'Vagrant::Config.run do |config|' > /tmp/Vagrantfile")
-  #      Shellutil.execute("echo '   config.ssh.forwarded_port_key = \"ssh\"' >> /tmp/Vagrantfile")
-  #      Shellutil.execute("echo '   config.raw.forward_port(\"ssh\",22,#{host_port})' >> /tmp/Vagrantfile")
-  #      Shellutil.execute("echo 'end' >> /tmp/Vagrantfile")
+#      Shellutil.execute("echo 'Vagrant::Config.run do |config|' > /tmp/Vagrantfile")
+#      Shellutil.execute("echo '   config.ssh.forwarded_port_key = \"ssh\"' >> /tmp/Vagrantfile")
+#      Shellutil.execute("echo '   config.raw.forward_port(\"ssh\",22,#{host_port})' >> /tmp/Vagrantfile")
+#      Shellutil.execute("echo 'end' >> /tmp/Vagrantfile")
 
 
-  #vagrant export disables the machine
-  #      thebox.ssh_enable_vmachine({:hostport => host_port , :guestport => 22} )
+#vagrant export disables the machine
+#      thebox.ssh_enable_vmachine({:hostport => host_port , :guestport => 22} )
