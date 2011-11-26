@@ -33,9 +33,9 @@ module Veewee
 
     attr_accessor :iso_dowload_timeout, :iso_src,:iso_md5 ,:iso_download_instructions
 
-    attr_accessor :virtualbox_options
-    attr_accessor :vmfusion_options
-    attr_accessor :kvm_options
+    attr_accessor :virtualbox
+    attr_accessor :vmfusion
+    attr_accessor :kvm
 
     def initialize(name,path,env)
 
@@ -73,9 +73,9 @@ module Veewee
       #       :shutdown_cmd => "shutdown -h now",
       #        :kickstart_file => nil,
 
-      @virtualbox_options=Hash.new
-      @vmfusion_options=Hash.new
-      @kvm_options=Hash.new
+      @virtualbox={:vm_options => {}}
+      @vmfusion={:vm_options => {}}
+      @kvm={:vm_options => {}}
 
     end
 
