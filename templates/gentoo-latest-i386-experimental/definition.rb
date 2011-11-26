@@ -3,7 +3,7 @@ Veewee::Definition.declare( {
   :disk_size => '10140', :disk_format => 'VDI',:hostiocache => 'off',
   :os_type_id => 'Gentoo',
   :iso_file => "install-x86-minimal-20111101.iso",
-  :iso_src => "http://gentoo.mirrors.easynews.com/linux/gentoo/releases/x86/autobuilds/20111101/install-x86-minimal-20111101.iso"
+  :iso_src => "http://gentoo.mirrors.easynews.com/linux/gentoo/releases/x86/autobuilds/20111101/install-x86-minimal-20111101.iso",
   :iso_md5 => "b65ff0bb97eb0290c3bb598372dce8173d70a731",
   :iso_download_timeout => "1000",
   :boot_wait => "120",:boot_cmd_sequence => [
