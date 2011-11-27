@@ -23,7 +23,7 @@ module Veewee
       def destroy(box_name)
         venv=Veewee::Environment.new(options)
         venv.ui=env.ui
-        venv.config.builders["kvm"].get_box(box_name).destroy(options)
+        venv.providers["kvm"].get_box(box_name).destroy(options)
       end
 
       method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging"
