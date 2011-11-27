@@ -1,13 +1,11 @@
 require 'veewee/provider/core/provider'
-require 'veewee/provider/vmfusion/provider/validate_vmfusion'
-
 
 module Veewee
   module Provider
     module Vmfusion
       class Provider < Veewee::Provider::Core::Provider
 
-        include ::Veewee::Provider::Vmfusion::ProviderCommand
+        #include ::Veewee::Provider::Vmfusion::ProviderCommand
 
         def check_requirements
           #unless gem_available?("fission")

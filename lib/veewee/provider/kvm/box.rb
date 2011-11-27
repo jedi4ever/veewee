@@ -1,5 +1,6 @@
 require 'veewee/provider/core/box'
 require 'veewee/provider/core/box/vnc'
+require 'veewee/provider/kvm/box/validate_kvm'
 
 module Veewee
   module Provider
@@ -10,6 +11,7 @@ module Veewee
         include ::Veewee::Provider::Kvm
 
         include ::Veewee::Provider::Core::BoxCommand
+        include ::Veewee::Provider::Kvm::BoxCommand
 
         attr_accessor :connection
 

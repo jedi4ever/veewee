@@ -2,6 +2,7 @@ require 'veewee/provider/core/box'
 require 'veewee/provider/core/box/vnc'
 
 require 'veewee/provider/vmfusion/box/template'
+require 'veewee/provider/vmfusion/box/validate_vmfusion'
 require 'veewee/provider/vmfusion/box/create'
 require 'veewee/provider/vmfusion/box/export_ova'
 require 'veewee/provider/core/helper/tcp'

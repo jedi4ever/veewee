@@ -172,7 +172,7 @@ module Veewee
         venv=Veewee::Environment.new(options)
         venv.ui = ::Veewee::UI::Shell.new(venv, shell)
 
-        venv.providers["virtualbox"].get_box(box_name).validate_vagrant
+        venv.providers["virtualbox"].get_box(box_name).validate_vagrant(options)
         rescue Veewee::Error => ex
           venv.ui.error ex
           exit -1

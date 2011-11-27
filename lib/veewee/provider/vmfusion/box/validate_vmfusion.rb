@@ -1,9 +1,9 @@
 module Veewee
   module Provider
-    module Virtualbox
+    module Vmfusion
       module BoxCommand
 
-        def validate_vagrant(options)
+        def validate_vmfusion(options)
           require 'cucumber'
 
           require 'cucumber/rspec/disable_option_parser'
@@ -18,14 +18,14 @@ module Veewee
 
           # Pass the name of the box
           ENV['VEEWEE_BOXNAME']=@name
-          ENV['VEEWEE_PROVIDER']="virtualbox"
+          ENV['VEEWEE_PROVIDER']="vmfusion"
 
           feature_path=File.join(File.dirname(__FILE__),"..","..","..","..","..","validation","veewee.feature")
 
           features=Array.new
           features[0]=feature_path
           features[1]="--tags"
-          features[2]="@vagrant,@virtualbox"
+          features[2]="@vmfusion"
 
           begin
             # The dup is to keep ARGV intact, so that tools like ruby-debug can respawn.
