@@ -17,6 +17,7 @@ module Veewee
 
           env.logger.info "Checking for version of libvirt"
           begin
+            require 'libvirt'
             env.logger.info "Opening a libvirt connection to qemu:///system"
             conn = ::Libvirt::open("qemu:///system")
             env.logger.info "Libvirt connection established"
