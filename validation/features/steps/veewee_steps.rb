@@ -12,6 +12,10 @@ When /^I run "([^\"]*)" over ssh$/ do |command|
   @sshresult=@box.ssh(command)
 end
 
+Then /^I should see the provided username in the output$/ do
+  @sshresult.stdout.should =~ /#{ENV["VEEWEE_SSH_USER"]}/
+end
+
 Then /^I should see "([^\"]*)" in the output$/ do |string|
   @sshresult.stdout.should =~ /#{string}/
 end

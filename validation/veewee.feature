@@ -6,7 +6,7 @@ Feature: veewee box validation
   Scenario: Valid definition
     Given a veeweebox was build
     And I run "whoami" over ssh
-    Then I should see "vagrant" in the output
+    Then I should see the provided username in the output
 
   @vmfusion @virtualbox @kvm
   Scenario: Checking sudo
