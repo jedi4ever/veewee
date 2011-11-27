@@ -28,7 +28,7 @@ module Veewee
             env.logger.info "Checking available storagepools"
             pools=conn.list_storage_pools
             env.logger.info "Storagepools: #{pools.join(',')}"
-            unless pools.count < 1
+            if pools.count < 1
               raise Veewee::Error,"You need at least one storage pool defined"
             end
 
@@ -36,7 +36,7 @@ module Veewee
             # format major * 1,000,000 + minor * 1,000 + release
             env.logger.info "Checking libvirt version"
             libvirt_version=conn.libversion
-            unless libvirt_version < 8003
+            if libvirt_version < 8003
               raise Veewee::Error,"You need at least libvirt version 0.8.3 or higher "
             end
             conn.close
