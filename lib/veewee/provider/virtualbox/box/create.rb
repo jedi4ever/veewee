@@ -18,7 +18,7 @@ module Veewee
         def attach_serial_console
           command ="#{@vboxcmd} modifyvm '#{name}' --uart1 0x3F8 4"
           shell_exec("#{command}")
-          command ="#{@vboxcmd} modifyvm '#{name}' --uartmode1 file '#{File.join(FileUtils.pwd,name+'.log')}'"
+          command ="#{@vboxcmd} modifyvm '#{name}' --uartmode1 file '#{File.join(FileUtils.pwd,name+"-serial-console"+'.log')}'"
           shell_exec("#{command}")
         end
 

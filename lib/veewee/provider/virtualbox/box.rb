@@ -50,7 +50,7 @@ module Veewee
           create_vm
 
           # Attach ttyS0 to the VM for console output
-          redirect_console=options[:redirectconsole]==true ? false : true
+          redirect_console=options[:redirectconsole]
           if redirect_console
             attach_serial_console
           end
