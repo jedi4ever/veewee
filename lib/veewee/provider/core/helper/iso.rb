@@ -16,11 +16,12 @@ module Veewee
             end
             env.ui.info "Checking if isofile #{filename} already exists."
             full_path=File.join(env.config.veewee.iso_dir,filename)
+            env.ui.info "Full path: #{full_path}"
             if File.exists?(full_path)
               env.ui.info ""
               env.ui.info "The isofile #{filename} already exists."
             else
-              download_progress(url,filename)
+              download_progress(url,full_path)
             end
           end
 
@@ -37,6 +38,7 @@ module Veewee
               pbar.set s if pbar
             }) { |src|
               # We assume large 10K files, so this is tempfile object 
+              env.ui.info "Moving #{src.path} to #{localfile}"
               FileUtils.mv(src.path,localfile)
             }
           end
