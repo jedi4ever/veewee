@@ -7,7 +7,13 @@ module Veewee
 
           # Requires valid definition
 
-          env.ui.info "Building Box #{name} with Definition #{definition.name} #{options}"
+          env.ui.info "Building Box #{name} with Definition #{definition.name}:"
+          options.each do |name,value|
+            env.ui.info "- #{name} : #{value}"
+          end
+
+          # Checking regexp of postinstall include/excludes
+          validate_postinstall_regex(options)
 
           # Check the iso file we need to build the box
           definition.verify_iso(options)
@@ -71,6 +77,30 @@ module Veewee
           env.ui.info ssh_command_string
 
           return self
+        end
+
+        def validate_postinstall_regex(options)
+          env.logger.info "Checking the postinstall excludes"
+          unless options["postinstall_exclude"].nil?
+            options["postinstall_exclude"].each do |p|
+              begin
+                r=::Regexp.new(p)
+              rescue ::RegexpError => ex
+                raise Veewee::Error ,"\nError in postinstall exclude (ruby regexp) pattern: #{p}:\n- #{ex}"
+              end
+            end
+          end
+
+          env.logger.info "Checking the postinstall includes"
+          unless options["postinstall_include"].nil?
+            options["postinstall_include"].each do |p|
+              begin
+                r=Regexp.new(p)
+              rescue RegexpError => ex
+                raise Veewee::Error ,"\nError in postinstall include (ruby regexp) pattern: #{p}:\n- #{ex}"
+              end
+            end
+          end
         end
 
         def filter_postinstall_files(options)

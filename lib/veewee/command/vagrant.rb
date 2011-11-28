@@ -12,8 +12,8 @@ module Veewee
       method_option :nogui,:type => :boolean , :default => false, :aliases => "-n", :desc => "no gui"
       method_option :auto,:type => :boolean , :default => false, :aliases => "-a", :desc => "auto answers"
       method_option :redirectconsole,:type => :boolean , :default => false, :aliases => "-r", :desc => "redirects console output"
-      method_option :postinstall_include, :type => :array, :default => [], :aliases => "-i", :desc => "patterns of postinstall filenames to additionally include"
-      method_option :postinstall_exclude, :type => :array, :default => [], :aliases => "-e", :desc => "patterns of postinstall filenames to exclude"
+      method_option :postinstall_include, :type => :array, :default => [], :aliases => "-i", :desc => "ruby regexp of postinstall filenames to additionally include"
+      method_option :postinstall_exclude, :type => :array, :default => [], :aliases => "-e", :desc => "ruby regexp of postinstall filenames to exclude"
       def build(box_name)
         begin
         venv=Veewee::Environment.new(options)
