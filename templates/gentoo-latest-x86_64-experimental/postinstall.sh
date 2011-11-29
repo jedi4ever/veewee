@@ -192,17 +192,12 @@ echo "emerge =sys-kernel/linux-headers-2.6.39" | chroot /mnt/gentoo /bin/bash -
 
 #Installing the virtualbox guest additions
 cat <<EOF | chroot /mnt/gentoo /bin/bash -
-cd /tmp
-mkdir /mnt/vbox
-wget http://download.virtualbox.org/virtualbox/$VBOX_VERSION/VBoxGuestAdditions_$VBOX_VERSION.iso
-mount -o loop VBoxGuestAdditions_$VBOX_VERSION.iso /mnt/vbox
-sh /mnt/vbox/VBoxLinuxAdditions.run
-umount /mnt/vbox
-rm VBoxGuestAdditions_$VBOX_VERSION.iso
-EOF
-
-cat <<EOF | chroot /mnt/gentoo /bin/bash -
-rc-update add vboxadd default
+mkdir /etc/portage
+cat <<KEYWORDSEOF > /etc/portage/package.keywords
+=app-emulation/virtualbox-guest-additions-4.1.6-r1
+KEYWORDSEOF
+emerge =app-emulation/virtualbox-guest-additions-4.1.6-r1
+rc-update add virtualbox-guest-additions default
 EOF
 
 rm -rf /mnt/gentoo/usr/portage/distfiles
