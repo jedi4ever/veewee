@@ -205,6 +205,9 @@ cat <<EOF | chroot /mnt/gentoo /bin/bash -
 rc-update add vboxadd default
 EOF
 
+rm -rf /mnt/gentoo/usr/portage/distfiles
+mkdir /mnt/gentoo/usr/portage/distfiles
+echo "chown portage:portage /usr/portage/distfiles" | chroot /mnt/gentoo /bin/bash -
 
 echo "sed -i 's:^DAEMONS\(.*\))$:DAEMONS\1 rc.vboxadd):' /etc/rc.conf" | chroot /mnt/gentoo sh -
 
