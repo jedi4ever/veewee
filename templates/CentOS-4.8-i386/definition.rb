@@ -3,7 +3,7 @@ Veewee::Session.declare({
   :disk_size => '10140', :disk_format => 'VDI',:hostiocache => 'off',:ioapic => 'on', :pae => 'on',
   :os_type_id => 'RedHat',
   :iso_file => "CentOS-4.8-i386-bin-DVD.iso", :iso_src => "", :iso_md5 => "", :iso_download_timeout => 1000,
-  :iso_download_instructions => "This iso is no more available, for instructions see http://isoredirect.centos.org/centos/4/isos/i386/"
+  :iso_download_instructions => "This iso is no more available, for instructions see http://isoredirect.centos.org/centos/4/isos/i386/",
   :boot_wait => "10", :boot_cmd_sequence => [ 'linux text ks=http://%IP%:%PORT%/ks.cfg<Enter>' ],
   :kickstart_port => "7122", :kickstart_timeout => 10000, :kickstart_file => "ks.cfg",
   :ssh_login_timeout => "100", :ssh_user => "vagrant", :ssh_password => "vagrant", :ssh_key => "",
