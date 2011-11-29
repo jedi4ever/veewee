@@ -166,7 +166,7 @@ Put your isofile inside the 'currentdir'/iso directory or if you don't run
 
     $ vagrant basebox validate 'myubuntubox'
 
-this will run some cucumber test against the box to see if it has the necessary bits and pieces for vagrant to work
+this will run some cucumber test against the box to see if it has the necessary bits and pieces for vagrant to work (keep the basebox running after the build completes, or restart it before running the validation)
 
 ## Export the vm to a .box file
 
