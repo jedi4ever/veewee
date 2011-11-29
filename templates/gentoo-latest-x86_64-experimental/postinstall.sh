@@ -109,8 +109,6 @@ quit
 GRUBEOF
 EOF
 
-exit 1
-
 cat <<EOF | chroot /mnt/gentoo /bin/bash -
 cat <<FSTAB > /etc/fstab
 /dev/sda1   /boot     ext2    noauto,noatime     1 2
