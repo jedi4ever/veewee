@@ -46,7 +46,7 @@ module Veewee
         exit
       end
       
-      puts "Excuting vagrant voodoo:"
+      puts "Executing vagrant voodoo:"
       export_command="vagrant package --base '#{boxname}' --output '#{box_path}'"
       puts "#{export_command}"
       Veewee::Shell.execute("#{export_command}") #hmm, needs to get the gem_home set?
