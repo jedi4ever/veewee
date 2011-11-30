@@ -38,8 +38,12 @@ module Veewee
               pbar.set s if pbar
             }) { |src|
               # We assume large 10K files, so this is tempfile object 
-              env.ui.info "Moving #{src.path} to #{localfile}"
-              FileUtils.mv(src.path,localfile)
+              env.logger.info "#{src.class}"
+                env.ui.info "Moving #{src.path} to #{localfile}"
+                FileUtils.mv(src.path,localfile)
+                #open(localfile,"wb") { |dst|
+                  #dst.write(src.read)
+                #}
             }
           end
 
@@ -98,7 +102,7 @@ module Veewee
 
                 if answer.downcase == "yes"
                   begin
-                    download_iso(self.iso_src,full_path)
+                    download_iso(self.iso_src,filename)
                   rescue OpenURI::HTTPError => ex
                     env.ui.error "There was an error downloading #{self.iso_src}:"
                     env.ui.error "#{ex}"
