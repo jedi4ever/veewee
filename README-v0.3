@@ -1,0 +1,58 @@
+# Installation:
+  - from source
+  - via gem
+
+# Technique
+  Virtualbox sendkeycode (raw Bios keystrokes)
+  KVM, VNC -> (using VNC)
+
+# Sublibraries
+  KVM -> Fog -> libvirt -> ruby bindings
+  VMWare fusion -> inspired by Fission
+
+# Requirements
+  virtualbox -> 
+
+  kvm -> ruby-libvirt gem
+    v0.8.3 or higher
+    have a default dir pool installed
+    permissions to write create new volumes
+
+  vmfusion -> VMWare fusion installed
+    Tested on VMWare fusion 0.3.x
+
+# Changes to Definitions
+  Veewee::Definition.declare instead of Veewee::Session.declare
+
+  Virtualbox options ioapic, pae are now moved to :virtualbox => { vm_options => [ :ioapic => 'on' ]}
+    now you can pass all options you have to virtualbox
+
+# Use as a library
+
+# ostype_id (not everytime exists on all providers)
+
+# Rakefile contains check iso
+# Rakefile contains test
+# Rakefile contains real_test
+
+# Templates
+  idea is to split postinstall.sh to multiple pieces
+  check for .veewee_version or .vmfusion_version to see for which provider we are building this
+  include/exclude can do this
+  default user becomes veewee, vagrant.sh will create the vagrant user if used under vagrant 
+  uploading vmware.iso
+  uploading virtualbox.iso
+
+# Validation
+  veewee.feature (depending on virtualbox, vagrant)
+  no more ssh_steps
+  uses @tags per provider
+
+# veewee vmfusion export ova
+# vagrant basebox export box
+
+# New options
+  --postinstall-include/exclude
+  --auto (download yes)
+  --force also for export
+  --debug (debug output)
