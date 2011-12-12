@@ -5,7 +5,7 @@ date > /etc/vagrant_box_build_time
 cat > /etc/yum.repos.d/puppetlabs.repo << EOM
 [puppetlabs]
 name=puppetlabs
-baseurl=http://stahnma.fedorapeople.org/puppetlabs/6/\$basearch
+baseurl=http://yum.puppetlabs.com/el/6/products/\$basearch
 enabled=1
 gpgcheck=0
 EOM
@@ -29,7 +29,7 @@ gem install --no-ri --no-rdoc chef
 mkdir /home/vagrant/.ssh
 chmod 700 /home/vagrant/.ssh
 cd /home/vagrant/.ssh
-wget --no-check-certificate 'http://github.com/mitchellh/vagrant/raw/master/keys/vagrant.pub' -O authorized_keys
+wget --no-check-certificate 'https://raw.github.com/mitchellh/vagrant/master/keys/vagrant.pub' -O authorized_keys
 chown -R vagrant /home/vagrant/.ssh
 
 # Installing the virtualbox guest additions

@@ -39,6 +39,12 @@ cd rubygems-1.7.2
 cd ..
 rm -rf rubygems-1.7.2*
 
+# Installing make tool for chef
+apt-get install make
+
+# Installing dependencies for chef
+/opt/ruby/bin/gem install polyglot net-ssh-gateway mime-types
+
 # Installing chef & Puppet
 /opt/ruby/bin/gem install chef --no-ri --no-rdoc
 /opt/ruby/bin/gem install puppet --no-ri --no-rdoc
@@ -51,7 +57,7 @@ echo 'PATH=$PATH:/opt/ruby/bin/'> /etc/profile.d/vagrantruby.sh
 mkdir /home/vagrant/.ssh
 chmod 700 /home/vagrant/.ssh
 cd /home/vagrant/.ssh
-wget --no-check-certificate 'http://github.com/mitchellh/vagrant/raw/master/keys/vagrant.pub' -O authorized_keys
+wget --no-check-certificate 'https://raw.github.com/mitchellh/vagrant/master/keys/vagrant.pub' -O authorized_keys
 chmod 600 /home/vagrant/.ssh/authorized_keys
 chown -R vagrant /home/vagrant/.ssh
 

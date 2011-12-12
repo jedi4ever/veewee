@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# var to determine package source
+PKGSRC=net
+
 date > /etc/vagrant_box_build_time
 
 # launch automated install
@@ -39,12 +42,6 @@ EOF
 # create puppet group
 groupadd puppet
 
-# make sure ssh is allowed
-echo "sshd:	ALL" > /etc/hosts.allow
-
-# and everything else isn't
-echo "ALL:	ALL" > /etc/hosts.deny
-
 # make sure sshd starts
 sed -i 's:^DAEMONS\(.*\))$:DAEMONS\1 sshd):' /etc/rc.conf
 
@@ -58,24 +55,15 @@ chown -R vagrant /home/vagrant/.ssh
 # choose a mirror
 sed -i 's/^#\(.*leaseweb.*\)/\1/' /etc/pacman.d/mirrorlist
 
-# update pacman
-pacman -Syy
-pacman -S --noconfirm pacman
-
-# upgrade pacman db
-pacman-db-upgrade
-pacman -Syy
-
 # install some packages
-pacman -S --noconfirm glibc git
 gem install --no-ri --no-rdoc chef facter
 cd /tmp
 git clone https://github.com/puppetlabs/puppet.git
 cd puppet
-ruby install.rb --bindir=/usr/bin --sbindir=/sbin
+ruby install.rb --bindir=/usr/bin --sbindir=/sbin 2>/dev/null
 
 # set up networking
-sed -i 's/^\(interface=*\)/\1eth0/' /etc/rc.conf
+[[ $PKGSRC == 'net' ]] && sed -i 's/^\(interface=*\)/\1eth0/' /etc/rc.conf
 
 # leave the chroot
 ENDCHROOT

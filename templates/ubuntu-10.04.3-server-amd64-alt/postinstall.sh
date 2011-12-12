@@ -190,7 +190,7 @@ if test ! -d "${DIR_PATH}" ; then
 fi
 chmod 700 /home/${VEEWEE_USER}/.ssh
 cd /home/${VEEWEE_USER}/.ssh
-wget --no-check-certificate 'http://github.com/mitchellh/vagrant/raw/master/keys/vagrant.pub' -O authorized_keys
+wget --no-check-certificate 'https://raw.github.com/mitchellh/vagrant/master/keys/vagrant.pub' -O authorized_keys
 chmod 0600  /home/${VEEWEE_USER}/.ssh/*
 chown -R ${VEEWEE_USER} /home/${VEEWEE_USER}/.ssh
 cp /etc/ssh/sshd_config /etc/ssh/sshd_config.original

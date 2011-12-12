@@ -52,6 +52,6 @@ Veewee::Session.declare( {
   :ssh_user             => "vagrant",
   :sudo_cmd             => "echo '%p'|sudo -S bash '%f'",
   :shutdown_cmd         => "shutdown -h now",
-  :use_hw_virt_ext      => 'off',
-  :use_pae              => 'on'
+  :hwvirtext      => 'off',
+  :pae              => 'on'
 })
