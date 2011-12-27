@@ -44,7 +44,7 @@ cd /mnt/gentoo
 
 #Download a stage3 archive
 while true; do
-	wget http://mirror.switch.ch/ftp/mirror/gentoo/releases/amd64/autobuilds/20111013/stage3-amd64-20111013.tar.bz2 && > gotstage3
+        wget http://distfiles.gentoo.org/releases/amd64/current-stage3/stage3-amd64-20111208.tar.bz2 && > gotstage3
         if [ -f "gotstage3" ]
         then
 		break
@@ -58,7 +58,7 @@ tar xjpf stage3*
 #Download Portage snapshot
 cd /mnt/gentoo/usr
 while true; do
-	wget http://mirror.switch.ch/ftp/mirror/gentoo/snapshots/portage-latest.tar.bz2 && > gotportage
+        wget http://distfiles.gentoo.org/releases/snapshots/current/portage-latest.tar.bz2 && > gotportage
         if [ -f "gotportage" ]
         then
 		break
