@@ -1,10 +1,10 @@
 Veewee::Session.declare( {
-  :cpu_count => '8', :memory_size=> '2048',
+  :cpu_count => '2', :memory_size=> '1024',
   :disk_size => '10140', :disk_format => 'VDI',:hostiocache => 'off',
   :os_type_id => 'Gentoo',
-  :iso_file => "install-amd64-minimal-20111013.iso",
-  :iso_src => "http://mirror.switch.ch/ftp/mirror/gentoo/releases/amd64/autobuilds/20111013/install-amd64-minimal-20111013.iso",
-  :iso_md5 => "3a08f6c41b7ba1a7574fed14629778c9",
+  :iso_file => "install-amd64-minimal-20111208.iso",
+  :iso_src => "http://distfiles.gentoo.org/releases/amd64/autobuilds/current-iso/install-amd64-minimal-20111208.iso",
+  :iso_md5 => "8c4e10aaaa7cce35503c0d23b4e0a42a",
   :iso_download_timeout => "1000",
   :boot_wait => "1",:boot_cmd_sequence => [
         '<Wait>'*2,
