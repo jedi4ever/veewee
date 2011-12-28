@@ -556,10 +556,6 @@ module Veewee
 
         end
 
-
-        #Exec and system stop the execution here
-        Veewee::Shell.execute("#{command}")
-
         command="#{@vboxcmd} sharedfolder add  '#{boxname}' --name 'veewee-validation' --hostpath '#{File.expand_path(@validation_dir)}' --automount"
 
         Veewee::Shell.execute("#{command}")
