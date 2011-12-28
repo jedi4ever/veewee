@@ -1,10 +1,6 @@
 # Many thanks to @draco2002
 # http://dracosplace.com/veewee_and_freebsd
 
-<<<<<<< HEAD
-#  :iso_src => "ftp://mirrors.isc.org/pub/pcbsd/8.2/i386/PCBSD8.2-x86-bootonly.iso",
-#  :iso_file => "PCBSD8.2-x86-bootonly.iso",
-
 #Based on https://gist.github.com/911058
 
 Veewee::Session.declare( {
@@ -19,7 +15,8 @@ Veewee::Session.declare( {
         '<KillX>',
         '<Enter>',
         'dhclient em0<Enter>',
-        'sleep 15;echo "Lets Get the File";fetch "http://%IP%:%PORT%/pcinstall.fbg.cfg";sleep 2;',        
+        'echo "waiting for 25 seconds"',
+        'sleep 25;echo "Lets Get the File";fetch "http://%IP%:%PORT%/pcinstall.fbg.cfg";sleep 2;',
         'echo \'echo sshd_enable=\"YES\" >> $FSMNT/etc/rc.conf\' > /root/activate-ssh.sh ; cat /root/activate-ssh.sh<Enter>',
         'chmod +x /root/activate-ssh.sh<Enter>',
         'echo "Hope i got the file";/usr/PCBSD/pc-sysinstall/pc-sysinstall -c /root/pcinstall.fbg.cfg<Enter>',

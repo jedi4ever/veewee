@@ -1,7 +1,7 @@
 Veewee::Session.declare({
   :cpu_count => '1', :memory_size=> '384',
   :disk_size => '10140', :disk_format => 'VDI', :hostiocache => 'off',
-  :os_type_id => 'RedHat_64', :use_vbox_guest_add => true,
+  :os_type_id => 'RedHat_64',
   :iso_file => "CentOS-6.0-x86_64-minimal.iso", :iso_src => "http://be.mirror.eurid.eu/centos/6.0/isos/x86_64/CentOS-6.0-x86_64-minimal.iso", :iso_md5 => "b9fff4dad7aad0edaa564d7a251cb971", :iso_download_timeout => 1000,
   :iso_download_instructions => "We can not download the ISO , you need to download it yourself and put it in the iso directory\n"+
   "- URL: http://isoredirect.centos.org/centos/6/isos/x86_64/ ",
