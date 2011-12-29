@@ -5,16 +5,30 @@ date > /etc/vagrant_box_build_time
 #Based on http://www.funtoo.org/wiki/Funtoo_Linux_Installation
 
 #Partition the disk
-#This assumes a predefined layout - customize to your own liking
-
-#/boot -> /dev/sda1   200M, need to skip a few meg for new GPT instead of old MBR
+# Gentoo live CD were using doesn't have gdisk and it looks 
+# to be interactive like fdisk.  sfdisk is scribable but has issues.
+#
+# If you adjust, best to read this 
+#     http://www.spinics.net/lists/util-linux-ng/msg03406.html
+#
+# Basically, all partitioning programs are wonky, sfdisk is scriptable, but likes
+# to keeps things too tight skipping post-MBR spacing and "grub-install" fails later.
+# Take the advice of the email and partition your drive with fdisk and dump it with 
+#
+#    sfdisk -uS -d /dev/sda 
+#
+# and plug those values into the script.  The --force by sector will get
+# you what fdisk layed out and gets something grub-install can deal with.   fun...
+#
+#
+#/boot -> /dev/sda1   200M, left 2Meg of space for grub-install 
 #swap  -> /dev/sda2   1.5G
 #root  -> /dev/sda3   Rest of space and bootable
 
-sfdisk --force /dev/sda -uM<<EOF
-2,200,L
-,1500,S
-,,L,*
+sfdisk --force -uS /dev/sda <<EOF
+4096,409600,L
+413696,3072000,S
+3485696,17281024,L,*
 EOF
 
 sleep 2
