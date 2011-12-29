@@ -1,5 +1,5 @@
 Veewee::Session.declare( {
-  :cpu_count => '4', :memory_size=> '1536',
+  :cpu_count => 8'', :memory_size=> '1536',
   :disk_size => '10140', :disk_format => 'VDI',:hostiocache => 'off',
   :os_type_id => 'Gentoo', # Funtoo is a GIT based gentoo derivative
   :iso_file => "install-amd64-minimal-20111013.iso",
@@ -30,6 +30,6 @@ Veewee::Session.declare( {
   :ssh_host_port => "7222", :ssh_guest_port => "22",
   :sudo_cmd => "cat '%f'|su -",
   :shutdown_cmd => "shutdown -p now",
-  :postinstall_files => [ "postinstall.sh"],:postinstall_timeout => "10000"
+  :postinstall_files => [ "postinstall.sh"],:postinstall_timeout => "15000"
    }
 )

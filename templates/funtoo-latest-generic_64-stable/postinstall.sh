@@ -7,12 +7,12 @@ date > /etc/vagrant_box_build_time
 #Partition the disk
 #This assumes a predefined layout - customize to your own liking
 
-#/boot -> /dev/sda1   200M
+#/boot -> /dev/sda1   200M, need to skip a few meg for new GPT instead of old MBR
 #swap  -> /dev/sda2   1.5G
 #root  -> /dev/sda3   Rest of space and bootable
 
 sfdisk --force /dev/sda -uM<<EOF
-,200,L
+2,200,L
 ,1500,S
 ,,L,*
 EOF
@@ -78,6 +78,9 @@ echo "rc-update add dhcpcd default" | chroot /mnt/funtoo /bin/bash -
 # Get the kernel sources
 echo "sys-kernel/sysrescue-std-sources binary" >> ./etc/portage/package.use
 echo "emerge sysrescue-std-sources" | chroot /mnt/funtoo /bin/bash -
+
+# Fix a package blocker problem with the current stage3 tarball
+#echo "emerge -u sysvinit" | chroot /mnt/funtoo /bin/bash -
 
 # Make the disk bootable
 echo "emerge boot-update" | chroot /mnt/funtoo /bin/bash -
