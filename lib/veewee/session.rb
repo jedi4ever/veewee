@@ -527,6 +527,13 @@ module Veewee
           end
         end
 
+        # Set NAT network
+        unless @definition[:network].nil?
+          puts "Using #{@definition[:network]} as the NAT network"
+          command="#{@vboxcmd} modifyvm #{boxname} --natnet1 #{@definition[:network]}"
+          Veewee::Shell.execute("#{command}")
+        end
+
         # Todo Check for java
         # Todo check output of commands
 
@@ -670,7 +677,6 @@ module Veewee
       command ="#{@vboxcmd} storageattach '#{boxname}' --storagectl 'IDE Controller' --type dvddrive --port 1 --device 0 --medium '#{full_iso_file}'"
      Veewee::Shell.execute("#{command}")
     end
-
 
 
     def self.suppress_messages
