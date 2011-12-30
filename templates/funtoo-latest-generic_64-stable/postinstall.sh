@@ -134,8 +134,9 @@ vagrant
 EOF
 ENDCHROOT
 
-#create vagrant user  / password vagrant
-chroot /mnt/funtoo useradd -m -r vagrant -p '$1$MPmczGP9$1SeNO4bw5YgiEJuo/ZkWq1'
+#create vagrant user with password set to vagrant
+chroot /mnt/funtoo useradd -m -r vagrant -g vagrant -G wheel -p '$1$MPmczGP9$1SeNO4bw5YgiEJuo/ZkWq1'
+chroot /mnt/funtoo rc-update add sshd default
 
 # Cron & Syslog
 chroot /mnt/funtoo emerge metalog vixie-cron
@@ -144,6 +145,7 @@ chroot /mnt/funtoo rc-update add vixie-cron default
 
 #Get an editor going
 chroot /mnt/funtoo emerge vim
+echo "EDITOR=/usr/bin/vim" > /mnt/funtoo/etc/env.d/99editor
 
 #Allow external ssh
 echo "echo 'sshd:ALL' > /etc/hosts.allow" | chroot /mnt/funtoo /bin/bash -
@@ -203,6 +205,8 @@ mkdir /mnt/funtoo/usr/portage/distfiles
 echo "chown portage:portage /usr/portage/distfiles" | chroot /mnt/funtoo /bin/bash -
 
 echo "sed -i 's:^DAEMONS\(.*\))$:DAEMONS\1 rc.vboxadd):' /etc/rc.conf" | chroot /mnt/funtoo /bin/bash -
+
+chroot /mnt/funtoo env-update
 
 exit
 cd /
