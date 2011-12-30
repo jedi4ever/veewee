@@ -123,28 +123,26 @@ GRUBCONF
 echo "grub-install --no-floppy /dev/sda" | chroot /mnt/funtoo /bin/bash -
 echo "boot-update" | chroot /mnt/funtoo /bin/bash -
 
-
-#We need some things to do here
-
-#Root password
-chroot /mnt/funtoo /bin/bash <<ENDCHROOT
-passwd<<EOF
-vagrant
-vagrant
-EOF
-ENDCHROOT
+#Root password, decided vagrant sudo was better, commented out
+###chroot /mnt/funtoo /bin/bash <<ENDCHROOT
+###passwd<<EOF
+###vagrant
+###vagrant
+###EOF
+###ENDCHROOT
 
 #create vagrant user with password set to vagrant
-chroot /mnt/funtoo useradd -m -r vagrant -g vagrant -G wheel -p '$1$MPmczGP9$1SeNO4bw5YgiEJuo/ZkWq1'
+chroot /mnt/funtoo groupadd -r vagrant
+chroot /mnt/funtoo useradd -m -r vagrant -g vagrant -G wheel -p '$1$MPmczGP9$1SeNO4bw5YgiEJuo/ZkWq1' -c "Added by vagrant, veewee basebox creation"
 chroot /mnt/funtoo rc-update add sshd default
 
 # Cron & Syslog
-chroot /mnt/funtoo emerge metalog vixie-cron
+chroot /mnt/funtoo emerge -u metalog vixie-cron
 chroot /mnt/funtoo rc-update add metalog default
 chroot /mnt/funtoo rc-update add vixie-cron default
 
 #Get an editor going
-chroot /mnt/funtoo emerge vim
+chroot /mnt/funtoo emerge -u vim
 echo "EDITOR=/usr/bin/vim" > /mnt/funtoo/etc/env.d/99editor
 
 #Allow external ssh
@@ -152,11 +150,11 @@ echo "echo 'sshd:ALL' > /etc/hosts.allow" | chroot /mnt/funtoo /bin/bash -
 echo "echo 'ALL:ALL' > /etc/hosts.deny" | chroot /mnt/funtoo /bin/bash -
 
 #Configure Sudo
-chroot /mnt/funtoo emerge sudo
+chroot /mnt/funtoo emerge -u sudo
 echo "echo 'vagrant ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers" | chroot /mnt/funtoo /bin/bash -
 
 #Installing vagrant keys
-chroot /mnt/funtoo emerge wget 
+chroot /mnt/funtoo emerge -u wget 
 
 echo "creating vagrant ssh keys"
 chroot /mnt/funtoo mkdir /home/vagrant/.ssh
@@ -166,23 +164,22 @@ chroot /mnt/funtoo wget --no-check-certificate 'https://raw.github.com/mitchellh
 chroot /mnt/funtoo chmod 600 /home/vagrant/.ssh/authorized_keys
 chroot /mnt/funtoo chown -R vagrant /home/vagrant/.ssh
 
-#This could be done in postinstall
-#reboot
-
-#get some ruby running
-chroot /mnt/funtoo emerge git curl gcc automake  m4
-chroot /mnt/funtoo emerge libiconv readline zlib openssl curl git libyaml sqlite libxslt
-echo "bash < <(curl -s https://rvm.beginrescueend.com/install/rvm)"| chroot /mnt/funtoo /bin/bash -
-echo "/usr/local/rvm/bin/rvm install ruby-1.8.7 "| chroot /mnt/funtoo /bin/bash -
-echo "/usr/local/rvm/bin/rvm use ruby-1.8.7 --default "| chroot /mnt/funtoo /bin/bash -
+#get some ruby running, needed for veewee validate step
+chroot /mnt/funtoo emerge -u git curl gcc automake autoconf m4
+chroot /mnt/funtoo emerge -u libiconv readline zlib openssl libyaml sqlite libxslt
+chroot /mnt/funtoo /bin/bash <<ENDRUBY
+bash -s stable < <(curl -s https://raw.github.com/wayneeseguin/rvm/master/binscripts/rvm-installer )
+. /usr/local/rvm/scripts/rvm 
+rvm install ruby-1.8.7
+rvm use ruby-1.8.7 --default
 
 #Installing chef & Puppet
-echo ". /usr/local/rvm/scripts/rvm ; gem install chef --no-ri --no-rdoc"| chroot /mnt/funtoo /bin/bash -
-echo ". /usr/local/rvm/scripts/rvm ; gem install puppet --no-ri --no-rdoc"| chroot /mnt/funtoo /bin/bash -
+. /usr/local/rvm/scripts/rvm 
+gem install chef
+gem install puppet
 
-
-echo "adding rvm to global bash rc"
-echo "echo '. /usr/local/rvm/scripts/rvm' >> /etc/bash/bash.rc" | chroot /mnt/funtoo /bin/bash -
+usermod -G rvm vagrant
+ENDRUBY
 
 /bin/cp -f /root/.vbox_version /mnt/funtoo/home/vagrant/.vbox_version
 VBOX_VERSION=$(cat /root/.vbox_version)
@@ -204,7 +201,8 @@ rm -rf /mnt/funtoo/usr/portage/distfiles
 mkdir /mnt/funtoo/usr/portage/distfiles
 echo "chown portage:portage /usr/portage/distfiles" | chroot /mnt/funtoo /bin/bash -
 
-echo "sed -i 's:^DAEMONS\(.*\))$:DAEMONS\1 rc.vboxadd):' /etc/rc.conf" | chroot /mnt/funtoo /bin/bash -
+# veewee validate uses password authentication
+sed -i -e 's:PasswordAuthentication no:PasswordAuthentication yes:' /mnt/funtoo/etc/ssh/sshd_config
 
 chroot /mnt/funtoo env-update
 
