@@ -206,6 +206,8 @@ sed -i -e 's:PasswordAuthentication no:PasswordAuthentication yes:' /mnt/funtoo/
 
 chroot /mnt/funtoo env-update
 
+rm /mnt/funtoo/stage3*.tar.xz
+
 exit
 cd /
 umount /mnt/funtoo/{proc,sys,dev}
