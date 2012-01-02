@@ -6,7 +6,7 @@ date > /etc/vagrant_box_build_time
 
 #Partition the disk
 # Gentoo live CD were using doesn't have gdisk and it looks 
-# to be interactive like fdisk.  sfdisk is scribable but has issues.
+# to be interactive like fdisk.  sfdisk is scritable but has issues.
 #
 # If you adjust, best to read this 
 #     http://www.spinics.net/lists/util-linux-ng/msg03406.html
@@ -58,11 +58,11 @@ tar xpf stage3*
 #Chroot
 mount --bind /proc ./proc
 mount --bind /dev ./dev
-cp /etc/resolv.conf ./etc/
-echo "env-update && source /etc/profile" | chroot /mnt/funtoo /bin/bash -
+cp /etc/resolv.conf /mnt/funtoo/etc/
+chroot /mnt/funtoo env-update
 
 # git installed from stage3 tarball
-echo "emerge --sync" | chroot /mnt/funtoo /bin/bash -
+chroot /mnt/funtoo emerge --sync
 
 # California dreamin
 cd etc
@@ -87,18 +87,16 @@ none                    /dev/shm        tmpfs           nodev,nosuid,noexec     
 FSTABEOF
 
 # dhcp
-echo "rc-update add dhcpcd default" | chroot /mnt/funtoo /bin/bash -
+chroot /mnt/funtoo rc-update add dhcpcd default
 
 # Get the kernel sources
-echo "sys-kernel/sysrescue-std-sources binary" >> ./etc/portage/package.use
-echo "emerge sysrescue-std-sources" | chroot /mnt/funtoo /bin/bash -
-
-# Fix a package blocker problem with the current stage3 tarball
-#echo "emerge -u sysvinit" | chroot /mnt/funtoo /bin/bash -
+echo 'MAKEOPTS="-j9"' >> /mnt/funtoo/etc/make.conf
+#echo 'MAKEOPTS="-j9"' >> /mnt/funtoo/etc/genkernel.conf
+echo "sys-kernel/sysrescue-std-sources binary" >> /mnt/funtoo/etc/portage/package.use
+echo 'MAKEOPTS="-j9" emerge sysrescue-std-sources' | chroot /mnt/funtoo /bin/bash -
 
 # Make the disk bootable
-echo "emerge boot-update" | chroot /mnt/funtoo /bin/bash -
-echo 'MAKEOPTS="-j9"' >> /mnt/funtoo/etc/make.conf
+chroot /mnt/funtoo emerge boot-update
 
 cat <<GRUBCONF > ./etc/boot.conf
 boot {
@@ -120,8 +118,8 @@ boot {
 } 
 GRUBCONF
 
-echo "grub-install --no-floppy /dev/sda" | chroot /mnt/funtoo /bin/bash -
-echo "boot-update" | chroot /mnt/funtoo /bin/bash -
+chroot /mnt/funtoo grub-install --no-floppy /dev/sda
+chroot /mnt/funtoo boot-update
 
 #Root password, decided vagrant sudo was better, commented out
 ###chroot /mnt/funtoo /bin/bash <<ENDCHROOT
@@ -146,60 +144,63 @@ chroot /mnt/funtoo emerge -u vim
 echo "EDITOR=/usr/bin/vim" > /mnt/funtoo/etc/env.d/99editor
 
 #Allow external ssh
-echo "echo 'sshd:ALL' > /etc/hosts.allow" | chroot /mnt/funtoo /bin/bash -
-echo "echo 'ALL:ALL' > /etc/hosts.deny" | chroot /mnt/funtoo /bin/bash -
+echo 'sshd:ALL' > /mnt/funtoo/etc/hosts.allow
+echo 'ALL:ALL' > /mnt/funtoo/etc/hosts.deny
 
 #Configure Sudo
 chroot /mnt/funtoo emerge -u sudo
-echo "echo 'vagrant ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers" | chroot /mnt/funtoo /bin/bash -
+echo 'vagrant ALL=(ALL) NOPASSWD: ALL' >> /mnt/funtoo/etc/sudoers
 
 #Installing vagrant keys
 chroot /mnt/funtoo emerge -u wget 
 
 echo "creating vagrant ssh keys"
-chroot /mnt/funtoo mkdir /home/vagrant/.ssh
-chroot /mnt/funtoo chmod 700 /home/vagrant/.ssh
-chroot /mnt/funtoo cd /home/vagrant/.ssh
-chroot /mnt/funtoo wget --no-check-certificate 'https://raw.github.com/mitchellh/vagrant/master/keys/vagrant.pub' -O /home/vagrant/.ssh/authorized_keys
-chroot /mnt/funtoo chmod 600 /home/vagrant/.ssh/authorized_keys
-chroot /mnt/funtoo chown -R vagrant /home/vagrant/.ssh
+VAGRANTID=$(grep vagrant /mnt/funtoo/etc/passwd | cut -d ":" -f 3,4)
+mkdir /mnt/funtoo/home/vagrant/.ssh
+chmod 700 /mnt/funtoo/home/vagrant/.ssh
+wget --no-check-certificate 'https://raw.github.com/mitchellh/vagrant/master/keys/vagrant.pub' -O /mnt/funtoo/home/vagrant/.ssh/authorized_keys
+chmod 600 /mnt/funtoo/home/vagrant/.ssh/authorized_keys
+chown -R ${VAGRANTID} /mnt/funtoo/home/vagrant/.ssh
 
-#get some ruby running, needed for veewee validate step
+# Get ruby and rvm all setup...
 chroot /mnt/funtoo emerge -u git curl gcc automake autoconf m4
 chroot /mnt/funtoo emerge -u libiconv readline zlib openssl libyaml sqlite libxslt
-chroot /mnt/funtoo /bin/bash <<ENDRUBY
-bash -s stable < <(curl -s https://raw.github.com/wayneeseguin/rvm/master/binscripts/rvm-installer )
-. /usr/local/rvm/scripts/rvm 
-rvm install ruby-1.8.7
-rvm use ruby-1.8.7 --default
 
-#Installing chef & Puppet
-. /usr/local/rvm/scripts/rvm 
+# Lots of problems if you install as root so we'll use sudo like to docs describe
+chroot --userspec=${VAGRANTID} /mnt/funtoo /bin/bash <<ENDRVM
+sudo bash -s stable < <(curl -s https://raw.github.com/wayneeseguin/rvm/master/binscripts/rvm-installer )
+sudo usermod -G rvm vagrant
+ENDRVM
+
+chroot /mnt/funtoo env-update
+# Log back in which picks new group membership and /etc/profile.d/rvm.sh
+chroot --userspec=${VAGRANTID} /mnt/funtoo /bin/bash <<ENDRUBY
+source /etc/profile
+rvm install 1.8.7
+rvm use 1.8.7 --default
+rvm gemset create global
+rvm use @global
+
+#Installing chef & puppet
 gem install chef
 gem install puppet
-
-usermod -G rvm vagrant
 ENDRUBY
 
+
+echo "$(date '+%Y-%m-%d')" > /mnt/funtoo/etc/veewee_bld_date
 /bin/cp -f /root/.vbox_version /mnt/funtoo/home/vagrant/.vbox_version
+chown -R ${VAGRANTID} /mnt/funtoo/home/vagrant/.vbox_version
 VBOX_VERSION=$(cat /root/.vbox_version)
 
 #Kernel headers
-echo "emerge =sys-kernel/linux-headers-2.6.39" | chroot /mnt/funtoo /bin/bash -
+chroot /mnt/funtoo "emerge -u sys-kernel/linux-headers"
 
 #Installing the virtualbox guest additions
-cat <<EOF | chroot /mnt/funtoo /bin/bash -
-mkdir /etc/portage
-cat <<KEYWORDSEOF > /etc/portage/package.keywords
-=app-emulation/virtualbox-guest-additions-4.1.6-r1
-KEYWORDSEOF
-emerge =app-emulation/virtualbox-guest-additions-4.1.6-r1
-rc-update add virtualbox-guest-additions default
-EOF
+echo "app-emulation/virtualbox-guest-additions" >> /mnt/funtoo/etc/portage/package.keywords
+chroot /mnt/funtoo emerge app-emulation/virtualbox-guest-additions
+chroot /mnt/funtoo rc-update add virtualbox-guest-additions default
 
-rm -rf /mnt/funtoo/usr/portage/distfiles
-mkdir /mnt/funtoo/usr/portage/distfiles
-echo "chown portage:portage /usr/portage/distfiles" | chroot /mnt/funtoo /bin/bash -
+rm -rf /mnt/funtoo/usr/portage/distfiles/*
 
 # veewee validate uses password authentication
 sed -i -e 's:PasswordAuthentication no:PasswordAuthentication yes:' /mnt/funtoo/etc/ssh/sshd_config
