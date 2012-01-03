@@ -10,13 +10,24 @@
 echo -e "PermitRootLogin no\nAllowUsers vagrant" >> /etc/ssh/sshd_config
 
 # Cron & Syslog
-emerge -u metalog vixie-cron
+emerge -u --oneshot metalog vixie-cron
 rc-update add metalog default
 rc-update add vixie-cron default
 
+#Kernel headers
+emerge -u --oneshot sys-kernel/linux-headers
+
+#Installing the virtualbox guest additions
+emerge app-emulation/virtualbox-guest-additions
+rc-update add virtualbox-guest-additions default
+
 # Get ruby and rvm all setup...
-emerge -u git curl gcc automake autoconf m4
-emerge -u libiconv readline zlib openssl libyaml sqlite libxslt
+emerge -u --oneshot git curl gcc automake autoconf m4
+emerge -u --oneshot libiconv readline zlib openssl libyaml sqlite libxslt
+
+# Clean up portage
+rm -rf /usr/portage/distfiles/*
+rm /stage3*.tar.xz
 
 # What a PITA, wanted to get a shared RVM setup, but that can't be installed by root
 # Starting to feel like a matryoshka doll...
@@ -53,23 +64,20 @@ rvm use @global
 #Installing chef & puppet
 gem install chef
 gem install puppet
+
+# Cleanup
+sudo chmod 655 /tmp/sshkey
+sudo rm /tmp/ssh*
+
+echo -e "\n***\n*** Chef and Puppet installed in RVM ***\n***\n"
 GEMINST
 
 chmod 755 /tmp/sshgems
-sed -i -e "s,yuck,$(id)," /tmp/sshgems
+sed -i -e 's,yuck,$(id),' /tmp/sshgems
 ssh -F /tmp/sshvagrant me /tmp/sshgems
 
-#Kernel headers
-emerge -u sys-kernel/linux-headers
+# Sometimes you don't get out of the SSH session.  Think the EOF bails out both
+# the ssh login with the vagrant account and the veewee login with the root
+# account.  So we put the RVM stuff last and its no issue.
 
-#Installing the virtualbox guest additions
-emerge app-emulation/virtualbox-guest-additions
-rc-update add virtualbox-guest-additions default
-
-env-update
-
-rm -rf /usr/portage/distfiles/*
-chmod 655 /tmp/sshkey
-rm /tmp/ssh*
-rm /stage3*.tar.xz
-
+echo -e "\n***\n*** SURVIVED SSH EOF! ***\n***\n"
