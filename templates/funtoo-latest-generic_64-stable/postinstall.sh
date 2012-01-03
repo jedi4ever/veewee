@@ -65,13 +65,13 @@ chroot /mnt/funtoo env-update
 chroot /mnt/funtoo emerge --sync
 
 # California dreamin
-cd etc
+cd /mnt/funtoo/etc
 rm -f localtime
 ln -s ../usr/share/zoneinfo/America/Los_Angeles localtime
 cd /mnt/funtoo
 
 # get fstab defined
-cat <<FSTABEOF > ./etc/fstab
+cat <<FSTABEOF > /mnt/funtoo/etc/fstab
 # The root filesystem should have a pass number of either 0 or 1.
 # All other filesystems should have a pass number of 0 or greater than 1.
 #
@@ -93,6 +93,7 @@ chroot /mnt/funtoo rc-update add dhcpcd default
 echo 'MAKEOPTS="-j9"' >> /mnt/funtoo/etc/make.conf
 #echo 'MAKEOPTS="-j9"' >> /mnt/funtoo/etc/genkernel.conf
 echo "sys-kernel/sysrescue-std-sources binary" >> /mnt/funtoo/etc/portage/package.use
+echo "app-emulation/virtualbox-guest-additions" >> /mnt/funtoo/etc/portage/package.keywords
 echo 'MAKEOPTS="-j9" emerge sysrescue-std-sources' | chroot /mnt/funtoo /bin/bash -
 
 # Make the disk bootable
@@ -121,27 +122,19 @@ GRUBCONF
 chroot /mnt/funtoo grub-install --no-floppy /dev/sda
 chroot /mnt/funtoo boot-update
 
-#Root password, decided vagrant sudo was better, commented out
-###chroot /mnt/funtoo /bin/bash <<ENDCHROOT
-###passwd<<EOF
-###vagrant
-###vagrant
-###EOF
-###ENDCHROOT
+#Root password, needed since we're a two step installation
+chroot /mnt/funtoo /bin/bash <<ENDCHROOT
+passwd<<EOF
+vagrant
+vagrant
+EOF
+ENDCHROOT
 
 #create vagrant user with password set to vagrant
 chroot /mnt/funtoo groupadd -r vagrant
-chroot /mnt/funtoo useradd -m -r vagrant -g vagrant -G wheel -p '$1$MPmczGP9$1SeNO4bw5YgiEJuo/ZkWq1' -c "Added by vagrant, veewee basebox creation"
+chroot /mnt/funtoo groupadd rvm
+chroot /mnt/funtoo useradd -m -r vagrant -g vagrant -G wheel,rvm -p '$1$MPmczGP9$1SeNO4bw5YgiEJuo/ZkWq1' -c "Added by vagrant, veewee basebox creation"
 chroot /mnt/funtoo rc-update add sshd default
-
-# Cron & Syslog
-chroot /mnt/funtoo emerge -u metalog vixie-cron
-chroot /mnt/funtoo rc-update add metalog default
-chroot /mnt/funtoo rc-update add vixie-cron default
-
-#Get an editor going
-chroot /mnt/funtoo emerge -u vim
-echo "EDITOR=/usr/bin/vim" > /mnt/funtoo/etc/env.d/99editor
 
 #Allow external ssh
 echo 'sshd:ALL' > /mnt/funtoo/etc/hosts.allow
@@ -150,6 +143,7 @@ echo 'ALL:ALL' > /mnt/funtoo/etc/hosts.deny
 #Configure Sudo
 chroot /mnt/funtoo emerge -u sudo
 echo 'vagrant ALL=(ALL) NOPASSWD: ALL' >> /mnt/funtoo/etc/sudoers
+
 
 #Installing vagrant keys
 chroot /mnt/funtoo emerge -u wget 
@@ -162,56 +156,22 @@ wget --no-check-certificate 'https://raw.github.com/mitchellh/vagrant/master/key
 chmod 600 /mnt/funtoo/home/vagrant/.ssh/authorized_keys
 chown -R ${VAGRANTID} /mnt/funtoo/home/vagrant/.ssh
 
-# Get ruby and rvm all setup...
-chroot /mnt/funtoo emerge -u git curl gcc automake autoconf m4
-chroot /mnt/funtoo emerge -u libiconv readline zlib openssl libyaml sqlite libxslt
-
-# Lots of problems if you install as root so we'll use sudo like to docs describe
-chroot --userspec=${VAGRANTID} /mnt/funtoo /bin/bash <<ENDRVM
-sudo bash -s stable < <(curl -s https://raw.github.com/wayneeseguin/rvm/master/binscripts/rvm-installer )
-sudo usermod -G rvm vagrant
-ENDRVM
-
-chroot /mnt/funtoo env-update
-# Log back in which picks new group membership and /etc/profile.d/rvm.sh
-chroot --userspec=${VAGRANTID} /mnt/funtoo /bin/bash <<ENDRUBY
-source /etc/profile
-rvm install 1.8.7
-rvm use 1.8.7 --default
-rvm gemset create global
-rvm use @global
-
-#Installing chef & puppet
-gem install chef
-gem install puppet
-ENDRUBY
-
-
-echo "$(date '+%Y-%m-%d')" > /mnt/funtoo/etc/veewee_bld_date
 /bin/cp -f /root/.vbox_version /mnt/funtoo/home/vagrant/.vbox_version
+/bin/cp -f /etc/vagrant_box_build_time /mnt/funtoo/etc/vagrant_box_build_time
 chown -R ${VAGRANTID} /mnt/funtoo/home/vagrant/.vbox_version
-VBOX_VERSION=$(cat /root/.vbox_version)
-
-#Kernel headers
-chroot /mnt/funtoo "emerge -u sys-kernel/linux-headers"
-
-#Installing the virtualbox guest additions
-echo "app-emulation/virtualbox-guest-additions" >> /mnt/funtoo/etc/portage/package.keywords
-chroot /mnt/funtoo emerge app-emulation/virtualbox-guest-additions
-chroot /mnt/funtoo rc-update add virtualbox-guest-additions default
-
-rm -rf /mnt/funtoo/usr/portage/distfiles/*
 
 # veewee validate uses password authentication
 sed -i -e 's:PasswordAuthentication no:PasswordAuthentication yes:' /mnt/funtoo/etc/ssh/sshd_config
 
+#Get an editor going
+chroot /mnt/funtoo emerge -u vim
+echo "EDITOR=/usr/bin/vim" > /mnt/funtoo/etc/env.d/99editor
 chroot /mnt/funtoo env-update
 
-rm /mnt/funtoo/stage3*.tar.xz
 
-exit
 cd /
-umount /mnt/funtoo/{proc,sys,dev}
+/etc/rc.d/network stop
+umount /mnt/funtoo/{boot,proc,dev}
 umount /mnt/funtoo
 
 reboot
