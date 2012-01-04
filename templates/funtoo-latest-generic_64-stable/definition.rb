@@ -1,12 +1,13 @@
 Veewee::Session.declare( {
-  :cpu_count => '2', :memory_size=> '1024',
+  :cpu_count => '8', :memory_size=> '1536',
   :disk_size => '10140', :disk_format => 'VDI',:hostiocache => 'off',
-  :os_type_id => 'Gentoo',
-  :iso_file => "install-amd64-minimal-20111208.iso",
-  :iso_src => "http://distfiles.gentoo.org/releases/amd64/autobuilds/current-iso/install-amd64-minimal-20111208.iso",
+  :os_type_id => 'Gentoo', # Funtoo is a GIT based gentoo derivative
+  :iso_file => "install-amd64-minimal-20111013.iso",
+  :iso_src => "http://ftp.osuosl.org/pub/gentoo/releases/amd64/autobuilds/20111208/install-amd64-minimal-20111208.iso",
   :iso_md5 => "8c4e10aaaa7cce35503c0d23b4e0a42a",
   :iso_download_timeout => "1000",
-  :boot_wait => "1",:boot_cmd_sequence => [
+  :boot_wait => "1",
+  :boot_cmd_sequence => [
         '<Wait>'*2,
         'gentoo-nofb<Enter>',
         '<Wait>'*10,
@@ -29,6 +30,6 @@ Veewee::Session.declare( {
   :ssh_host_port => "7222", :ssh_guest_port => "22",
   :sudo_cmd => "cat '%f'|su -",
   :shutdown_cmd => "shutdown -p now",
-  :postinstall_files => [ "postinstall.sh"],:postinstall_timeout => "10000"
+  :postinstall_files => [ "postinstall.sh"],:postinstall_timeout => "15000"
    }
 )
