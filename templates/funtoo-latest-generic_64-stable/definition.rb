@@ -18,12 +18,10 @@ Veewee::Session.declare( {
         '2<Enter>',
         '1<Enter>',
 	'<Wait><Wait>ifconfig -a <Enter>',
-	#'sleep 5 ;curl http://%IP%:%PORT%/stages.sh -o stages.sh &&',
-	#'bash stages.sh &<Enter>',
         'passwd<Enter><Wait><Wait>',
 	'vagrant<Enter><Wait>',
 	'vagrant<Enter><Wait>',
-        '/etc/init.d/sshd start<Enter>'
+        '/etc/init.d/sshd start<Enter><Wait><Wait>'
     ],
   :kickstart_port => "7122", :kickstart_timeout => "10000",:kickstart_file => "",
   :ssh_login_timeout => "10000",:ssh_user => "root", :ssh_password => "vagrant",:ssh_key => "",
