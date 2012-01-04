@@ -1,5 +1,5 @@
 cmd /c winrm quickconfig -q
-cmd /c winrm quickconfig -transport:http
+cmd /c winrm quickconfig -transport:http # needs to be auto no questions asked
 cmd /c winrm set winrm/config @{MaxTimeoutms="1800000"}
 cmd /c winrm set winrm/config/winrs @{MaxMemoryPerShellMB="300"}
 cmd /c winrm set winrm/config/service @{AllowUnencrypted="true"}

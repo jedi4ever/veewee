@@ -31,7 +31,6 @@ Veewee::Session.declare({
       "Autounattend.xml", # automate install and setup winrm
       "install-winrm.bat",
       "install-cygwin-sshd.bat",
-      "install-guest-additions.bat",
       "cygwin-setup.exe",
       "oracle-cert.cer"
     ],
