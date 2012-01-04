@@ -23,7 +23,7 @@ Veewee::Session.declare({
     :boot_cmd_sequence => [ 
     '<Tab><Tab><Tab><Enter>',
     '<Enter>'
-    ]
+    ],
 
     :ssh_login_timeout => "10000",
     # Actively attempt to winrm (no ssh on base windows) in for 10000 seconds
@@ -35,7 +35,7 @@ Veewee::Session.declare({
     # No sudo on windows
     :sudo_cmd => "sh '%f'",
     # Shutdown is different as well
-    :shutdown_cmd => "shutdown /p /t 60 /c \"Vagrant Shutdown\" /f /d p:4:1",
+    :shutdown_cmd => "shutdown /s /t 60 /d p:4:1 /c \"Vagrant Shutdown\"",
 })
 
 

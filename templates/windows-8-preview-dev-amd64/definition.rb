@@ -1,37 +1,36 @@
-# Download Windows Server 2008 Enterprise: (60 day eval, expandable to 240 days)
-# http://www.microsoft.com/download/en/details.aspx?id=8371
-# 64bit
-# http://download.microsoft.com/download/B/4/D/B4DC75A1-D7D2-4F31-87F9-E02C950E8D31/6001.18000.080118-1840_amd64fre_Server_en-us-KRMSXFRE_EN_DVD.iso
-# md5sum 0477c88678efb8ebc5cd7a9e9efd8b82  6001.18000.080118-1840_amd64fre_Server_en-us-KRMSXFRE_EN_DVD.iso
-# 32bit
-# http://download.microsoft.com/download/B/4/D/B4DC75A1-D7D2-4F31-87F9-E02C950E8D31/6001.18000.080118-1840_x86fre_Server_en-us-KRMSFRE_EN_DVD.iso
 
+
+# Download Windows 8 Developer Preview with developer tools English, 64-bit (x64)
+# http://msdn.microsoft.com/en-us/windows/apps/br229516?ppud=4
+# 64bit
+# http://wdp.dlws.microsoft.com/WDPDL/9B8DFDFF736C5B1DBF956B89D8A9D4FD925DACD2/WindowsDeveloperPreview-64bit-English-Developer.iso
+# md5sum   WindowsDeveloperPreview-64bit-English-Developer.iso
+# sha1hash 6FE9352FB59F6D0789AF35D1001BD4E4E81E42AF
+# md5sum
 
 
 # Win2008 requires at least 10gig hard drive to install...
 
 Veewee::Session.declare({
-    :os_type_id => 'Windows2008_64',
-    :iso_file => "6001.18000.080118-1840_amd64fre_Server_en-us-KRMSXFRE_EN_DVD.iso",
+    :os_type_id => 'Windows8_64',
+    :iso_file => "WindowsDeveloperPreview-64bit-English-Developer.iso"
     :iso_md5 => "0477c88678efb8ebc5cd7a9e9efd8b82",
-    :iso_src => "http://download.microsoft.com/download/B/4/D/B4DC75A1-D7D2-4F31-87F9-E02C950E8D31/6001.18000.080118-1840_amd64fre_Server_en-us-KRMSXFRE_EN_DVD.iso",
+    :iso_src => "http://wdp.dlws.microsoft.com/WDPDL/9B8DFDFF736C5B1DBF956B89D8A9D4FD925DACD2/WindowsDeveloperPreview-64bit-English-Developer.iso"
     :iso_download_timeout => "1000",
-
     :cpu_count => '1',
     :memory_size=> '384', 
     :disk_size => '20280', :disk_format => 'VDI', :hostiocache => 'off',
 
-
-    #:kickstart_port => "7122",
-    #:kickstart_ip => self.local_ip, we could set this manually, I wish we could push this to the 
-    #:kickstart_timeout => 1000,
-    #:kickstart_file => ["VBoxWindowsAdditions-amd64.exe"],
+  :floppy_files => ["Autounattend.xml",
+      "cygwin-setup.exe",
+      "install-cygwin-sshd.bat",
+      "install-winrm.bat",
+      "oracle-cert.cer"],
 
     :floppy_files => [
       "Autounattend.xml", # automate install and setup winrm
       "install-winrm.bat",
       "install-cygwin-sshd.bat",
-      "install-guest-additions.bat",
       "cygwin-setup.exe",
       "oracle-cert.cer"
     ],

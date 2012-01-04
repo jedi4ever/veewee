@@ -2,11 +2,14 @@
 #video memory size should be at least 32meg for windows 7 to do full screen on my desktop
 # I'm not sure how to set that with veewee::session yet
 Veewee::Session.declare({
-    :os_type_id => 'Windows7_64',
-    :iso_file => "Windows 7 7600 AIO.ISO",
-    :iso_src => "", # Manual download
-    :iso_md5 => "",
-    :iso_download_timeout => "1000",
+    :os_type_id => 'Windows7',
+    # http://technet.microsoft.com/en-us/evalcenter/cc442495.aspx
+    # The 90-day Trial is offered for a limited time and in limited quantity.
+    # The download will be available through June 30th, 2012, while supplies last.
+    :iso_file => "7600.16385.090713-1255_x86fre_enterprise_en-us_EVAL_Eval_Enterprise-GRMCENEVAL_EN_DVD.iso",
+    :iso_src => "http://download.microsoft.com/download/release/Win7/3/b/a/3bac7d87-8ad2-4b7a-87b3-def36aee35fa/7600.16385.090713-1255_x86fre_enterprise_en-us_EVAL_Eval_Enterprise-GRMCENEVAL_EN_DVD.iso",
+    :iso_md5 => "1d0d239a252cb53e466d39e752b17c28",
+    :iso_download_timeout => "10000",
 
     :cpu_count => '1',
     :memory_size=> '512', 
@@ -23,6 +26,7 @@ Veewee::Session.declare({
     :boot_cmd_sequence => [ 
       '<Tab><Spacebar><Tab><Tab><Tab><Spacebar>'
     ],
+
 
     :ssh_login_timeout => "10000",
     # Actively attempt to winrm (no ssh on base windows) in for 10000 seconds

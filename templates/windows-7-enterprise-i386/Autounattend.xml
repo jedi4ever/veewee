@@ -82,7 +82,6 @@
                 <WillShowUI>OnError</WillShowUI>
             </DiskConfiguration>
             <UserData>
-              <!-- Product Key from http://technet.microsoft.com/en-us/library/ff793406.aspx -->
                 <ProductKey>
                     <WillShowUI>Never</WillShowUI>
                 </ProductKey>
@@ -148,5 +147,5 @@
             <SkipRearm>1</SkipRearm>
         </component>
     </settings>
-    <cpi:offlineImage cpi:source="wim:d:/sources/install.wim#Windows 7 ULTIMATE" xmlns:cpi="urn:schemas-microsoft-com:cpi" />
+    <cpi:offlineImage cpi:source="wim:d:/sources/install.wim#Windows 7 ENTERPRISE" xmlns:cpi="urn:schemas-microsoft-com:cpi" />
 </unattend>

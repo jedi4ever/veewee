@@ -90,7 +90,7 @@ ruby dk.rb install
 
 # Installing puppet
 gem.bat install puppet  --no-rdoc --no-ri --verbose
-gem install sys-admin win32-process win32-dir win32-service win32-taskscheduler --no-rdoc --no-ri --verbose
+
 # Installing chef required gems on windows
 # For ruby 1.8
 gem.bat install win32-open3 ruby-wmi windows-api windows-pr --no-rdoc --no-ri --verbose
