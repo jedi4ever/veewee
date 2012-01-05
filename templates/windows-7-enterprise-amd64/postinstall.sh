@@ -67,8 +67,6 @@ chmod 755 /bin/sudo
 # Mounting a directory
 net.exe use  '\\vboxsvr\veewee-validation'
 
-reg add "HKEY_CURRENT_USER\Control Panel\Desktop" ScreenSaveActive /t REG_SZ /d 0 /f
-reg add "HKEY_CURRENT_USER\Control Panel\Desktop" ScreenSaveIsSecure /t REG_SZ /d 0 /f
 
 # Reboot
 # http://www.techrepublic.com/blog/datacenter/restart-windows-server-2003-from-the-command-line/245

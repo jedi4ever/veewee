@@ -9,3 +9,6 @@ cmd /c netsh advfirewall firewall set rule group="remote administration" new ena
 cmd /c netsh firewall add portopening TCP 5985 "Port 5985"
 cmd /c net stop winrm
 cmd /c net start winrm
+
+cmd /c reg add "HKEY_CURRENT_USER\Control Panel\Desktop" /v ScreenSaveActive /t REG_SZ /d 0 /f
+cmd /c reg add "HKEY_CURRENT_USER\Control Panel\Desktop" /v ScreenSaveIsSecure /t REG_SZ /d 0 /f

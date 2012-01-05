@@ -7,9 +7,9 @@ Veewee::Session.declare({
     # The 90-day Trial is offered for a limited time and in limited quantity.
     # The download will be available through June 30th, 2012, while supplies last.
     :iso_file => "7600.16385.090713-1255_x64fre_enterprise_en-us_EVAL_Eval_Enterprise-GRMCENXEVAL_EN_DVD.iso",
-    :iso_src => "http://wb.dlservice.microsoft.com/dl/download/release/Win7/3/b/a/3bac7d87-8ad2-4b7a-87b3-def36aee35fa/7600.16385.090713-1255_x64fre_enterprise_en-us_EVAL_Eval_Enterprise-GRMCENXEVAL_EN_DVD.iso?lcid=1033",
+    :iso_src => "http://wb.dlservice.microsoft.com/dl/download/release/Win7/3/b/a/3bac7d87-8ad2-4b7a-87b3-def36aee35fa/7600.16385.090713-1255_x64fre_enterprise_en-us_EVAL_Eval_Enterprise-GRMCENXEVAL_EN_DVD.iso",
     :iso_md5 => "1d0d239a252cb53e466d39e752b17c28",
-    :iso_download_timeout => "10000",
+    :iso_download_timeout => "100000",
 
     :cpu_count => '1',
     :memory_size=> '512', 
@@ -18,14 +18,13 @@ Veewee::Session.declare({
     :floppy_files => [
       "Autounattend.xml",
       "install-winrm.bat",
-      "install-chefclient.bat"
+      "oracle-cert.cer",
+      "install-cygwin-sshd.bat"
     ],
 
 
-    :boot_wait => "660", #ten minutes, ten seconds
-    :boot_cmd_sequence => [ 
-      '<Tab><Spacebar><Tab><Tab><Tab><Spacebar>'
-    ],
+    :boot_wait => "1", #12 minutes
+    :boot_cmd_sequence => [''],
 
 
     :ssh_login_timeout => "10000",
@@ -38,5 +37,5 @@ Veewee::Session.declare({
     # No sudo on windows
     :sudo_cmd => "sh '%f'",
     # Shutdown is different as well
-    :shutdown_cmd => "shutdown /p /t 60 /c \"Vagrant Shutdown\" /f /d p:4:1",
+    :shutdown_cmd => "shutdown /s /t 60 /c \"Vagrant Shutdown\" /f /d p:4:1",
   })
