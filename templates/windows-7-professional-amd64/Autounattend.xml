@@ -44,7 +44,7 @@
                 <SynchronousCommand wcm:action="add">
                     <Order>2</Order>
                     <CommandLine>cmd.exe /c a:install-cygwin-sshd.bat</CommandLine>
-                    <Description>Install cygwin sshd</Description>
+                    <Description>Install Cygwin sshd</Description>
                     <RequiresUserInput>false</RequiresUserInput>
                 </SynchronousCommand>
             </FirstLogonCommands>
@@ -95,7 +95,7 @@
                     <InstallFrom>
                         <MetaData wcm:action="add">
                             <Key>/IMAGE/NAME</Key>
-                            <Value>Windows 7 ULTIMATE</Value>
+                            <Value>Windows 7 PROFESSIONAL</Value>
                         </MetaData>
                     </InstallFrom>
                     <InstallTo>
@@ -148,5 +148,5 @@
             <SkipRearm>1</SkipRearm>
         </component>
     </settings>
-    <cpi:offlineImage cpi:source="wim:d:/sources/install.wim#Windows 7 ULTIMATE" xmlns:cpi="urn:schemas-microsoft-com:cpi" />
+    <cpi:offlineImage cpi:source="wim:d:/sources/install.wim#Windows 7 PROFESSIONAL" xmlns:cpi="urn:schemas-microsoft-com:cpi" />
 </unattend>

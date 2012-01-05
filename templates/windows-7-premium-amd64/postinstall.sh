@@ -33,14 +33,16 @@ chmod +x daemontools.exe
 ./daemontools.exe /S
 
 # Download Virtualbox Additions
-VBOX_VERSION="4.0.8"
+VBOX_VERSION="4.1.6"
 wget http://download.virtualbox.org/virtualbox/$VBOX_VERSION/VBoxGuestAdditions_$VBOX_VERSION.iso
 
 # Mount iso file
 # http://www.daemon-help.com/en/windows_integration_lite/command_line_parameters.html
 # /cygdrive/c/Program Files (x86)/DAEMON Tools Pro
 cd "/cygdrive/c/Program Files (x86)/DAEMON Tools Lite"
-./DTLite.exe -mount 0,"c:\cygwin\home\vagrant\VBoxGuestAdditions_4.0.8.iso"
+./DTLite.exe &
+sleep 2
+./DTLite.exe -mount 0,"c:\cygwin\home\vagrant\VBoxGuestAdditions_4.1.6.iso"
 
 # Mark Oracle as a trusted installer
 #http://blogs.msdn.com/b/steverac/archive/2009/07/09/adding-certificates-to-the-local-certificates-store-and-setting-local-policy-using-a-command-line-system-center-updates-publisher-example.aspx
@@ -88,7 +90,7 @@ ruby dk.rb install
 
 # Installing puppet
 gem.bat install puppet  --no-rdoc --no-ri --verbose
-
+gem install sys-admin win32-process win32-dir win32-service win32-taskscheduler --no-rdoc --no-ri --verbose
 # Installing chef required gems on windows
 # For ruby 1.8
 gem.bat install win32-open3 ruby-wmi windows-api windows-pr --no-rdoc --no-ri --verbose
