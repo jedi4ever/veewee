@@ -43,8 +43,8 @@
                 </SynchronousCommand>
                 <SynchronousCommand wcm:action="add">
                     <Order>2</Order>
-                    <CommandLine>cmd.exe /c a:install-chefclient.bat</CommandLine>
-                    <Description>Install chefclient</Description>
+                    <CommandLine>cmd.exe /c a:install-cygwin-sshd.bat</CommandLine>
+                    <Description>Install Cygwin SSHD</Description>
                     <RequiresUserInput>false</RequiresUserInput>
                 </SynchronousCommand>
             </FirstLogonCommands>
@@ -94,7 +94,7 @@
                     <InstallFrom>
                         <MetaData wcm:action="add">
                             <Key>/IMAGE/NAME</Key>
-                            <Value>Windows 7 ULTIMATE</Value>
+                            <Value>Windows 7 ENTERPRISE</Value>
                         </MetaData>
                     </InstallFrom>
                     <InstallTo>
