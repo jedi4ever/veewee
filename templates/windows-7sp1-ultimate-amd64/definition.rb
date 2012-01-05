@@ -3,10 +3,11 @@
 # I'm not sure how to set that with veewee::session yet
 Veewee::Session.declare({
     :os_type_id => 'Windows7_64',
-    :iso_file => "Windows 7 7600 AIO.ISO",
-    :iso_src => "", # Manual download
-    :iso_md5 => "",
-    :iso_download_timeout => "1000",
+    :iso_file => "X17-24395.iso",
+    # https://sites.google.com/site/linuxlablibrary/windows-7-iso
+    :iso_src => "http://msft.digitalrivercontent.net/win/X17-24395.iso",
+    :iso_md5 => "56a26636ec667799f5a7f42f142c772d",
+    :iso_download_timeout => "100000",
 
     :cpu_count => '1',
     :memory_size=> '512', 
