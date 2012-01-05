@@ -43,8 +43,8 @@
                 </SynchronousCommand>
                 <SynchronousCommand wcm:action="add">
                     <Order>2</Order>
-                    <CommandLine>cmd.exe /c a:install-chefclient.bat</CommandLine>
-                    <Description>Install chefclient</Description>
+                    <CommandLine>cmd.exe /c a:install-cygwin-sshd.bat</CommandLine>
+                    <Description>Install cygwin sshd</Description>
                     <RequiresUserInput>false</RequiresUserInput>
                 </SynchronousCommand>
             </FirstLogonCommands>

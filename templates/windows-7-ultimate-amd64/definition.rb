@@ -15,11 +15,14 @@ Veewee::Session.declare({
     :floppy_files => [
       "Autounattend.xml",
       "install-winrm.bat",
-      "install-chefclient.bat"
+      "oracle-cert.cer",
+      "install-cygwin-sshd.bat"
     ],
 
 
-    :boot_wait => "660", #ten minutes, ten seconds
+    :boot_wait => "720", #12 minutes.. should be long enough
+    # this is waiting for the screene where we could put in our product key
+    # this is the command sequence to bybass it and to not try to register once online
     :boot_cmd_sequence => [ 
       '<Tab><Spacebar><Tab><Tab><Tab><Spacebar>'
     ],
@@ -27,12 +30,12 @@ Veewee::Session.declare({
     :ssh_login_timeout => "10000",
     # Actively attempt to winrm (no ssh on base windows) in for 10000 seconds
     :ssh_user => "vagrant", :ssh_password => "vagrant", :ssh_key => "", 
-    :ssh_host_port => "59857", :ssh_guest_port => "5985",
+    :ssh_host_port => "59857", :ssh_guest_port => "22",
     # And run postinstall.sh for up to 10000 seconds
     :postinstall_timeout => "10000",
     :postinstall_files => ["postinstall.sh"],
     # No sudo on windows
     :sudo_cmd => "sh '%f'",
     # Shutdown is different as well
-    :shutdown_cmd => "shutdown /p /t 60 /c \"Vagrant Shutdown\" /f /d p:4:1",
+    :shutdown_cmd => "shutdown /s /t 0 /c \"Vagrant Shutdown\" /f /d p:4:1",
   })
