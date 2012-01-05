@@ -22,15 +22,13 @@ Veewee::Session.declare({
       "install-cygwin-sshd.bat"
     ],
 
-
     :boot_wait => "1", #12 minutes
     :boot_cmd_sequence => [''],
-
 
     :ssh_login_timeout => "10000",
     # Actively attempt to winrm (no ssh on base windows) in for 10000 seconds
     :ssh_user => "vagrant", :ssh_password => "vagrant", :ssh_key => "", 
-    :ssh_host_port => "59857", :ssh_guest_port => "5985",
+    :ssh_host_port => "59857", :ssh_guest_port => "22",
     # And run postinstall.sh for up to 10000 seconds
     :postinstall_timeout => "10000",
     :postinstall_files => ["postinstall.sh"],

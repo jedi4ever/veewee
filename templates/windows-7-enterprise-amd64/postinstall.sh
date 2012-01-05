@@ -20,8 +20,8 @@ chmod +x apt-cyg
 mv apt-cyg /usr/local/bin/
 
 # 7zip will allow us to extract a file from an ISO
-wget http://downloads.sourceforge.net/sevenzip/7z920-x64.msi
-msiexec /qb /i 7z920-x64.msi
+wget http://downloads.sourceforge.net/sevenzip/7z922-x64.msi
+msiexec /qb /i 7z922-x64.msi
 
 # Download Virtualbox Additions
 VBOX_VERSION="4.1.8" #"4.0.8"
