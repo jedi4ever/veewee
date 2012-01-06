@@ -98,16 +98,22 @@
                 <Enabled>true</Enabled>
             </AutoLogon>
             <FirstLogonCommands>
+                <!-- <SynchronousCommand wcm:action="add"> -->
+                <!--     <CommandLine>cmd.exe /c a:install-cygwin-sshd.bat</CommandLine> -->
+                <!--     <Description>Install Cygwin SSH</Description> -->
+                <!--     <Order>1</Order> -->
+                <!--     <RequiresUserInput>true</RequiresUserInput> -->
+                <!-- </SynchronousCommand> -->
+                <!-- <SynchronousCommand wcm:action="add"> -->
+                <!--     <CommandLine>cmd.exe /c a:install-winrm.bat</CommandLine> -->
+                <!--     <Description>Install Win RM</Description> -->
+                <!--     <Order>2</Order> -->
+                <!--     <RequiresUserInput>true</RequiresUserInput> -->
+                <!-- </SynchronousCommand> -->
                 <SynchronousCommand wcm:action="add">
-                    <CommandLine>cmd.exe /c a:install-cygwin-sshd.bat</CommandLine>
-                    <Description>Install Cygwin SSH</Description>
-                    <Order>1</Order>
-                    <RequiresUserInput>true</RequiresUserInput>
-                </SynchronousCommand>
-                <SynchronousCommand wcm:action="add">
-                    <CommandLine>cmd.exe /c a:install-winrm.bat</CommandLine>
+                    <CommandLine>cmd.exe /c a:install-vbox-guest.bat</CommandLine>
                     <Description>Install Win RM</Description>
-                    <Order>2</Order>
+                    <Order>1</Order>
                     <RequiresUserInput>true</RequiresUserInput>
                 </SynchronousCommand>
             </FirstLogonCommands>
