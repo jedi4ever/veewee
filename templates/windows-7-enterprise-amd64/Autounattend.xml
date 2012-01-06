@@ -94,7 +94,7 @@
                     <Value>dgBhAGcAcgBhAG4AdABQAGEAcwBzAHcAbwByAGQA</Value>
                     <PlainText>false</PlainText>
                 </Password>
-                <Username>administrator</Username>
+                <Username>vagrant</Username>
                 <Enabled>true</Enabled>
             </AutoLogon>
             <FirstLogonCommands>
