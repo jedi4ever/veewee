@@ -278,7 +278,7 @@ module Veewee
             add_sata_controller(boxname)
             attach_disk(boxname)
             mount_isofile(boxname,@definition[:iso_file])
-            mount_guest_additions(boxname, '/usr/share/virtualbox/virtualbox/VBoxGuestAdditions.iso') #actually an iso
+            mount_guest_additions(boxname, '/usr/share/virtualbox/VBoxGuestAdditions.iso') #actually an iso
             add_ssh_nat_mapping(boxname)
 
             #Starting machine
