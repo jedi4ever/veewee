@@ -673,8 +673,8 @@ module Veewee
     end
 
     def self.mount_guest_additions(boxname,isofile='/usr/share/virtualbox/VBoxGuestAdditions.iso')
-      puts "Mounting guest additions cdrom: #{iso_file}"
-      command ="#{@vboxcmd} storageattach '#{boxname}' --storagectl 'IDE Controller' --type dvddrive --port 1 --device 0 --medium '#{full_iso_file}'"
+      puts "Mounting guest additions cdrom: #{isofile}"
+      command ="#{@vboxcmd} storageattach '#{boxname}' --storagectl 'IDE Controller' --type dvddrive --port 1 --device 0 --medium '#{isofile}'"
      Veewee::Shell.execute("#{command}")
     end
 
