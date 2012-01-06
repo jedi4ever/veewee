@@ -278,6 +278,7 @@ module Veewee
             add_sata_controller(boxname)
             attach_disk(boxname)
             mount_isofile(boxname,@definition[:iso_file])
+            mount_guest_additions(boxname, '/usr/share/virtualbox/VBoxGuestAdditions.iso') #actually an iso
             add_ssh_nat_mapping(boxname)
 
             #Starting machine
@@ -533,7 +534,7 @@ module Veewee
         # Check for floppy
         unless @definition[:floppy_files].nil?
             require 'tmpdir'
-            temp_dir=Dir.tmpdir
+            temp_dir=Dir.mktmpdir
             @definition[:floppy_files].each do |filename|
               full_filename=full_filename=File.join(@definition_dir,boxname,filename)
               FileUtils.cp("#{full_filename}","#{temp_dir}")
@@ -667,7 +668,13 @@ module Veewee
       full_iso_file=File.join(@iso_dir,isofile)
       puts "Mounting cdrom: #{full_iso_file}"
       #command => "${vboxcmd} storageattach '${vname}' --storagectl 'IDE Controller' --type dvddrive --port 1 --device 0 --medium '${isodst}' ";
-      command ="#{@vboxcmd} storageattach '#{boxname}' --storagectl 'IDE Controller' --type dvddrive --port 1 --device 0 --medium '#{full_iso_file}'"
+      command ="#{@vboxcmd} storageattach '#{boxname}' --storagectl 'IDE Controller' --type dvddrive --port 0 --device 0 --medium '#{full_iso_file}'"
+     Veewee::Shell.execute("#{command}")
+    end
+
+    def self.mount_guest_additions(boxname,isofile='/usr/share/virtualbox/VBoxGuestAdditions.iso')
+      puts "Mounting guest additions cdrom: #{isofile}"
+      command ="#{@vboxcmd} storageattach '#{boxname}' --storagectl 'IDE Controller' --type dvddrive --port 1 --device 0 --medium '#{isofile}'"
      Veewee::Shell.execute("#{command}")
     end
 
