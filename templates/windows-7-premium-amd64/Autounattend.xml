@@ -43,8 +43,8 @@
                 </SynchronousCommand>
                 <SynchronousCommand wcm:action="add">
                     <Order>2</Order>
-                    <CommandLine>cmd.exe /c a:install-cygwin-sshd.bat</CommandLine>
-                    <Description>Install cygwin sshd</Description>
+                    <CommandLine>cmd.exe /c a:install-chefclient.bat</CommandLine>
+                    <Description>Install chefclient</Description>
                     <RequiresUserInput>false</RequiresUserInput>
                 </SynchronousCommand>
             </FirstLogonCommands>
@@ -148,5 +148,5 @@
             <SkipRearm>1</SkipRearm>
         </component>
     </settings>
-    <cpi:offlineImage cpi:source="wim:d:/sources/install.wim#Windows 7 ULTIMATE" xmlns:cpi="urn:schemas-microsoft-com:cpi" />
+    <cpi:offlineImage cpi:source="wim:d:/sources/install.wim#Windows 7 HOMEPREMIUM" xmlns:cpi="urn:schemas-microsoft-com:cpi" />
 </unattend>
