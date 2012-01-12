@@ -69,7 +69,7 @@ module Veewee
         FileUtils.mkdir(File.join(@definition_dir,boxname))
       end
       FileUtils.cp_r(File.join(@template_dir,template_name,'.'),File.join(@definition_dir,boxname))
-      puts "The basebox '#{boxname}' has been successfully created from the template ''#{template_name}'"
+      puts "The basebox '#{boxname}' has been successfully created from the template '#{template_name}'"
       puts "You can now edit the definition files stored in definitions/#{boxname}"
       puts "or build the box with:"
       if (options["format"]=='vagrant')
