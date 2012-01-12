@@ -533,7 +533,7 @@ module Veewee
         # Check for floppy
         unless @definition[:floppy_files].nil?
             require 'tmpdir'
-            temp_dir=Dir.tmpdir
+            temp_dir=Dir.mktmpdir
             @definition[:floppy_files].each do |filename|
               full_filename=full_filename=File.join(@definition_dir,boxname,filename)
               FileUtils.cp("#{full_filename}","#{temp_dir}")
