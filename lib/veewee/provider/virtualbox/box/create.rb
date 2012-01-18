@@ -120,7 +120,7 @@ module Veewee
             #newdisk.save
 
             place=get_vm_location
-            command ="#{@vboxcmd} createhd --filename '#{File.join(File.new(place),name,name+"."+definition.disk_format.downcase)}' --size '#{definition.disk_size.to_i}' --format #{definition.disk_format.downcase}"
+            command ="#{@vboxcmd} createhd --filename '#{File.join(place,name,name+"."+definition.disk_format.downcase)}' --size '#{definition.disk_size.to_i}' --format #{definition.disk_format.downcase}"
             shell_exec("#{command}")
           end
 
