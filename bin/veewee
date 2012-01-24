@@ -35,7 +35,7 @@ Veewee::Session.setenv({:veewee_dir => veewee_dir, :definition_dir => definition
 class VeeweeCLI < Thor 
   
   desc "init [NAME] [TEMPLATE]", "initializes a box from a template" 
-  method_options :force => :boolean
+  method_options :force => :boolean, :format => :string
   def init(boxname=nil, template=nil)
     if (boxname.nil?)  
       puts "please provide a boxname"
@@ -43,7 +43,7 @@ class VeeweeCLI < Thor
     end
     
     puts "Init a new box #{boxname}, starting from template #{template}"
-  	Veewee::Session.define(boxname,template)
+	Veewee::Session.define(boxname,template, options)
   	
   end
 
@@ -53,14 +53,13 @@ class VeeweeCLI < Thor
   end
   
   desc "build [NAME]", "build the box defined" 
-  method_options :force => :boolean
+  method_options :force => :boolean, :nogui => :boolean, :format => :string
   def build(boxname)
     puts "Building box #{boxname}"
-	  Veewee::Session.build(boxname)
+	  Veewee::Session.build(boxname, options)
   end
 
   desc "export [NAME]", "export the box" 
-  method_options :force => :boolean  
   def export(boxname)
       if (!boxname.nil?)
         Veewee::Session.export_box(boxname)
