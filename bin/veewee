@@ -13,6 +13,7 @@ definition_dir= File.expand_path(File.join(".", "definitions"))
 lib_dir= File.expand_path(File.join(veewee_dir, "lib"))
 box_dir= File.expand_path(File.join(veewee_dir, "boxes"))
 template_dir=File.expand_path(File.join(veewee_dir, "templates"))
+validation_dir=File.expand_path(File.join(veewee_dir, 'validation'))
 
 #vbox_dir=File.expand_path(File.join(veewee_dir, "tmp"))
 tmp_dir=File.expand_path(File.join(veewee_dir, "tmp"))
@@ -28,14 +29,15 @@ Dir.glob(File.join(lib_dir, '**','*.rb')).each {|f|
 
 #Initialize
 Veewee::Session.setenv({:veewee_dir => veewee_dir, :definition_dir => definition_dir,
-   :template_dir => template_dir, :iso_dir => iso_dir, :box_dir => box_dir, :tmp_dir => tmp_dir})
+   :template_dir => template_dir, :iso_dir => iso_dir, :box_dir => box_dir, :tmp_dir => tmp_dir,
+   :validation_dir => validation_dir})
 
 
    
 class VeeweeCLI < Thor 
   
   desc "init [NAME] [TEMPLATE]", "initializes a box from a template" 
-  method_options :force => :boolean
+  method_options :force => :boolean, :format => :string
   def init(boxname=nil, template=nil)
     if (boxname.nil?)  
       puts "please provide a boxname"
@@ -43,7 +45,7 @@ class VeeweeCLI < Thor
     end
     
     puts "Init a new box #{boxname}, starting from template #{template}"
-  	Veewee::Session.define(boxname,template)
+	Veewee::Session.define(boxname,template, options)
   	
   end
 
@@ -53,14 +55,13 @@ class VeeweeCLI < Thor
   end
   
   desc "build [NAME]", "build the box defined" 
-  method_options :force => :boolean
+  method_options :force => :boolean, :nogui => :boolean, :format => :string
   def build(boxname)
     puts "Building box #{boxname}"
-	  Veewee::Session.build(boxname)
+	  Veewee::Session.build(boxname, options)
   end
 
   desc "export [NAME]", "export the box" 
-  method_options :force => :boolean  
   def export(boxname)
       if (!boxname.nil?)
         Veewee::Session.export_box(boxname)

@@ -209,7 +209,7 @@ module Veewee
         puts "Not yet implemented"
     end
 
-    def self.build(boxname,options)
+    def self.build(boxname,options = {})
 
         options = {  "force" => false, "format" => "vagrant", "nogui" => false }.merge(options)
 
