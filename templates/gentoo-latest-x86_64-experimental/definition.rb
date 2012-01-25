@@ -1,10 +1,20 @@
+# get latest gentoo build
+require 'net/http'
+uri = 'http://distfiles.gentoo.org/releases/amd64/autobuilds/latest-install-amd64-minimal.txt'
+build = Net::HTTP.get_response( URI.parse( uri ) ).body
+build = /^(([^#].*)\/(.*))/.match( build )
+uri = "http://distfiles.gentoo.org/releases/amd64/autobuilds/#{build[1]}.DIGESTS"
+digest = Net::HTTP.get_response( URI.parse( uri ) ).body
+digest = Regexp.new( '^([a-z0-9]{32})\s+ ' + Regexp.escape( build[3] ) + '$').match( digest )[1]
+
+
 Veewee::Session.declare( {
   :cpu_count => '2', :memory_size=> '1024',
   :disk_size => '10140', :disk_format => 'VDI',:hostiocache => 'off',
   :os_type_id => 'Gentoo',
-  :iso_file => "install-amd64-minimal-20111208.iso",
-  :iso_src => "http://distfiles.gentoo.org/releases/amd64/autobuilds/current-iso/install-amd64-minimal-20111208.iso",
-  :iso_md5 => "8c4e10aaaa7cce35503c0d23b4e0a42a",
+  :iso_file => build[3],
+  :iso_src => "http://distfiles.gentoo.org/releases/amd64/autobuilds/#{build[1]}",
+  :iso_md5 => digest,
   :iso_download_timeout => "1000",
   :boot_wait => "1",:boot_cmd_sequence => [
         '<Wait>'*2,

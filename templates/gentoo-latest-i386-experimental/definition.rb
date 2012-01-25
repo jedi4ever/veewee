@@ -1,12 +1,26 @@
+# get latest gentoo build
+require 'net/http'
+uri = 'http://distfiles.gentoo.org/releases/x86/autobuilds/latest-install-x86-minimal.txt'
+build = Net::HTTP.get_response( URI.parse( uri ) ).body
+build = /^(([^#].*)\/(.*))/.match( build )
+uri = "http://distfiles.gentoo.org/releases/x86/autobuilds/#{build[1]}.DIGESTS"
+digest = Net::HTTP.get_response( URI.parse( uri ) ).body
+digest = Regexp.new( '^([a-z0-9]{32})\s+ ' + Regexp.escape( build[3] ) + '$').match( digest )[1]
+
 Veewee::Session.declare( {
   :cpu_count => '1', :memory_size=> '768',
   :disk_size => '10140', :disk_format => 'VDI',:hostiocache => 'off',
   :os_type_id => 'Gentoo',
-  :iso_file => "install-x86-minimal-20110726.iso",
-  :iso_src => "http://ftp.halifax.rwth-aachen.de/gentoo/releases/x86/autobuilds/20110726/install-x86-minimal-20110726.iso",
-  :iso_md5 => "29fc74988e7f86417395e376afc1af47",
+  :iso_file => build[3],
+  :iso_src => "http://distfiles.gentoo.org/releases/x86/autobuilds/#{build[1]}",
+  :iso_md5 => digest,
   :iso_download_timeout => "1000",
-  :boot_wait => "120",:boot_cmd_sequence => [
+  :boot_wait => "1",:boot_cmd_sequence => [
+        '<Wait>'*2,
+        'gentoo-nofb<Enter>',
+        '<Wait>'*10,
+        '<Enter>',
+        '<Wait>'*10,
         'net-setup eth0<Enter>',
         '<Wait><Enter>',
         '2<Enter>',
