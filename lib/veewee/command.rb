@@ -7,7 +7,7 @@ Dir.glob(File.join(lib_dir, '**','*.rb')).each {|f| require f  }
 #Setup some base variables to use
 template_dir=File.expand_path(File.join(lib_dir,"..", "templates"))
 
-veewee_dir="."
+veewee_dir=ENV['VEEWEE_DIR'] || "."
 definition_dir= File.expand_path(File.join(veewee_dir, "definitions"))
 tmp_dir=File.expand_path(File.join(veewee_dir, "tmp"))
 iso_dir=File.expand_path(File.join(veewee_dir, "iso"))
