@@ -19,7 +19,7 @@
                             <Letter>C</Letter>
                             <Order>1</Order>
                             <PartitionID>1</PartitionID>
-                            <Label>Windows 2008</Label>
+                            <Label>Windows 2008R1 ServerWebCORE</Label>
                         </ModifyPartition>
                     </ModifyPartitions>
                     <DiskID>0</DiskID>
@@ -46,7 +46,10 @@
                     <InstallFrom>
                         <MetaData wcm:action="add">
                             <Key>/IMAGE/NAME</Key>
-                            <Value>Windows Longhorn SERVERSTANDARD</Value>
+                            <Value>Windows Longhorn SERVERWEBCORE</Value> 
+                            <!-- If Name fails you can the INDEX -->
+                            <!-- <Key>/IMAGE/INDEX</Key> -->
+                            <!-- <Value>1</Value> -->
                         </MetaData>
                     </InstallFrom>
                 </OSImage>
@@ -112,6 +115,11 @@
                     <Description>Install Cygwin SSHD</Description>
                     <Order>2</Order>
                 </SynchronousCommand>
+                <SynchronousCommand wcm:action="add">
+                    <CommandLine>cmd.exe /c a:install-vbox-guest.bat</CommandLine>
+                    <Description>Install Virtualbox Guest Utilities</Description>
+                    <Order>3</Order>
+                </SynchronousCommand>
                 <!-- needed wget -->
                 <!-- <SynchronousCommand wcm:action="add"> -->
                 <!--     <CommandLine>cmd.exe /c a:install-guest-additions.bat</CommandLine> -->
@@ -128,7 +136,7 @@
                 <HelpCustomized>false</HelpCustomized>
             </OEMInformation>
             <!-- Rename computer here. -->
-            <ComputerName>vagrant-2008R1-serverstandard</ComputerName>
+            <ComputerName>webcore-2K8R1</ComputerName>
             <TimeZone>New Zealand Standard Time</TimeZone>
             <RegisteredOwner></RegisteredOwner>
         </component>
@@ -141,6 +149,14 @@
         <component name="Microsoft-Windows-Security-Licensing-SLC-UX" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <SkipAutoActivation>true</SkipAutoActivation>
         </component>
+        <component name="Security-Malware-Windows-Defender" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="NonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <DisableAntiSpyware>true</DisableAntiSpyware>
+        </component>
     </settings>
-    <cpi:offlineImage cpi:source="catalog:d:/sources/install_windows longhorn serverstandard.clg" xmlns:cpi="urn:schemas-microsoft-com:cpi" />
+    <settings pass="generalize">
+        <component name="Microsoft-Windows-Security-Licensing-SLC" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <SkipRearm>1</SkipRearm>
+        </component>
+    </settings>
+    <cpi:offlineImage cpi:source="wim:d:/sources/install.wim#Windows Longhorn SERVERWEB" xmlns:cpi="urn:schemas-microsoft-com:cpi" />
 </unattend>
