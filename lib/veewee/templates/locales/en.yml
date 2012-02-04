@@ -1,0 +1,30 @@
+en:
+  veewee:
+    general:
+      creating_home_dir: "Creating home directory since it doesn't exist: %{directory}"
+      moving_home_dir: "Moving old Vagrant home directory to new location: %{directory}"
+      home_dir_migration_failed: |-
+        Both an old and new Vagrant home directory exist. Only the new one will
+        be used. Please merge the old directory into the new directory if you'd
+        like to use the old data as well.
+
+        Old: %{old}
+        New: %{new}
+
+#-------------------------------------------------------------------------------
+# Translations for exception classes
+#-------------------------------------------------------------------------------
+    errors:
+      base_vm_not_found: The base VM with the name '%{name}' was not found.
+      box_not_found: Box '%{name}' could not be found.
+      chef_not_detected: |-
+        The chef (either `chef-solo` or `chef-client`) binary was not found on
+        the VM and is required for chef provisioning. Please verify that chef
+        is installed and that the binary is available on the PATH.
+        
+
+#-------------------------------------------------------------------------------
+# Translations for config validation errors
+#-------------------------------------------------------------------------------
+    config:
+

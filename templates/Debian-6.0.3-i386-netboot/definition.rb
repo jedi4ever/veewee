@@ -1,6 +1,6 @@
 #Thanks to Fletcher Nichol - https://github.com/fnichol
 
-Veewee::Session.declare({
+Veewee::Definition.declare({
   :cpu_count => '1',
   :memory_size=> '256',
   :disk_size => '10140', :disk_format => 'VDI', :hostiocache => 'off',

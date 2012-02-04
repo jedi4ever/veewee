@@ -1,4 +1,6 @@
-rvm use ruby-1.8.7
+#rvm use ruby-1.8.7
+rvm use ruby-1.9.2
 rvm gemset use veewee
 alias vagrant="bundle exec vagrant"
+alias veewee="bundle exec veewee"
 alias irb="bundle exec irb"

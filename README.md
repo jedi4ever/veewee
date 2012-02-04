@@ -111,7 +111,7 @@ this is essentially making a copy based on the  templates provided above.
 
 ## Optionally modify the definition.rb , postinstall.sh or preseed.cfg
 
-    Veewee::Session.declare( {
+    Veewee::Definition.declare( {
     :cpu_count => '1', :memory_size=> '256', 
     :disk_size => '10140', :disk_format => 'VDI',
     :os_type_id => 'Ubuntu',

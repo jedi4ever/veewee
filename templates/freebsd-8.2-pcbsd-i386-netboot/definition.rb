@@ -1,9 +1,8 @@
 # Many thanks to @draco2002
 # http://dracosplace.com/veewee_and_freebsd
-
 #Based on https://gist.github.com/911058
 
-Veewee::Session.declare( {
+Veewee::Definition.declare( {
   :cpu_count => '1', :memory_size=> '768',
   :disk_size => '10140', :disk_format => 'VDI',:hostiocache => 'off',
   :os_type_id => 'FreeBSD',
@@ -28,5 +27,5 @@ Veewee::Session.declare( {
   :sudo_cmd => "cat '%f'|su -",
   :shutdown_cmd => "shutdown -p now",
   :postinstall_files => [ "postinstall.sh"],:postinstall_timeout => "10000"
-   }
-)
+}
+                          )

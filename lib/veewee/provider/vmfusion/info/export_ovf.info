@@ -1,0 +1,103 @@
+# /Library/Application\ Support/VMware\ Fusion/ovftool/ovftool.bin  --help
+
+falcon-pdb:Downloads patrick$ /Library/Application\ Support/VMware\ Fusion/ovftool/ovftool.bin  --help
+Usage: ovftool [options] <source> [<target>]
+where
+<source>: Source URL locator to an OVF package, VMX file, or virtual machine in
+          vCenter or on ESX Server. 
+<target>: Destination URL locator which specifies either a file location, or a 
+          location in the vCenter inventory or on an ESX Server. 
+
+If <target> is not specified, information about the source is displayed to the 
+console. 
+
+Options:
+     --acceptAllEulas         : Accept all end-user licenses agreements without
+                                being prompted. 
+     --authdPortSource        : Use this to override default vmware authd port 
+                                (902) when using a host as source. 
+     --authdPortTarget        : Use this to override default vmware authd port 
+                                (902) when using a host as target. 
+     --chunkSize              : Specifies the chunk size to use for files in a 
+                                generated OVF package. The default is not to 
+                                chunk. The chunk size without unit is assumed 
+                                to be in megabytesAccepted units are b, kb, mb,
+                                gb; e.g., 2gb or 100kb. 
+     --compress               : Compress the disks in an OVF package. Value 
+                                must be between 1 and 9. 1 is the fastest, but 
+                                gives the worst compression, whereas 9 is the 
+                                slowest, but gives the best compression. 
+ -ds/--datastore              : Target datastore name for a VI locator.
+     --deploymentOption       : Selects what deployment option to use (if the 
+                                source OVF package supports multiple options.) 
+     --disableVerification    : Skip validation of signature and certificate.
+ -dm/--diskMode               : Select target disk format. Supported formats 
+                                are: monolithicSparse, monolithicFlat, 
+                                twoGbMaxExtentSparse, twoGbMaxExtentFlat, 
+                                streamOptimized, thin (VI target) and thick (VI
+                                target) 
+     --eula                   : EULA to be inserted in the first virtual system
+                                or virtual system collection in the OVF. If the
+                                EULA is in a file, use the option 
+                                --eula@=filename instead. 
+ -h /--help                   : Prints this message.
+     --hideEula               : In OVF probe mode, hides the EULA.
+     --ipAllocationPolicy     : IP allocation policy for a deployed OVF 
+                                package. Supported values are fixed, transient 
+                                and dhcp. 
+     --ipProtocol             : Select what IP protocol to use (IPv4, IPv6).
+     --lax                    : Relax OVF specification conformance and virtual
+                                hardware compliance checks. Use only if you 
+                                know what you are doing. 
+     --locale                 : Selects locale for target.
+     --machineOutput          : Output OVF Tool messages in a machine friendly 
+                                manner. 
+     --makeDeltaDisks         : Build delta disk hierarchy from the given 
+                                source locator. 
+ -n /--name                   : Specifies target name (defaults to source 
+                                name). 
+     --net                    : Set a network assignment in the deployed OVF 
+                                package. A network assignment is set using the 
+                                syntax --net:<OVF name>=<target name>. 
+ -nw/--network                : Target network for a VI deployment.
+     --noDisks                : Disable disk conversion.
+     --noImageFiles           : Do not include image files in destination.
+ -o /--overwrite              : Force overwrites of existing files.
+     --powerOffSource         : Ensures a VM/vApp is powered off before 
+                                importing from a VI source. 
+     --powerOffTarget         : Ensures a VM/vApp is powered off before 
+                                overwriting a VI target. 
+     --powerOn                : Powers on a VM/vApp deployed on a VI target.
+     --privateKey             : Sign OVF package with the given private key 
+                                (.pem file). The file must contain a private 
+                                key and a certificate. 
+     --privateKeyPassword     : Password for the private key. Should be used in
+                                conjunction with privateKey if the private key 
+                                requires password authentication. If required 
+                                and not specified, the tool will prompt for the
+                                password. 
+     --prop                   : Set a property in the deployed OVF package. A 
+                                property is set using the syntax 
+                                --prop:<key>=<value>. 
+     --proxy                  : Proxy used for HTTP[S] access.
+ -q /--quiet                  : No output to screen except errors.
+     --schemaValidate         : Validate OVF descriptor against OVF schema.
+     --skipManifestCheck      : Skip validation of OVF package manifest.
+     --skipManifestGeneration : Skip generation of OVF package manifest.
+ -st/--sourceType             : Explicitly express that source is OVF, OVA, 
+                                VMX, VI, vApprun 
+ -tt/--targetType             : Explicitly express that target is OVF, OVA, 
+                                VMX, VI, vApprun 
+     --verifyOnly             : Do not upload the source but only verify it 
+                                against the target host. Applies to VI 4 
+                                targets only. 
+ -v /--version                : Prints the version of this tool.
+ -vf/--vmFolder               : Target VM folder in VI inventory (relative to 
+                                datacenter). 
+
+For more help, type: --help <topic>, where topics are:
+ locators    : For detailed source and destination locator syntax
+ examples    : For examples of use
+ config      : For syntax of configuration files
+ integration : For a list of options primarily used when ovftool is exec'ed 
+               from another tool or shellscript. 

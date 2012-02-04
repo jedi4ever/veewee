@@ -1,13 +1,13 @@
 require 'digest/md5'
-CURRENT_DIR       = File.dirname(__FILE__)
-PRESEED_MD5       = "#{Digest::MD5.file("#{CURRENT_DIR}/preseed.cfg").hexdigest}"
+current_dir       = File.dirname(__FILE__)
+preseed_md5       = "#{Digest::MD5.file("#{current_dir}/preseed.cfg").hexdigest}"
 
-Veewee::Session.declare( {
+Veewee::Definition.declare( {
   :boot_cmd_sequence    => [
                            "<Esc><Esc><Enter>",
                            "/install/vmlinuz ",
                            "noapic ",
-                           "auto-install/enable",
+                           "auto-install/enable ",
                            "console-setup/ask_detect=false ",
                            "console-setup/modelcode=pc105 ",
                            "console-setup/layoutcode=us ",
@@ -23,7 +23,7 @@ Veewee::Session.declare( {
                            "netcfg/choose_interface=auto ",
                            "preseed/interactive=false ",
                            "preseed/url=http://%IP%:%PORT%/preseed.cfg ",
-                           "preseed/url/checksum=#{PRESEED_MD5} ",
+                           "preseed/url/checksum=#{preseed_md5} ",
                            "DEBCONF_DEBUG=5 ",
                            "-- <Enter>"
                            ],
@@ -33,19 +33,27 @@ Veewee::Session.declare( {
   :disk_format          => 'VMDK',
   :hostiocache          => 'on',
   :iso_download_timeout => "60",
-  :iso_file             => "ubuntu-10.04.3-server-amd64.iso",
-  :iso_src              => "http://releases.ubuntu.com/10.04.3/ubuntu-10.04.3-server-amd64.iso",
-  :iso_md5              => "84b43b7bbee85d0af8e11b778c8d1290",
+  :iso_file             => "ubuntu-10.10-server-amd64.iso",
+  :iso_src              => "http://releases.ubuntu.com/maverick/ubuntu-10.10-server-amd64.iso",
+  :iso_md5              => "ab66a1d59a8d78e9ea8ef9b021d6574a",
   :kickstart_file       => "preseed.cfg",
   :kickstart_port       => "7122",
   :kickstart_timeout    => "60",
   :memory_size          => '384',
   :os_type_id           => 'Ubuntu_64',
-  :postinstall_files    => [ "postinstall.sh" ],
+  :postinstall_files    => [
+                            "base.sh",
+                            "ruby.sh",
+                            "puppet.sh",
+                            "chef.sh",
+                            "virtualbox.sh",
+                            "vagrant.sh",
+                            "cleanup.sh" 
+                            ],
   :postinstall_timeout  => "10000",
   :ssh_login_timeout    => "60",
-  :ssh_user             => "vagrant",
-  :ssh_password         => "vagrant",
+  :ssh_user             => "veewee",
+  :ssh_password         => "veewee",
   :ssh_key              => "",
   :ssh_host_port        => "7222",
   :ssh_guest_port       => "22",

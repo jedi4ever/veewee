@@ -1,0 +1,165 @@
+---
+Other:
+  :fusion: other
+  :kvm:
+  :vbox: Other
+Other_64:
+  :fusion: other-64
+  :kvm:
+  :vbox: Other_64
+FreeBSD:
+  :fusion: freeBSD
+  :kvm:
+  :vbox: FreeBSD
+FreeBSD_64:
+  :fusion: FreeBSD_64
+  :kvm:
+  :vbox: FreeBSD-64
+Oracle:
+  :fusion: oraclelinux
+  :kvm:
+  :vbox: Oracle
+Oracle_64:
+  :fusion: oraclelinux-64
+  :kvm:
+  :vbox: Oracle_64
+Debian:
+  :fusion: debian5
+  :kvm:
+  :vbox: Debian
+Debian_64:
+  :fusion: debian5-64
+  :kvm:
+  :vbox: Debian_64
+Gentoo:
+  :fusion: other26xlinux
+  :kvm:
+  :vbox: Gentoo
+Gentoo_64:
+  :fusion: other26xlinux-64
+  :kvm:
+  :vbox: Gentoo_64
+Linux22:
+  :fusion: linux
+  :kvm:
+  :vbox: Linux22
+Linux24:
+  :fusion: other24xlinux
+  :kvm:
+  :vbox: Linux24
+Linux24_64:
+  :fusion: other24xlinux-64
+  :kvm:
+  :vbox: Linux24_64
+Linux26:
+  :fusion: other26xlinux
+  :kvm:
+  :vbox: Linux26
+Linux26_64:
+  :fusion: other26xlinux-64
+  :kvm:
+  :vbox: Linux26_64
+RedHat:
+  :fusion: RedHat
+  :kvm:
+  :vbox: RedHat
+RedHat_64:
+  :fusion: RedHat_64
+  :kvm:
+  :vbox: RedHat_64
+Centos:
+  :fusion: centos
+  :kvm:
+  :vbox: RedHat
+Centos_64:
+  :fusion: centos-64
+  :kvm:
+  :vbox: RedHat_64
+ArchLinux:
+  :fusion: other26xlinux
+  :kvm:
+  :vbox: ArchLinux
+ArchLinux_64:
+  :fusion: other26xlinux-64
+  :kvm:
+  :vbox: ArchLinux_64
+OpenSUSE:
+  :fusion: opensuse
+  :kvm:
+  :vbox: OpenSUSE
+OpenSUSE_64:
+  :fusion: opensuse-64
+  :kvm:
+  :vbox: OpenSUSE_64
+SUSE:
+  :fusion: suse
+  :kvm:
+  :vbox: OpenSUSE
+SUSE_64:
+  :fusion: suse-64
+  :kvm:
+  :vbox: OpenSUSE_64
+Fedora:
+  :fusion: fedora
+  :kvm:
+  :vbox: Fedora
+Fedora_64:
+  :fusion: fedora-64
+  :kvm:
+  :vbox: Fedora_64
+Ubuntu:
+  :fusion: ubuntu
+  :kvm:
+  :vbox: Ubuntu
+Ubuntu_64:
+  :fusion: ubuntu-64
+  :kvm:
+  :vbox: Ubuntu_64
+Linux:
+  :fusion: linux
+  :kvm:
+  :vbox: Linux
+Solaris:
+  :fusion: solaris10
+  :kvm:
+  :vbox: Solaris
+Solaris_64:
+  :fusion: solaris10-64
+  :kvm:
+  :vbox: Solaris_64
+Solaris9:
+  :fusion: solaris
+  :kvm:
+  :vbox: Solaris
+Solaris7:
+  :fusion: solaris7
+  :kvm:
+  :vbox: Solaris
+Solaris8:
+  :fusion: solaris8
+  :kvm:
+  :vbox: Solaris
+OpenSolaris:
+  :fusion: solaris10
+  :kvm:
+  :vbox: OpenSolaris
+OpenSolaris_64:
+  :fusion: solaris-64
+  :kvm:
+  :vbox: OpenSolaris_64
+OpenBSD:
+  :fusion: other
+  :kvm:
+  :vbox: OpenBSD
+OpenBSD_64:
+  :fusion: other-64
+  :kvm:
+  :vbox: OpenBSD_64
+NetBSD:
+  :fusion: other
+  :kvm:
+  :vbox: NetBSD
+NetBSD_64:
+  :fusion: other-64
+  :kvm:
+  :vbox: NetBSD_64
