@@ -15,7 +15,7 @@ Gem::Specification.new do |s|
   s.rubyforge_project         = "veewee"
 
   s.add_dependency "vagrant",  ">= 0.9"
-  s.add_dependency "net-ssh",  ">= 2.1.0"
+  s.add_dependency "net-ssh",  ">= 2.2.0"
   s.add_dependency "popen4",   "~> 0.1.2"
   s.add_dependency "thor",     "~> 0.14.6"
   s.add_dependency "highline", "~> 1.6.1"
