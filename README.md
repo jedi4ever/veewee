@@ -1,4 +1,4 @@
-# Note: the veewee03 will soon be merged into master
+# Note: the veewee03 is now merged into master
 
 Maintaining two branches with complete different structures isn't fun. So..... I want to merge the two.
 
@@ -11,6 +11,8 @@ Veewee03 will bring many new features:
 Caveat: it's functional but not as polished as the previous version. But I'm sure with your help this won't take long.
 
 My apologies for all the pull-requests to the previous version that will not be merged automatically. I'm focusing more on get this version stable and will incorporate the ideas later (some already are)
+
+# The current state of the github is highly unstable, use the 'veewee' gem to use the latest stable version
 
 ---
 **VeeWee:** the tool to easily build vagrant base boxes or kvm,virtualbox and fusion images
