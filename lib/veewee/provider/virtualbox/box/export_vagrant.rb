@@ -32,7 +32,7 @@ module Veewee
             env.ui.info "Sudo also needs to work for user #{definition.ssh_user}"
             env.ui.info "Performing a clean shutdown now."
 
-            self.shutdown
+            self.halt
 
             #Wait for state poweroff
             while (self.running?) do

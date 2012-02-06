@@ -33,7 +33,7 @@ module Veewee
       def halt(box_name)
         venv=Veewee::Environment.new(options)
         venv.ui=env.ui
-        venv.providers["virtualbox"].get_box(box_name).shutdown(options)
+        venv.providers["virtualbox"].get_box(box_name).halt(options)
       end
 
       method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging"
@@ -42,7 +42,7 @@ module Veewee
       def up(box_name)
         venv=Veewee::Environment.new(options)
         venv.ui=env.ui
-        venv.providers["virtualbox"].get_box(box_name).start(options)
+        venv.providers["virtualbox"].get_box(box_name).up(options)
       end
 
       desc "ssh [BOXNAME] [COMMAND]", "Shows SSH information"
@@ -50,7 +50,7 @@ module Veewee
       def ssh(box_name,command=nil)
         venv=Veewee::Environment.new(options)
         venv.ui=env.ui
-        puts venv.providers["virtualbox"].get_box(box_name).issh(command)
+        puts venv.providers["virtualbox"].get_box(box_name).ssh(command)
       end
 
       desc "define [BOXNAME] [TEMPLATE]", "Define a new basebox starting from a template"

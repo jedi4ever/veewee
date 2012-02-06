@@ -20,7 +20,7 @@ module Veewee
 
           if self.exists?
             # check if --force option was given
-            if options[:force]==true
+            if options['force']==true
               self.destroy
               self.reload
             else
@@ -39,7 +39,7 @@ module Veewee
 
           # Check the GUI mode required
           env.logger.info "Provider asks the box to start: GUI enabled? #{!options[:nogui]}"
-          self.start(options)
+          self.up(options)
 
           # Waiting for it to boot
           env.ui.info "Waiting #{definition.boot_wait.to_i} seconds for the machine to boot"
@@ -190,8 +190,8 @@ module Veewee
             filename=File.join(definition.path,postinstall_file)
             unless File.basename(postinstall_file)=~/^_/
               self.scp(filename,File.basename(filename))
-              self.ssh("chmod +x \"#{File.basename(filename)}\"")
-              self.ssh(sudo("./"+File.basename(filename)))
+              self.exec("chmod +x \"#{File.basename(filename)}\"")
+              self.exec(sudo("./"+File.basename(filename)))
             else
               env.logger.info "Skipping postinstallfile #{postinstall_file}"
             end

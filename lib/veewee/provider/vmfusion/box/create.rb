@@ -4,6 +4,14 @@ module Veewee
   module Provider
     module Vmfusion
       module BoxCommand
+
+        # When we create a new box
+        # We assume the box is not running
+        def create(options)
+          create_vm
+          create_disk
+        end
+
         def create_disk
           #Disk types:
           #    0                   : single growable virtual disk
@@ -41,25 +49,6 @@ module Veewee
           aFile.write(vmx_template(fusion_definition))
           aFile.close
           FileUtils.chdir(current_dir)
-        end
-
-        def determine_vmrun_cmd
-          return "#{fusion_path}/vmrun"
-        end
-
-        def vm_path
-          home=ENV['HOME']
-          dir="#{home}/Documents/Virtual Machines.localized/#{name}.vmwarevm"
-          return dir
-        end
-
-        def fusion_path
-          dir="/Library/Application Support/VMware Fusion/"
-          return dir
-        end
-
-        def vmx_file_path
-          return "#{vm_path}/#{name}.vmx"
         end
 
       end

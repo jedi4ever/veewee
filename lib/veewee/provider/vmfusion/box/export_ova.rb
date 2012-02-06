@@ -26,7 +26,7 @@ module Veewee
             # Wait for the shutdown to complete
             begin
               Timeout::timeout(20) do
-                self.shutdown(options)
+                self.halt(options)
                 status=self.running?
                 unless status
                   return

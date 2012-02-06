@@ -5,8 +5,8 @@ Gem::Specification.new do |s|
   s.name        = "veewee"
   s.version     = Veewee::VERSION
   s.platform    = Gem::Platform::RUBY
-  s.authors     = ["Patrick Debois", "Ringo De Smet"]
-  s.email       = ["patrick.debois@jedi.be", "ringo.desmet@gmail.com"]
+  s.authors     = ["Patrick Debois" ]
+  s.email       = ["patrick.debois@jedi.be"]
   s.homepage    = "http://github.com/jedi4ever/veewee/"
   s.summary     = %q{Vagrant box creation}
   s.description = %q{Expand the 'vagrant box' command to support the creation of base boxes from scratch}
@@ -15,7 +15,7 @@ Gem::Specification.new do |s|
   s.rubyforge_project         = "veewee"
 
   s.add_dependency "vagrant",  ">= 0.9"
-  s.add_dependency "net-ssh",  ">= 2.2.0"
+  s.add_dependency "net-ssh",  ">= 2.2.1"
   s.add_dependency "popen4",   "~> 0.1.2"
   s.add_dependency "thor",     "~> 0.14.6"
   s.add_dependency "highline", "~> 1.6.1"
@@ -24,7 +24,9 @@ Gem::Specification.new do |s|
   s.add_dependency "cucumber", ">=1.0.0"
   s.add_dependency "ansi", "~> 1.3.0"
   s.add_dependency "ruby-vnc", "~> 1.0.0"
-  s.add_dependency "fog", "~> 1.0.0"
+  s.add_dependency "fog", "~> 1.1.2"
+  s.add_dependency "childprocess"
+
   s.add_dependency "CFPropertyList", "~> 2.0.17"
 #  s.add_dependency "libvirt"
   s.add_dependency "rspec",    "~> 2.5"

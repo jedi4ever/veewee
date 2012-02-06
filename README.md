@@ -1,3 +1,20 @@
+# Note: the veewee03 branch has been merged to master
+
+Maintaining two branches with complete different structures isn't fun. So..... I merged the two.
+
+Veewee03 will bring:
+
+- kvm and vmware fusion support -
+- veewee as a standalone tool tool if you don't use virtualbox,vagrant 
+- postinstall scripts can now be toggle with --include and --exclude
+
+Caveat: it's functional but not as polished as the previous version. But I'm sure with your help this won't take long.
+
+My apologies for all the pull request to the previous version that will not be merged automatically. I'm focusing more on get this version stable and will incorporate the ideas later (some already are)
+
+---
+
+
 **VeeWee:** the tool to easily build vagrant base boxes
 Vagrant is a great tool to test new things or changes in a virtual machine(Virtualbox) using either chef or puppet.
 The first step is to download an existing 'base box'. I believe this scares a lot of people as they don't know who or how this box was build. Therefore lots of people end up first building their own base box to use with vagrant.

@@ -6,10 +6,11 @@ require 'veewee/provider/core/helper/iso'
 
 require 'veewee/provider/core/box/build'
 require 'veewee/provider/core/box/scp'
-require 'veewee/provider/core/box/ssh'
-require 'veewee/provider/core/box/shutdown'
+require 'veewee/provider/core/box/exec'
+require 'veewee/provider/core/box/poweroff'
+require 'veewee/provider/core/box/halt'
 require 'veewee/provider/core/box/sudo'
-require 'veewee/provider/core/box/issh'
+require 'veewee/provider/core/box/ssh'
 
 module Veewee
   module Provider

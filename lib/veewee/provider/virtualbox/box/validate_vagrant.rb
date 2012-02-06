@@ -11,7 +11,7 @@ module Veewee
 
           # Passing ssh options via ENV varialbles to cucumber
           # VEEWEE_SSH_USER, VEEWEE_SSH_PASSWORD ,VEEWEE_SSH_PORT
-          cucumber_vars=ssh_options
+          cucumber_vars=self.ssh_options
           cucumber_vars.each do |key,value|
             ENV['VEEWEE_'+key.to_s.upcase]=cucumber_vars[key].to_s
           end

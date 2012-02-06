@@ -5,33 +5,19 @@ module Veewee
 
         def destroy(option={})
 
-          if raw.nil?
+          unless self.exists?
             env.ui.error "Error:: You tried to destroy a non-existing box '#{name}'"
             exit -1
           end
 
           # If it has a save state,remove that first
-          if raw.saved?
-            env.ui.info "Removing save state"
-            raw.discard_state
-            raw.reload
-          end
 
-          env.logger.info "Checking state: #{raw.state}"
-          if raw.state.to_s=="running"
+          if self.running?
             # Poweroff
-            raw.stop
+            self.poweroff
             # Wait for it to happen
             sleep 2
           end
-          #:destroy_medium => :delete,  will delete machine + all media attachments
-          #vm.destroy(:destroy_medium => :delete)
-          ##vm.destroy(:destroy_image => true)
-
-          #VBoxManage unregistervm "test-machine" --delete
-          #because the destroy does remove the .vbox file on 4.0.x
-          #PDB
-          #vm.destroy()
 
           command="#{@vboxcmd} unregistervm  '#{name}' --delete"
           env.ui.info command
@@ -42,33 +28,34 @@ module Veewee
           sleep 1
 
           #if the disk was not attached when the machine was destroyed we also need to delete the disk
-          location=name+"."
+          pattern=name+"."
           #+definition.disk_format.downcase
           found=false
-          VirtualBox::HardDrive.all.each do |d|
-            if d.location.match(/#{location}/)
+          command="#{@vboxcmd} list hdds -l"
+          hdds=shell_exec("#{command}").stdout.split(/\n\n/)
 
-              if File.exists?(d.location)
-                command="#{@vboxcmd} closemedium disk '#{d.location}' --delete"
+          hdds.each do |hdd_text|
+            location=hdd_text.split(/\n/).grep(/^Location/).first.split(':')[1].strip
+            if location.match(/#{pattern}/)
+
+              if File.exists?(location)
+                command="#{@vboxcmd} closemedium disk '#{location}' --delete"
               else
-                command="#{@vboxcmd} closemedium disk '#{d.location}'"
+                command="#{@vboxcmd} closemedium disk '#{location}'"
               end
 
-            #command="#{@vboxcmd} closemedium disk '#{d.location}' --delete"
-            env.ui.info "Deleting disk #{d.location}"
-            env.ui.info "#{command}"
+              env.ui.info "Deleting disk #{location}"
+              env.ui.info "#{command}"
 
-            shell_exec("#{command}")
+              shell_exec("#{command}")
 
-            if File.exists?(d.location)
-              env.ui.info "We tried to delete the disk file via virtualbox '#{d.location} but failed"
-              env.ui.info "Removing it manually"
-              FileUtils.rm(d.location)
-              exit -1
-            end
-            #v.3
-            #d.destroy(true)
-            break
+              if File.exists?(location)
+                env.ui.info "We tried to delete the disk file via virtualbox '#{location} but failed"
+                env.ui.info "Removing it manually"
+                FileUtils.rm(location)
+                exit -1
+              end
+              break
             end
           end
         end

@@ -4,13 +4,14 @@ module Veewee
     module  Core
       module BoxCommand
 
-        def shutdown(options={})
+        def halt(options={})
           if self.running?
             if options["force"]==true
-              self.halt
+              self.poweroff
             else
-              self.ssh("echo '#{definition.shutdown_cmd}' > /tmp/shutdown.sh")
-              self.ssh(sudo("/tmp/shutdown.sh"))
+              self.exec("echo '#{definition.shutdown_cmd}' > /tmp/shutdown.sh")
+              self.exec("chmod +x /tmp/shutdown.sh")
+              self.exec(sudo("/tmp/shutdown.sh"))
             end
           else
             raise Veewee::Error,"Box is not running"
