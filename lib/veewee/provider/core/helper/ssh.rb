@@ -47,7 +47,7 @@ module Veewee
                 end
               end
             rescue Timeout::Error
-              env.ui.error "Ssh timeout #{options[:timeout]} min has been reached."
+              env.ui.error "Ssh timeout #{options[:timeout]} sec has been reached."
               exit -1
             end
             env.ui.info ""
