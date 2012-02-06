@@ -1,33 +1,3 @@
-# Note: the veewee03 will soon be merged into master
-
-Maintaining two branches with complete different structures isn't fun. So..... I want to merge the two.
-
-Veewee03 will bring:
-
-- kvm and vmware fusion support -
-- veewee as a standalone tool tool if you don't use virtualbox,vagrant 
-- postinstall scripts can now be toggle with --include and --exclude
-
-Caveat: it's functional but not as polished as the previous version. But I'm sure with your help this won't take long.
-
-My apologies for all the pull-requests to the previous version that will not be merged automatically. I'm focusing more on get this version stable and will incorporate the ideas later (some already are)
-
----
-
-The procedure below is stil the original version. A new of documentation is being prepared in <doc> directory.
-
-**VeeWee:** the tool to easily build vagrant base boxes
-Vagrant is a great tool to test new things or changes in a virtual machine(Virtualbox) using either chef or puppet.
-The first step is to download an existing 'base box'. I believe this scares a lot of people as they don't know who or how this box was build. Therefore lots of people end up first building their own base box to use with vagrant.
-
-Veewee tries to automate this and to share the knowledge and sources you need to create a basebox. Instead of creating custom ISO's from your favorite distribution, it leverages the 'keyboardputscancode' command of Virtualbox so send the actual 'boot prompt' keysequence to boot an existing iso.
-
-Before we can actually build the boxes, we need to take care of the minimal things to install:
-
-- Have Virtualbox 4.x installed -> download it from http://download.virtualbox.org/virtualbox/
-
-People have reported good experiences, why don't you give it a try?
-
 ## Installation:
 __as a gem__
 
@@ -43,7 +13,6 @@ __from source__
 If you don't use rvm, be sure to execute vagrant through bundle exec
 
     $ alias vagrant="bundle exec vagrant"
-
 
 ## Define a new box
 Let's define a  Ubuntu 10.10 server i386 basebox called myunbuntubox
