@@ -53,7 +53,9 @@ module Veewee
 
     def initialize(options={})
 
-      cwd= options.has_key?(:cwd) ? options[:cwd] : Dir.pwd
+      cwd = ENV['VEEWEE_DIR'] || Dir.pwd
+      # If a cwd was provided as option it overrules the default
+      cwd = options[:cwd] if options.has_key?(:cwd)
 
       defaults={
         :cwd => cwd,
