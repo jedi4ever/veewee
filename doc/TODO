@@ -1,20 +1,11 @@
-# Installation:
-  - from source
-  - via gem
-
-# Technique
-  Virtualbox sendkeycode (raw Bios keystrokes)
-  KVM, VNC -> (using VNC)
-
-# Sublibraries
-  KVM -> Fog -> libvirt -> ruby bindings
-  VMWare fusion -> inspired by Fission
+Still to document:
 
 # Requirements
   virtualbox -> 
 
   kvm -> ruby-libvirt gem
     v0.8.3 or higher
+  require libvirt 0.8+ version 
     have a default dir pool installed
     permissions to write create new volumes
 
@@ -22,7 +13,6 @@
     Tested on VMWare fusion 0.3.x
 
 # Changes to Definitions
-  Veewee::Definition.declare instead of Veewee::Session.declare
 
   Virtualbox options ioapic, pae are now moved to :virtualbox => { vm_options => [ :ioapic => 'on' ]}
     now you can pass all options you have to virtualbox
@@ -56,3 +46,15 @@
   --auto (download yes)
   --force also for export
   --debug (debug output)
+
+  ostypes are now synchronized accross kvm
+
+Todo:
+  veewee steps (username,password, + VEEWEE env variables)
+  validate vms - + features selection
+  check libvirt version
+  windows test
+  validation of checks (also - inclide/exclude)
+  check execs with exit code
+  multinetwork card 
+  dkms for kernel installs

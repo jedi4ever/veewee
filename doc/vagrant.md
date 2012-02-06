@@ -1,19 +1,3 @@
-## Installation:
-__as a gem__
-
-    $ gem install veewee
-
-__from source__
-
-    $ git clone https://github.com/jedi4ever/veewee.git
-    $ cd veewee
-    $ gem install bundler
-    $ bundle install
-
-If you don't use rvm, be sure to execute vagrant through bundle exec
-
-    $ alias vagrant="bundle exec vagrant"
-
 ## Define a new box
 Let's define a  Ubuntu 10.10 server i386 basebox called myunbuntubox
 this is essentially making a copy based on the  templates provided above.
@@ -133,13 +117,3 @@ Start of an existing one
 - go to the github gui and issue a pull request for it
 
 ## If you have a setup working, share your 'definition' with me. That would be fun! 
-
-IDEAS:
-
-- Now you integrate this with your CI build to create a daily basebox
-
-FUTURE IDEAS:
-
-- export to AMI too
-- provide for more failsafe execution, testing parameters
-- Do the same for Vmware Fusion
