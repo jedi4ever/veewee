@@ -34,6 +34,7 @@ Veewee::Definition.declare({
   :ssh_guest_port => "22",
   :sudo_cmd => "echo '%p'|sudo -S sh '%f'",
   :shutdown_cmd => "halt -p",
-  :postinstall_files => [ "postinstall.sh" ],
+  :postinstall_files => 
+    [ "postinstall.sh" ],
   :postinstall_timeout => "10000"
 })
