@@ -1,3 +1,4 @@
+# The current state of the github is highly unstable, use the 'veewee' gem to use the latest stable version
 # Note: the veewee03 is now merged into master
 
 Maintaining two branches with complete different structures isn't fun. So..... I want to merge the two.
@@ -8,11 +9,9 @@ Veewee03 will bring many new features:
 - veewee as a standalone tool tool if you don't use virtualbox,vagrant 
 - postinstall scripts can now be toggle with --include and --exclude
 
-Caveat: it's functional but not as polished as the previous version. But I'm sure with your help this won't take long.
+Caveat: it's alpha-functional but not as polished as the previous version. But I'm sure with your help this won't take long.
 
 My apologies for all the pull-requests to the previous version that will not be merged automatically. I'm focusing more on get this version stable and will incorporate the ideas later (some already are)
-
-# The current state of the github is highly unstable, use the 'veewee' gem to use the latest stable version
 
 ---
 **VeeWee:** the tool to easily build vagrant base boxes or kvm,virtualbox and fusion images
@@ -28,18 +27,18 @@ Besides building Vagrant boxes, veewee can also be used for:
 
 Before you start read through:
 
-- the [requirements](doc/requirements)
-- the [installation](doc/installation) procedure
+- the [requirements](veewee/doc/requirements)
+- the [installation](veewee/doc/installation) procedure
 
 Depending on how you want to use veewee, read through one of the following guides: (**work in progres**)
 
-- [guide for vagrant](doc/vagrant)
+- [guide for vagrant](veewee/doc/vagrant)
 
-- [guide for Virtualbox](doc/vbox)
-- [guide for Vmware fusion](doc/fusion)
-- [guide for KVM](doc/kvm)
+- [guide for Virtualbox](veewee/doc/vbox)
+- [guide for Vmware fusion](veewee/doc/fusion)
+- [guide for KVM](veewee/doc/kvm)
 
-You can also look at the more detailed pages on each subject in the [documentation directory](doc)
+You can also look at the more detailed pages on each subject in the [documentation directory](veewee/doc)
 
 People have reported good experiences, why don't you give it a try?
 
