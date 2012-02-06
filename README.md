@@ -1,5 +1,6 @@
-# The current state of the github is highly unstable, use the 'veewee' gem to use the latest stable version
-# Note: the veewee03 is now merged into master
+# Note: due to a miss manipulation on my side, the veewee03 branch got merged with master
+# Therefore the current state of the masterbranch on github is highly unstable
+# Use the 'veewee' gem to use the latest stable version
 
 Maintaining two branches with complete different structures isn't fun. So..... I want to merge the two.
 
