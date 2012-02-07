@@ -1,6 +1,10 @@
 # Note: due to a miss manipulation on my side, the veewee03 branch got merged with master
 # Therefore the current state of the masterbranch on github is highly unstable
-# Use the 'veewee' gem to use the latest stable version
+
+To refer to the old master, I've put up the state before the error at
+<https://github.com/jedi4ever/veewee-old>
+
+-------
 
 Maintaining two branches with complete different structures isn't fun. So..... I want to merge the two.
 
