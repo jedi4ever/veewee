@@ -1,3 +1,3 @@
 # Install Ruby
-yum -y install ruby-devel rubygems
+yum -y install ruby ruby-devel rubygems
 
