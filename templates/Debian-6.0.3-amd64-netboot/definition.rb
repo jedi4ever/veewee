@@ -1,4 +1,4 @@
-Veewee::Session.declare({
+Veewee::Definition.declare({
   :cpu_count => '1',
   :memory_size=> '256',
   :disk_size => '10140', :disk_format => 'VDI', :hostiocache => 'off',
@@ -34,6 +34,7 @@ Veewee::Session.declare({
   :ssh_guest_port => "22",
   :sudo_cmd => "echo '%p'|sudo -S sh '%f'",
   :shutdown_cmd => "halt -p",
-  :postinstall_files => [ "postinstall.sh" ],
+  :postinstall_files => 
+    [ "postinstall.sh" ],
   :postinstall_timeout => "10000"
 })
