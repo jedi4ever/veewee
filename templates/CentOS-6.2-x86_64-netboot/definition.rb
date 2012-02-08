@@ -1,18 +1,18 @@
-Veewee::Session.declare({
+Veewee::Definition.declare({
   :cpu_count => '1',
   :memory_size=> '480',
   :disk_size => '10140',
   :disk_format => 'VDI',
   :hostiocache => 'off',
+  :ioapic => 'on',
+  :pae => 'on',
   :os_type_id => 'RedHat_64',
-  :iso_file => "CentOS-6.2-x86_64-minimal.iso",
-  :iso_src => "http://centos.weepeetelecom.be/6.2/isos/x86_64/CentOS-6.2-x86_64-minimal.iso",
-  :iso_md5 => "20dac370a6e08ded2701e4104855bc6e",
+  :iso_file => "CentOS-6.2-x86_64-netinstall.iso",
+  :iso_src => "http://be.mirror.eurid.eu/centos/6.2/isos/x86_64/CentOS-6.2-x86_64-netinstall.iso",
+  :iso_md5 => "7e7f4161a5c8c49032655e5f4ecd1f07",
   :iso_download_timeout => 1000,
-  :boot_wait => "10",
-  :boot_cmd_sequence => [
-    '<Tab> text ks=http://%IP%:%PORT%/ks.cfg<Enter>'
-  ],
+  :boot_wait => "15",
+  :boot_cmd_sequence => [ '<Tab> text ks=http://%IP%:%PORT%/ks.cfg<Enter>' ],
   :kickstart_port => "7122",
   :kickstart_timeout => 10000,
   :kickstart_file => "ks.cfg",
