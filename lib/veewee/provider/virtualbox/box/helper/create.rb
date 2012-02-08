@@ -73,7 +73,7 @@ module Veewee
               full_filename=full_filename=File.join(definition.path,filename)
               FileUtils.cp("#{full_filename}","#{temp_dir}")
             end
-            javacode_dir=File.expand_path(File.join(__FILE__,'..','..','java'))
+            javacode_dir=File.expand_path(File.join(__FILE__,'..','..','..','..','..','..','java'))
             floppy_file=File.join(definition.path,"virtualfloppy.vfd")
             command="java -jar #{javacode_dir}/dir2floppy.jar '#{temp_dir}' '#{floppy_file}'"
             shell_exec("#{command}")

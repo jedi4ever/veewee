@@ -3,7 +3,7 @@ module Veewee
     module Virtualbox
       module BoxCommand
 
-        def ssh(command,options)
+        def ssh(command,options={})
           super(command,options)
         end
 

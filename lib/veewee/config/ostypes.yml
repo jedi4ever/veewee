@@ -1,4 +1,80 @@
 ---
+Windows7_64:
+  :fusion:
+  :kvm:
+  :vbox: Windows7_64
+Windows7:
+  :fusion:
+  :kvm:
+  :vbox: Windows7
+Windows8:
+  :fusion:
+  :kvm:
+  :vbox: Windows8
+Windows8_64:
+  :fusion:
+  :kvm:
+  :vbox: Windows8_64
+WindowsNT:
+  :fusion:
+  :kvm:
+  :vbox: WindowsNT
+Windows2008:
+  :fusion:
+  :kvm:
+  :vbox: Windows2008
+Windows2008_64:
+  :fusion:
+  :kvm:
+  :vbox: Windows2008_64
+WindowsVista_64:
+  :fusion:
+  :kvm:
+  :vbox: WindowsVista_64
+WindowsVista:
+  :fusion:
+  :kvm:
+  :vbox: WindowsVista
+Windows2003:
+  :fusion:
+  :kvm:
+  :vbox: Windows2003
+Windows2003_64:
+  :fusion:
+  :kvm:
+  :vbox: Windows2003_64
+WindowsXP_64:
+  :fusion:
+  :kvm:
+  :vbox: WindowsXP_64
+WindowsXP:
+  :fusion:
+  :kvm:
+  :vbox: WindowsXP
+Windows2000:
+  :fusion:
+  :kvm:
+  :vbox: Windows200
+WindowsNT4:
+  :fusion:
+  :kvm:
+  :vbox: WindowsNT4
+WindowsMe:
+  :fusion:
+  :kvm:
+  :vbox: WindowsMe
+Windows98:
+  :fusion:
+  :kvm:
+  :vbox: Windows98
+Windows95:
+  :fusion:
+  :kvm:
+  :vbox: Windows95
+Windows31:
+  :fusion:
+  :kvm:
+  :vbox: Windows31
 Other:
   :fusion: other
   :kvm:

@@ -46,10 +46,12 @@ module Veewee
           sleep definition.boot_wait.to_i
 
           # Calculate an available kickstart port
-          guessed_port=guess_free_port(definition.kickstart_port.to_i,7199).to_s
-          if guessed_port.to_s!=definition.kickstart_port
-            env.ui.warn "Changing kickstart port from #{definition.kickstart_port} to #{guessed_port}"
-            definition.kickstart_port=guessed_port.to_s
+          unless definition.kickstart_port.nil?
+            guessed_port=guess_free_port(definition.kickstart_port.to_i,7199).to_s
+            if guessed_port.to_s!=definition.kickstart_port
+              env.ui.warn "Changing kickstart port from #{definition.kickstart_port} to #{guessed_port}"
+              definition.kickstart_port=guessed_port.to_s
+            end
           end
 
           # Let fill's in the variable we need
