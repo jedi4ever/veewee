@@ -5,7 +5,7 @@ module Veewee
 
         def forwarding(name)
           command="#{@vboxcmd} showvminfo --details --machinereadable '#{self.name}'"
-          shell_results=shell_exec("#{command}",{:mute => false })
+          shell_results=shell_exec("#{command}",{:mute => true })
           rules=shell_results.stdout.split(/\n/).grep(/^Forward/)
           result=nil
           rules.each do |rule|

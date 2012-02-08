@@ -24,7 +24,7 @@ module Veewee
           env.ui.info "Deleting vm #{name}"
 
           #Exec and system stop the execution here
-          shell_exec("#{command}")
+          shell_exec("#{command}",{:mute => true})
           sleep 1
 
           #if the disk was not attached when the machine was destroyed we also need to delete the disk
@@ -32,7 +32,7 @@ module Veewee
           #+definition.disk_format.downcase
           found=false
           command="#{@vboxcmd} list hdds -l"
-          hdds=shell_exec("#{command}").stdout.split(/\n\n/)
+          hdds=shell_exec("#{command}",{:mute => true}).stdout.split(/\n\n/)
 
           hdds.each do |hdd_text|
             location=hdd_text.split(/\n/).grep(/^Location/).first.split(':')[1].strip
@@ -47,7 +47,7 @@ module Veewee
               env.ui.info "Deleting disk #{location}"
               env.ui.info "#{command}"
 
-              shell_exec("#{command}")
+              shell_exec("#{command}",{:mute => true})
 
               if File.exists?(location)
                 env.ui.info "We tried to delete the disk file via virtualbox '#{location} but failed"
