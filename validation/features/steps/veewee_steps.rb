@@ -8,8 +8,13 @@ Given /^a veeweebox was build$/ do
   @box=@environment.providers[@provider_name].get_box(@box_name)
 end
 
+When /^I sudorun "([^\"]*)" over ssh$/ do |command|
+  @box.exec("echo '#{command}' > /tmp/validation.sh")
+  @sshresult=@box.exec(@box.sudo("/tmp/validation.sh"))
+end
+
 When /^I run "([^\"]*)" over ssh$/ do |command|
-  @sshresult=@box.ssh(command)
+  @sshresult=@box.exec(command)
 end
 
 Then /^I should see the provided username in the output$/ do

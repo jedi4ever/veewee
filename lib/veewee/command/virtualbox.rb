@@ -45,12 +45,12 @@ module Veewee
         venv.providers["virtualbox"].get_box(box_name).up(options)
       end
 
-      desc "ssh [BOXNAME] [COMMAND]", "Shows SSH information"
+      desc "ssh [BOXNAME] [COMMAND]", "Interactive ssh login"
       method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging"
       def ssh(box_name,command=nil)
         venv=Veewee::Environment.new(options)
         venv.ui=env.ui
-        puts venv.providers["virtualbox"].get_box(box_name).ssh(command)
+        venv.providers["virtualbox"].get_box(box_name).issh(command)
       end
 
       desc "define [BOXNAME] [TEMPLATE]", "Define a new basebox starting from a template"

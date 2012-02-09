@@ -11,6 +11,7 @@ require 'veewee/provider/core/box/poweroff'
 require 'veewee/provider/core/box/halt'
 require 'veewee/provider/core/box/sudo'
 require 'veewee/provider/core/box/ssh'
+require 'veewee/provider/core/box/issh'
 
 module Veewee
   module Provider

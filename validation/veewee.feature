@@ -11,7 +11,7 @@ Feature: veewee box validation
   @vmfusion @virtualbox @kvm
   Scenario: Checking sudo
     Given a veeweebox was build
-    And I run "sudo whoami" over ssh
+    And I sudorun "whoami" over ssh
     Then I should see "root" in the output
 
   @vmfusion @virtualbox @kvm

@@ -49,7 +49,7 @@ module Veewee
       def ssh(box_name,command=nil)
         venv=Veewee::Environment.new(options)
         venv.ui=env.ui
-        puts venv.providers["kvm"].get_box(box_name).ssh(command)
+        puts venv.providers["kvm"].get_box(box_name).issh(command)
       end
 
       desc "define [BOXNAME] [TEMPLATE]", "Define a new basebox starting from a template"
