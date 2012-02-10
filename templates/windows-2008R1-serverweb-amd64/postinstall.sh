@@ -24,19 +24,19 @@ wget http://downloads.sourceforge.net/sevenzip/7z922-x64.msi
 msiexec /qb /i 7z922-x64.msi
 
 # Download Virtualbox Additions
-VBOX_VERSION="4.1.8" #"4.0.8"
-wget http://download.virtualbox.org/virtualbox/$VBOX_VERSION/VBoxGuestAdditions_$VBOX_VERSION.iso
+#VBOX_VERSION="4.1.8" #"4.0.8"
+#wget http://download.virtualbox.org/virtualbox/$VBOX_VERSION/VBoxGuestAdditions_$VBOX_VERSION.iso
 
 # Extract the installer from the ISO (WHY WHY WHY isn't this available not bundled within an ISO)
-/cygdrive/c/Program\ Files/7-Zip/7z.exe x VBoxGuestAdditions_$VBOX_VERSION.iso VBoxWindowsAdditions-amd64.exe
+#/cygdrive/c/Program\ Files/7-Zip/7z.exe x VBoxGuestAdditions_$VBOX_VERSION.iso VBoxWindowsAdditions-amd64.exe
 
 # Mark Oracle as a trusted installer
 #http://blogs.msdn.com/b/steverac/archive/2009/07/09/adding-certificates-to-the-local-certificates-store-and-setting-local-policy-using-a-command-line-system-center-updates-publisher-example.aspx
 
-certutil -addstore -f "TrustedPublisher" a:oracle-cert.cer
+#certutil -addstore -f "TrustedPublisher" a:oracle-cert.cer
 
 # Install the Virtualbox Additions
-./VBoxWindowsAdditions-amd64.exe /S
+#./VBoxWindowsAdditions-amd64.exe /S
 
 
 #Rather than do the manual install of ruby and chef, just use the opscode msi
@@ -65,7 +65,6 @@ EOF
 chmod 755 /bin/sudo
 
 # Mounting a directory
-# I don't think this works until after a reboot
 #net.exe use  '\\vboxsvr\veewee-validation'
 
 
