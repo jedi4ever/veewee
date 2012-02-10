@@ -27,6 +27,7 @@
 # Win2008 requires at least 10gig hard drive to install...
 
 Veewee::Session.declare({
+    :name => 'Windows Longhorn SERVERWEB'
     :os_type_id => 'Windows2008_64',
 #    :iso_file => "en_windows_web_server_2008_x64_dvd_x14-26683.iso",
     :iso_file => "6001.18000.080118-1840_amd64fre_ServerWeb_en-us-KRMWXFRE_EN_DVD.iso",
