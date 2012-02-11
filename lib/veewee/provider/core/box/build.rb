@@ -73,6 +73,7 @@ module Veewee
           self.handle_kickstart(options)
           self.transfer_buildinfo(options)
           self.handle_postinstall(options)
+          self.handle_authorized_keys(options)
 
           env.ui.confirm "The box #{name} was build succesfully!"
           env.ui.info "You can now login to the box with:"
@@ -198,6 +199,11 @@ module Veewee
               env.logger.info "Skipping postinstallfile #{postinstall_file}"
             end
           end
+        end
+
+        # Overwrite authorized_keys with personal key if it exists
+        def handle_authorized_keys(options)
+          # implemented in specific provider
         end
 
         # Transfer information provide by the Provider to the box
