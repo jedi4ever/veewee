@@ -1,10 +1,10 @@
 ---
 Windows7_64:
-  :fusion:
+  :fusion: windows7-64
   :kvm:
   :vbox: Windows7_64
 Windows7:
-  :fusion:
+  :fusion: windows7
   :kvm:
   :vbox: Windows7
 Windows8:
@@ -16,39 +16,39 @@ Windows8_64:
   :kvm:
   :vbox: Windows8_64
 WindowsNT:
-  :fusion:
+  :fusion: winNT
   :kvm:
   :vbox: WindowsNT
 Windows2008:
-  :fusion:
+  :fusion: longhorn
   :kvm:
   :vbox: Windows2008
 Windows2008_64:
-  :fusion:
+  :fusion: longhorn-64
   :kvm:
   :vbox: Windows2008_64
 WindowsVista_64:
-  :fusion:
+  :fusion: winvista-64
   :kvm:
   :vbox: WindowsVista_64
 WindowsVista:
-  :fusion:
+  :fusion: winvista
   :kvm:
   :vbox: WindowsVista
 Windows2003:
-  :fusion:
+  :fusion: winnetstandard
   :kvm:
   :vbox: Windows2003
 Windows2003_64:
-  :fusion:
+  :fusion: winnetstandard-64
   :kvm:
   :vbox: Windows2003_64
 WindowsXP_64:
-  :fusion:
+  :fusion: winXPPro-64
   :kvm:
   :vbox: WindowsXP_64
 WindowsXP:
-  :fusion:
+  :fusion: winXP
   :kvm:
   :vbox: WindowsXP
 Windows2000:

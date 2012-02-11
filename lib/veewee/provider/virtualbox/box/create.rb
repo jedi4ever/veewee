@@ -43,7 +43,8 @@ module Veewee
           self.add_sata_controller
           self.attach_disk
 
-          self.create_floppy
+          self.create_floppy("virtualfloppy.vfd")
+
           self.add_floppy_controller
           self.attach_floppy
 

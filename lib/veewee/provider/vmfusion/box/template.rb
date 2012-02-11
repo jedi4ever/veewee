@@ -13,10 +13,16 @@ module Veewee
       def vmx_template(definition)
         # We only want specific variables for ERB
 
+        floppy_path=nil
+        unless definition.floppy_files.nil?
+          floppy_path=File.join(definition.path,'virtualfloppy.img')
+        end
+
         data = {
           :cpu_count => definition.cpu_count, :memory_size => definition.memory_size,
           :controller_type => "lsilogic",
           :fusion_os_type => definition.os_type_id,
+          :floppyfile => floppy_path,
           :mac_addres => "auto generated",
           :iso_file => "#{File.join(env.config.veewee.iso_dir,definition.iso_file)}",
           :box_name => name,

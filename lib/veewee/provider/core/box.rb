@@ -12,6 +12,7 @@ require 'veewee/provider/core/box/halt'
 require 'veewee/provider/core/box/sudo'
 require 'veewee/provider/core/box/ssh'
 require 'veewee/provider/core/box/issh'
+require 'veewee/provider/core/box/floppy'
 
 module Veewee
   module Provider

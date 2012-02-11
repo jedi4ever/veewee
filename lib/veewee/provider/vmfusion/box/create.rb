@@ -10,7 +10,9 @@ module Veewee
         def create(options)
           create_vm
           create_disk
+          self.create_floppy("virtualfloppy.img")
         end
+
 
         def create_disk
           #Disk types:

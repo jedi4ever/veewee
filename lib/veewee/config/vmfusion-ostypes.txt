@@ -1,0 +1,1 @@
+strings /Applications/VMware Fusion.app/Contents/MacOS/vmware |grep gostable|cut -d '.' -f 4|cut -d ')' -f 1|more 
