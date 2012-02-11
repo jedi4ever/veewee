@@ -116,6 +116,10 @@ module Veewee
                   exit
                 end
 
+                unless File.readable?(full_path)
+                  raise Veewee::Error, "The provided iso #{full_path} is not readable"
+                end
+
                 env.ui.info "Verifying md5 checksum : #{self.iso_md5}"
                 file_md5=hashsum(full_path)
 
