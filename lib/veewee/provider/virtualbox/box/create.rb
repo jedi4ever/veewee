@@ -5,6 +5,13 @@ module Veewee
 
         def create(options={})
 
+          # First check if the directory where we create the VM is empty
+          # Sometimes there are leftovers from badly terminated vms
+          box_directory=File.join(self.get_vbox_home,name)
+          if File.exists?(box_directory)
+            raise Veewee::Error,"To create the vm '#{name}' the directory '#{box_directory}' needs to be empty. \nThis could be caused by an badly closed vm.\nRemove it manually before you proceed."
+          end
+
           guessed_port=guess_free_port(definition.ssh_host_port.to_i,definition.ssh_host_port.to_i+40).to_s
           if guessed_port.to_s!=definition.ssh_host_port
             env.ui.warn "Changing ssh port from #{definition.ssh_host_port} to #{guessed_port}"

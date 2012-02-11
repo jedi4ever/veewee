@@ -36,7 +36,7 @@ module Veewee
           shell_exec("#{command}")
         end
 
-        def get_vm_location
+        def get_vbox_home
           command="#{@vboxcmd}  list  systemproperties"
           shell_results=shell_exec("#{command}",{:mute => true})
           location=shell_results.stdout.split(/\n/).grep(/Default machine/)[0].split(":")[1].strip
@@ -85,7 +85,7 @@ module Veewee
             env.ui.info "Creating new harddrive of size #{definition.disk_size.to_i} "
 
 
-            place=get_vm_location
+            place=get_vbox_home
             command ="#{@vboxcmd} createhd --filename '#{File.join(place,name,name+"."+definition.disk_format.downcase)}' --size '#{definition.disk_size.to_i}' --format #{definition.disk_format.downcase}"
             shell_exec("#{command}")
 
@@ -93,7 +93,7 @@ module Veewee
 
         def attach_disk
 
-          place=get_vm_location
+          place=get_vbox_home
           location=name+"."+definition.disk_format.downcase
 
           location="#{File.join(place,name,location)}"
