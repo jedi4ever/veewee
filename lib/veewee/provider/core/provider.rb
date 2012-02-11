@@ -1,4 +1,4 @@
-
+require 'veewee/provider/core/helper/shell'
 module Veewee
   module Provider
     module Core
@@ -9,6 +9,8 @@ module Veewee
 
         attr_accessor :type
         attr_accessor :name
+
+        include ::Veewee::Provider::Core::Helper::Shell
 
         def initialize(name,options,env)
 

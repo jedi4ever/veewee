@@ -44,6 +44,10 @@ module Veewee
             raise Veewee::Error, "There was a problem opening a connection to libvirt: #{ex}"
           end
 
+          unless self.shell_exec("arp").status == 0
+            raise Veewee::Error,"Could not execute the arp command. This is required to find the IP address of the VM"
+          end
+
         end
 
 

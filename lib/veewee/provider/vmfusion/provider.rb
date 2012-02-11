@@ -8,9 +8,9 @@ module Veewee
         #include ::Veewee::Provider::Vmfusion::ProviderCommand
 
         def check_requirements
-          #unless gem_available?("fission")
-          #raise ::Veewee::Error, "The Vmfusion Provider requires the gem 'fission' to be installed\n"+ "gem install fission"
-          #end
+          unless File.exists?("/Library/Application Support/VMware Fusion/vmrun")
+            raise Veewee::Error,"The file /Library/Application Support/VMware Fusion/vmrun does not exists. Probably you don't have Vmware fusion installed"
+          end
         end
 
 
