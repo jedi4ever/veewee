@@ -28,6 +28,7 @@ module Veewee
             box=Object.const_get("Veewee").const_get("Provider").const_get(type.to_s.capitalize).const_get("Box").new(name,env)
           rescue Error => ex
             env.ui.error "Could not instante the box #{name} with provider #{type} ,#{ex}"
+            raise
           end
         end
 

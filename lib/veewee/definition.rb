@@ -148,12 +148,21 @@ module Veewee
     end
 
     def valid?
+      # Check if the definition exists?
       unless exists?
         return false
       end
 
+      # Check ostype to be valid
       unless ostype_valid?
         return false
+      end
+
+      # Postinstall files require a valid user and password
+      unless self.postinstall_files.nil?
+        if self.ssh_user.nil? || self.ssh_password.nil?
+          return false
+        end
       end
 
       return true
@@ -162,7 +171,7 @@ module Veewee
     private
     def ostype_valid?
       unless env.ostypes.has_key?(@os_type_id)
-        env.logger.info("The ostype: #{@os_type_id} is not available")
+        env.ui.info("The ostype: #{@os_type_id} is not available")
         return false
       else
         return true
@@ -170,7 +179,7 @@ module Veewee
     end
 
     def method_missing(m, *args, &block)
-      puts "There's no attribute #{m} defined for definition #{@name}-- ignoring it"
+      env.logger.info "There's no attribute #{m} defined for definition #{@name}-- ignoring it"
     end
 
   end #End Class
