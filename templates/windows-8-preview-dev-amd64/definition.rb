@@ -13,12 +13,12 @@
 
 Veewee::Session.declare({
     :os_type_id => 'Windows8_64',
-    :iso_file => "WindowsDeveloperPreview-64bit-English-Developer.iso"
+    :iso_file => "WindowsDeveloperPreview-64bit-English-Developer.iso",
     :iso_md5 => "0477c88678efb8ebc5cd7a9e9efd8b82",
-    :iso_src => "http://wdp.dlws.microsoft.com/WDPDL/9B8DFDFF736C5B1DBF956B89D8A9D4FD925DACD2/WindowsDeveloperPreview-64bit-English-Developer.iso"
+    :iso_src => "http://wdp.dlws.microsoft.com/WDPDL/9B8DFDFF736C5B1DBF956B89D8A9D4FD925DACD2/WindowsDeveloperPreview-64bit-English-Developer.iso",
     :iso_download_timeout => "1000",
     :cpu_count => '1',
-    :memory_size=> '384', 
+    :memory_size=> '384',
     :disk_size => '20280', :disk_format => 'VDI', :hostiocache => 'off',
 
   :floppy_files => ["Autounattend.xml",
