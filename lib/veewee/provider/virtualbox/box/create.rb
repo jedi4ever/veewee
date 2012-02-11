@@ -31,6 +31,7 @@ module Veewee
 
           self.add_ide_controller
           self.attach_isofile
+          self.attach_guest_additions
 
           self.add_sata_controller
           self.attach_disk

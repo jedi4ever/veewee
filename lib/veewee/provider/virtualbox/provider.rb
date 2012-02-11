@@ -13,8 +13,6 @@ module Veewee
           #end
         end
 
-
-
       end #End Class
     end # End Module
   end # End Module
