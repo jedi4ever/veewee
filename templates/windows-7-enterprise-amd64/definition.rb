@@ -17,9 +17,10 @@ Veewee::Session.declare({
     
     :floppy_files => [
       "Autounattend.xml",
+      "install-vbox-guest.bat",
       "install-winrm.bat",
-      "oracle-cert.cer",
-      "install-cygwin-sshd.bat"
+      "install-cygwin-sshd.bat",
+      "oracle-cert.cer"
     ],
 
     :boot_wait => "1", #12 minutes

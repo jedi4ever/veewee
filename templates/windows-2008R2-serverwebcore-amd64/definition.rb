@@ -13,6 +13,8 @@ Veewee::Session.declare({
 
     :floppy_files => [
       "Autounattend.xml", # automate install and setup winrm
+      "cygwin-setup.exe",
+      "install-vbox-guest.bat",
       "install-cygwin-sshd.bat",
       "install-winrm.bat",
       "oracle-cert.cer"],
@@ -30,7 +32,8 @@ Veewee::Session.declare({
     :ssh_login_timeout => "10000",
     # Actively attempt to winrm (no ssh on base windows) in for 10000 seconds
     :ssh_user => "vagrant", :ssh_password => "vagrant", :ssh_key => "", 
-    :ssh_host_port => "59856", :ssh_guest_port => "5985",
+    :ssh_host_port => "59823", :ssh_guest_port => "22", # this still uses cygwinsshd
+    #:ssh_host_port => "59856", :ssh_guest_port => "5985", # NO winrm... yet
     # And run postinstall.sh for up to 10000 seconds
     :postinstall_timeout => "10000",
     :postinstall_files => ["postinstall.sh"],

@@ -128,7 +128,7 @@
                 <HelpCustomized>false</HelpCustomized>
             </OEMInformation>
             <!-- Rename computer here. -->
-            <ComputerName>vagrant-2008R2</ComputerName>
+            <ComputerName>vagrant-2008R1-serverstandard</ComputerName>
             <TimeZone>New Zealand Standard Time</TimeZone>
             <RegisteredOwner></RegisteredOwner>
         </component>
