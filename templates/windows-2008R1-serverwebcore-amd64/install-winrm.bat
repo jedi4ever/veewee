@@ -7,9 +7,7 @@ cmd /c winrm set winrm/config/service/auth @{Basic="true"}
 cmd /c winrm set winrm/config/listener?Address=*+Transport=HTTP @{Port="5985"}
 cmd /c netsh advfirewall firewall set rule group="remote administration" new enable=yes
 cmd /c netsh firewall add portopening TCP 5985 "Port 5985"
-
 cmd /c net stop winrm
-cmd /c sc config winrm start= auto
 cmd /c net start winrm
 
 cmd /c reg add "HKEY_CURRENT_USER\Control Panel\Desktop" /v ScreenSaveActive /t REG_SZ /d 0 /f

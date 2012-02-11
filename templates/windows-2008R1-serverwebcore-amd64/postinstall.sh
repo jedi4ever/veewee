@@ -65,8 +65,7 @@ EOF
 chmod 755 /bin/sudo
 
 # Mounting a directory
-# I don't think this works until after a reboot
-#net.exe use  '\\vboxsvr\veewee-validation'
+net.exe use  '\\vboxsvr\veewee-validation'
 
 
 # Reboot
