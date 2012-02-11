@@ -16,13 +16,15 @@ module Veewee
           unless forward.nil?
             if guessed_port!=forward[:guest_port]
               # Remove the existing one
-              delete_forwarding("guestssh")
+              self.delete_forwarding("guestssh")
               env.ui.warn "Changing ssh port from #{forward[:guest_port]} to #{guessed_port}"
-              add_ssh_nat_mapping
+              self.add_ssh_nat_mapping
             end
           else
-              add_ssh_nat_mapping
+              self.add_ssh_nat_mapping
           end
+
+          self.suppress_messages    
 
           # Once assembled we start the machine
           env.logger.info "Started the VM with GUI Enabled? #{gui_enabled}"

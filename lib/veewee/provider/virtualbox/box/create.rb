@@ -13,33 +13,33 @@ module Veewee
 
 
           # Suppress those annoying virtualbox messages
-          suppress_messages
+          self.suppress_messages
 
-          create_vm
+          self.create_vm
 
           # Attach ttyS0 to the VM for console output
           redirect_console=options[:redirectconsole]
           if redirect_console
-            attach_serial_console
+            self.attach_serial_console
           end
 
           # Adds a folder to the vm for testing purposes
-          add_shared_folder
+          self.add_shared_folder
 
           #Create a disk with the same name as the box_name
-          create_disk
+          self.create_disk
 
-          add_ide_controller
-          attach_isofile
+          self.add_ide_controller
+          self.attach_isofile
 
-          add_sata_controller
-          attach_disk
+          self.add_sata_controller
+          self.attach_disk
 
-          create_floppy
-          add_floppy_controller
-          attach_floppy
+          self.create_floppy
+          self.add_floppy_controller
+          self.attach_floppy
 
-          add_ssh_nat_mapping
+          self.add_ssh_nat_mapping
 
         end
 

@@ -45,7 +45,8 @@ module Veewee
 
 
         def suppress_messages
-          update_date=Time.now+86400
+          day=24*60*60
+          update_date=Time.now+365*day
 
           extraData = [
             ["Gui/RegistrationData","triesLeft=0"],
