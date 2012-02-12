@@ -8,7 +8,7 @@ module Veewee
           options = {}
 
           opts = OptionParser.new do |opts|
-            opts.banner = "Destroy the basebox that was build"
+            opts.banner = "Destroy the basebox that was built"
             opts.separator ""
             opts.separator "Usage: vagrant basebox destroy <boxname>"
 

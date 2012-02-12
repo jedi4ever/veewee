@@ -41,7 +41,7 @@ The following command are available: change the vbox to fusion or kvm if you wan
     Tasks:
       veewee vbox build [BOX_NAME]             # Build box
       veewee vbox define [BOXNAME] [TEMPLATE]  # Define a new basebox starting fr...
-      veewee vbox destroy [BOXNAME]            # Destroys the basebox that was build
+      veewee vbox destroy [BOXNAME]            # Destroys the basebox that was built
       veewee vbox halt [BOXNAME]               # Activates a shutdown on the basebox
       veewee vbox help [COMMAND]               # Describe subcommands or one spec...
       veewee vbox list                         # Lists all defined boxes
