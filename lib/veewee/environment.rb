@@ -96,14 +96,6 @@ module Veewee
       return self
     end
 
-#    def list_ostypes
-      #@ui.info "The following are possible os_types you can use in your definition.rb files"
-#
-      #config.ostypes.each { |key,value|
-        #@ui.info "#{key}"
-      #}
-    #end
-
     #---------------------------------------------------------------
     # Config Methods
     #---------------------------------------------------------------

@@ -64,13 +64,16 @@ module Veewee
           # Type the boot sequence
           self.console_type(boot_sequence)
 
+          self.handle_kickstart(options)
+
           # Wait for an ipaddress
+          # This needs to be done after the kickstart:
+          # As the dhcp request will likely occur just before the kickstart fetch
           until !self.ip_address.nil?
             env.logger.info "wait for Ip addres"
             sleep 2
           end
 
-          self.handle_kickstart(options)
           self.transfer_buildinfo(options)
           self.handle_postinstall(options)
 
