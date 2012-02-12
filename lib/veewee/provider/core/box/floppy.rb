@@ -16,6 +16,10 @@ module Veewee
             end
             javacode_dir=File.expand_path(File.join(__FILE__,'..','..','..','..','..','java'))
             floppy_file=File.join(definition.path,filename)
+            if File.exists?(floppy_file)
+              env.logger.info "Removing previous floppy file"
+              FileUtils.rm(floppy_file)
+            end
             command="java -jar #{javacode_dir}/dir2floppy.jar '#{temp_dir}' '#{floppy_file}'"
             shell_exec("#{command}")
           end

@@ -50,7 +50,7 @@ module Veewee
           devices=domain_doc.xpath('/domain/devices').first
           # The floppy xml representation
           floppy_xml="<disk type='file' device='floppy'><driver name='qemu' type='raw'/><source file='"+
-          File.join(definitition.path,"virtualfloppy.vfd") +
+          File.join(definitition.path,"virtualfloppy.img") +
           "'/><target dev='fda' bus='fdc'/><address type='drive' controller='0' bus='0' unit='0'/></disk>
           <controller type='fdc' index='0'>"
 
