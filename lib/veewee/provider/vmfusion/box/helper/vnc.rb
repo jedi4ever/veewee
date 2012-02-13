@@ -41,27 +41,6 @@ module Veewee
           self.vnc_port - 5900
         end
 
-
-#        def remove_vnc_port
-#          env.ui.info "Removing vnc_port from #{raw.vmx_path}"
-#          lines=File.readlines(raw.vmx_path).reject{|l| l =~ /^RemoteDisplay.vnc/}
-#          File.open(raw.vmx_path, 'w') do |f|
-#            f.puts lines
-#          end
-#        end
-#
-#        def set_vnc_port(port)
-#          unless vnc_enabled?
-#            env.ui.info "Adding vnc_port #{port} to #{raw.vmx_path}"
-#            File.open(raw.vmx_path, 'a') do |f|
-#              f.puts 
-#            end
-#          else
-#            raise Veewee::Error,"VNC is already enabled"
-#          end
-#        end
-
-
         def vnc_enabled?
            lines=File.readlines(raw.vmx_path)
            matches=lines.grep(/^RemoteDisplay.vnc.enabled/)

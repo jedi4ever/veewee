@@ -19,7 +19,6 @@ module Veewee
                 return result
               rescue RuntimeError => ex
                 env.ui.error "Error executing command #{command} : #{ex}"
-                puts "Error executing command #{command} : #{ex}"
                 raise Veewee::SshError, ex
               end
             end
