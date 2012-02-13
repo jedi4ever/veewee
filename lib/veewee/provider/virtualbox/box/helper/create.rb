@@ -38,7 +38,7 @@ module Veewee
 
         def get_vbox_home
           command="#{@vboxcmd}  list  systemproperties"
-          shell_results=shell_exec("#{command}",{:mute => true})
+          shell_results=shell_exec("#{command}")
           location=shell_results.stdout.split(/\n/).grep(/Default machine/)[0].split(":")[1].strip
           return location
         end
@@ -56,7 +56,7 @@ module Veewee
           ]
           extraData.each do |data|
             command="#{@vboxcmd} setextradata global '#{data[0]}' '#{data[1]}'"
-            shell_results=shell_exec("#{command}",{:mute => false})
+            shell_results=shell_exec("#{command}")
           end
 
         end

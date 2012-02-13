@@ -5,7 +5,7 @@ module Veewee
 
         def forwarding(name)
           command="#{@vboxcmd} showvminfo --details --machinereadable '#{self.name}'"
-          shell_results=shell_exec("#{command}",{:mute => true })
+          shell_results=shell_exec("#{command}")
           rules=shell_results.stdout.split(/\n/).grep(/^Forward/)
           result=nil
           rules.each do |rule|
@@ -29,7 +29,7 @@ module Veewee
         def delete_forwarding(name)
           forward=self.forwarding(name)
           command="#{@vboxcmd} controlvm '#{self.name}' natpf#{forward[:nr]} delete #{name}"
-          shell_results=shell_exec("#{command}",{:mute => false})
+          shell_results=shell_exec("#{command}")
         end
 
       end
