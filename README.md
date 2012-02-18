@@ -43,7 +43,7 @@ Depending on how you want to use veewee, read through one of the following guide
 - [guide for Vmware fusion](veewee/tree/master/doc/fusion.md)
 - [guide for KVM](veewee/tree/master/doc/kvm.md)
 
-You can also look at the more detailed pages on each subject in the [documentation directory](veewee/doc)
+You can also look at the more detailed pages on each subject in the [documentation directory](veewee/tree/master/doc)
 
 People have reported good experiences, why don't you give it a try?
 
