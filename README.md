@@ -32,18 +32,18 @@ Besides building Vagrant boxes, veewee can also be used for:
 
 Before you start read through:
 
-- the [requirements](veewee/doc/requirements)
-- the [installation](veewee/doc/installation) procedure
+- the [requirements](veewee/tree/master/doc/requirements.md)
+- the [installation](veewee/tree/master/doc/installation.md) procedure
 
 Depending on how you want to use veewee, read through one of the following guides: (**work in progres**)
 
-- [guide for vagrant](veewee/doc/vagrant)
+- [guide for vagrant](veewee/tree/master/doc/vagrant.md)
 
-- [guide for Virtualbox](veewee/doc/vbox)
-- [guide for Vmware fusion](veewee/doc/fusion)
-- [guide for KVM](veewee/doc/kvm)
+- [guide for Virtualbox](veewee/tree/master/doc/vbox.md)
+- [guide for Vmware fusion](veewee/tree/master/doc/fusion.md)
+- [guide for KVM](veewee/tree/master/doc/kvm.md)
 
-You can also look at the more detailed pages on each subject in the [documentation directory](veewee/doc)
+You can also look at the more detailed pages on each subject in the [documentation directory](veewee/tree/master/doc)
 
 People have reported good experiences, why don't you give it a try?
 

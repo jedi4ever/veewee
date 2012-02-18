@@ -2,11 +2,11 @@
 Let's define a  Ubuntu 10.10 server i386 basebox called myunbuntubox
 this is essentially making a copy based on the  templates provided above.
 
-    $ vagrant basebox define 'myubuntubox' 'ubuntu-10.10-server-i386'
+    $ veewee vbox basebox define 'myubuntubox' 'ubuntu-10.10-server-i386'
     The basebox 'myubuntubox' has been succesfully created from the template ''ubuntu-10.10-server-i386'
     You can now edit the definition files stored in definitions/myubuntubox
     or build the box with:
-    vagrant basebox build 'myubuntubox'
+    veewee vbox basebox build 'myubuntubox'
 
 -> This copies over the templates/ubuntu-10.10-server-i386 to definition/myubuntubox
 
@@ -47,7 +47,7 @@ If you need to change values in the templates, be sure to run the rake undefine,
 ## Getting the cdrom file in place
 Put your isofile inside the 'currentdir'/iso directory or if you don't run
 
-    $ vagrant basebox build 'myubuntubox'
+    $ veewee vbox basebox build 'myubuntubox'
 
 - the build assumes your iso files are in 'currentdir'/iso
 - if it can not find it will suggest to download the iso for you
@@ -55,7 +55,7 @@ Put your isofile inside the 'currentdir'/iso directory or if you don't run
 
 ## Build the new box:
 
-    $ vagrant basebox build 'myubuntubox'
+    $ veewee vbox basebox build 'myubuntubox'
 
 - This will create a machine + disk according to the definition.rb
 - Note: :os_type_id = The internal Name Virtualbox uses for that Distribution
@@ -68,13 +68,13 @@ Put your isofile inside the 'currentdir'/iso directory or if you don't run
 
 ## Validate the vm 
 
-    $ vagrant basebox validate 'myubuntubox'
+    $ veewee vbox basebox validate 'myubuntubox'
 
 this will run some cucumber test against the box to see if it has the necessary bits and pieces for vagrant to work
 
 ## Export the vm to a .box file
 
-    $ vagrant basebox export 'myubuntubox'
+    $ veewee vbox basebox export 'myubuntubox'
 
 this is actually calling - vagrant package --base 'myubuntubox' --output 'boxes/myubuntubox.box'
 
@@ -108,7 +108,7 @@ If you don't use rvm, be sure to execute vagrant through bundle exec
 
 Start of an existing one
 
-    $ vagrant basebox define 'mynewos' 'ubuntu...'
+    $ veewee vbox basebox define 'mynewos' 'ubuntu...'
 
 - Do changes in the currentdir/definitions/mynewos
 - When it builds ok, move the definition/mynewos to a sensible directory under templates
