@@ -16,7 +16,7 @@ module Veewee
           # So we begin by transferring the ISO file of the vmware tools
 
           # Set default
-          iso_image="/Library/Parallels/Tools/prl-tools-linux.iso"
+          iso_image="/Library/Parallels/Tools/prl-tools-lin.iso"
           iso_image="/Library/Parallels/Tools/prl-tools-mac.iso" if definition.os_type_id=~/^Darwin/
           iso_image="/Library/Parallels/Tools/prl-tools-win.iso" if definition.os_type_id=~/^Win/
           iso_image="/Library/Parallels/Tools/prl-tools-other.iso" if definition.os_type_id=~/^Free/
