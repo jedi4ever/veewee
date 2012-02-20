@@ -29,6 +29,8 @@ module Veewee
           # Create the vm
           command="prlctl create '#{self.name}' --distribution '#{distribution}'"
           shell_exec("#{command}")
+          command="prlctl set '#{self.name}' --cpus #{definition.cpu_count} --memsize #{definition.memory_size}"
+          shell_exec("#{command}")
 
 
           #NOTE: order is important: as this determines the boot order sequence
