@@ -27,6 +27,11 @@ echo -e "\ninstall chef and puppet ..."
 gem install chef --no-ri --no-rdoc
 gem install puppet --no-ri --no-rdoc
 
+# remove zypper locks, preventing installation of additional packages,
+# present because of the autoinst <software><remove-packages>
+echo -e "\nremove zypper package locks ..."
+rm -f /etc/zypp/locks
+
 # install the virtualbox guest additions
 echo -e "\ninstall the virtualbox guest additions ..."
 zypper --non-interactive remove `rpm -qa virtualbox-guest-*`
