@@ -1,9 +1,9 @@
 require 'digest/md5'
-CURRENT_DIR       = File.dirname(__FILE__)
-PRESEED_MD5       = "#{Digest::MD5.file("#{CURRENT_DIR}/preseed.cfg").hexdigest}"
+current_dir       = File.dirname(__FILE__)
+preseed_md5       = "#{Digest::MD5.file("#{current_dir}/preseed.cfg").hexdigest}"
 #ISO_MD5           = "#{Digest::MD5.file("#{CURRENT_DIR}/../../iso/ubuntu-10.04.3-alternate-amd64.iso").hexdigest}"
 
-Veewee::Session.declare( {
+Veewee::Definition.declare( {
   :boot_cmd_sequence    => [
                            "<Esc><Esc><Enter>",
                            "/install/vmlinuz ",
@@ -24,7 +24,7 @@ Veewee::Session.declare( {
                            "netcfg/choose_interface=auto ",
                            "preseed/interactive=false ",
                            "preseed/url=http://%IP%:%PORT%/preseed.cfg ",
-                           "preseed/url/checksum=#{PRESEED_MD5} ",
+                           "preseed/url/checksum=#{preseed_md5} ",
                            "DEBCONF_DEBUG=5 ",
                            "-- <Enter>"
                            ],
@@ -52,6 +52,6 @@ Veewee::Session.declare( {
   :ssh_user             => "vagrant",
   :sudo_cmd             => "echo '%p'|sudo -S bash '%f'",
   :shutdown_cmd         => "shutdown -h now",
-  :use_hw_virt_ext      => 'off',
-  :use_pae              => 'on'
+  :hwvirtext      => 'off',
+  :pae              => 'on'
 })

@@ -1,79 +1,22 @@
 #!/usr/bin/env ruby
-
-require 'rubygems'
-require 'thor'
-require 'bundler'
-require 'virtualbox'
 require 'veewee'
 
+env = Veewee::Environment.new
 
-#Setup some base variables to use
-veewee_dir= File.expand_path(File.join(File.dirname(__FILE__),".."))
-definition_dir= File.expand_path(File.join(".", "definitions"))
-lib_dir= File.expand_path(File.join(veewee_dir, "lib"))
-box_dir= File.expand_path(File.join(veewee_dir, "boxes"))
-template_dir=File.expand_path(File.join(veewee_dir, "templates"))
+begin
+  # Begin logging
+  env.ui.info("veewee") { "`veewee` invoked: #{ARGV.inspect}" }
 
-#vbox_dir=File.expand_path(File.join(veewee_dir, "tmp"))
-tmp_dir=File.expand_path(File.join(veewee_dir, "tmp"))
+  # Disable color if the proper argument was passed
+  shell = ARGV.include?("--no-color") ? Thor::Shell::Basic.new : Thor::Base.shell.new
 
-iso_dir=File.expand_path(File.join(veewee_dir, "iso"))
+  # Attach the UI
+  env.ui = ::Veewee::UI::Shell.new(env, shell)
+  env.load!
 
-#needs to be moved to the config files to be allowed override
-#ENV['VBOX_USER_HOME']=vbox_dir
+  # Start the CLI
+  ::Veewee::CLI.start(ARGV,:env => env)
 
-#Load Veewee::Session libraries
-Dir.glob(File.join(lib_dir, '**','*.rb')).each {|f|
-  require f  }
-
-#Initialize
-Veewee::Session.setenv({:veewee_dir => veewee_dir, :definition_dir => definition_dir,
-   :template_dir => template_dir, :iso_dir => iso_dir, :box_dir => box_dir, :tmp_dir => tmp_dir})
-
-
-   
-class VeeweeCLI < Thor 
-  
-  desc "init [NAME] [TEMPLATE]", "initializes a box from a template" 
-  method_options :force => :boolean
-  def init(boxname=nil, template=nil)
-    if (boxname.nil?)  
-      puts "please provide a boxname"
-      exit
-    end
-    
-    puts "Init a new box #{boxname}, starting from template #{template}"
-  	Veewee::Session.define(boxname,template)
-  	
-  end
-
-  desc "templates", "list the template available" 
-  def templates 
-    Veewee::Session.list_templates
-  end
-  
-  desc "build [NAME]", "build the box defined" 
-  method_options :force => :boolean
-  def build(boxname)
-    puts "Building box #{boxname}"
-	  Veewee::Session.build(boxname)
-  end
-
-  desc "export [NAME]", "export the box" 
-  method_options :force => :boolean  
-  def export(boxname)
-      if (!boxname.nil?)
-        Veewee::Session.export_box(boxname)
-      end
-  end
-  
-end
-
-
-
-version=VirtualBox.version
-if (version.match(/^4./))
-   	VeeweeCLI.start
-else
-   	puts "veewee only supports VirtualBox 4.x"
+rescue Veewee::Error => e
+  puts "#{e}"
 end

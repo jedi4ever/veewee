@@ -1,9 +1,14 @@
 .DS_Store
+.bundle
+Gemfile.lock
 gems/*
 iso/*
+iso
+*.ova
 tmp/*
 definitions/*
 Vagrantfile
+Vagrantfile.*
 cookbooks/*
 manifests/*
 boxes/*
@@ -11,3 +16,4 @@ pkg/*
 *.box
 .vagrant
 virtualfloppy.vfd
+*.swp

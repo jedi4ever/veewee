@@ -1,0 +1,301 @@
+---
+Windows7_64:
+  :fusion: windows7-64
+  :kvm:
+  :vbox: Windows7_64
+  :parallels: win-7
+Windows7:
+  :fusion: windows7
+  :kvm:
+  :vbox: Windows7
+  :parallels: win-7
+Windows8:
+  :fusion:
+  :kvm:
+  :vbox: Windows8
+  :parallels: win-8
+Windows8_64:
+  :fusion:
+  :kvm:
+  :vbox: Windows8_64
+  :parallels: win-8
+WindowsNT:
+  :fusion: winNT
+  :kvm:
+  :vbox: WindowsNT
+  :parallels: win-net
+Windows2008:
+  :fusion: longhorn
+  :kvm:
+  :vbox: Windows2008
+  :parallels: win-2008
+Windows2008_64:
+  :fusion: longhorn-64
+  :kvm:
+  :vbox: Windows2008_64
+  :parallels: win-2008
+WindowsVista_64:
+  :fusion: winvista-64
+  :kvm:
+  :vbox: WindowsVista_64
+  :parallels: win-vista
+WindowsVista:
+  :fusion: winvista
+  :kvm:
+  :vbox: WindowsVista
+  :parallels: win-vista
+Windows2003:
+  :fusion: winnetstandard
+  :kvm:
+  :vbox: Windows2003
+  :parallels: win-2003
+Windows2003_64:
+  :fusion: winnetstandard-64
+  :kvm:
+  :vbox: Windows2003_64
+  :parallels: win-2003
+WindowsXP_64:
+  :fusion: winXPPro-64
+  :kvm:
+  :vbox: WindowsXP_64
+  :parallels: win-xp
+WindowsXP:
+  :fusion: winXP
+  :kvm:
+  :vbox: WindowsXP
+  :parallels: win-xp
+Windows2000:
+  :fusion:
+  :kvm:
+  :vbox: Windows200
+  :parallels: win-2000
+WindowsNT4:
+  :fusion:
+  :kvm:
+  :vbox: WindowsNT4
+  :parallels: win-nt
+WindowsMe:
+  :fusion:
+  :kvm:
+  :vbox: WindowsMe
+  :parallels: win-me
+Windows98:
+  :fusion:
+  :kvm:
+  :vbox: Windows98
+  :parallels: win-98
+Windows95:
+  :fusion:
+  :kvm:
+  :vbox: Windows95
+  :parallels: win-95
+Windows31:
+  :fusion:
+  :kvm:
+  :vbox: Windows31
+  :parallels: win-311
+Other:
+  :fusion: other
+  :kvm:
+  :vbox: Other
+  :parallels: other
+Other_64:
+  :fusion: other-64
+  :kvm:
+  :vbox: Other_64
+  :parallels: other
+FreeBSD:
+  :fusion: freeBSD
+  :kvm:
+  :vbox: FreeBSD
+  :parallels: freebsd
+FreeBSD_64:
+  :fusion: FreeBSD_64
+  :kvm:
+  :vbox: FreeBSD-64
+  :parallels: freebsd
+Oracle:
+  :fusion: oraclelinux
+  :kvm:
+  :vbox: Oracle
+  :parallels: other
+Oracle_64:
+  :fusion: oraclelinux-64
+  :kvm:
+  :vbox: Oracle_64
+  :parallels: other
+Debian:
+  :fusion: debian5
+  :kvm:
+  :vbox: Debian
+  :parallels: debian
+Debian_64:
+  :fusion: debian5-64
+  :kvm:
+  :vbox: Debian_64
+  :parallels: debian
+Gentoo:
+  :fusion: other26xlinux
+  :kvm:
+  :vbox: Gentoo
+  :parallels: other
+Gentoo_64:
+  :fusion: other26xlinux-64
+  :kvm:
+  :vbox: Gentoo_64
+  :parallels: other
+Linux22:
+  :fusion: linux
+  :kvm:
+  :vbox: Linux22
+  :parallels: other
+Linux24:
+  :fusion: other24xlinux
+  :kvm:
+  :vbox: Linux24
+  :parallels: linux-2.4
+Linux24_64:
+  :fusion: other24xlinux-64
+  :kvm:
+  :vbox: Linux24_64
+  :parallels: linux-2.4
+Linux26:
+  :fusion: other26xlinux
+  :kvm:
+  :vbox: Linux26
+  :parallels: linux-2.6
+Linux26_64:
+  :fusion: other26xlinux-64
+  :kvm:
+  :vbox: Linux26_64
+  :parallels: linux-2.6
+RedHat:
+  :fusion: RedHat
+  :kvm:
+  :vbox: RedHat
+  :parallels: redhat
+RedHat_64:
+  :fusion: RedHat_64
+  :kvm:
+  :vbox: RedHat_64
+  :parallels: redhat
+Centos4:
+  :fusion: centos
+  :kvm:
+  :vbox: RedHat
+  :parallels: centos
+Centos_64:
+  :fusion: centos-64
+  :kvm:
+  :vbox: RedHat_64
+  :parallels: centos
+ArchLinux:
+  :fusion: other26xlinux
+  :kvm:
+  :vbox: ArchLinux
+  :parallels: linux-2.6
+ArchLinux_64:
+  :fusion: other26xlinux-64
+  :kvm:
+  :vbox: ArchLinux_64
+  :parallels: linux-2.6
+OpenSUSE:
+  :fusion: opensuse
+  :kvm:
+  :vbox: OpenSUSE
+  :parallels: opensuse
+OpenSUSE_64:
+  :fusion: opensuse-64
+  :kvm:
+  :vbox: OpenSUSE_64
+  :parallels: opensuse
+SUSE:
+  :fusion: suse
+  :kvm:
+  :vbox: OpenSUSE
+  :parallels: suse
+SUSE_64:
+  :fusion: suse-64
+  :kvm:
+  :vbox: OpenSUSE_64
+  :parallels: suse
+Fedora:
+  :fusion: fedora
+  :kvm:
+  :vbox: Fedora
+  :parallels: fedora-core
+Fedora_64:
+  :fusion: fedora-64
+  :kvm:
+  :vbox: Fedora_64
+  :parallels: fedora-core
+Ubuntu:
+  :fusion: ubuntu
+  :kvm:
+  :vbox: Ubuntu
+  :parallels: ubuntu
+Ubuntu_64:
+  :fusion: ubuntu-64
+  :kvm:
+  :vbox: Ubuntu_64
+  :parallels: ubuntu
+Linux:
+  :fusion: linux
+  :kvm:
+  :vbox: Linux
+  :parallels: linux
+Solaris:
+  :fusion: solaris10
+  :kvm:
+  :vbox: Solaris
+  :parallels: solaris-10
+Solaris_64:
+  :fusion: solaris10-64
+  :kvm:
+  :vbox: Solaris_64
+  :parallels: solaris-10
+Solaris9:
+  :fusion: solaris
+  :kvm:
+  :vbox: Solaris
+  :parallels: solaris-9
+Solaris7:
+  :fusion: solaris7
+  :kvm:
+  :vbox: Solaris
+  :parallels: solaris
+Solaris8:
+  :fusion: solaris8
+  :kvm:
+  :vbox: Solaris
+  :parallels: solaris
+OpenSolaris:
+  :fusion: solaris10
+  :kvm:
+  :vbox: OpenSolaris
+  :parallels: opensolaris
+OpenSolaris_64:
+  :fusion: solaris-64
+  :kvm:
+  :vbox: OpenSolaris_64
+  :parallels: opensolaris
+OpenBSD:
+  :fusion: other
+  :kvm:
+  :vbox: OpenBSD
+  :parallels: other
+OpenBSD_64:
+  :fusion: other-64
+  :kvm:
+  :vbox: OpenBSD_64
+  :parallels: other
+NetBSD:
+  :fusion: other
+  :kvm:
+  :vbox: NetBSD
+  :parallels: other
+NetBSD_64:
+  :fusion: other-64
+  :kvm:
+  :vbox: NetBSD_64
+  :parallels: other

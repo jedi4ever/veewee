@@ -1,0 +1,116 @@
+Install correct version!
+
+/Library/Frameworks/ParallelsVirtualizationSDK.framework/Versions/6/Resources/English.lpro
+
+Parallels Virtualization SDK Programmer's Guide.PDF
+
+---------------------
+Error -> Import not found
+Solution -> Download SDK ->
+
+dlopen(/System/Library/Frameworks/Python.framework/Versions/2.6/Extras/lib/python/prlsdkapi/prlsdk.so, 2): no suitable image found.  Did find:
+        /System/Library/Frameworks/Python.framework/Versions/2.6/Extras/lib/python/prlsdkapi/prlsdk.so: mach-o, but wrong architecture
+
+
+Error -> Wrong architecture
+Solution -> right python version
+patrick@falcon-pdb:ruby-1.9.2-p136@veewee ~/dev/veewee/lib/veewee/provider/parallels/box (parallels) $ export VERSIONER_PYTHON_PREFER_32_BIT=yes
+patrick@falcon-pdb:ruby-1.9.2-p136@veewee ~/dev/veewee/lib/veewee/provider/parallels/box (parallels) $ export VERSIONER_PYTHON_PREFER_64_BIT=no
+patrick@falcon-pdb:ruby-1.9.2-p136@veewee ~/dev/veewee/lib/veewee/provider/parallels/box (parallels) $ python a.py
+Traceback (most recent call last):
+  File "a.py", line 13, in <module>
+      login_job.wait()
+        File "/System/Library/Frameworks/Python.framework/Versions/2.6/Extras/lib/python/prlsdkapi/__init__.py", line 555, in wait
+            sdk_check_result(self.get_ret_code(), err_obj)
+              File "/System/Library/Frameworks/Python.framework/Versions/2.6/Extras/lib/python/prlsdkapi/__init__.py", line 67, in sdk_check_result
+                  raise PrlSDKError, (result, conv_error(result), err_obj)
+                  prlsdkapi.PrlSDKError: SDK error: 0x80000249: Unable to connect to Parallels Service. Make sure that the prl_disp_service process is active and it is not blocked by F
+                  irewall. If the problem persists, contact the Parallels support team for assistance.
+
+-----------
+sudo launchctl start com.parallels.desktop.launchdaemon  
+sudo launchctl list | grep com.parallels.desktop.launchdaemon
+-----------
+http://download.parallels.com/desktop/v7/ga-locales/documentation/en_US/Parallels%20Virtualization%20SDK%20Programmer's%20Guide.pdf
+Creating a basic application - python
+
+
+prlctl version 7.0.15052.710728
+
+Usage: prlctl ACTION <ID | NAME> [OPTIONS] [-l user[[:passwd]@server[:port]]
+Supported actions are:
+  capture <ID | NAME> --file <name>
+  clone <ID | NAME> --name <NEW_NAME> [--template]] [--dst path] [--changesid] [--linked] [--detach-external-hdd <yes|no>]
+  convert <PATH> [--dst <path>] [--force]
+  create <NAME> {--ostemplate <name> | --distribution <name|list>} [--dst <path>] [--changesid] [--no-hdd]
+                [--lion-recovery]
+  delete <ID | NAME>
+  enter <ID | NAME>
+  exec <ID | NAME> <command> [arg ...]
+  list [-a,--all] [-t,--template] [--vmtype ct|vm|all] [-o,--output name[,name...]] [-s,--sort name]
+  list -i,--info [-f,--full] [<ID | NAME>]
+  pause <ID | NAME>
+  register <PATH>
+  reset <ID | NAME>
+  resume <ID | NAME>
+  start <ID | NAME>
+  change-sid <ID | NAME>
+  stop <ID | NAME> [--kill | --noforce]
+  snapshot <ID | NAME> [-n,--name <name>] [-d,--description <desc>]
+  snapshot-delete <ID | NAME> -i,--id <snapid>
+  snapshot-list <ID | NAME> [-t,--tree] [-i,--id <snapid>]
+  snapshot-switch <ID | NAME> -i,--id <snapid>
+  suspend <ID | NAME>
+  unregister <ID | NAME>
+  reset-uptime <ID | NAME>
+  encrypt <ID | NAME> [--dry-run]
+  decrypt <ID | NAME> [--dry-run]
+  change-passwd <ID | NAME>
+  problem-report <ID | NAME> [--send [--proxy [user[:password]@proxyhost[:port]]] [--no-proxy] [--name <your name>] [--email <your E-mail>] [--description <problem description>]]
+  set <ID | NAME> [--cpus <N>] [--memsize <N>] [--videosize <n>]
+    [--memquota <auto|min:max[:priority[:maxballoon]]] [--mem-hotplug <on|off>]
+    [--description <desc>] [--autostart <on|off|auto>] [--autostart-delay <n>]
+    [--autostop <stop|suspend>] [--applyconfig <conf>] [--name <name>]
+    [--start-as-user <administrator|owner|user:passwd>]
+    [--vnc-mode <auto | manual | off>] [--vnc-port <port>] [--vnc-passwd <passwd>]
+    [--cpu-hotplug <on|off>]
+    [--userpasswd <user:passwd>]
+    [--usedefanswers <on | off>]
+    [--sync-host-printers <on | off>] [--sync-default-printer <on | off>]
+    [Device management options] [Shared folder options]
+Device management options are:
+	--device-connect <name>
+	--device-disconnect <name>
+	--device-del <name>
+	--device-set <name> <Set options>
+		[Set options] [--enable|--disable] [--connect|--disconnect]
+	--device-add <hdd | cdrom | net | fdd | serial | parallel | sound | usb>
+		[Device options] [--enable|--disable] [--connect|--disconnect]
+	--device-add hdd [--image <image>]
+		[--type <expand | plain>] [--size <n>] [--split]
+		[--iface <ide|scsi|sata>] [--position <n>]
+	--device-add hdd --device <real_name>
+		[--iface <ide|scsi|sata>] [--passthr] [--position <n>]
+	--device-add cdrom {--device <name> | --image <image>}
+		[--iface <ide|scsi|sata>] [--passthr] [--position <n>]
+	--device-add net --type <shared | bridged | host-only>
+		[--mac <addr|auto>]
+		[--ipadd <addr[/mask]> | --ipdel <addr[/mask]> |
+		--dhcp <yes|no> | --dhcp6 <yes|no>] [--gw <gw>] [--gw6 <gw>]
+		[--nameserver <addr>] [--searchdomain <addr>] [--configure <yes|no>]
+		[--ipfilter <yes|no>] [--macfilter <yes|no>]
+		[--preventpromisc <yes|no>]
+		[--adapter-type <e1000|rtl>]
+	--device-add fdd [--device <real_name>]
+	--device-add fdd --image <image> [--recreate]
+	--device-add serial {--device <name> | --output <file> |--socket <name>}
+	--device-add parallel {--device <name> | --output <file}
+	--device-add sound --output <name> --input <name>
+	--device-bootorder <name1 name2 ...>
+Shared folder options are:
+	--shf-host <on | off>
+	--shf-host-add <name> --path <path> [--mode <ro|rw>]
+		[--shf-description <txt>] [--enable|--disable]
+	--shf-host-del <name>
+	--shf-host-set <name> [--mode <ro|rw>] [--path <path>]
+		[--shf-description <txt>] [--enable|--disable]

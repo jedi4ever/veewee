@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 
+	Unattended installation file for Windows 7 x64. Place in the root directory of a USB drive.
+	Important! Before using, change the Product Key and Administrator's password. 
+	Make sure the partition number and physical disk number are correct for your system.
+-->
+<unattend xmlns="urn:schemas-microsoft-com:unattend">
+    <settings pass="windowsPE">
+        <component name="Microsoft-Windows-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <DiskConfiguration>
+                <Disk wcm:action="add">
+					<DiskID>0</DiskID>
+					<!-- Format partition 1 of disk 0. -->
+                    <CreatePartitions>
+                        <CreatePartition wcm:action="add">
+                            <Order>1</Order>
+                            <Type>Primary</Type>
+                            <Size>10000</Size>
+                        </CreatePartition>
+                    </CreatePartitions>
+                    <ModifyPartitions>
+                        <ModifyPartition wcm:action="add">
+                            <Extend>false</Extend>
+                            <Format>NTFS</Format>
+                            <Letter>C</Letter>
+                            <Order>1</Order>
+                            <PartitionID>1</PartitionID>
+                            <Label>Windows 7</Label>
+                        </ModifyPartition>
+                    </ModifyPartitions>
+                    <WillWipeDisk>true</WillWipeDisk>
+                </Disk>
+                <WillShowUI>OnError</WillShowUI>
+            </DiskConfiguration>
+            <ImageInstall>
+                <OSImage>
+                    <InstallTo>
+                        <DiskID>0</DiskID>
+                        <PartitionID>1</PartitionID>
+                    </InstallTo>
+                </OSImage>
+            </ImageInstall>
+            <UserData>
+                <ProductKey>
+                    <WillShowUI>OnError</WillShowUI>
+					<!-- Change Product Key here. -->
+                    <Key>......</Key>
+                </ProductKey>
+                <AcceptEula>true</AcceptEula>
+            </UserData>
+        </component>
+        <component name="Microsoft-Windows-International-Core-WinPE" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <SetupUILanguage>
+                <UILanguage>en-US</UILanguage>
+            </SetupUILanguage>
+            <UILanguage>en-US</UILanguage>
+            <InputLocale>en-US</InputLocale>
+            <SystemLocale>en-US</SystemLocale>
+            <UILanguageFallback>en-US</UILanguageFallback>
+            <UserLocale>en-US</UserLocale>
+        </component>
+    </settings>
+    <settings pass="specialize">
+        <component name="Microsoft-Windows-Shell-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <OEMInformation>
+                <HelpCustomized>false</HelpCustomized>
+            </OEMInformation>
+			<!-- Rename computer here. -->
+            <ComputerName>win7-pc</ComputerName>
+            <TimeZone>Pacific Standard Time</TimeZone>
+            <RegisteredOwner></RegisteredOwner>
+        </component>
+        <component name="Microsoft-Windows-TerminalServices-LocalSessionManager" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+			<!-- Allow Remote Desktop connections. -->
+            <fDenyTSConnections>false</fDenyTSConnections>
+        </component>
+		<component name="Microsoft-Windows-Web-Services-for-Management-Core" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" processorArchitecture="amd64" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+		   <ConfigureWindowsRemoteManagement>true</ConfigureWindowsRemoteManagement>
+		</component>
+        <component name="Microsoft-Windows-IE-InternetExplorer" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <DisableAccelerators>true</DisableAccelerators>
+            <DisableOOBAccelerators>true</DisableOOBAccelerators>
+            <SuggestedSitesEnabled>false</SuggestedSitesEnabled>
+            <Home_Page>about:home</Home_Page>
+            <QuickLinkList>
+                <QuickLinkItem wcm:action="add">
+                    <QuickLinkName>Google</QuickLinkName>
+                    <QuickLinkUrl>http://www.google.com</QuickLinkUrl>
+                    <QLID>1</QLID>
+                </QuickLinkItem>
+                <QuickLinkItem wcm:action="add">
+                    <QuickLinkName>Permanent Beta</QuickLinkName>
+                    <QuickLinkUrl>http://www.sergeyv.com/blog</QuickLinkUrl>
+                    <QLID>2</QLID>
+                </QuickLinkItem>
+            </QuickLinkList>
+        </component>
+        <component name="Microsoft-Windows-Security-SPP-UX" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+			<!-- Disable automatic activation. This gives 30 days of usage when product key is specified in setup (WinPE pass). -->
+            <SkipAutoActivation>true</SkipAutoActivation>
+        </component>
+    </settings>
+    <settings pass="oobeSystem">
+        <component name="Microsoft-Windows-Shell-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <OOBE>
+                <NetworkLocation>Home</NetworkLocation>
+                <ProtectYourPC>2</ProtectYourPC>
+                <HideEULAPage>true</HideEULAPage>
+            </OOBE>
+            <RegisteredOwner />
+            <TimeZone>Pacific Standard Time</TimeZone>
+            <UserAccounts>
+                <AdministratorPassword>
+					<!-- Specify Built-in Administrator password here. Don't forget to also change it
+					in the AutoLogon setting. -->
+                    <Value>vagrant</Value>
+                    <PlainText>true</PlainText>
+                </AdministratorPassword>
+            </UserAccounts>
+            <FirstLogonCommands>
+                <SynchronousCommand wcm:action="add">
+                    <CommandLine>%SystemRoot%\System32\reg.exe ADD HKCU\Console /v QuickEdit /t REG_DWORD /d 1 /f</CommandLine>
+                    <Order>1</Order>
+                    <Description>Enable QuickEdit mode</Description>
+                </SynchronousCommand>
+                <SynchronousCommand wcm:action="add">
+                    <CommandLine>%SystemRoot%\System32\reg.exe ADD HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced\ /v HideFileExt /t REG_DWORD /d 0 /f</CommandLine>
+                    <Order>2</Order>
+                    <Description>Show file extensions in Explorer</Description>
+                </SynchronousCommand>
+                <SynchronousCommand wcm:action="add">
+                    <CommandLine>%SystemRoot%\System32\reg.exe ADD HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced\ /v Start_ShowRun /t REG_DWORD /d 1 /f</CommandLine>
+                    <Order>3</Order>
+                    <Description>Show Run command in Start Menu</Description>
+                </SynchronousCommand>
+                <SynchronousCommand wcm:action="add">
+                    <CommandLine>%SystemRoot%\System32\reg.exe ADD HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced\ /v StartMenuAdminTools /t REG_DWORD /d 1 /f</CommandLine>
+                    <Order>4</Order>
+                    <Description>Show Administrative Tools in Start Menu</Description>
+                </SynchronousCommand>
+            </FirstLogonCommands>
+            <AutoLogon>
+                <Password>
+					<!-- Don't forget to change. -->
+                    <Value>[ChangeThis!]</Value>
+                    <PlainText>true</PlainText>
+                </Password>
+                <Enabled>true</Enabled>
+                <LogonCount>2</LogonCount>
+                <Username>Administrator</Username>
+            </AutoLogon>
+            <Themes>
+                <ThemeName>Landscapes</ThemeName>
+                <DesktopBackground>%SystemRoot%\Web\Wallpaper\Landscapes\img9.jpg</DesktopBackground>
+            </Themes>
+            <TaskbarLinks>
+                <Link0>%USERPROFILE%\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Accessories\Command Prompt.lnk</Link0>
+            </TaskbarLinks>
+        </component>
+        <component name="Microsoft-Windows-International-Core" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <InputLocale>en-US</InputLocale>
+            <SystemLocale>en-US</SystemLocale>
+            <UILanguage>en-US</UILanguage>
+            <UILanguageFallback>en-US</UILanguageFallback>
+            <UserLocale>en-US</UserLocale>
+        </component>
+	 <component name="Microsoft-Windows-Deployment" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	            <RunSynchronous>
+	                <RunSynchronousCommand wcm:action="add">
+			    <Credentials>
+					<Username>Administrator</Username>
+					<Password>vagrant</Password>
+			    </Credentials>
+	                    <Order>1</Order>
+	                    <Path>cmd /c winrm quickconfig -q -transport:http</Path>
+	                </RunSynchronousCommand>
+	            </RunSynchronous>
+	        </component>
+    </settings>
+</unattend>
