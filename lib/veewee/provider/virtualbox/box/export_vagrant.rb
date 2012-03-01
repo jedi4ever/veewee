@@ -59,7 +59,14 @@ module Veewee
           end
 
           env.ui.info "Excuting vagrant voodoo:"
-          export_command="vagrant package --base '#{name}' --output '#{box_path}'"
+          export_command = "vagrant package --base '#{name}' --output '#{box_path}'"
+          env.ui.info "vagrantfile: '#{definition.vagrantfile}'"
+          export_command += " --vagrantfile '#{definition.vagrantfile}'" if definition.vagrantfile
+
+          include_files = [definition.include_files].flatten.compact
+          include_files.map! { |filename| "'#{filename}'" }
+          export_command += " --include #{include_files.join(' ')}" unless include_files.empty?
+
           env.ui.info "#{export_command}"
           shell_exec("#{export_command}") #hmm, needs to get the gem_home set?
           env.ui.info ""
