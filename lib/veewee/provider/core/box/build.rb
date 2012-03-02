@@ -77,7 +77,7 @@ module Veewee
           self.transfer_buildinfo(options)
           self.handle_postinstall(options)
 
-          env.ui.confirm "The box #{name} was build succesfully!"
+          env.ui.success "The box #{name} was built succesfully!"
           env.ui.info "You can now login to the box with:"
           env.ui.info ssh_command_string
 

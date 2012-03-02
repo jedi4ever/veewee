@@ -2,7 +2,7 @@ module Veewee
 
   # Vagrant UIs handle communication with the outside world (typically
   # through a shell). They must respond to the typically logger methods
-  # of `warn`, `error`, `info`, and `confirm`.
+  # of `warn`, `error`, `info`, and `success`.
   class UI
     attr_accessor :env
 
@@ -10,7 +10,7 @@ module Veewee
       @env = env
     end
 
-    [:warn, :error, :info, :confirm].each do |method|
+    [:warn, :error, :info, :success].each do |method|
       define_method(method) do |message, *argv|
         opts , *argv = argv
         opts ||= {}
@@ -33,7 +33,7 @@ module Veewee
         @shell = shell
       end
 
-      [[:warn, :yellow], [:error, :red], [:info, nil], [:confirm, :green]].each do |method, color|
+      [[:warn, :yellow], [:error, :red], [:info, nil], [:success, :green]].each do |method, color|
         class_eval <<-CODE
           def #{method}(message, opts=nil)
             super(message)
