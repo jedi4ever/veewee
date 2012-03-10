@@ -2,7 +2,7 @@
 # is only because it hasn't been released yet.
 Veewee::Session.declare({
   :cpu_count => '2',
-  :memory_size=> '2048',
+  :memory_size=> '1500',
   :disk_size => '10140',
   :disk_format => 'VDI',
   :hostiocache => 'off',
