@@ -9,7 +9,8 @@ module Veewee
           # Check for floppy
           unless definition.floppy_files.nil?
             require 'tmpdir'
-            temp_dir=Dir.mktmpdir
+            temp_dir=File.join(Dir::tmpdir, "veewee_#{Time.now.to_i}_#{rand(1000)}")
+            Dir.mkdir(temp_dir)
             definition.floppy_files.each do |filename|
               full_filename=full_filename=File.join(definition.path,filename)
               FileUtils.cp("#{full_filename}","#{temp_dir}")
