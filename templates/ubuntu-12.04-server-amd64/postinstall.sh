@@ -66,9 +66,12 @@ umount /mnt
 
 rm VBoxGuestAdditions_$VBOX_VERSION.iso
 
+#
+### THIS was causing problems with iSCSI so killed it
+#
 # Remove items used for building, since they aren't needed anymore
-apt-get -y remove linux-headers-$(uname -r) build-essential
-apt-get -y autoremove
+#apt-get -y remove linux-headers-$(uname -r) build-essential
+#apt-get -y autoremove
 
 # Zero out the free space to save space in the final image:
 dd if=/dev/zero of=/EMPTY bs=1M

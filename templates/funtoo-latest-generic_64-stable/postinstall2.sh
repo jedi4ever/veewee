@@ -56,8 +56,8 @@ sudo env-update
 source /etc/profile
 
 # Install ruby and gems into rvm
-rvm install 1.8.7
-rvm use 1.8.7 --default
+rvm install 1.9.3
+rvm use 1.9.3 --default
 rvm gemset create global
 rvm use @global
 
