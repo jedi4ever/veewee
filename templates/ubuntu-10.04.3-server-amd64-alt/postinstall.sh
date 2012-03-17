@@ -19,6 +19,17 @@ export DEBIAN_FRONTEND=noninteractive
 export VEEWEE_USER="vagrant"
 export VBOX_VERSION=$(cat /home/${VEEWEE_USER}/.vbox_version)
 
+### Install Virtualbox guest additions
+#
+apt-get -y install dkms
+cd /tmp
+wget http://download.virtualbox.org/virtualbox/$VBOX_VERSION/VBoxGuestAdditions_$VBOX_VERSION.iso
+mount -o loop VBoxGuestAdditions_$VBOX_VERSION.iso /mnt
+sh /mnt/VBoxLinuxAdditions.run
+umount /mnt
+
+rm VBoxGuestAdditions_$VBOX_VERSION.iso
+
 ### Install packages
 #
 # Necessary for full Ruby 1.9.2, guest additions etc.
@@ -200,16 +211,6 @@ echo RSAAuthentication yes >>/etc/ssh/sshd_config
 echo PasswordAuthentication no >>/etc/ssh/sshd_config
 echo ChallengeResponseAuthentication no >>/etc/ssh/sshd_config
 /etc/init.d/ssh restart
-
-### Install Virtualbox guest additions
-#
-cd /tmp
-wget http://download.virtualbox.org/virtualbox/$VBOX_VERSION/VBoxGuestAdditions_$VBOX_VERSION.iso
-mount -o loop VBoxGuestAdditions_$VBOX_VERSION.iso /mnt
-sh /mnt/VBoxLinuxAdditions.run
-umount /mnt
-
-rm VBoxGuestAdditions_$VBOX_VERSION.iso
 
 ### Package Cleanup
 #
