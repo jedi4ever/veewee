@@ -2,6 +2,17 @@
 
 date > /etc/vagrant_box_build_time
 
+# Installing the virtualbox guest additions
+apt-get -y install dkms
+VBOX_VERSION=$(cat /home/vagrant/.vbox_version)
+cd /tmp
+wget http://download.virtualbox.org/virtualbox/$VBOX_VERSION/VBoxGuestAdditions_$VBOX_VERSION.iso
+mount -o loop VBoxGuestAdditions_$VBOX_VERSION.iso /mnt
+sh /mnt/VBoxLinuxAdditions.run
+umount /mnt
+
+rm VBoxGuestAdditions_$VBOX_VERSION.iso
+
 # Apt-install various things necessary for Ruby, guest additions,
 # etc., and remove optional things to trim down the machine.
 apt-get -y update
@@ -56,22 +67,9 @@ wget --no-check-certificate 'https://raw.github.com/mitchellh/vagrant/master/key
 chmod 600 /home/vagrant/.ssh/authorized_keys
 chown -R vagrant /home/vagrant/.ssh
 
-# Installing the virtualbox guest additions
-VBOX_VERSION=$(cat /home/vagrant/.vbox_version)
-cd /tmp
-wget http://download.virtualbox.org/virtualbox/$VBOX_VERSION/VBoxGuestAdditions_$VBOX_VERSION.iso
-mount -o loop VBoxGuestAdditions_$VBOX_VERSION.iso /mnt
-sh /mnt/VBoxLinuxAdditions.run
-umount /mnt
-
-rm VBoxGuestAdditions_$VBOX_VERSION.iso
-
-#
-### THIS was causing problems with iSCSI so killed it
-#
 # Remove items used for building, since they aren't needed anymore
-#apt-get -y remove linux-headers-$(uname -r) build-essential
-#apt-get -y autoremove
+apt-get -y remove linux-headers-$(uname -r) build-essential
+apt-get -y autoremove
 
 # Zero out the free space to save space in the final image:
 dd if=/dev/zero of=/EMPTY bs=1M
