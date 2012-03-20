@@ -2,4 +2,5 @@ rvm use ruby-1.9.2
 rvm gemset create veewee
 rvm gemset use veewee
 alias veewee="bundle exec veewee"
+alias vagrant="bundle exec vagrant"
 alias irb="bundle exec irb"
