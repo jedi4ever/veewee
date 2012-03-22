@@ -68,13 +68,13 @@ Put your isofile inside the 'currentdir'/iso directory or if you don't run
 
 ## Validate the vm 
 
-    $ veewee vbox basebox validate 'myubuntubox'
+    $ veewee vbox validate 'myubuntubox'
 
 this will run some cucumber test against the box to see if it has the necessary bits and pieces for vagrant to work
 
 ## Export the vm to a .box file
 
-    $ veewee vbox basebox export 'myubuntubox'
+    $ vagrant basebox export 'myubuntubox'
 
 this is actually calling - vagrant package --base 'myubuntubox' --output 'boxes/myubuntubox.box'
 
