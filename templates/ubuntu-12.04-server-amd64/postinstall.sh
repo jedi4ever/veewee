@@ -44,14 +44,17 @@ cd ..
 rm -rf ruby-1.9.3-p125
 rm ruby-1.9.3-p125.tgz
 
+####
+# Note, as of ruby 1.9.x, gems is included with ruby
+####
 # Install RubyGems 1.8.17
-wget http://production.cf.rubygems.org/rubygems/rubygems-1.8.17.tgz
-tar xzf rubygems-1.8.17.tgz
-cd rubygems-1.8.17
-/opt/ruby/bin/ruby setup.rb
-cd ..
-rm -rf rubygems-1.8.17
-rm rubygems-1.8.17.tgz
+#wget http://production.cf.rubygems.org/rubygems/rubygems-1.8.17.tgz
+#tar xzf rubygems-1.8.17.tgz
+#cd rubygems-1.8.17
+#/opt/ruby/bin/ruby setup.rb
+#cd ..
+#rm -rf rubygems-1.8.17
+#rm rubygems-1.8.17.tgz
 
 # Installing chef & Puppet
 /opt/ruby/bin/gem install chef --no-ri --no-rdoc
@@ -70,7 +73,7 @@ chmod 600 /home/vagrant/.ssh/authorized_keys
 chown -R vagrant /home/vagrant/.ssh
 
 # Remove items used for building, since they aren't needed anymore
-apt-get -y remove linux-headers-$(uname -r) build-essential
+#apt-get -y remove linux-headers-$(uname -r) build-essential
 apt-get -y autoremove
 
 # Zero out the free space to save space in the final image:
