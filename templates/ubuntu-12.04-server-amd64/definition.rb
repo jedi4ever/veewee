@@ -1,5 +1,3 @@
-# obviously this is using the "alternate" ISO, not the "server" ISO, but that
-# is only because it hasn't been released yet.
 Veewee::Session.declare({
   :cpu_count => '2',
   :memory_size=> '1500',
@@ -8,7 +6,7 @@ Veewee::Session.declare({
   :hostiocache => 'off',
   :os_type_id => 'Ubuntu_64',
 # :iso_file => "precise-alternate-amd64-#{Time.now.strftime('%Y-%m-%d')}.iso",
-  :iso_file => "precise-alternate-amd64.iso",
+  :iso_file => "precise-server-amd64.iso",
   :iso_src => "http://cdimage.ubuntu.com/ubuntu-server/daily/current/precise-server-amd64.iso",
   :iso_md5 => "`curl -s http://cdimage.ubuntu.com/ubuntu-server/daily/current/MD5SUMS -o - | awk '{if ( $2 == \"*precise-server-amd64.iso\") print $1 }'`",
   :iso_download_timeout => "1000",
