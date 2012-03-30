@@ -7,10 +7,9 @@ Veewee::Session.declare({
   :disk_format => 'VDI',
   :hostiocache => 'off',
   :os_type_id => 'Ubuntu_64',
-# :iso_file => "precise-alternate-amd64-#{Time.now.strftime('%Y-%m-%d')}.iso",
   :iso_file => "precise-alternate-amd64.iso",
   :iso_src => "http://cdimage.ubuntu.com/daily/current/precise-alternate-amd64.iso",
-  :iso_md5 => "`curl -s http://cdimage.ubuntu.com/daily/current/MD5SUMS -o - | awk '{if ( $2 == \"*precise-alternate-amd64.iso\") print $1 }'`",
+  :iso_md5 => `curl -s http://cdimage.ubuntu.com/daily/current/MD5SUMS -o - | awk '{if ( $2 == \"*precise-alternate-amd64.iso\") print $1 }'`,
   :iso_download_timeout => "1000",
   :boot_wait => "4",
   :boot_cmd_sequence => [
