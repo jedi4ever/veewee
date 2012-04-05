@@ -39,15 +39,21 @@ curl -s https://raw.github.com/wayneeseguin/rvm/master/binscripts/rvm-installer 
 chmod +x /tmp/rvm-installer
 /tmp/rvm-installer stable
 
+# listen up, blank lines could be screwing things up
+sed -i -e "/^$/d" /usr/local/rvm/gemsets/default.gems
+
 # Install Ruby using RVM
 echo "Installing Ruby 1.9.3 as default ruby"
 bash -c '
  source /etc/profile
- rvm install 1.9.3
- rvm use 1.9.3 --default
+ rvm install 1.9.3-p125
+ rvm alias create default ruby-1.9.3-p125
+ rvm use 1.9.3-p125 --default
 
  echo "Installing default RubyGems"
- gem install chef puppet ruby-debug-ide19 ruby-debug-base19 ruby-debug19 rails mysql mysql2'
+ gem install chef puppet'
+
+sleep 1
 
 # Make default user member of RVM group
 usermod -a -G rvm vagrant
