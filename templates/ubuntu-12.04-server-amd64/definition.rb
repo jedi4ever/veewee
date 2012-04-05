@@ -10,7 +10,7 @@ Veewee::Session.declare({
   :iso_src => "http://cdimage.ubuntu.com/ubuntu-server/daily/current/precise-server-amd64.iso",
   :iso_md5 => "`curl -s http://cdimage.ubuntu.com/ubuntu-server/daily/current/MD5SUMS -o - | awk '{if ( $2 == \"*precise-server-amd64.iso\") print $1 }'`",
   :iso_download_timeout => "1000",
-  :boot_wait => "4",
+  :boot_wait => "5",
   :boot_cmd_sequence => [
     '<Esc><Esc><Enter>',
     '/install/vmlinuz noapic preseed/url=http://%IP%:%PORT%/preseed.cfg ',

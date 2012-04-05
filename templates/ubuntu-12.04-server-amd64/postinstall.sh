@@ -19,7 +19,7 @@ apt-get -y update
 apt-get -y upgrade
 apt-get -y install linux-headers-$(uname -r) build-essential
 apt-get -y install zlib1g-dev libssl-dev libreadline-gplv2-dev
-apt-get -y install vim
+apt-get -y install vim libyaml-dev
 apt-get clean
 
 # Setup sudo to allow no-password sudo for "admin"
@@ -32,37 +32,27 @@ sed -i -e 's/%admin ALL=(ALL) ALL/%admin ALL=NOPASSWD:ALL/g' /etc/sudoers
 # Install NFS client
 apt-get -y install nfs-common
 
-# Install Ruby from source in /opt so that users of Vagrant
-# can install their own Rubies using packages or however.
-wget http://ftp.ruby-lang.org/pub/ruby/1.9/ruby-1.9.3-p125.tar.gz
-tar xvzf ruby-1.9.3-p125.tar.gz
-cd ruby-1.9.3-p125
-./configure --prefix=/opt/ruby
-make
-make install
-cd ..
-rm -rf ruby-1.9.3-p125
-rm ruby-1.9.3-p125.tgz
 
-####
-# Note, as of ruby 1.9.x, gems is included with ruby
-####
-# Install RubyGems 1.8.17
-#wget http://production.cf.rubygems.org/rubygems/rubygems-1.8.17.tgz
-#tar xzf rubygems-1.8.17.tgz
-#cd rubygems-1.8.17
-#/opt/ruby/bin/ruby setup.rb
-#cd ..
-#rm -rf rubygems-1.8.17
-#rm rubygems-1.8.17.tgz
+# Install Ruby Version Manager
+curl -s https://raw.github.com/wayneeseguin/rvm/master/binscripts/rvm-installer -o /tmp/rvm-installer
+chmod +x /tmp/rvm-installer
+/tmp/rvm-installer stable
 
-# Installing chef & Puppet
-/opt/ruby/bin/gem install chef --no-ri --no-rdoc
-/opt/ruby/bin/gem install puppet --no-ri --no-rdoc
+# Enable RVM for all users
+echo '[[ -s "/usr/local/rvm/scripts/rvm" ]] && source "/usr/local/rvm/scripts/rvm"' > /etc/profile.d/rvm.sh
 
-# Add /opt/ruby/bin to the global path as the last resort so
-# Ruby, RubyGems, and Chef/Puppet are visible
-echo 'PATH=$PATH:/opt/ruby/bin/'> /etc/profile.d/vagrantruby.sh
+# Install Ruby using RVM
+echo "Installing Ruby 1.9.3 as default ruby"
+bash -c '
+ source /etc/profile
+ rvm install 1.9.3
+ rvm use 1.9.3 --default
+
+ echo "Installing default RubyGems"
+ gem install chef puppet ruby-debug-ide19 ruby-debug-base19 ruby-debug19 rails mysql mysql2'
+
+# Make default user member of RVM group
+usermod -a -G rvm vagrant
 
 # Installing vagrant keys
 mkdir /home/vagrant/.ssh
@@ -78,6 +68,7 @@ apt-get -y autoremove
 
 # Zero out the free space to save space in the final image:
 dd if=/dev/zero of=/EMPTY bs=1M
+sleep 1
 rm -f /EMPTY
 
 # Removing leftover leases and persistent rules
