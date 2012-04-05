@@ -20,6 +20,7 @@ apt-get -y upgrade
 apt-get -y install linux-headers-$(uname -r) build-essential
 apt-get -y install zlib1g-dev libssl-dev libreadline-gplv2-dev
 apt-get -y install vim libyaml-dev curl
+apt-get -y install autoconf autoconf2.13 autoconf-archive gnu-standards autoconf-doc libtool gettext gettext-doc libtool-doc
 apt-get clean
 
 # Setup sudo to allow no-password sudo for "admin"
@@ -37,9 +38,6 @@ apt-get -y install nfs-common
 curl -s https://raw.github.com/wayneeseguin/rvm/master/binscripts/rvm-installer -o /tmp/rvm-installer
 chmod +x /tmp/rvm-installer
 /tmp/rvm-installer stable
-
-# Enable RVM for all users
-echo '[[ -s "/usr/local/rvm/scripts/rvm" ]] && source "/usr/local/rvm/scripts/rvm"' > /etc/profile.d/rvm.sh
 
 # Install Ruby using RVM
 echo "Installing Ruby 1.9.3 as default ruby"
