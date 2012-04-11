@@ -207,7 +207,7 @@ module Veewee
                   transfered = true
                   self.exec("chmod +x \"#{File.basename(pre_filename)}\"")
                   # Inject the call to the real script by executing the first argument (it will be the postinstall script file name to be executed)
-                  self.exec("execute=\"# We must execute the script passed as the first argument\\n\\$1\" && printf \"%b\\n\" \"$execute\" >> #{File.basename(pre_filename)}")
+                  self.exec("execute=\"\\n# We must execute the script passed as the first argument\\n\\$1\" && printf \"%b\\n\" \"$execute\" >> #{File.basename(pre_filename)}")
                 end
                 command = "./" + File.basename(pre_filename)
                 command = sudo(command) + " ./"+File.basename(filename)

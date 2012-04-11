@@ -52,3 +52,7 @@ People have reported good experiences, why don't you give it a try?
 IDEAS:
 
 - Now you integrate this with your CI build to create a daily basebox
+
+[whren - 2012/04/12]
+
+See [use of pre_postinstall_file in defition.rb](https://github.com/whren/veewee/wiki/Use-of-pre_postinstall_file-in-definition.rb)
