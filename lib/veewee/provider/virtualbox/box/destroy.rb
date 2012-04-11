@@ -19,7 +19,7 @@ module Veewee
             sleep 2
           end
 
-          command="#{@vboxcmd} unregistervm  '#{name}' --delete"
+          command="#{@vboxcmd} unregistervm  \"#{name}\" --delete"
           env.ui.info command
           env.ui.info "Deleting vm #{name}"
 
@@ -39,9 +39,9 @@ module Veewee
             if location.match(/#{pattern}/)
 
               if File.exists?(location)
-                command="#{@vboxcmd} closemedium disk '#{location}' --delete"
+                command="#{@vboxcmd} closemedium disk \"#{location}\" --delete"
               else
-                command="#{@vboxcmd} closemedium disk '#{location}'"
+                command="#{@vboxcmd} closemedium disk \"#{location}\""
               end
 
               env.ui.info "Deleting disk #{location}"

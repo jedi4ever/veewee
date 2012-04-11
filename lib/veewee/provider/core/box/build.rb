@@ -38,7 +38,7 @@ module Veewee
           self.create(options)
 
           # Check the GUI mode required
-          env.logger.info "Provider asks the box to start: GUI enabled? #{!options[:nogui]}"
+          env.logger.info "Provider asks the box to start: GUI enabled? #{!options['nogui']}"
           self.up(options)
 
           # Waiting for it to boot
@@ -77,7 +77,7 @@ module Veewee
           self.transfer_buildinfo(options)
           self.handle_postinstall(options)
 
-          env.ui.confirm "The box #{name} was build succesfully!"
+          env.ui.success "The box #{name} was build succesfully!"
           env.ui.info "You can now login to the box with:"
           env.ui.info ssh_command_string
 
@@ -190,13 +190,32 @@ module Veewee
         # This function handles all the post-install scripts
         # It requires a box(to login to) and a definition(listing the postinstall files)
         def handle_postinstall(options)
+          is_pre_postinstall_file = !definition.pre_postinstall_file.nil? && !definition.pre_postinstall_file.length != 0
+          transfered = false
           definition.postinstall_files.each do |postinstall_file|
             # Filenames of postinstall_files are relative to their definition
             filename=File.join(definition.path,postinstall_file)
             unless File.basename(postinstall_file)=~/^_/
               self.scp(filename,File.basename(filename))
               self.exec("chmod +x \"#{File.basename(filename)}\"")
-              self.exec(sudo("./"+File.basename(filename)))
+              if is_pre_postinstall_file
+                # Filename of pre_postinstall_file are relative to their definition
+                pre_filename=File.join(definition.path, definition.pre_postinstall_file)
+                # Upload the pre postinstall script if not already transfered
+                if !transfered
+                  self.scp(pre_filename,File.basename(pre_filename))
+                  transfered = true
+                  self.exec("chmod +x \"#{File.basename(pre_filename)}\"")
+                  # Inject the call to the real script by executing the first argument (it will be the postinstall script file name to be executed)
+                  self.exec("execute=\"# We must execute the script passed as the first argument\\n\\$1\" && printf \"%b\\n\" \"$execute\" >> #{File.basename(pre_filename)}")
+                end
+                command = "./" + File.basename(pre_filename)
+                command = sudo(command) + " ./"+File.basename(filename)
+              else
+                command = "./"+File.basename(filename)
+                command = sudo(command)
+              end
+              self.exec(command)
             else
               env.logger.info "Skipping postinstallfile #{postinstall_file}"
             end
@@ -210,6 +229,9 @@ module Veewee
           build_info.each do |info|
             begin
               infofile=Tempfile.open("#{info[:filename]}")
+              # Force binary mode to prevent windows from putting CR-LF end line style
+              # http://www.ruby-forum.com/topic/127453#568546
+              infofile.binmode
               infofile.puts "#{info[:content]}"
               infofile.rewind
               infofile.close
