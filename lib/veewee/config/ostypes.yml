@@ -112,7 +112,7 @@ FreeBSD:
 FreeBSD_64:
   :fusion: FreeBSD_64
   :kvm:
-  :vbox: FreeBSD-64
+  :vbox: FreeBSD_64
   :parallels: freebsd
 Oracle:
   :fusion: oraclelinux
