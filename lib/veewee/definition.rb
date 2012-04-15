@@ -21,6 +21,8 @@ module Veewee
 
     attr_accessor :ssh_login_timeout, :ssh_user , :ssh_password, :ssh_key, :ssh_host_port, :ssh_guest_port
 
+    attr_accessor :winrm_login_timeout, :winrm_user , :winrm_password, :winrm_host_port, :winrm_guest_port
+
     attr_accessor :sudo_cmd
     attr_accessor :shutdown_cmd
 
@@ -72,6 +74,9 @@ module Veewee
       #        :ssh_host_port => "2222", :ssh_guest_port => "22", :sudo_cmd => "echo '%p'|sudo -S sh '%f'",
       #       :shutdown_cmd => "shutdown -h now",
       #        :kickstart_file => nil,
+      @winrm_host_port = "5985"; @winrm_guest_port = "5985"
+      @winrm_login_timeout = "10000"
+      @boot_cmd_sequence = [] # Empty list by default
 
       @virtualbox={:vm_options => {}}
       @vmfusion={:vm_options => {}}
@@ -160,7 +165,7 @@ module Veewee
 
       # Postinstall files require a valid user and password
       unless self.postinstall_files.nil?
-        if self.ssh_user.nil? || self.ssh_password.nil?
+        if (self.ssh_user.nil? || self.ssh_password.nil?) && (self.winrm_user.nil? || self.winrm_password.nil?)
           return false
         end
       end
