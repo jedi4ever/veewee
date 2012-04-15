@@ -29,15 +29,42 @@ handle_kickstart: https://github.com/hh/veewee/blob/feature/windows/lib/veewee/p
 In handle_kickstart we open up an http listener and serve up the files and they are retrieved by the host.
 
 
+
+winrm exec implementation current works
+
 ```
-chris@chris-MacBookAir:~/vagrant$ veewee vbox define windows-7-enterprise-amd64-winrm windows-7-enterprise-amd64-winrm
+$ veewee vbox winrm windows-7-enterprise-amd64-winrm 'hostname'
+Executing winrm command: hostname
+vagrant-2008R2
+```
+
+
+winrm copy implementation that current does nothing:
+
+```
+$ veewee vbox copy windows-7-enterprise-amd64-winrm sourcefile.txt destfileinVM.txt
+Waiting for winrm login on 127.0.0.1 with user vagrant to windows on port => 5985 to work, timeout=10000 sec
+.
+Going to try and copy sourcefile.txt to destfileinVM.txt
+However File copy via WINRM not implemented yet, look at core/helper/scp
+Maybe we should start up a web server and execute a retrieve?
+
+```
+
+
+```
+$ veewee vbox define windows-7-enterprise-amd64-winrm windows-7-enterprise-amd64-winrm
+
 The basebox 'windows-7-enterprise-amd64-winrm' has been succesfully created from the template 'windows-7-enterprise-amd64-winrm'
 You can now edit the definition files stored in definitions/windows-7-enterprise-amd64-winrm or build the box with:
 veewee vbox build 'windows-7-enterprise-amd64-winrm'
 ```
 
+Basebox build process run on Ubuntu with missing winrm copy/exec:
+
 ```
-chris@chris-MacBookAir:~/vagrant$ veewee vbox build 'windows-7-enterprise-amd64-winrm'
+$ veewee vbox build 'windows-7-enterprise-amd64-winrm'
+
 Downloading vbox guest additions iso v 4.1.12 - http://download.virtualbox.org/virtualbox/4.1.12/VBoxGuestAdditions_4.1.12.iso
 Checking if isofile VBoxGuestAdditions_4.1.12.iso already exists.
 Full path: /home/chris/vagrant/iso/VBoxGuestAdditions_4.1.12.iso
@@ -87,21 +114,5 @@ Command: postinstall.sh
 The box windows-7-enterprise-amd64-winrm was build succesfully!
 You can now login to the box with:
 knife winrm -m 127.0.0.1-P 5985 -x vagrant -P vagrant COMMAND
-```
-
-```
-chris@chris-MacBookAir:~/telogis/vagrant$ veewee vbox winrm windows-7-enterprise-amd64-winrm 'hostname'
-Executing winrm command: hostname
-vagrant-2008R2
-```
-
-```
-chris@chris-MacBookAir:~/telogis/vagrant$ veewee vbox copy windows-7-enterprise-amd64-winrm sourcefile.txt destfileinVM.txt
-Waiting for winrm login on 127.0.0.1 with user vagrant to windows on port => 5985 to work, timeout=10000 sec
-.
-Going to try and copy sourcefile.txt to destfileinVM.txt
-However File copy via WINRM not implemented yet, look at core/helper/scp
-Maybe we should start up a web server and execute a retrieve?
-
 ```
 
