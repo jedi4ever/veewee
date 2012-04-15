@@ -10,18 +10,10 @@ module Veewee
           raise Veewee::Error,"Box is not running" unless self.running?
 
           if (options[:interactive]==true)
-            # Command line options
-            host_ip=self.ip_address
-
-            unless host_ip.nil? || host_ip==""
-              winrm_command="winrm #{winrm_commandline_options(options)} #{host_ip} \"#{command}\""
-            else
-              env.ui.error "Can't winrm into '#{@name} as we couldn't figure out it's ip-address"
-            end
-          else
-            winrm_options={:user => definition.winrm_user,:password => definition.winrm_password, :port => definition.winrm_host_port}
-            winrm_execute(host_ip,command,winrm_options)
+            env.ui.info "WINRM NOT INTERACTIVE YET"
           end
+          winrm_options={:user => definition.winrm_user,:password => definition.winrm_password, :port => definition.winrm_host_port}
+          winrm_execute(self.ip_address,command,winrm_options.merge(options))
 
         end
 
