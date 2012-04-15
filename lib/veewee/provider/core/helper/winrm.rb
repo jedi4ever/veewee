@@ -98,9 +98,15 @@ module Veewee
             client
           end
           
-          def winrm_execute(host,command, options = { :progress => "on"} )
+          def winrm_execute(host,command, options)
             
-            options = winrm_options.merge({:exitcode => "0"}.merge(options))
+            options = winrm_options.merge( # global default
+              { # function defaults
+                :exitcode => "0",
+                :progress => "on"
+              }.merge(
+                options # calling override
+                ))
             stdout=""
             stderr=""
             status=-99999
@@ -122,7 +128,7 @@ module Veewee
               end
             end
             status = output[:exitcode]
-            env.ui.info "ERROR: exit code #{exit_code}" if status > 0
+            env.ui.info "EXITCODE: #{status}" if status > 0
 
             if (status.to_s != options[:exitcode] )
               if (options[:exitcode]=="*")
