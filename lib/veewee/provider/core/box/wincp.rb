@@ -8,9 +8,9 @@ module Veewee
           raise Veewee::Error,"Box is not running" unless self.running?
           begin
             self.when_winrm_login_works(self.ip_address,winrm_options.merge(options)) do
-              env.ui.info "We connected via WINRM!"
               env.ui.info "Going to try and copy #{localfile} to #{remotefile}"
               env.ui.error "However File copy via WINRM not implemented yet, look at core/helper/scp"
+              env.ui.error "Maybe we should start up a web server and execute a retrieve?"
             end
           end
         end
