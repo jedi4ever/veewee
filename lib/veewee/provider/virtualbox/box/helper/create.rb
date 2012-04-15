@@ -39,14 +39,10 @@ module Veewee
         def get_vbox_home
           command="#{@vboxcmd}  list  systemproperties"
           shell_results=shell_exec("#{command}")
-          # Do not know how to correctly require Util::Platform, so we use a fqdn call
-          if Vagrant::Util::Platform.windows?
-            # On windows Default machine path would include a drive letter, then ':'.
-            # So here we tell to split no more than 2 elements to keep the full path
-            location=shell_results.stdout.split(/\n/).grep(/Default machine/)[0].split(":", 2)[1].strip
-          else
-            location=shell_results.stdout.split(/\n/).grep(/Default machine/)[0].split(":")[1].strip
-          end
+          # On windows Default machine path would include a drive letter, then ':'.
+          # So here we tell to split no more than 2 elements to keep the full path
+          # This should work for all OS as we just need to separate the parameter name with first ':' from the value
+          location=shell_results.stdout.split(/\n/).grep(/Default machine/)[0].split(":", 2)[1].strip
           return location
         end
 
