@@ -12,13 +12,6 @@ module Veewee
             raise Veewee::Error,"To create the vm '#{name}' the directory '#{box_directory}' needs to be empty. \nThis could be caused by an badly closed vm.\nRemove it manually before you proceed."
           end
 
-          guessed_port=guess_free_port(definition.ssh_host_port.to_i,definition.ssh_host_port.to_i+40).to_s
-          if guessed_port.to_s!=definition.ssh_host_port
-            env.ui.warn "Changing ssh port from #{definition.ssh_host_port} to #{guessed_port}"
-            definition.ssh_host_port=guessed_port.to_s
-          end
-
-
           # Suppress those annoying virtualbox messages
           self.suppress_messages
 
@@ -48,7 +41,22 @@ module Veewee
           self.add_floppy_controller
           self.attach_floppy
 
-          self.add_ssh_nat_mapping
+          if definition.winrm_user && definition.winrm_password # prefer winrm 
+            env.ui.warn "Using winrm because winrm_user and winrm_password are both set"
+            guessed_port=guess_free_port(definition.winrm_host_port.to_i,definition.winrm_host_port.to_i+40).to_s
+            if guessed_port.to_s!=definition.winrm_host_port
+              env.ui.warn "Changing winrm port from #{definition.winrm_host_port} to #{guessed_port}"
+              definition.winrm_host_port=guessed_port.to_s
+            end
+            self.add_winrm_nat_mapping
+          else
+            guessed_port=guess_free_port(definition.ssh_host_port.to_i,definition.ssh_host_port.to_i+40).to_s
+            if guessed_port.to_s!=definition.ssh_host_port
+              env.ui.warn "Changing ssh port from #{definition.ssh_host_port} to #{guessed_port}"
+              definition.ssh_host_port=guessed_port.to_s
+            end
+            self.add_ssh_nat_mapping
+          end
 
         end
 

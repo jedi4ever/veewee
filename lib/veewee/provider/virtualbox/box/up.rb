@@ -8,20 +8,40 @@ module Veewee
 
           raise Veewee::Error,"Box is already running" if self.running?
 
-          # Before we start,correct the ssh port if needed
-          forward=self.forwarding("guestssh")
-          guessed_port=guess_free_port(definition.ssh_host_port.to_i,definition.ssh_host_port.to_i+40).to_s
-          definition.ssh_host_port=guessed_port.to_s
-
-          unless forward.nil?
-            if guessed_port!=forward[:guest_port]
-              # Remove the existing one
-              self.delete_forwarding("guestssh")
-              env.ui.warn "Changing ssh port from #{forward[:guest_port]} to #{guessed_port}"
+          if definition.winrm_user && definition.winrm_password # prefer winrm 
+            # Before we start,correct the ssh port if needed
+            forward=self.forwarding("guestwinrm")
+            guessed_port=guess_free_port(definition.winrm_host_port.to_i,definition.winrm_host_port.to_i+40).to_s
+            definition.winrm_host_port=guessed_port.to_s
+            
+            unless forward.nil?
+              if guessed_port!=forward[:guest_port]
+                # Remove the existing one
+                self.delete_forwarding("guestwinrm")
+                env.ui.warn "Changing winrm port on UP from #{forward[:guest_port]} to #{guessed_port}"
+              self.add_winrm_nat_mapping
+              end
+            else
+              self.add_winrm_nat_mapping
+            end
+            
+          else
+            # Before we start,correct the ssh port if needed
+            forward=self.forwarding("guestssh")
+            guessed_port=guess_free_port(definition.ssh_host_port.to_i,definition.ssh_host_port.to_i+40).to_s
+            definition.ssh_host_port=guessed_port.to_s
+            
+            unless forward.nil?
+              if guessed_port!=forward[:guest_port]
+                # Remove the existing one
+                self.delete_forwarding("guestssh")
+                env.ui.warn "Changing ssh port from #{forward[:guest_port]} to #{guessed_port}"
+              self.add_ssh_nat_mapping
+              end
+            else
               self.add_ssh_nat_mapping
             end
-          else
-              self.add_ssh_nat_mapping
+            
           end
 
           self.suppress_messages    

@@ -16,7 +16,7 @@ module Veewee
            super(options)
            iso_image="VBoxGuestAdditions_#{self.vbox_version}.iso"
            env.logger.info "About to transfer virtualbox guest additions iso to the box #{name} - #{ip_address} - #{ssh_options}"
-           self.scp("#{File.join(env.config.veewee.iso_dir,iso_image)}",File.basename(iso_image))
+           self.copy_to_box("#{File.join(env.config.veewee.iso_dir,iso_image)}",File.basename(iso_image))
          end
 
       end

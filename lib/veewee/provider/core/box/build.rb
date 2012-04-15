@@ -74,12 +74,17 @@ module Veewee
             sleep 2
           end
 
+
           self.transfer_buildinfo(options)
           self.handle_postinstall(options)
 
           env.ui.confirm "The box #{name} was build succesfully!"
           env.ui.info "You can now login to the box with:"
-          env.ui.info ssh_command_string
+          if (definition.winrm_user && definition.winrm_password)
+            env.ui.info winrm_command_string
+          else
+            env.ui.info ssh_command_string
+          end
 
           return self
         end
@@ -194,9 +199,14 @@ module Veewee
             # Filenames of postinstall_files are relative to their definition
             filename=File.join(definition.path,postinstall_file)
             unless File.basename(postinstall_file)=~/^_/
-              self.scp(filename,File.basename(filename))
-              self.exec("chmod +x \"#{File.basename(filename)}\"")
-              self.exec(sudo("./"+File.basename(filename)))
+              self.copy_to_box(filename,File.basename(filename))
+              if (definition.winrm_user && definition.winrm_password)
+                # no sudo on windows, batch files only please?
+                self.exec(File.basename(filename))
+              else
+                self.exec("chmod +x \"#{File.basename(filename)}\"")
+                self.exec(sudo("./"+File.basename(filename)))
+              end
             else
               env.logger.info "Skipping postinstallfile #{postinstall_file}"
             end
@@ -213,7 +223,7 @@ module Veewee
               infofile.puts "#{info[:content]}"
               infofile.rewind
               infofile.close
-              self.scp(infofile.path,info[:filename])
+              self.copy_to_box(infofile.path,info[:filename])
               infofile.delete
             rescue RuntimeError => ex
               env.ui.error "Error transfering file #{info[:filename]} failed, possible not enough permissions to write? #{ex}"

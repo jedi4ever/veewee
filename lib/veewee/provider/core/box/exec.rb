@@ -8,24 +8,37 @@ module Veewee
          "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -p #{ssh_options[:port]} -l #{definition.ssh_user} #{self.ip_address}"
         end
 
+        def winrm_command_string
+          "knife winrm -m #{self.ip_address}-P #{winrm_options[:port]} -x #{definition.winrm_user}" +
+            " -P #{definition.winrm_password} COMMAND"
+        end
+
         def exec(command,options={})
           raise Veewee::Error,"Box is not running" unless self.running?
-          begin
-            new_options=ssh_options.merge(options)
-            self.when_ssh_login_works(self.ip_address,new_options) do
-              begin
-                env.logger.info "About to execute remote command #{command} on box #{name} - #{self.ip_address} - #{new_options}"
-                result=self.ssh_execute(self.ip_address,command,new_options)
-                return result
-              rescue RuntimeError => ex
-                env.ui.error "Error executing command #{command} : #{ex}"
-                raise Veewee::SshError, ex
+          if definition.winrm_user && definition.winrm_password
+            env.ui.error "WINRM EXEC NOT IMPLEMPENTED YET"
+            env.ui.error "Command: #{command}"
+          elsif definition.ssh_user && definition.ssh_password
+
+            begin
+              new_options=ssh_options.merge(options)
+              self.when_ssh_login_works(self.ip_address,new_options) do
+                begin
+                  env.logger.info "About to execute remote command #{command} on box #{name} - #{self.ip_address} - #{new_options}"
+                  result=self.ssh_execute(self.ip_address,command,new_options)
+                  return result
+                rescue RuntimeError => ex
+                  env.ui.error "Error executing command #{command} : #{ex}"
+                  raise Veewee::SshError, ex
+                end
               end
+            rescue Net::SSH::AuthenticationFailed => ex # may want to catch winrm auth fails as well
+              env.ui.error "Authentication failure"
+              raise Veewee::SshError, ex
             end
-          rescue Net::SSH::AuthenticationFailed => ex
-            env.ui.error "Authentication failure"
-            raise Veewee::SshError, ex
+
           end
+
 
         end
       end # Module

@@ -36,7 +36,7 @@ module Veewee
 
           env.logger.info "About to transfer parallels tools iso buildinfo to the box #{name} - #{ip_address} - #{ssh_options}"
           iso_image=guest_iso_path
-          self.scp(iso_image,File.basename(iso_image))
+          self.copy_to_box(iso_image,File.basename(iso_image))
         end
 
       end
