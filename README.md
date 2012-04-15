@@ -5,6 +5,19 @@
 
 - veewee vbox define windows-7-enterprise-amd64-winrm windows-7-enterprise-amd64-winrm
 - veewee vbox build windows-7-enterprise-amd64-winrm
+- veewee vbox winrm windows-7-enterprise-amd64-winrm 'hostname'
+- veewee vbox copy windows-7-enterprise-amd64-winrm sourcefile.txt destfileinVM.txt
+
+
+vbox copy uses scp if winrm_user or winrm_password are not in the definition.
+
+The winrm implementation currently does nothing. Winrm basically allows us to execute commands on the windows host, but transfering files is not part of what it does.
+
+I'm open to thoughts on how to implement winrm copy.
+
+https://github.com/hh/veewee/blob/feature/windows/lib/veewee/provider/core/box/build.rb#L185
+
+We handle_quickstart by opening up an http listener and serve up the files to the host and they are retrieved. Right now that seems the quickest path.
 
 
 ```
@@ -12,6 +25,9 @@ chris@chris-MacBookAir:~/vagrant$ veewee vbox define windows-7-enterprise-amd64-
 The basebox 'windows-7-enterprise-amd64-winrm' has been succesfully created from the template 'windows-7-enterprise-amd64-winrm'
 You can now edit the definition files stored in definitions/windows-7-enterprise-amd64-winrm or build the box with:
 veewee vbox build 'windows-7-enterprise-amd64-winrm'
+```
+
+```
 chris@chris-MacBookAir:~/vagrant$ veewee vbox build 'windows-7-enterprise-amd64-winrm'
 Downloading vbox guest additions iso v 4.1.12 - http://download.virtualbox.org/virtualbox/4.1.12/VBoxGuestAdditions_4.1.12.iso
 Checking if isofile VBoxGuestAdditions_4.1.12.iso already exists.
@@ -62,49 +78,21 @@ Command: postinstall.sh
 The box windows-7-enterprise-amd64-winrm was build succesfully!
 You can now login to the box with:
 knife winrm -m 127.0.0.1-P 5985 -x vagrant -P vagrant COMMAND
+```
 
 ```
-Veewee03 will bring many new features:
+chris@chris-MacBookAir:~/telogis/vagrant$ veewee vbox winrm windows-7-enterprise-amd64-winrm 'hostname'
+Executing winrm command: hostname
+vagrant-2008R2
+```
 
-- kvm and vmware fusion support -
-- veewee as a standalone tool tool if you don't use virtualbox,vagrant 
-- postinstall scripts can now be toggle with --include and --exclude
+```
+chris@chris-MacBookAir:~/telogis/vagrant$ veewee vbox copy windows-7-enterprise-amd64-winrm sourcefile.txt destfileinVM.txt
+Waiting for winrm login on 127.0.0.1 with user vagrant to windows on port => 5985 to work, timeout=10000 sec
+.
+Going to try and copy sourcefile.txt to destfileinVM.txt
+However File copy via WINRM not implemented yet, look at core/helper/scp
+Maybe we should start up a web server and execute a retrieve?
 
-Caveat: it's alpha-functional but not as polished as the previous version. But I'm sure with your help this won't take long.
+```
 
-My apologies for all the pull-requests to the previous version that will not be merged automatically. I'm focusing more on get this version stable and will incorporate the ideas later (some already are)
-
----
-**VeeWee:** the tool to easily build vagrant base boxes or kvm,virtualbox and fusion images
-
-Vagrant is a great tool to test new things or changes in a virtual machine(Virtualbox) using either chef or puppet.
-The first step is to download an existing 'base box'. I believe this scares a lot of people as they don't know who or how this box was build. Therefore lots of people end up first building their own base box to use with vagrant.
-
-Besides building Vagrant boxes, veewee can also be used for:
-
-- create vmware (fusion), kvm  virtual machines 
-- interact with with those vms (up, destroy, halt, ssh)
-- export them : OVA for fusion, IMG for KVM and ovf for virtualbox
-
-Before you start read through:
-
-- the [requirements](veewee/tree/master/doc/requirements.md)
-- the [installation](veewee/tree/master/doc/installation.md) procedure
-
-Depending on how you want to use veewee, read through one of the following guides: (**work in progres**)
-
-- [guide for vagrant](veewee/tree/master/doc/vagrant.md)
-
-- [guide for Virtualbox](veewee/tree/master/doc/vbox.md)
-- [guide for Vmware fusion](veewee/tree/master/doc/fusion.md)
-- [guide for KVM](veewee/tree/master/doc/kvm.md)
-
-You can also look at the more detailed pages on each subject in the [documentation directory](veewee/tree/master/doc)
-
-People have reported good experiences, why don't you give it a try?
-
-## If you have a setup working, share your 'definition' with me. That would be fun! 
-
-IDEAS:
-
-- Now you integrate this with your CI build to create a daily basebox
