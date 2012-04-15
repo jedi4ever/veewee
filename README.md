@@ -1,4 +1,4 @@
-# This is a branch to allows windows VM's to be used via winrm and not relying on ssh.
+# This is a branch that allows windows VM's to be used via winrm and not relying on ssh.
 
 -------
 
