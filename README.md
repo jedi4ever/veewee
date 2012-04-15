@@ -1,12 +1,6 @@
-# Note: due to a miss manipulation on my side, the veewee03 branch got merged with master
-# Therefore the current state of the masterbranch on github is highly unstable
-
-To refer to the old master, I've put up the state before the error at
-<https://github.com/jedi4ever/veewee-old>
+# This is a branch to allows windows VM's to be used via winrm and not relying on ssh.
 
 -------
-
-This is a branch to allows windows VM's to be used via winrm and not relying on ssh.
 
 
 - veewee vbox define windows-7-enterprise-amd64-winrm windows-7-enterprise-amd64-winrm
