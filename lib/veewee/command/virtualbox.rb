@@ -53,6 +53,32 @@ module Veewee
         venv.providers["virtualbox"].get_box(box_name).issh(command)
       end
 
+
+      desc "winrm [BOXNAME] [COMMAND]", "Execute command via winrm"
+      method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging"
+      def winrm(box_name,command=nil)
+        venv=Veewee::Environment.new(options)
+        venv.ui=env.ui
+        venv.providers["virtualbox"].get_box(box_name).winrm(command,{:exitcode => "*"})
+      end
+
+      desc "iwinrm [BOXNAME] [COMMAND]", "Interactive winrm login"
+      method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging"
+      def iwinrm(box_name,command=nil)
+        venv=Veewee::Environment.new(options)
+        venv.ui=env.ui
+        venv.providers["virtualbox"].get_box(box_name).iwinrm(command)
+      end
+
+      desc "copy [BOXNAME] [SRC] [DST]", "Copy a file to the VM"
+      method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging"
+      def copy(box_name,src,dst)
+        venv=Veewee::Environment.new(options)
+        venv.ui=env.ui
+        venv.providers["virtualbox"].get_box(box_name).copy_to_box(src,dst)
+      end
+
+
       desc "define [BOXNAME] [TEMPLATE]", "Define a new basebox starting from a template"
       method_option :force,:type => :boolean , :default => false, :aliases => "-f", :desc => "overwrite the definition"
       method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging"
