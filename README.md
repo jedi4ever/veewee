@@ -9,15 +9,24 @@
 - veewee vbox copy windows-7-enterprise-amd64-winrm sourcefile.txt destfileinVM.txt
 
 
-vbox copy uses scp if winrm_user or winrm_password are not in the definition.
+Winrm allows us to execute commands on the windows host, but it lacks a file transfer method similar to scp.
 
-The winrm implementation currently does nothing. Winrm basically allows us to execute commands on the windows host, but transfering files is not part of what it does.
+If winrm_user or winrm_password are in the definition, vbox will use wincp.
 
-I'm open to thoughts on how to implement winrm copy.
+wincp: https://github.com/hh/veewee/blob/feature/windows/lib/veewee/provider/core/box/wincp.rb#L11
 
-https://github.com/hh/veewee/blob/feature/windows/lib/veewee/provider/core/box/build.rb#L185
+However the wincp implementation currently does nothing.
 
-We handle_quickstart by opening up an http listener and serve up the files to the host and they are retrieved. Right now that seems the quickest path.
+
+I'm open to thoughts on how to implement wincp / winrm copy.
+
+
+
+Current thought:
+
+handle_kickstart: https://github.com/hh/veewee/blob/feature/windows/lib/veewee/provider/core/box/build.rb#L185
+
+In handle_kickstart we open up an http listener and serve up the files and they are retrieved by the host.
 
 
 ```
