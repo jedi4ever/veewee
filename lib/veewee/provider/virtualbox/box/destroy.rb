@@ -6,7 +6,7 @@ module Veewee
         def destroy(option={})
 
           unless self.exists?
-            env.ui.error "Error:: You tried to destroy a non-existing box '#{name}'"
+            ui.error "Error:: You tried to destroy a non-existing box '#{name}'"
             exit -1
           end
 
@@ -20,8 +20,8 @@ module Veewee
           end
 
           command="#{@vboxcmd} unregistervm  \"#{name}\" --delete"
-          env.ui.info command
-          env.ui.info "Deleting vm #{name}"
+          ui.info command
+          ui.info "Deleting vm #{name}"
 
           #Exec and system stop the execution here
           shell_exec("#{command}",{:mute => true})
@@ -44,14 +44,14 @@ module Veewee
                 command="#{@vboxcmd} closemedium disk \"#{location}\""
               end
 
-              env.ui.info "Deleting disk #{location}"
-              env.ui.info "#{command}"
+              ui.info "Deleting disk #{location}"
+              ui.info "#{command}"
 
               shell_exec("#{command}",{:mute => true})
 
               if File.exists?(location)
-                env.ui.info "We tried to delete the disk file via virtualbox '#{location} but failed"
-                env.ui.info "Removing it manually"
+                ui.info "We tried to delete the disk file via virtualbox '#{location} but failed"
+                ui.info "Removing it manually"
                 FileUtils.rm(location)
                 exit -1
               end

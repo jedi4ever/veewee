@@ -75,7 +75,7 @@ module Veewee
           venv.definitions.undefine(definition_name,options)
           env.ui.info "Definition #{definition_name} succesfully removed" , :prefix => false
         rescue Error => ex
-          env.ui.error "#{ex}",:prefix => false
+          env.ui.error("#{ex}",:prefix => false)
           exit -1
         end
       end
@@ -108,7 +108,7 @@ module Veewee
         venv=Veewee::Environment.new(options)
         venv.ui=env.ui
         venv.definitions.each do |name,definition|
-          env.ui.info "- #{name}"
+          env.ui.info "- #{name}",:prefix => false
         end
       end
 
@@ -121,7 +121,7 @@ module Veewee
 
         venv.providers["virtualbox"].get_box(box_name).validate_vagrant(options)
         rescue Veewee::Error => ex
-          venv.ui.error ex
+          venv.ui.error(ex, :prefix => false)
           exit -1
         end
       end

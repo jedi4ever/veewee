@@ -12,6 +12,13 @@ module Veewee
 
         include ::Veewee::Provider::Core::Helper::Shell
 
+        def ui
+          return @_ui if defined?(@_ui)
+          @_ui = @env.ui.dup
+          @_ui.resource = @name
+          @_ui
+        end
+
         def initialize(name,options,env)
 
           @env=env
@@ -29,7 +36,7 @@ module Veewee
             # Get a real box object from the Provider
             box=Object.const_get("Veewee").const_get("Provider").const_get(type.to_s.capitalize).const_get("Box").new(name,env)
           rescue Error => ex
-            env.ui.error "Could not instante the box #{name} with provider #{type} ,#{ex}"
+            ui.error "Could not instante the box #{name} with provider #{type} ,#{ex}"
             raise
           end
         end
@@ -44,19 +51,19 @@ module Veewee
         end
 
         def gem_available?(gemname)
-            env.logger.info "Checking for gem #{gemname}"
+          env.logger.info "Checking for gem #{gemname}"
+          available=false
+          begin
+            available=true unless Gem::Specification::find_by_name("#{gemname}").nil?
+          rescue Gem::LoadError
+            env.logger.info "Error loading gem #{gemname}"
             available=false
-            begin
-              available=true unless Gem::Specification::find_by_name("#{gemname}").nil?
-            rescue Gem::LoadError
-              env.logger.info "Error loading gem #{gemname}"
-              available=false
-            rescue
-              env.logger.info "Falling back to old syntax for #{gemname}"
-              available=Gem.available?("#{gemname}")
-              env.logger.info "Old syntax #{gemname}.available? #{available}"
-            end
-            return available
+          rescue
+            env.logger.info "Falling back to old syntax for #{gemname}"
+            available=Gem.available?("#{gemname}")
+            env.logger.info "Old syntax #{gemname}.available? #{available}"
+          end
+          return available
         end
 
         def gems_available?(names)

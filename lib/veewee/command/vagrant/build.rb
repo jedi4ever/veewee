@@ -53,7 +53,7 @@ module Veewee
             venv.ui=@env.ui
             venv.providers["virtualbox"].get_box(argv[0]).build(options)
           rescue Veewee::Error => ex
-            venv.ui.error ex
+            venv.ui.error(ex, :prefix => false)
             exit -1
           end
 

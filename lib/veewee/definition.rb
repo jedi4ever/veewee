@@ -39,6 +39,14 @@ module Veewee
     attr_accessor :vmfusion
     attr_accessor :kvm
 
+
+    def ui
+      return @_ui if defined?(@_ui)
+      @_ui = @env.ui.dup
+      @_ui.resource = @name
+      @_ui
+    end
+
     def initialize(name,path,env)
 
       @name=name

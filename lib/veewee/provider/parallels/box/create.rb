@@ -45,7 +45,7 @@ module Veewee
           #
           # Attach cdrom
           full_iso_file=File.join(env.config.veewee.iso_dir,definition.iso_file)
-          env.ui.info "Mounting cdrom: #{full_iso_file}"
+          ui.info "Mounting cdrom: #{full_iso_file}"
           command ="prlctl set '#{self.name}' --device-add cdrom --enable --image '#{full_iso_file}'"
           shell_exec("#{command}")
 

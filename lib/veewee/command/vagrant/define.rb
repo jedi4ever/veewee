@@ -37,7 +37,7 @@ module Veewee
             venv.ui.info "You can now edit the definition files stored in definitions/#{definition_name} or build the box with:"
             venv.ui.info "vagrant basebox build '#{definition_name}'"
           rescue Veewee::Error => ex
-            venv.ui.error ex
+            venv.ui.error(ex,:prefix => false)
             exit -1
           end
 

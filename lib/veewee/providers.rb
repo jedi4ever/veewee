@@ -19,7 +19,7 @@ module Veewee
              rescue ::Veewee::Error => e
                 raise
              rescue Error => e
-               env.ui.error "Error loading provider with #{name},#{$!}"
+               env.ui.error "Error loading provider with #{name},#{$!}",:prefix => false
              end
       end
 

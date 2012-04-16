@@ -28,9 +28,9 @@ module Veewee
             venv.ui=@env.ui
             definition_name=argv[0]
             venv.definitions.undefine(definition_name,options)
-            venv.ui.info "Definitio '#{definition_name}' succesfully removed"
+            venv.ui.info("Definition '#{definition_name}' succesfully removed",:prefix => false)
           rescue Veewee::Error => ex
-            venv.ui.error ex
+            venv.ui.error(ex,:prefix => false)
             exit -1
           end
 

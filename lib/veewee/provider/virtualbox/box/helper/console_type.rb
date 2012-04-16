@@ -12,13 +12,13 @@ module Veewee
 
         def send_virtualbox_sequence(sequence)
 
-          env.ui.info ""
+          ui.info ""
 
           counter=0
           sequence.each { |s|
             counter=counter+1
 
-            env.ui.info "Typing:[#{counter}]: "+s
+            ui.info "Typing:[#{counter}]: "+s
 
             keycodes=Veewee::Provider::Core::Helper::Scancode.string_to_keycode(s)
 
@@ -38,8 +38,8 @@ module Veewee
             sleep 0.5
           }
 
-          env.ui.info "Done typing."
-          env.ui.info ""
+          ui.info "Done typing."
+          ui.info ""
 
         end
 
@@ -48,10 +48,10 @@ module Veewee
           env.logger.info "#{command}"
           sshresult=shell_exec("#{command}",{:mute => true})
           unless sshresult.stdout.index("E_ACCESSDENIED").nil?
-            env.ui.error "There was an error typing the commands on the console"
-            env.ui.error "Probably the VM did not get started."
-            env.ui.error ""
-            env.ui.error "#{sshresult.stdout}"
+            ui.error "There was an error typing the commands on the console"
+            ui.error "Probably the VM did not get started."
+            ui.error ""
+            ui.error "#{sshresult.stdout}"
             exit -1
           end
         end

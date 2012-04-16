@@ -18,12 +18,12 @@ module Veewee
                 result=self.ssh_execute(self.ip_address,command,new_options)
                 return result
               rescue RuntimeError => ex
-                env.ui.error "Error executing command #{command} : #{ex}"
+                ui.error("Error executing command #{command} : #{ex}",:prefix => false)
                 raise Veewee::SshError, ex
               end
             end
           rescue Net::SSH::AuthenticationFailed => ex
-            env.ui.error "Authentication failure"
+            ui.error("Authentication failure",:prefix => false)
             raise Veewee::SshError, ex
           end
 

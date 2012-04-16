@@ -33,7 +33,7 @@ module Veewee
             box_name=argv[0]
             venv.providers["virtualbox"].get_box(box_name).export_vagrant(options)
           rescue Veewee::Error => ex
-            venv.ui.error ex
+            venv.ui.error(ex,:prefix => false)
             exit -1
           end
 

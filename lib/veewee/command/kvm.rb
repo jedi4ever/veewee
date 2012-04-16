@@ -74,7 +74,7 @@ module Veewee
           venv.undefine(definition_name,options)
           venv.definitions.undefine(definition_name,options)
         rescue Error => ex
-          env.ui.error "#{ex}"
+          env.ui.error("#{ex}", :prefix=> false)
           exit -1
         end
       end

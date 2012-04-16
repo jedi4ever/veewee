@@ -26,7 +26,7 @@ module Veewee
 
           # This tries to guess a local free tcp port 
           def guess_free_port(min_port,max_port)
-            env.ui.info "Received port hint - #{min_port}"
+            ui.info "Received port hint - #{min_port}"
 
             guessed_port=nil
 
@@ -38,10 +38,10 @@ module Veewee
             end
 
             if guessed_port.nil?
-              env.ui.info "No free port available: tried #{min_port}..#{max_port}"
+              ui.error "No free port available: tried #{min_port}..#{max_port}"
               exit -1
             else
-              env.ui.info "Found port #{guessed_port} available"
+              ui.info "Found port #{guessed_port} available"
             end
 
             return guessed_port
@@ -58,7 +58,7 @@ module Veewee
                 connected=false
                 while !connected do
                   begin
-                    env.ui.info "trying connection"
+                    ui.info "trying connection"
                     s = TCPSocket.new(ip, options[:port])
                     s.close
                     block.call(ip);

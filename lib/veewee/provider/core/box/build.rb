@@ -7,9 +7,9 @@ module Veewee
 
           # Requires valid definition
 
-          env.ui.info "Building Box #{name} with Definition #{definition.name}:"
+          ui.info "Building Box #{name} with Definition #{definition.name}:"
           options.each do |name,value|
-            env.ui.info "- #{name} : #{value}"
+            ui.info "- #{name} : #{value}"
           end
 
           # Checking regexp of postinstall include/excludes
@@ -24,14 +24,14 @@ module Veewee
               self.destroy
               self.reload
             else
-              env.ui.error "you need to provide --force because the box #{name} already exists"
+              ui.error("you need to provide --force because the box #{name} already exists",:prefix => false)
               raise Veewee::Error,"you need to provide --force because the box #{name} already exists"
             end
           end
 
           # By now the box should have been gone, just checking again
           if self.exists?
-            env.ui.error "The box should have been deleted by now. Something went terribly wrong. Sorry"
+            ui.error("The box should have been deleted by now. Something went terribly wrong. Sorry",:prefix => false)
             raise Veewee::Error, "The box should have been deleted by now. Something went terribly wrong. Sorry"
           end
 
@@ -42,14 +42,14 @@ module Veewee
           self.up(options)
 
           # Waiting for it to boot
-          env.ui.info "Waiting #{definition.boot_wait.to_i} seconds for the machine to boot"
+          ui.info "Waiting #{definition.boot_wait.to_i} seconds for the machine to boot"
           sleep definition.boot_wait.to_i
 
           # Calculate an available kickstart port
           unless definition.kickstart_port.nil?
             guessed_port=guess_free_port(definition.kickstart_port.to_i,7199).to_s
             if guessed_port.to_s!=definition.kickstart_port
-              env.ui.warn "Changing kickstart port from #{definition.kickstart_port} to #{guessed_port}"
+              ui.warn "Changing kickstart port from #{definition.kickstart_port} to #{guessed_port}"
               definition.kickstart_port=guessed_port.to_s
             end
           end
@@ -78,9 +78,9 @@ module Veewee
           self.handle_postinstall(options)
 
 
-          env.ui.success "The box #{name} was built succesfully!"
-          env.ui.info "You can now login to the box with:"
-          env.ui.info ssh_command_string
+          ui.success "The box #{name} was built succesfully!"
+          ui.info "You can now login to the box with:"
+          ui.info ssh_command_string
 
           return self
         end
@@ -164,10 +164,10 @@ module Veewee
           kickstartfiles=definition.kickstart_file
 
           if kickstartfiles.nil? || kickstartfiles.length == 0
-            env.ui.info "Skipping webserver as no kickstartfile was specified"
+            ui.info "Skipping webserver as no kickstartfile was specified"
           end
 
-          env.ui.info "Starting a webserver #{definition.kickstart_ip}:#{definition.kickstart_port}\n"
+          ui.info "Starting a webserver #{definition.kickstart_ip}:#{definition.kickstart_port}\n"
 
           # Check if the kickstart is an array or a single string
           if kickstartfiles.is_a?(String)
@@ -239,7 +239,7 @@ module Veewee
               self.scp(infofile.path,info[:filename])
               infofile.delete
             rescue RuntimeError => ex
-              env.ui.error "Error transfering file #{info[:filename]} failed, possible not enough permissions to write? #{ex}"
+              ui.error("Error transfering file #{info[:filename]} failed, possible not enough permissions to write? #{ex}",:prefix => false)
               raise Veewee::Error,"Error transfering file #{info[:filename]} failed, possible not enough permissions to write? #{ex}"
             end
           end

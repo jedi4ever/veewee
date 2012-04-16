@@ -6,7 +6,7 @@ module Veewee
         def up(options={})
 
           unless self.exists?
-            env.ui.error "Error:: You tried to up a non-existing box '#{name}'"
+            ui.error "Error:: You tried to up a non-existing box '#{name}'"
             exit -1
           end
 
@@ -23,7 +23,7 @@ module Veewee
             if guessed_port!=forward[:guest_port]
               # Remove the existing one
               self.delete_forwarding("guestssh")
-              env.ui.warn "Changing ssh port from #{forward[:guest_port]} to #{guessed_port}"
+              ui.warn "Changing ssh port from #{forward[:guest_port]} to #{guessed_port}"
               self.add_ssh_nat_mapping
             end
           else

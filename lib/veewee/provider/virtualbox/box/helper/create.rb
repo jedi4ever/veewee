@@ -66,7 +66,7 @@ module Veewee
 
 
         def create_disk
-            env.ui.info "Creating new harddrive of size #{definition.disk_size.to_i} "
+            ui.info "Creating new harddrive of size #{definition.disk_size.to_i} "
 
 
             place=get_vbox_home
@@ -81,7 +81,7 @@ module Veewee
           location=name+"."+definition.disk_format.downcase
 
           location="#{File.join(place,name,location)}"
-          env.ui.info "Attaching disk: #{location}"
+          ui.info "Attaching disk: #{location}"
 
           #command => "${vboxcmd} storageattach \"${vname}\" --storagectl \"SATA Controller\" --port 0 --device 0 --type hdd --medium \"${vname}.vdi\"",
           command ="#{@vboxcmd} storageattach \"#{name}\" --storagectl \"SATA Controller\" --port 0 --device 0 --type hdd --medium \"#{location}\""
@@ -92,14 +92,14 @@ module Veewee
 
         def attach_isofile
           full_iso_file=File.join(env.config.veewee.iso_dir,definition.iso_file)
-          env.ui.info "Mounting cdrom: #{full_iso_file}"
+          ui.info "Mounting cdrom: #{full_iso_file}"
           command ="#{@vboxcmd} storageattach \"#{name}\" --storagectl \"IDE Controller\" --type dvddrive --port 0 --device 0 --medium \"#{full_iso_file}\""
           shell_exec("#{command}")
         end
 
         def attach_guest_additions
           full_iso_file=File.join(env.config.veewee.iso_dir,"VBoxGuestAdditions_#{self.vbox_version}.iso")
-          env.ui.info "Mounting guest additions: #{full_iso_file}"
+          ui.info "Mounting guest additions: #{full_iso_file}"
           command ="#{@vboxcmd} storageattach \"#{name}\" --storagectl \"IDE Controller\" --type dvddrive --port 1 --device 0 --medium \"#{full_iso_file}\""
           shell_exec("#{command}")
         end
@@ -137,7 +137,7 @@ module Veewee
           #Exec and system stop the execution here
           shell_exec("#{command}")
 
-          env.ui.info "Creating vm #{name} : #{definition.memory_size}M - #{definition.cpu_count} CPU - #{vbox_os_type_id(definition.os_type_id)}"
+          ui.info "Creating vm #{name} : #{definition.memory_size}M - #{definition.cpu_count} CPU - #{vbox_os_type_id(definition.os_type_id)}"
 
           #setting cpu's
           command="#{@vboxcmd} modifyvm \"#{name}\" --cpus #{definition.cpu_count}"
@@ -157,8 +157,8 @@ module Veewee
           vm_flags.each do |vm_flag|
             if definition.instance_variable_defined?("@#{vm_flag}")
               vm_flag_value=definition.instance_variable_get("@#{vm_flag}")
-              env.ui.info "Setting VM Flag #{vm_flag} to #{vm_flag_value}"
-              env.ui.warn "Used of #{vm_flag} is deprecated - specify your options in :virtualbox => { : vm_options => [\"#{vm_flag}\" => \"#{vm_flag_value}\"]}"
+              ui.info "Setting VM Flag #{vm_flag} to #{vm_flag_value}"
+              ui.warn "Used of #{vm_flag} is deprecated - specify your options in :virtualbox => { : vm_options => [\"#{vm_flag}\" => \"#{vm_flag_value}\"]}"
               command="#{@vboxcmd} modifyvm #{name} --#{vm_flag.to_s} #{vm_flag_value}"
               shell_exec("#{command}")
             end
@@ -166,7 +166,7 @@ module Veewee
 
           unless definition.virtualbox[:vm_options][0].nil?
             definition.virtualbox[:vm_options][0].each do |vm_flag,vm_flag_value|
-              env.ui.info "Setting VM Flag #{vm_flag} to #{vm_flag_value}"
+              ui.info "Setting VM Flag #{vm_flag} to #{vm_flag_value}"
               command="#{@vboxcmd} modifyvm #{name} --#{vm_flag.to_s} #{vm_flag_value}"
               shell_exec("#{command}")
             end

@@ -5,6 +5,7 @@ module Veewee
   # of `warn`, `error`, `info`, and `success`.
   class UI
     attr_accessor :env
+    attr_accessor :resource
 
     def initialize(env)
       @env = env
@@ -71,6 +72,7 @@ module Veewee
       def format_message(message, opts=nil)
         opts = { :prefix => true }.merge(opts || {})
         opts[:prefix]=false if env.resource=="veewee"
+        opts[:prefix]=false if env.resource=="vagrant"
         message = "[#{env.resource}] #{message}" if opts[:prefix]
         message
       end

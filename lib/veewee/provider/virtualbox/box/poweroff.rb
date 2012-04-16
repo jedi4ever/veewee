@@ -6,7 +6,7 @@ module Veewee
         def poweroff(options={})
           # If the vm is not powered off, perform a shutdown
           if (self.exists? && self.running?)
-            env.ui.info "Shutting down vm #{name}"
+            ui.info "Shutting down vm #{name}"
             #We force it here, maybe vm.shutdown is cleaner
             command="#{@vboxcmd} controlvm \"#{name}\" poweroff"
             shell_exec("#{command}")

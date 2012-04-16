@@ -5,7 +5,7 @@ module Veewee
 
         def destroy(options={})
           unless self.exists?
-            env.ui.error "Error:: You tried to destroy a non-existing box '#{name}'"
+            ui.error "Error:: You tried to destroy a non-existing box '#{name}'"
             exit -1
           end
 
