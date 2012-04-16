@@ -4,6 +4,12 @@ module Veewee
       module BoxCommand
 
         def up(options={})
+
+          unless self.exists?
+            env.ui.error "Error:: You tried to up a non-existing box '#{name}'"
+            exit -1
+          end
+
           gui_enabled=options[:nogui]==true ? false : true
 
           raise Veewee::Error,"Box is already running" if self.running?
@@ -21,7 +27,7 @@ module Veewee
               self.add_ssh_nat_mapping
             end
           else
-              self.add_ssh_nat_mapping
+            self.add_ssh_nat_mapping
           end
 
           self.suppress_messages    
