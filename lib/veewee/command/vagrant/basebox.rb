@@ -10,6 +10,7 @@ require 'veewee/command/vagrant/halt'
 require 'veewee/command/vagrant/ssh'
 require 'veewee/command/vagrant/define'
 require 'veewee/command/vagrant/undefine'
+require 'veewee/command/vagrant/validate'
 require 'veewee/command/vagrant/export'
 
 
@@ -34,6 +35,7 @@ module Veewee
           @subcommands.register(:define)    { Veewee::Command::Vagrant::Define }
           @subcommands.register(:undefine)    { Veewee::Command::Vagrant::Undefine }
           @subcommands.register(:export)    { Veewee::Command::Vagrant::Export }
+          @subcommands.register(:validate)    { Veewee::Command::Vagrant::Validate }
 
         end
 
