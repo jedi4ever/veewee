@@ -28,7 +28,7 @@ module Veewee
           sleep 1
 
           #if the disk was not attached when the machine was destroyed we also need to delete the disk
-          pattern=name+"."
+          pattern= File::SEPARATOR+name+"."
           #+definition.disk_format.downcase
           found=false
           command="#{@vboxcmd} list hdds -l"
