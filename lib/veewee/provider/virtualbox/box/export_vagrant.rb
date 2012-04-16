@@ -58,7 +58,7 @@ module Veewee
             exit
           end
 
-          env.ui.info "Excuting vagrant voodoo:"
+          env.ui.info "Executing vagrant voodoo:"
           export_command="vagrant package --base '#{name}' --output '#{box_path}'"
           env.ui.info "#{export_command}"
           shell_exec("#{export_command}") #hmm, needs to get the gem_home set?
