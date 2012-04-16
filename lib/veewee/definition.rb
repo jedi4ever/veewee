@@ -24,6 +24,8 @@ module Veewee
     attr_accessor :sudo_cmd
     attr_accessor :shutdown_cmd
 
+    attr_accessor :pre_postinstall_file
+
     attr_accessor :postinstall_files, :postinstall_timeout
 
     attr_accessor :floppy_files
@@ -58,6 +60,7 @@ module Veewee
       @floppy_files = nil
 
       # Default there are no post install files
+      @pre_postinstall_file = nil
       @postinstall_files=[]; @postinstall_timeout = 10000;
 
       @iso_file=""

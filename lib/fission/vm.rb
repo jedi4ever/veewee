@@ -327,7 +327,9 @@ module Fission
 
         unless File.binary?(file)
           text = (File.read file).gsub from, to
-          File.open(file, 'w'){ |f| f.print text }
+          # Force binary mode to prevent windows from putting CR-LF end line style
+          # http://www.ruby-forum.com/topic/60697#58748
+          File.open(file, 'wb'){ |f| f.print text }
         end
 
       end
@@ -349,7 +351,9 @@ module Fission
       content=content+"uuid.action = \"create\"\n"
 
       # Now rewrite the vmx file
-      File.open(new_vmx_file,'w'){ |f| f.print content}
+      # Force binary mode to prevent windows from putting CR-LF end line style
+      # http://www.ruby-forum.com/topic/60697#58748
+      File.open(new_vmx_file,'wb'){ |f| f.print content}
 
     end
 

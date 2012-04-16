@@ -4,7 +4,7 @@ module Veewee
       module BoxCommand
 
         def forwarding(name)
-          command="#{@vboxcmd} showvminfo --details --machinereadable '#{self.name}'"
+          command="#{@vboxcmd} showvminfo --details --machinereadable \"#{self.name}\""
           shell_results=shell_exec("#{command}")
           rules=shell_results.stdout.split(/\n/).grep(/^Forward/)
           result=nil
@@ -28,7 +28,7 @@ module Veewee
 
         def delete_forwarding(name)
           forward=self.forwarding(name)
-          command="#{@vboxcmd} controlvm '#{self.name}' natpf#{self.natinterface} delete #{name}"
+          command="#{@vboxcmd} controlvm \"#{self.name}\" natpf#{self.natinterface} delete #{name}"
           shell_results=shell_exec("#{command}")
         end
 

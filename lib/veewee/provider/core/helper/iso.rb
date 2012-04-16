@@ -40,6 +40,9 @@ module Veewee
               # We assume large 10K files, so this is tempfile object 
               env.logger.info "#{src.class}"
                 env.ui.info "Moving #{src.path} to #{localfile}"
+                # Force the close of the src stream to release handle before moving
+                # Not forcing the close may cause an issue on windows (Permission Denied)
+                src.close
                 FileUtils.mv(src.path,localfile)
                 #open(localfile,"wb") { |dst|
                   #dst.write(src.read)

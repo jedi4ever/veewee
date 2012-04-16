@@ -10,7 +10,7 @@ module Veewee
             exit -1
           end
 
-          gui_enabled=options[:nogui]==true ? false : true
+          gui_enabled=options['nogui']==true ? false : true
 
           raise Veewee::Error,"Box is already running" if self.running?
 
@@ -35,9 +35,9 @@ module Veewee
           # Once assembled we start the machine
           env.logger.info "Started the VM with GUI Enabled? #{gui_enabled}"
 
-          command="#{@vboxcmd} startvm --type gui '#{name}'"
+          command="#{@vboxcmd} startvm --type gui \"#{name}\""
           unless (gui_enabled)
-            command="#{@vboxcmd} startvm --type headless '#{name}'"
+            command="#{@vboxcmd} startvm --type headless \"#{name}\""
           end
           shell_results=shell_exec("#{command}",{:mute => true})
         end
