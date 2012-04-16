@@ -26,7 +26,7 @@ module Veewee
 
           unless definition.nil?
             #Map SSH Ports
-            command="#{@vboxcmd} modifyvm '#{name}' --natpf1 'guestssh,tcp,,#{definition.ssh_host_port},,#{definition.ssh_guest_port}'"
+            command="#{@vboxcmd} modifyvm '#{name}' --natpf#{self.natinterface} 'guestssh,tcp,,#{definition.ssh_host_port},,#{definition.ssh_guest_port}'"
             shell_exec("#{command}")
           end
         end
@@ -49,8 +49,8 @@ module Veewee
           update_date=Time.now+365*day
 
           extraData = [
-            ["Gui/RegistrationData","triesLeft=0"],
-            ["Gui/SuppressMessages","confirmInputCapture,remindAboutAutoCapture,remindAboutMouseIntegrationOff,remindAboutMouseIntegrationOn,remindAboutWrongColorDepth"],
+            ["GUI/RegistrationData","triesLeft=0"],
+            ["GUI/SuppressMessages","confirmInputCapture,remindAboutAutoCapture,remindAboutMouseIntegrationOff,remindAboutMouseIntegrationOn,remindAboutWrongColorDepth"],
             ["GUI/UpdateDate", "1 d, #{update_date.year}-#{update_date.month.to_s.rjust(2,'0')}-#{update_date.day.to_s.rjust(2,'0')}, stable"],
             ["GUI/UpdateCheckCount","60"]
           ]
