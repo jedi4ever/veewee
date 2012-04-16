@@ -51,7 +51,7 @@ module Veewee
           def hashsum(filename)
             checksum=Digest::MD5.new
             buflen=1024
-            open(filename, "r") do |io|
+            open(filename, "rb") do |io|
               counter = 0
               while (!io.eof)
                 readBuf = io.readpartial(buflen)
