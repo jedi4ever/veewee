@@ -25,7 +25,7 @@ module Veewee
           begin
             venv=Veewee::Environment.new(options)
             venv.ui=@env.ui
-            venv.providers["virtualbox"].get_box(argv[0]).issh(arg[1])
+            venv.providers["virtualbox"].get_box(argv[0]).issh(argv[1])
           rescue Veewee::Error => ex
             venv.ui.error(ex,:prefix => false)
             exit -1
