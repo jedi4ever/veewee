@@ -63,3 +63,21 @@ task :iso, [:box_name] do |t,args|
     end
   end
 end
+
+desc 'Run through all templates and build'
+task :blast do
+
+  ve=Veewee::Environment.new()
+  ve.templates.each do |name,template|
+    begin
+      ve.definitions.define("auto",name, { 'force' => true})
+      vd=ve.definitions["auto"]
+      box=ve.providers["virtualbox"].get_box("auto")
+      box.build({"auto" => true,"force" => true })
+      box.validate_vagrant
+      box.destroy
+    rescue Exception => ex
+      puts "Template #{name} failed - #{ex}"
+    end
+  end
+end
