@@ -10,7 +10,7 @@ class TestVeeweeBuild < Test::Unit::TestCase
     @vd=@ve.definitions[@definition_name]
     @box_name=@definition_name
     @vd.postinstall_files=["_test_me.sh"]
-    @box=@ve.providers["vmfusion"].get_box(@box_name)
+    @box=@ve.providers["virtualbox"].get_box(@box_name)
   end
 
   # First build of box
@@ -20,7 +20,7 @@ class TestVeeweeBuild < Test::Unit::TestCase
   def test_box_1_build
     assert_nothing_raised {
       #@box.build({"auto" => true,:force => true, #:nogui => true })
-      @box.build({"auto" => true,:force => true })
+      @box.build({"auto" => true,"force" => true })
     }
   end
 
@@ -57,9 +57,9 @@ class TestVeeweeBuild < Test::Unit::TestCase
   end
 
   def test_box_6_destroy
-  #  assert_nothing_raised {
-      #@box.destroy
-    #}
+    assert_nothing_raised {
+      @box.destroy
+    }
   end
 
   #
