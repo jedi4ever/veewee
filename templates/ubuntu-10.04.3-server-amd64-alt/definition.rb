@@ -35,7 +35,7 @@ Veewee::Definition.declare( {
   :hostiocache          => 'on',
   :iso_download_timeout => "60",
   :iso_file             => "ubuntu-10.04.3-alternate-amd64.iso",
-  :iso_src              => "http://releases.ubuntu.com/10.04.3/ubuntu-10.04.3-alternate-amd64.iso",
+  :iso_src              => "http://old-releases.ubuntu.com/releases/10.04.3/ubuntu-10.04.3-alternate-amd64.iso",
   :iso_md5              => "e38e5cf4cc02c9a3fa4ecd88832d120c",
   :kickstart_file       => "preseed.cfg",
   :kickstart_port       => "7122",

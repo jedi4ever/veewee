@@ -6,7 +6,7 @@ Veewee::Definition.declare({
   :hostiocache => 'off',
   :os_type_id => 'RedHat_64',
   :iso_file => "CentOS-6.0-x86_64-bin-DVD1.iso",
-  :iso_src => "http://be.mirror.eurid.eu/centos/6.0/isos/x86_64/CentOS-6.0-x86_64-bin-DVD1.iso",
+  :iso_src => "http://vault.centos.org/6.0/isos/x86_64/CentOS-6.0-x86_64-bin-DVD1.iso",
   :iso_md5 => "7c148e0a1b330186adef66ee3e2d433d",
   :iso_download_timeout => 1000,
   :iso_download_instructions => "We can not download the ISO , you need to download it yourself and put it in the iso directory\n"+
