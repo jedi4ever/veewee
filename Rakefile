@@ -68,7 +68,7 @@ desc 'Autobuilds all templates and runs validation'
 task :autotest do
 
   # We overrule all timeouts for tcp and ssh
-  ENV['VEEWEE_TIMEOUT']='6'
+  #ENV['VEEWEE_TIMEOUT']='600'
 
   ve=Veewee::Environment.new()
   ve.templates.each do |name,template|
