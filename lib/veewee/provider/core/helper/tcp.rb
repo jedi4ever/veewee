@@ -53,7 +53,7 @@ module Veewee
 
             options=defaults.merge(options)
             timeout=options[:timeout]
-            timeout=ENV['VEEWEE_TIMEOUT'] unless ENV['VEEWEE_TIMEOUT'].nil?
+            timeout=ENV['VEEWEE_TIMEOUT'].to_i unless ENV['VEEWEE_TIMEOUT'].nil?
 
             begin
               Timeout::timeout(timeout) do
