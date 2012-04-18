@@ -46,7 +46,7 @@ module Veewee
         env.logger.debug("[Template] no templates found") 
       end
 
-      templates.each(&block)
+      Hash[templates.sort].each(&block)
     end
 
     private
