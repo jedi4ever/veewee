@@ -126,6 +126,19 @@ module Veewee
         end
       end
 
+      desc "screenshot [NAME] [PNGFILENAME]", "Takes a screenshot of the box"
+      def screenshot(box_name,pngfilename)
+        begin
+        venv=Veewee::Environment.new(options)
+        venv.ui = ::Veewee::UI::Shell.new(venv, shell)
+
+        venv.providers["virtualbox"].get_box(box_name).screenshot(pngfilename,options)
+        rescue Veewee::Error => ex
+          venv.ui.error(ex, :prefix => false)
+          exit -1
+        end
+      end
+
 
     end
 
