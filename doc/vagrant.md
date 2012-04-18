@@ -2,7 +2,7 @@
 Let's define a  Ubuntu 10.10 server i386 basebox called myunbuntubox
 this is essentially making a copy based on the  templates provided above.
 
-    $ veewee vbox basebox define 'myubuntubox' 'ubuntu-10.10-server-i386'
+    $ veewee vbox define 'myubuntubox' 'ubuntu-10.10-server-i386'
     The basebox 'myubuntubox' has been succesfully created from the template ''ubuntu-10.10-server-i386'
     You can now edit the definition files stored in definitions/myubuntubox
     or build the box with:
