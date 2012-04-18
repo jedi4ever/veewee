@@ -67,6 +67,9 @@ end
 desc 'Autobuilds all templates and runs validation'
 task :autotest do
 
+  # We overrule all timeouts for tcp and ssh
+  ENV['VEEWEE_TIMEOUT']='6'
+
   ve=Veewee::Environment.new()
   ve.templates.each do |name,template|
     begin
@@ -81,6 +84,15 @@ task :autotest do
       box.destroy
     rescue Exception => ex
       puts "AUTO: Template #{name} failed - #{ex}"
+      if box.running?
+        begin
+          screenshot="screenshot-auto-#{name}.png"
+          puts "AUTO: Taking snapshot #{screenshot}"
+          box.screenshot(screenshot)
+        rescue Veewee::Error => ex
+          puts "AUTO: Error taking screenshot"
+        end
+      end
     end
   end
 end

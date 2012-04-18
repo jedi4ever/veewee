@@ -52,9 +52,11 @@ module Veewee
             defaults={ :port => 22, :timeout => 2 , :pollrate => 5}
 
             options=defaults.merge(options)
+            timeout=options[:timeout]
+            timeout=ENV['VEEWEE_TIMEOUT'] unless ENV['VEEWEE_TIMEOUT'].nil?
 
             begin
-              Timeout::timeout(options[:timeout]) do
+              Timeout::timeout(timeout) do
                 connected=false
                 while !connected do
                   begin
@@ -69,7 +71,7 @@ module Veewee
                 end
               end
             rescue Timeout::Error
-              raise 'timeout connecting to port'
+              raise "Timeout connecting to TCP port {options[:port]} exceeded #{timeout} secs."
             end
 
             return false

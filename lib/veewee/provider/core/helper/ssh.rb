@@ -25,16 +25,18 @@ module Veewee
             defaults={ :port => '22', :timeout => 20000 }
 
             options=defaults.merge(options)
+            timeout = options[:timeout]
+            timeout=ENV['VEEWEE_TIMEOUT'] unless ENV['VEEWEE_TIMEOUT'].nil? 
 
-            ui.info  "Waiting for ssh login on #{ip} with user #{options[:user]} to sshd on port => #{options[:port]} to work, timeout=#{options[:timeout]} sec"
+            ui.info  "Waiting for ssh login on #{ip} with user #{options[:user]} to sshd on port => #{options[:port]} to work, timeout=#{timeout} sec"
 
             begin
-              Timeout::timeout(options[:timeout]) do
+              Timeout::timeout(timeout) do
                 connected=false
                 while !connected do
                   begin
                     env.ui.info ".",{:new_line => false , :prefix => false}
-                    Net::SSH.start(ip, options[:user], { :port => options[:port] , :password => options[:password], :paranoid => false , :timeout => options[:timeout] }) do |ssh|
+                    Net::SSH.start(ip, options[:user], { :port => options[:port] , :password => options[:password], :paranoid => false , :timeout => timeout }) do |ssh|
 
                       ui.info "\n", {:prefix => false}
                       block.call(ip);
@@ -46,8 +48,7 @@ module Veewee
                 end
               end
             rescue Timeout::Error
-              ui.error "Ssh timeout #{options[:timeout]} sec has been reached."
-              raise Veewee::Error, "Ssh timeout #{options[:timeout]} sec has been reached."
+              raise Veewee::Error, "Ssh timeout #{timeout} sec has been reached."
             end
             ui.info ""
             return false
