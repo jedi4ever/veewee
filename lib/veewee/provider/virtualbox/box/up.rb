@@ -6,8 +6,7 @@ module Veewee
         def up(options={})
 
           unless self.exists?
-            ui.error "Error:: You tried to up a non-existing box '#{name}'"
-            exit -1
+            raise Veewee::Error, "Error:: You tried to up a non-existing box '#{name}'"
           end
 
           gui_enabled=options['nogui']==true ? false : true
@@ -30,7 +29,7 @@ module Veewee
             self.add_ssh_nat_mapping
           end
 
-          self.suppress_messages    
+          self.suppress_messages
 
           # Once assembled we start the machine
           env.logger.info "Started the VM with GUI Enabled? #{gui_enabled}"

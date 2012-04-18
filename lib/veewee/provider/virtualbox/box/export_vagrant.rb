@@ -54,8 +54,7 @@ module Veewee
           box_path=path1.relative_path_from(path2).to_s
 
           if File.exists?("#{box_path}")
-            ui.info "box #{name}.box already exists"
-            exit
+            raise Veewee::Error, "box #{name}.box already exists"
           end
 
           ui.info "Executing vagrant voodoo:"

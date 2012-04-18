@@ -6,8 +6,7 @@ module Veewee
         def destroy(option={})
 
           unless self.exists?
-            ui.error "Error:: You tried to destroy a non-existing box '#{name}'"
-            exit -1
+            raise Veewee::Error, "Error:: You tried to destroy a non-existing box '#{name}'"
           end
 
           # If it has a save state,remove that first
@@ -53,7 +52,6 @@ module Veewee
                 ui.info "We tried to delete the disk file via virtualbox '#{location} but failed"
                 ui.info "Removing it manually"
                 FileUtils.rm(location)
-                exit -1
               end
               break
             end

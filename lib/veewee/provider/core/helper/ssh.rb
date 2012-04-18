@@ -47,7 +47,7 @@ module Veewee
               end
             rescue Timeout::Error
               ui.error "Ssh timeout #{options[:timeout]} sec has been reached."
-              exit -1
+              raise Veewee::Error, "Ssh timeout #{options[:timeout]} sec has been reached."
             end
             ui.info ""
             return false

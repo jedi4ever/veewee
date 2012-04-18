@@ -39,7 +39,7 @@ module Veewee
 
             if guessed_port.nil?
               ui.error "No free port available: tried #{min_port}..#{max_port}"
-              exit -1
+              raise Veewee::Error, "No free port available: tried #{min_port}..#{max_port}"
             else
               ui.info "Found port #{guessed_port} available"
             end

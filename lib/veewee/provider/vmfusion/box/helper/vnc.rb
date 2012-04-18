@@ -29,7 +29,7 @@ module Veewee
 
           if guessed_port.nil?
             env.ui.info "No free VNC port available: tried #{min_port}..#{max_port}"
-            exit -1
+            raise Veewee::Error, "No free VNC port available: tried #{min_port}..#{max_port}"
           else
             env.ui.info "Found VNC port #{guessed_port} available"
           end

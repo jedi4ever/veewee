@@ -18,5 +18,5 @@ begin
   ::Veewee::CLI.start(ARGV,:env => env)
 
 rescue Veewee::Error => e
-  puts "#{e}"
+  env.ui.error "#{e}"
 end

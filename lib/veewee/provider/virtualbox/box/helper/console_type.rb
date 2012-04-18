@@ -48,11 +48,11 @@ module Veewee
           env.logger.info "#{command}"
           sshresult=shell_exec("#{command}",{:mute => true})
           unless sshresult.stdout.index("E_ACCESSDENIED").nil?
-            ui.error "There was an error typing the commands on the console"
-            ui.error "Probably the VM did not get started."
-            ui.error ""
-            ui.error "#{sshresult.stdout}"
-            exit -1
+            error= "There was an error typing the commands on the console"
+            error+="Probably the VM did not get started."
+            error+= ""
+            error+= "#{sshresult.stdout}"
+            raise Veewee::Error, error
           end
         end
 
