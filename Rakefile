@@ -25,7 +25,7 @@ Rake::TestTask.new do |t|
 end
 
 desc 'Verify ISO'
-task :iso, [:box_name] do |t,args|
+task :iso, [:template_name] do |t,args|
   require 'net/http'
   #if args.to_hash.size!=1
   #puts "needs one arguments: rake iso [\"yourname\"]"
@@ -64,14 +64,20 @@ task :iso, [:box_name] do |t,args|
   end
 end
 
-desc 'Autobuilds all templates and runs validation'
-task :autotest do
+desc 'Autobuilds all templates and runs validation.'
+task :autotest, [:pattern] do |t,args|
 
   # We overrule all timeouts for tcp and ssh
   #ENV['VEEWEE_TIMEOUT']='600'
 
   ve=Veewee::Environment.new()
   ve.templates.each do |name,template|
+
+    # If pattern was given, only take the ones that match the pattern
+    unless args[:pattern].nil?
+      next unless name.match(args[:pattern])
+    end
+
     begin
       ve.definitions.define("auto",name, { 'force' => true})
       vd=ve.definitions["auto"]
@@ -94,5 +100,6 @@ task :autotest do
         end
       end
     end
+
   end
 end
