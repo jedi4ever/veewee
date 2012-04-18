@@ -75,8 +75,11 @@ module Veewee
           end
 
           self.transfer_buildinfo(options)
+          
+          # Filtering post install files based upon --postinstall-include and --postinstall--exclude
+          definition.postinstall_files=filter_postinstall_files(options)
+                    
           self.handle_postinstall(options)
-
 
           ui.success "The box #{name} was built succesfully!"
           ui.info "You can now login to the box with:"
@@ -157,9 +160,7 @@ module Veewee
         # This function handles all the post-install scripts
         # It requires a definition to find all the necessary information
         def handle_kickstart(options)
-
-            # Filtering post install files based upon --postinstall-include and --postinstall--exclude
-          definition.postinstall_files=filter_postinstall_files(options)
+                    
           # Handling the kickstart by web
           kickstartfiles=definition.kickstart_file
 
@@ -191,32 +192,44 @@ module Veewee
         # This function handles all the post-install scripts
         # It requires a box(to login to) and a definition(listing the postinstall files)
         def handle_postinstall(options)
-          is_pre_postinstall_file = !definition.pre_postinstall_file.nil? && !definition.pre_postinstall_file.length != 0
-          transfered = false
+
+          # Transfer all postinstall files
           definition.postinstall_files.each do |postinstall_file|
             # Filenames of postinstall_files are relative to their definition
             filename=File.join(definition.path,postinstall_file)
-            unless File.basename(postinstall_file)=~/^_/
-              self.scp(filename,File.basename(filename))
-              self.exec("chmod +x \"#{File.basename(filename)}\"")
-              if is_pre_postinstall_file
+            self.scp(filename,File.basename(filename))
+            self.exec("chmod +x \"#{File.basename(filename)}\"")
+          end
+
+          # Prepare a pre_poinstall file if needed (not nil , or not empty)
+          unless definition.pre_postinstall_file.to_s.empty?
+            pre_filename=File.join(definition.path, definition.pre_postinstall_file)
+            self.scp(pre_filename,File.basename(pre_filename))
+            self.exec("chmod +x \"#{File.basename(pre_filename)}\"")
+            # Inject the call to the real script by executing the first argument (it will be the postinstall script file name to be executed)
+            self.exec("execute=\"\\n# We must execute the script passed as the first argument\\n\\$1\" && printf \"%b\\n\" \"$execute\" >> #{File.basename(pre_filename)}")
+          end
+          
+          # Now iterate over the postinstall files
+          definition.postinstall_files.each do |postinstall_file|
+            # Filenames of postinstall_files are relative to their definition
+            filename=File.join(definition.path,postinstall_file)
+
+            unless File.basename(postinstall_file).start_with?("_")
+            
+              unless definition.pre_postinstall_file.to_s.empty?
                 # Filename of pre_postinstall_file are relative to their definition
                 pre_filename=File.join(definition.path, definition.pre_postinstall_file)
                 # Upload the pre postinstall script if not already transfered
-                if !transfered
-                  self.scp(pre_filename,File.basename(pre_filename))
-                  transfered = true
-                  self.exec("chmod +x \"#{File.basename(pre_filename)}\"")
-                  # Inject the call to the real script by executing the first argument (it will be the postinstall script file name to be executed)
-                  self.exec("execute=\"\\n# We must execute the script passed as the first argument\\n\\$1\" && printf \"%b\\n\" \"$execute\" >> #{File.basename(pre_filename)}")
-                end
                 command = "./" + File.basename(pre_filename)
                 command = sudo(command) + " ./"+File.basename(filename)
               else
                 command = "./"+File.basename(filename)
                 command = sudo(command)
               end
+
               self.exec(command)
+              
             else
               env.logger.info "Skipping postinstallfile #{postinstall_file}"
             end
