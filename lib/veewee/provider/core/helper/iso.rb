@@ -138,7 +138,7 @@ module Veewee
 
             end
 
-            verify_md5sum(full_path) unless self.iso_md5.nil?
+            verify_md5sum(full_path) if options["md5check"] && !self.iso_md5.nil?
 
           end
         end #Module
