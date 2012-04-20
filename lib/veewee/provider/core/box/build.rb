@@ -75,10 +75,10 @@ module Veewee
           end
 
           self.transfer_buildinfo(options)
-          
+
           # Filtering post install files based upon --postinstall-include and --postinstall--exclude
           definition.postinstall_files=filter_postinstall_files(options)
-                    
+
           self.handle_postinstall(options)
 
           ui.success "The box #{name} was built succesfully!"
@@ -160,7 +160,7 @@ module Veewee
         # This function handles all the post-install scripts
         # It requires a definition to find all the necessary information
         def handle_kickstart(options)
-                    
+
           # Handling the kickstart by web
           kickstartfiles=definition.kickstart_file
 
@@ -209,14 +209,14 @@ module Veewee
             # Inject the call to the real script by executing the first argument (it will be the postinstall script file name to be executed)
             self.exec("execute=\"\\n# We must execute the script passed as the first argument\\n\\$1\" && printf \"%b\\n\" \"$execute\" >> #{File.basename(pre_filename)}")
           end
-          
+
           # Now iterate over the postinstall files
           definition.postinstall_files.each do |postinstall_file|
             # Filenames of postinstall_files are relative to their definition
             filename=File.join(definition.path,postinstall_file)
 
             unless File.basename(postinstall_file).start_with?("_")
-            
+
               unless definition.pre_postinstall_file.to_s.empty?
                 # Filename of pre_postinstall_file are relative to their definition
                 pre_filename=File.join(definition.path, definition.pre_postinstall_file)
@@ -229,7 +229,7 @@ module Veewee
               end
 
               self.exec(command)
-              
+
             else
               env.logger.info "Skipping postinstallfile #{postinstall_file}"
             end
