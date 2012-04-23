@@ -37,7 +37,7 @@ module Veewee
               :progress_proc => lambda {|s|
               pbar.set s if pbar
             }) { |src|
-              # We assume large 10K files, so this is tempfile object 
+              # We assume large 10K files, so this is tempfile object
               env.logger.info "#{src.class}"
                 ui.info "Moving #{src.path} to #{localfile}"
                 # Force the close of the src stream to release handle before moving
@@ -65,6 +65,17 @@ module Veewee
             return checksum.hexdigest
           end
 
+          def verify_md5sum(full_path)
+            filename = File.basename(full_path)
+            ui.info "Verifying md5 checksum : #{self.iso_md5}"
+            file_md5=hashsum(full_path)
+
+            unless file_md5==self.iso_md5
+              ui.error "The MD5 checksums for file #{filename } do not match: "
+              ui.error "- #{file_md5} (current) vs #{self.iso_md5} (specified)"
+              raise Veewee::Error, "The MD5 checksums for file #{filename } do not match: \n"+ "- #{file_md5} (current) vs #{self.iso_md5} (specified)"
+            end
+          end
 
           def verify_iso(options)
             filename=self.iso_file
@@ -123,18 +134,11 @@ module Veewee
                   raise Veewee::Error, "The provided iso #{full_path} is not readable"
                 end
 
-                ui.info "Verifying md5 checksum : #{self.iso_md5}"
-                file_md5=hashsum(full_path)
-
-                unless file_md5==self.iso_md5
-                  ui.error "The MD5 checksums for file #{filename } do not match: "
-                  ui.error "- #{file_md5} (current) vs #{self.iso_md5} (specified)"
-                  raise Veewee::Error, "The MD5 checksums for file #{filename } do not match: \n"+ "- #{file_md5} (current) vs #{self.iso_md5} (specified)"
-                end
-
               end
 
             end
+
+            verify_md5sum(full_path) if options["md5check"] && !self.iso_md5.nil?
 
           end
         end #Module
