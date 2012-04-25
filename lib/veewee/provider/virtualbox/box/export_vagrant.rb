@@ -59,6 +59,8 @@ module Veewee
 
           ui.info "Executing vagrant voodoo:"
           export_command="vagrant package --base '#{name}' --output '#{box_path}'"
+          export_command += " --include #{options["include"].join(',')}" unless options["include"].empty?
+          export_command += " --vagrantfile #{options["vagrantfile"].join(' ')}" unless options["vagrantfile"].empty?
           ui.info "#{export_command}"
           shell_exec("#{export_command}") #hmm, needs to get the gem_home set?
           ui.info ""

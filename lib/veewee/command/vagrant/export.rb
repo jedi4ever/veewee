@@ -6,6 +6,8 @@ module Veewee
       class Export < ::Vagrant::Command::Base
         def execute
           options = {}
+          options['include'] = []
+          options['vagrantfile'] = []
 
           opts = OptionParser.new do |opts|
             opts.banner = "Exports basebox to the vagrant box format"
@@ -18,6 +20,14 @@ module Veewee
 
             opts.on("-f", "--force", "force overwrite") do |f|
               options['force'] = f
+            end
+
+            opts.on( "--vagrantfile [FILE]", "vagrantfile") do |f|
+              options['vagrantfile'] = f
+            end
+
+            opts.on("-i", "--include [FILE]", "include") do |f|
+                options['include'] << f
             end
 
           end
