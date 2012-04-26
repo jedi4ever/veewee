@@ -7,9 +7,9 @@ Veewee::Session.declare({
   :disk_format => 'VDI',
   :hostiocache => 'off',
   :os_type_id => 'Ubuntu_64',
-  :iso_file => "precise-alternate-amd64.iso",
-  :iso_src => "http://cdimage.ubuntu.com/daily/current/precise-alternate-amd64.iso",
-  :iso_md5 => `curl -s http://cdimage.ubuntu.com/daily/current/MD5SUMS -o - | awk '{if ( $2 == \"*precise-alternate-amd64.iso\") print $1 }'`.strip,
+  :iso_file => "ubuntu-12.04-server-amd64.iso",
+  :iso_src => "http://releases.ubuntu.com/12.04/ubuntu-12.04-server-amd64.iso",
+  :iso_md5 => 'f2e921788d35bbdf0336d05d228136eb',
   :iso_download_timeout => "1000",
   :boot_wait => "4",
   :boot_cmd_sequence => [
