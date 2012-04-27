@@ -60,7 +60,6 @@ A typical cycle would be:
     $ veewee vbox ssh 'myubuntu'
     $ veewee vbox halt 'myubuntu'
     $ veewee vbox up 'myubuntu'
-    $ veewee vbox export 'myubuntu'
 
 ## Vagrant usage
 
