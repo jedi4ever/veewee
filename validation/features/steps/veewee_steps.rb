@@ -14,7 +14,7 @@ When /^I sudorun "([^\"]*)" over ssh$/ do |command|
 end
 
 When /^I run "([^\"]*)" over ssh$/ do |command|
-  @sshresult=@box.exec(command)
+  @sshresult=@box.exec(command, {:exitcode => '*'})
 end
 
 Then /^I should see the provided username in the output$/ do

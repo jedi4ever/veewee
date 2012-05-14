@@ -19,7 +19,7 @@ module Veewee
                 return result
               rescue RuntimeError => ex
                 error= "Error executing command #{command} : #{ex}"
-                error+="\n"+ex
+                error+="\n#{ex.backtrace.join("\n")}" unless ex.backtrace.empty?
                 raise Veewee::SshError, error
               end
             end
