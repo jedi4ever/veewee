@@ -3,7 +3,7 @@ Veewee::Session.declare({
   :disk_size => '10140', :disk_format => 'VDI', :hostiocache => 'off',
   :os_type_id => 'Ubuntu',
   :iso_file => "ubuntu-10.04.3-server-i386.iso",
-  :iso_src => "http://releases.ubuntu.com/10.04.3/ubuntu-10.04.3-server-i386.iso",
+  :iso_src => "http://old-releases.ubuntu.com/releases/10.04.3/ubuntu-10.04.3-server-i386.iso",
   :iso_md5 => "388104f6225ae676ceab0ba4bd7b5784",
   :iso_download_timeout => "1000",
   :boot_wait => "10", :boot_cmd_sequence => [

@@ -25,10 +25,10 @@ module Veewee
             venv=Veewee::Environment.new(options)
             venv.ui = @env.ui
             venv.ostypes.each do |name|
-              venv.ui.info "- #{name}"
+              venv.ui.info("- #{name}", :prefix => false)
             end
           rescue Veewee::Error => ex
-            venv.ui.error ex
+            venv.ui.error(ex,:prefix => false)
             exit -1
           end
         end

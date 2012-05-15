@@ -3,7 +3,7 @@ Veewee::Definition.declare({
   :disk_size => '10140', :disk_format => 'VDI', :hostiocache => 'off', :hwvirtext => 'on',
   :os_type_id => 'Fedora',
   :iso_file => "Fedora-14-i386-DVD.iso",
-  :iso_src => "http://mirror.uoregon.edu/fedora/linux/releases/14/Fedora/i386/iso/Fedora-14-i386-DVD.iso",
+  :iso_src => "http://archives.fedoraproject.org/pub/archive/fedora/linux/releases/14/Fedora/i386/iso/Fedora-14-i386-DVD.iso",
   :iso_md5 => "1cc67641506d2f931d669b8d3528dded",
   :iso_download_timeout => 1000,
   :boot_wait => "10", :boot_cmd_sequence => [ '<Tab> linux text ks=http://%IP%:%PORT%/ks.cfg<Enter><Enter>' ],

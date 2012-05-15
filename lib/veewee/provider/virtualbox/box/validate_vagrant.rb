@@ -4,6 +4,12 @@ module Veewee
       module BoxCommand
 
         def validate_vagrant(options)
+
+          unless self.running?
+            ui.error "Error:: You tried to validate box '#{name}' but it is not running"
+            exit -1
+          end
+
           require 'cucumber'
 
           require 'cucumber/rspec/disable_option_parser'
@@ -34,8 +40,8 @@ module Veewee
           rescue SystemExit => e
             Kernel.exit(e.status)
           rescue Exception => e
-            env.ui.error("#{e.message} (#{e.class})")
-            env.ui.error(e.backtrace.join("\n"))
+            ui.error("#{e.message} (#{e.class})")
+            ui.error(e.backtrace.join("\n"))
             Kernel.exit(1)
           end
 

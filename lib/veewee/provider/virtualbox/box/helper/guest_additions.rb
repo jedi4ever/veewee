@@ -7,7 +7,7 @@ module Veewee
           version=self.vbox_version
           isofile="VBoxGuestAdditions_#{version}.iso"
           url="http://download.virtualbox.org/virtualbox/#{version}/#{isofile}"
-          env.ui.info "Downloading vbox guest additions iso v #{version} - #{url}"
+          ui.info "Downloading vbox guest additions iso v #{version} - #{url}"
           download_iso(url,isofile)
         end
 

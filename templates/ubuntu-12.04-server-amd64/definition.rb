@@ -5,10 +5,9 @@ Veewee::Session.declare({
   :disk_format => 'VDI',
   :hostiocache => 'off',
   :os_type_id => 'Ubuntu_64',
-# :iso_file => "precise-alternate-amd64-#{Time.now.strftime('%Y-%m-%d')}.iso",
-  :iso_file => "precise-server-amd64.iso",
-  :iso_src => "http://cdimage.ubuntu.com/ubuntu-server/daily/current/precise-server-amd64.iso",
-  :iso_md5 => "`curl -s http://cdimage.ubuntu.com/ubuntu-server/daily/current/MD5SUMS -o - | awk '{if ( $2 == \"*precise-server-amd64.iso\") print $1 }'`",
+  :iso_file => "ubuntu-12.04-server-amd64.iso",
+  :iso_src => "http://releases.ubuntu.com/12.04/ubuntu-12.04-server-amd64.iso",
+  :iso_md5 => 'f2e921788d35bbdf0336d05d228136eb',
   :iso_download_timeout => "1000",
   :boot_wait => "5",
   :boot_cmd_sequence => [

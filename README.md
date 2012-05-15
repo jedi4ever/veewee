@@ -1,24 +1,3 @@
-# Note: due to a miss manipulation on my side, the veewee03 branch got merged with master
-# Therefore the current state of the masterbranch on github is highly unstable
-
-To refer to the old master, I've put up the state before the error at
-<https://github.com/jedi4ever/veewee-old>
-
--------
-
-Maintaining two branches with complete different structures isn't fun. So..... I want to merge the two.
-
-Veewee03 will bring many new features:
-
-- kvm and vmware fusion support -
-- veewee as a standalone tool tool if you don't use virtualbox,vagrant 
-- postinstall scripts can now be toggle with --include and --exclude
-
-Caveat: it's alpha-functional but not as polished as the previous version. But I'm sure with your help this won't take long.
-
-My apologies for all the pull-requests to the previous version that will not be merged automatically. I'm focusing more on get this version stable and will incorporate the ideas later (some already are)
-
----
 **VeeWee:** the tool to easily build vagrant base boxes or kvm,virtualbox and fusion images
 
 Vagrant is a great tool to test new things or changes in a virtual machine(Virtualbox) using either chef or puppet.
@@ -52,3 +31,7 @@ People have reported good experiences, why don't you give it a try?
 IDEAS:
 
 - Now you integrate this with your CI build to create a daily basebox
+
+[whren - 2012/04/12]
+
+See [use of pre_postinstall_file in defition.rb](https://github.com/whren/veewee/wiki/Use-of-pre_postinstall_file-in-definition.rb)

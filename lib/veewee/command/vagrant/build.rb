@@ -40,6 +40,9 @@ module Veewee
               options['postinstall_list'] = e
             end
 
+            opts.on("--[no-]md5","force to check iso file md5 sum") do |v|
+              options['md5check'] = v
+            end
 
           end
 
@@ -53,7 +56,7 @@ module Veewee
             venv.ui=@env.ui
             venv.providers["virtualbox"].get_box(argv[0]).build(options)
           rescue Veewee::Error => ex
-            venv.ui.error ex
+            venv.ui.error(ex, :prefix => false)
             exit -1
           end
 

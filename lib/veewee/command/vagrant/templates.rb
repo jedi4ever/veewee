@@ -24,12 +24,12 @@ module Veewee
           begin
             venv=Veewee::Environment.new(options)
             venv.ui = @env.ui
-            venv.ui.info "The following templates are available:"
+            venv.ui.info("The following templates are available:",:prefix => false)
             venv.templates.each do |name,template|
-              venv.ui.info "vagrant basebox define '<boxname>' '#{name}'",:prefix => false
+              venv.ui.info("vagrant basebox define '<boxname>' '#{name}'",:prefix => false)
             end
           rescue Veewee::Error => ex
-            venv.ui.error ex
+            venv.ui.error(ex,:prefix => false)
             exit -1
           end
         end

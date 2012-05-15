@@ -48,11 +48,11 @@ module Veewee
         env.ui.error "Some method got an error in the configfile - Sorry"
         env.ui.error $!
         env.ui.error e.message
-        exit -1
+        raise Veewee::Error "Some method got an error in the configfile - Sorry"
       rescue Error => e
         env.ui.error "Error processing configfile - Sorry"
         env.ui.error e.message
-        exit -1
+        raise Veewee::Error "Error processing configfile - Sorry"
       end
       return self
     end

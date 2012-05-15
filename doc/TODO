@@ -54,7 +54,7 @@ Todo:
   validate vms - + features selection
   check libvirt version
   windows test
-  validation of checks (also - inclide/exclude)
+  validation of checks (also - include/exclude)
   check execs with exit code
   multinetwork card 
   dkms for kernel installs

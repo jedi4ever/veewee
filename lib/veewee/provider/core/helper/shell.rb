@@ -24,7 +24,7 @@ module Veewee
             defaults={:mute => true, :status => 0}
             options=defaults.merge(options)
             result=ShellResult.new("","",-1)
-            env.ui.info "Executing #{command}" unless options[:mute]
+            ui.info "Executing #{command}" unless options[:mute]
             env.logger.debug "Command: \"#{command}\""
             env.logger.debug "Output:"
             env.logger.debug "-------"
@@ -32,15 +32,15 @@ module Veewee
             IO.popen("#{escaped_command}"+ " 2>&1") { |p|
               p.each_line{ |l|
                 result.stdout+=l
-                env.ui.info(l,{:new_line => false})  unless options[:mute]
+                ui.info(l,{:new_line => false})  unless options[:mute]
                 env.logger.debug(l.chomp)
               }
               result.status=Process.waitpid2(p.pid)[1].exitstatus
               if result.status.to_i!=options[:status]
-                env.ui.error "Error: We executed a shell command and the exit status was not #{options[:status]}"
-                env.ui.error "- Command :#{command}."
-                env.ui.error "- Exitcode :#{result.status}."
-                env.ui.error "- Output   :\n#{result.stdout}"
+                ui.error "Error: We executed a shell command and the exit status was not #{options[:status]}"
+                ui.error "- Command :#{command}."
+                ui.error "- Exitcode :#{result.status}."
+                ui.error "- Output   :\n#{result.stdout}"
                 raise Veewee::Error,"Wrong exit code for command #{command}"
               end
             }

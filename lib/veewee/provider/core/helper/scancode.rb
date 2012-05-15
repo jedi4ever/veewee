@@ -98,7 +98,7 @@ module Veewee
                 if !code.nil?
                   keycodes=keycodes+code+' '
                 else
-                  env.ui.info "no scan code for #{thestring.slice(0,1)}"
+                  ui.error "no scan code for #{thestring.slice(0,1)}"
                 end
                 #pop one
                 thestring=thestring.slice(1,thestring.length-1)

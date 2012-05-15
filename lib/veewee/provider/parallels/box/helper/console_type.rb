@@ -11,13 +11,13 @@ module Veewee
 
         def send_sequence(sequence)
 
-          env.ui.info ""
+          ui.info ""
 
           counter=0
           sequence.each { |s|
             counter=counter+1
 
-            env.ui.info "Typing:[#{counter}]: "+s
+            ui.info "Typing:[#{counter}]: "+s
 
             keycodes=self.string_to_parallels_keycode(s)
 
@@ -33,8 +33,8 @@ module Veewee
             #sleep after each sequence (needs to be param)
           }
 
-          env.ui.info "Done typing."
-          env.ui.info ""
+          ui.info "Done typing."
+          ui.info ""
 
 
         end
@@ -179,7 +179,7 @@ module Veewee
                   keycodes << c
                 end
               else
-                env.ui.info "no scan code for #{thestring.slice(0,1)}"
+                ui.info "no scan code for #{thestring.slice(0,1)}"
               end
               #pop one
               thestring=thestring.slice(1,thestring.length-1)

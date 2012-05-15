@@ -9,19 +9,19 @@ module Veewee
 
           class FileServlet < WEBrick::HTTPServlet::AbstractServlet
 
-            attr_reader :env
+            attr_reader :ui
 
-            def initialize(server,localfile,env)
+            def initialize(server,localfile,ui)
               super(server)
               @server=server
               @localfile=localfile
-              @env=env
+              @ui=ui
             end
 
             def do_GET(request,response)
               response['Content-Type']='text/plain'
               response.status = 200
-              env.ui.info "Serving file #{@localfile}"
+              ui.info "Serving file #{@localfile}"
               displayfile=File.open(@localfile,'r')
               content=displayfile.read()
               response.body=content
@@ -51,10 +51,10 @@ module Veewee
               :AccessLog => webrick_logger
             )
             env.logger.debug("mounting file /#{filename}")
-            s.mount("/#{filename}", Veewee::Provider::Core::Helper::Servlet::FileServlet,File.join(web_dir,filename),env)
+            s.mount("/#{filename}", Veewee::Provider::Core::Helper::Servlet::FileServlet,File.join(web_dir,filename),ui)
             trap("INT"){
               s.shutdown
-              env.ui.info "Stopping webserver"
+              ui.info "Stopping webserver"
               exit
             }
             s.start

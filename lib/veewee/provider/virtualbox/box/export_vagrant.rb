@@ -10,7 +10,7 @@ module Veewee
 
           # Check if box already exists
           unless self.exists?
-            env.ui.info "#{name} is not found, maybe you need to build it first?"
+            ui.info "#{name} is not found, maybe you need to build it first?"
             exit
           end
 
@@ -28,19 +28,19 @@ module Veewee
 
           # We need to shutdown first
           if self.running?
-            env.ui.info "Vagrant requires the box to be shutdown, before it can export"
-            env.ui.info "Sudo also needs to work for user #{definition.ssh_user}"
-            env.ui.info "Performing a clean shutdown now."
+            ui.info "Vagrant requires the box to be shutdown, before it can export"
+            ui.info "Sudo also needs to work for user #{definition.ssh_user}"
+            ui.info "Performing a clean shutdown now."
 
             self.halt
 
             #Wait for state poweroff
             while (self.running?) do
-              env.ui.info ".",{:new_line => false}
+              ui.info ".",{:new_line => false}
               sleep 1
             end
-            env.ui.info ""
-            env.ui.info "Machine #{name} is powered off cleanly"
+            ui.info ""
+            ui.info "Machine #{name} is powered off cleanly"
           end
 
           #Vagrant requires a relative path for output of boxes
@@ -54,28 +54,29 @@ module Veewee
           box_path=path1.relative_path_from(path2).to_s
 
           if File.exists?("#{box_path}")
-            env.ui.info "box #{name}.box already exists"
-            exit
+            raise Veewee::Error, "box #{name}.box already exists"
           end
 
-          env.ui.info "Excuting vagrant voodoo:"
+          ui.info "Executing vagrant voodoo:"
           export_command="vagrant package --base '#{name}' --output '#{box_path}'"
-          env.ui.info "#{export_command}"
+          export_command += " --include #{options["include"].join(',')}" unless options["include"].empty?
+          export_command += " --vagrantfile #{options["vagrantfile"].join(' ')}" unless options["vagrantfile"].empty?
+          ui.info "#{export_command}"
           shell_exec("#{export_command}") #hmm, needs to get the gem_home set?
-          env.ui.info ""
+          ui.info ""
 
           #add_ssh_nat_mapping back!!!!
           #vagrant removes the mapping
           #we need to restore it in order to be able to login again
           self.add_ssh_nat_mapping
 
-          env.ui.info "To import it into vagrant type:"
-          env.ui.info "vagrant box add '#{name}' '#{box_path}'"
-          env.ui.info ""
-          env.ui.info "To use it:"
-          env.ui.info "vagrant init '#{name}'"
-          env.ui.info "vagrant up"
-          env.ui.info "vagrant ssh"
+          ui.info "To import it into vagrant type:"
+          ui.info "vagrant box add '#{name}' '#{box_path}'"
+          ui.info ""
+          ui.info "To use it:"
+          ui.info "vagrant init '#{name}'"
+          ui.info "vagrant up"
+          ui.info "vagrant ssh"
         end
 
       end #Module
