@@ -41,15 +41,6 @@ cd ..
 rm -rf ruby-1.9.3-p125
 rm ruby-1.9.3-p125.tar.gz
 
-# Install RubyGems 1.8.17
-wget http://production.cf.rubygems.org/rubygems/rubygems-1.8.17.tgz
-tar xzf rubygems-1.8.17.tgz
-cd rubygems-1.8.17
-/opt/ruby/bin/ruby setup.rb
-cd ..
-rm -rf rubygems-1.8.17
-rm rubygems-1.8.17.tgz
-
 # Installing chef & Puppet
 /opt/ruby/bin/gem install chef --no-ri --no-rdoc
 /opt/ruby/bin/gem install puppet --no-ri --no-rdoc
