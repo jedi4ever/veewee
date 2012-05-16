@@ -52,7 +52,8 @@ bash -c '
  rvm use 1.9.3-p125 --default
 
  echo "Installing default RubyGems"
- gem install chef puppet'
+ gem install chef puppet
+ mkdir -p /opt/puppet/var/state/graphs'
 
 sleep 1
 
