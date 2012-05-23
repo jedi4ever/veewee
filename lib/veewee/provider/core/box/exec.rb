@@ -16,8 +16,9 @@ module Veewee
         def exec(command,options={})
           raise Veewee::Error,"Box is not running" unless self.running?
           if definition.winrm_user && definition.winrm_password
-            env.ui.error "WINRM EXEC NOT IMPLEMPENTED YET"
-            env.ui.error "Command: #{command}"
+            new_options=winrm_options.merge(options)
+            result = self.winrm_execute(self.ip_address,command,new_options)
+            return result
           elsif definition.ssh_user && definition.ssh_password
 
             begin

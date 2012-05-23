@@ -34,9 +34,17 @@ module Veewee
         end
         module Web
 
-          def wait_for_http_request(filename,options={:timeout => 10, :web_dir => "", :port => 7125})
+          def wait_for_http_request(filename,options) # original blocking
+            s = server_for_http_request(filename,options)
+            s.start
+          end
 
+          def allow_for_http_request(filename,options) # start in new thread
+            s = server_for_http_request(filename,options)
+            Thread.new { s.start }
+          end
 
+          def server_for_http_request(filename,options={:timeout => 10, :web_dir => "", :port => 7125})
             # Calculate the OS equivalent of /dev/null , on windows this is NUL:
             # http://www.ruby-forum.com/topic/115472
             fn = test(?e, '/dev/null') ? '/dev/null' : 'NUL:'
@@ -57,7 +65,7 @@ module Veewee
               env.ui.info "Stopping webserver"
               exit
             }
-            s.start
+            s
           end
 
         end #Class
