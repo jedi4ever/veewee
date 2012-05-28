@@ -5,7 +5,7 @@ Veewee::Definition.declare({
   :memory_size=> '256',
   :disk_size => '10140', :disk_format => 'VDI', :hostiocache => 'off',
   :os_type_id => 'Debian',
-  :iso_file => "debian-6.04-i386-netinst.iso",
+  :iso_file => "debian-6.0.5-i386-netinst.iso",
   :iso_src => "http://cdimage.debian.org/debian-cd/6.0.5/i386/iso-cd/debian-6.0.5-i386-netinst.iso",
   :iso_md5 => "bdf926d604258ce17dfba0b5ef067f17",
   :iso_download_timeout => "1000",
