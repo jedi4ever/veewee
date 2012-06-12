@@ -91,7 +91,7 @@ module Veewee
               rel_path=path1.relative_path_from(path2).to_s
 
               ui.info ""
-              ui.info "We did not find an isofile of name #{filename} in #{full_path}/iso. \n\nThe definition provided the following download information:"
+              ui.info "We did not find an isofile here : #{full_path}. \n\nThe definition provided the following download information:"
               unless "#{self.iso_src}"==""
                 ui.info "- Download url: #{self.iso_src}"
               end
