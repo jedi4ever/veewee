@@ -34,24 +34,31 @@ sed -i -e 's/%admin ALL=(ALL) ALL/%admin ALL=NOPASSWD:ALL/g' /etc/sudoers
 # Install NFS client
 apt-get -y install nfs-common
 
-# Install Ruby from source in /opt so that users of Vagrant
-# can install their own Rubies using packages or however.
-wget http://ftp.ruby-lang.org/pub/ruby/1.9/ruby-1.9.3-p194.tar.gz
-tar xvzf ruby-1.9.3-p194.tar.gz
-cd ruby-1.9.3-p194
-./configure --prefix=/opt/ruby
-make
-make install
-cd ..
-rm -rf ruby-1.9.3-p194
 
-# Installing chef & Puppet
-/opt/ruby/bin/gem install chef --no-ri --no-rdoc
-/opt/ruby/bin/gem install puppet --no-ri --no-rdoc
+# Install Ruby Version Manager
+curl -s https://raw.github.com/wayneeseguin/rvm/master/binscripts/rvm-installer -o /tmp/rvm-installer
+chmod +x /tmp/rvm-installer
+/tmp/rvm-installer stable
 
-# Add /opt/ruby/bin to the global path as the last resort so
-# Ruby, RubyGems, and Chef/Puppet are visible
-echo 'PATH=$PATH:/opt/ruby/bin/'> /etc/profile.d/vagrantruby.sh
+# listen up, blank lines could be screwing things up
+sed -i -e "/^$/d" /usr/local/rvm/gemsets/default.gems
+
+# Install Ruby using RVM
+echo "Installing Ruby 1.9.3 as default ruby"
+bash -c '
+ source /etc/profile
+ rvm install 1.9.3-p125
+ rvm alias create default ruby-1.9.3-p125
+ rvm use 1.9.3-p125 --default
+
+ echo "Installing default RubyGems"
+ gem install chef puppet
+ mkdir -p /opt/puppet/var/state/graphs'
+
+sleep 1
+
+# Make default user member of RVM group
+usermod -a -G rvm vagrant
 
 # Installing vagrant keys
 mkdir /home/vagrant/.ssh
