@@ -47,9 +47,9 @@ sed -i -e "/^$/d" /usr/local/rvm/gemsets/default.gems
 echo "Installing Ruby 1.9.3 as default ruby"
 bash -c '
  source /etc/profile
- rvm install 1.9.3-p125
- rvm alias create default ruby-1.9.3-p125
- rvm use 1.9.3-p125 --default
+ rvm install 1.9.3-p194
+ rvm alias create default ruby-1.9.3-p194
+ rvm use 1.9.3-p194 --default
 
  echo "Installing default RubyGems"
  gem install chef puppet
