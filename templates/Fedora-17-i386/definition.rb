@@ -5,7 +5,7 @@ Veewee::Session.declare({
   :os_type_id => 'Fedora',
   :iso_file => "Fedora-17-i386-DVD.iso",
   :iso_src => "http://download.fedoraproject.org/pub/fedora/linux/releases/17/Fedora/i386/iso/Fedora-17-i386-DVD.iso",
-  :iso_md5 => "bb38ea1fe4b2fc69e7a6e15cf1c69c91",
+  :iso_md5 => "d4717e04b596e33898cc34970e79dd3d",
   :iso_download_timeout => 1000,
   :boot_wait => "10", :boot_cmd_sequence => [ '<Tab> linux text biosdevname=0 ks=http://%IP%:%PORT%/ks.cfg<Enter><Enter>' ],
   :kickstart_port => "7122", :kickstart_timeout => 10000, :kickstart_file => "ks.cfg",
