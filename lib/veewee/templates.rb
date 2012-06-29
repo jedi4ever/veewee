@@ -15,10 +15,9 @@ module Veewee
         if template.exists?
           result=template
           return result
-        else
-          return nil
         end
       end
+      return nil
     end
 
     # Fetch all Templates
