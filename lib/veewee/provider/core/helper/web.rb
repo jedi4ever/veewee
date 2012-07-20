@@ -21,15 +21,10 @@ module Veewee
             def do_GET(request,response)
               response['Content-Type']='text/plain'
               response.status = 200
-              content = File.open(@localfile, "r").read
-              response.body = case File.extname(@localfile)
-              when ".erb"
-                ui.info "Rendering and serving file #{@localfile}"
-                ERB.new(content).result(binding)
-              else
-                ui.info "Serving file #{@localfile}"
-                content
-              end
+              ui.info "Serving file #{@localfile}"
+              displayfile=File.open(@localfile,'r')
+              content=displayfile.read()
+              response.body=content
               #If we shut too fast it might not get the complete file
               sleep 2
               @server.shutdown
