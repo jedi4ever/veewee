@@ -1,5 +1,3 @@
-# obviously this is using the "alternate" ISO, not the "server" ISO, but that
-# is only because it hasn't been released yet.
 Veewee::Session.declare({
   :cpu_count => '2',
   :memory_size=> '2048',
