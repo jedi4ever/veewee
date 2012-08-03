@@ -31,6 +31,7 @@ Gem::Specification.new do |s|
   s.add_dependency "ruby-vnc", "~> 1.0.0"
   s.add_dependency "fog", "~> 1.4"
   s.add_dependency "childprocess"
+  s.add_dependency "grit"
 
   # Modified dependency version, as libxml-ruby dependency has been removed in version 2.1.1
   # See : https://github.com/ckruse/CFPropertyList/issues/14
