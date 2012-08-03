@@ -9,7 +9,8 @@ apt-get -y update
 apt-get -y upgrade
 apt-get -y install linux-headers-$(uname -r) build-essential
 apt-get -y install zlib1g-dev libssl-dev libreadline-gplv2-dev
-apt-get -y install vim
+apt-get -y install vim libyaml-dev curl
+apt-get -y install autoconf autoconf2.13 autoconf-archive gnu-standards autoconf-doc libtool gettext gettext-doc libtool-doc
 apt-get clean
 
 # Installing the virtualbox guest additions
@@ -35,22 +36,14 @@ apt-get -y install nfs-common
 
 # Install Ruby from source in /opt so that users of Vagrant
 # can install their own Rubies using packages or however.
-wget http://ftp.ruby-lang.org/pub/ruby/1.9/ruby-1.9.2-p290.tar.gz
-tar xvzf ruby-1.9.2-p290.tar.gz
-cd ruby-1.9.2-p290
+wget http://ftp.ruby-lang.org/pub/ruby/1.9/ruby-1.9.3-p194.tar.gz
+tar xvzf ruby-1.9.3-p194.tar.gz
+cd ruby-1.9.3-p194
 ./configure --prefix=/opt/ruby
 make
 make install
 cd ..
-rm -rf ruby-1.9.2-p290
-
-# Install RubyGems 1.7.2
-wget http://production.cf.rubygems.org/rubygems/rubygems-1.8.11.tgz
-tar xzf rubygems-1.8.11.tgz
-cd rubygems-1.8.11
-/opt/ruby/bin/ruby setup.rb
-cd ..
-rm -rf rubygems-1.8.11
+rm -rf ruby-1.9.3-p194
 
 # Installing chef & Puppet
 /opt/ruby/bin/gem install chef --no-ri --no-rdoc
@@ -69,11 +62,12 @@ chmod 600 /home/vagrant/.ssh/authorized_keys
 chown -R vagrant /home/vagrant/.ssh
 
 # Remove items used for building, since they aren't needed anymore
-apt-get -y remove linux-headers-$(uname -r) build-essential
+#apt-get -y remove linux-headers-$(uname -r) build-essential
 apt-get -y autoremove
 
 # Zero out the free space to save space in the final image:
 dd if=/dev/zero of=/EMPTY bs=1M
+sleep 1
 rm -f /EMPTY
 
 # Removing leftover leases and persistent rules

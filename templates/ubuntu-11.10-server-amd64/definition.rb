@@ -1,6 +1,6 @@
 Veewee::Session.declare({
-  :cpu_count => '1',
-  :memory_size=> '384',
+  :cpu_count => '2',
+  :memory_size=> '1384',
   :disk_size => '10140',
   :disk_format => 'VDI',
   :hostiocache => 'off',
@@ -14,7 +14,7 @@ Veewee::Session.declare({
     '<Esc><Esc><Enter>',
     '/install/vmlinuz noapic preseed/url=http://%IP%:%PORT%/preseed.cfg ',
     'debian-installer=en_US auto locale=en_US kbd-chooser/method=us ',
-    'hostname=%NAME% ',
+    'hostname=%NAME% ', 'disable_ipv6=0 ',
     'fb=false debconf/frontend=noninteractive ',
     'keyboard-configuration/layout=USA keyboard-configuration/variant=USA console-setup/ask_detect=false ',
     'initrd=/install/initrd.gz -- <Enter>'

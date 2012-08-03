@@ -2,6 +2,17 @@
 
 date > /etc/vagrant_box_build_time
 
+
+# Apt-install various things necessary for Ruby, guest additions,
+# etc., and remove optional things to trim down the machine.
+apt-get -y update
+apt-get -y upgrade
+apt-get -y install linux-headers-$(uname -r) build-essential
+apt-get -y install zlib1g-dev libssl-dev libreadline-gplv2-dev
+apt-get -y install vim libyaml-dev curl
+apt-get -y install autoconf autoconf2.13 autoconf-archive gnu-standards autoconf-doc libtool gettext gettext-doc libtool-doc
+apt-get clean
+
 # Installing the virtualbox guest additions
 apt-get -y install dkms
 VBOX_VERSION=$(cat /home/vagrant/.vbox_version)
@@ -13,15 +24,9 @@ umount /mnt
 
 rm VBoxGuestAdditions_$VBOX_VERSION.iso
 
-# Apt-install various things necessary for Ruby, guest additions,
-# etc., and remove optional things to trim down the machine.
-apt-get -y update
-apt-get -y upgrade
-apt-get -y install linux-headers-$(uname -r) build-essential
-apt-get -y install zlib1g-dev libssl-dev libreadline-gplv2-dev
-apt-get clean
-
 # Setup sudo to allow no-password sudo for "admin"
+groupadd -r admin
+usermod -a -G admin vagrant
 cp /etc/sudoers /etc/sudoers.orig
 sed -i -e '/Defaults\s\+env_reset/a Defaults\texempt_group=admin' /etc/sudoers
 sed -i -e 's/%admin ALL=(ALL) ALL/%admin ALL=NOPASSWD:ALL/g' /etc/sudoers
@@ -29,25 +34,31 @@ sed -i -e 's/%admin ALL=(ALL) ALL/%admin ALL=NOPASSWD:ALL/g' /etc/sudoers
 # Install NFS client
 apt-get -y install nfs-common
 
-# Install Ruby from source in /opt so that users of Vagrant
-# can install their own Rubies using packages or however.
-wget http://ftp.ruby-lang.org/pub/ruby/1.9/ruby-1.9.3-p125.tar.gz
-tar xvzf ruby-1.9.3-p125.tar.gz
-cd ruby-1.9.3-p125
-./configure --prefix=/opt/ruby
-make
-make install
-cd ..
-rm -rf ruby-1.9.3-p125
-rm ruby-1.9.3-p125.tar.gz
 
-# Installing chef & Puppet
-/opt/ruby/bin/gem install chef --no-ri --no-rdoc
-/opt/ruby/bin/gem install puppet --no-ri --no-rdoc
+# Install Ruby Version Manager
+curl -s https://raw.github.com/wayneeseguin/rvm/master/binscripts/rvm-installer -o /tmp/rvm-installer
+chmod +x /tmp/rvm-installer
+/tmp/rvm-installer stable
 
-# Add /opt/ruby/bin to the global path as the last resort so
-# Ruby, RubyGems, and Chef/Puppet are visible
-echo 'PATH=$PATH:/opt/ruby/bin/'> /etc/profile.d/vagrantruby.sh
+# listen up, blank lines could be screwing things up
+sed -i -e "/^$/d" /usr/local/rvm/gemsets/default.gems
+
+# Install Ruby using RVM
+echo "Installing Ruby 1.9.3 as default ruby"
+bash -c '
+ source /etc/profile
+ rvm install 1.9.3-p194
+ rvm alias create default ruby-1.9.3-p194
+ rvm use 1.9.3-p194 --default
+
+ echo "Installing default RubyGems"
+ gem install chef puppet
+ mkdir -p /opt/puppet/var/state/graphs'
+
+sleep 1
+
+# Make default user member of RVM group
+usermod -a -G rvm vagrant
 
 # Installing vagrant keys
 mkdir /home/vagrant/.ssh
@@ -58,11 +69,12 @@ chmod 600 /home/vagrant/.ssh/authorized_keys
 chown -R vagrant /home/vagrant/.ssh
 
 # Remove items used for building, since they aren't needed anymore
-apt-get -y remove linux-headers-$(uname -r) build-essential
+#apt-get -y remove linux-headers-$(uname -r) build-essential
 apt-get -y autoremove
 
 # Zero out the free space to save space in the final image:
 dd if=/dev/zero of=/EMPTY bs=1M
+sleep 1
 rm -f /EMPTY
 
 # Removing leftover leases and persistent rules
