@@ -22,6 +22,7 @@ module Veewee
             :cpus => definition.cpu_count.to_i,
             :volume_capacity => "#{definition.disk_size}M",
             :network_interface_type => "nat",
+            :domain_type => options['use_emulation'] ? 'qemu': 'kvm',
             :iso_file => definition.iso_file,
             :arch => definition.os_type_id.end_with?("_64") ? "x86_64" : "i686",
             :iso_dir => env.config.veewee.iso_dir

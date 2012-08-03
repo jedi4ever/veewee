@@ -10,6 +10,7 @@ module Veewee
       method_option :auto,:type => :boolean , :default => false, :aliases => "-a", :desc => "auto answers"
       method_option :postinstall_include, :type => :array, :default => [], :aliases => "-i", :desc => "ruby regexp of postinstall filenames to additionally include"
       method_option :postinstall_exclude, :type => :array, :default => [], :aliases => "-e", :desc => "ruby regexp of postinstall filenames to exclude"
+      method_option :use_emulation, :type => :boolean , :default => false, :desc => "Use QEMU emulation"
       def build(box_name)
         venv=Veewee::Environment.new(options)
         venv.ui=env.ui
