@@ -29,7 +29,7 @@ Gem::Specification.new do |s|
   s.add_dependency "cucumber", ">=1.0.0"
   s.add_dependency "ansi", "~> 1.3.0"
   s.add_dependency "ruby-vnc", "~> 1.0.0"
-  s.add_dependency "fog", "~> 1.1.2"
+  s.add_dependency "fog", "~> 1.4"
   s.add_dependency "childprocess"
 
   # Modified dependency version, as libxml-ruby dependency has been removed in version 2.1.1
