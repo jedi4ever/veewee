@@ -70,7 +70,7 @@ module Veewee
           # This needs to be done after the kickstart:
           # As the dhcp request will likely occur just before the kickstart fetch
           until !self.ip_address.nil?
-            env.logger.info "wait for Ip addres"
+            env.logger.info "wait for Ip address"
             sleep 2
           end
 
