@@ -1,5 +1,5 @@
 Veewee::Session.declare( {
-  :cpu_count => '2', :memory_size=> '1024',
+  :cpu_count => '1', :memory_size=> '1024',
   :disk_size => '10140', :disk_format => 'VDI',:hostiocache => 'off',
   :os_type_id => 'Gentoo',
   :iso_file => "install-amd64-minimal-20111208.iso",

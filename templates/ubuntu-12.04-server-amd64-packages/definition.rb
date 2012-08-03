@@ -1,5 +1,5 @@
 Veewee::Session.declare({
-  :cpu_count => '2',
+  :cpu_count => '1',
   :memory_size=> '2048',
   :disk_size => '10140',
   :disk_format => 'VDI',
