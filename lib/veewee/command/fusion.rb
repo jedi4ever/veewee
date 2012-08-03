@@ -1,6 +1,6 @@
 module Veewee
   module Command
-    class Vmfusion< Veewee::Command::GroupBase
+    class Fusion< Veewee::Command::GroupBase
 
       register "fusion", "Subcommand for Vmware fusion"
       desc "build [BOX_NAME]", "Build box"

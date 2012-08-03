@@ -1,6 +1,6 @@
 module Veewee
   module Command
-    class Virtualbox< Veewee::Command::GroupBase
+    class Vbox< Veewee::Command::GroupBase
 
       register "vbox", "Subcommand for VirtualBox"
       desc "build [BOX_NAME]", "Build box"
