@@ -1,7 +1,7 @@
 # Veewee definition
 
 ## Creating a definition
-A definition is create be 'cloning' a *template*.
+A definition is created by 'cloning' a *template*.
 
 To create a definition you use the 'define' subcommand:
 
@@ -48,6 +48,9 @@ The 'Veewee::Session.declare' is now deprecated and you should use 'Veewee::Defi
 
 The default user of definitions is now 'veewee' and not 'vagrant'. This is because on other virtualizations like fusion and kvm, there is not relationship with the 'vagrant'. Users 'vagrant' are created by the 'vagrant.sh' script and not by the preseed or kickstart.
 
+_Using ERB in files_
+
+Add '.erb' to your files in a definition and they will get rendered (useful for generting kickstart,postinstall) (thx @mconigilaro)
 
 ## Listing existing definitions
 
