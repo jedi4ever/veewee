@@ -4,7 +4,7 @@ module Veewee
       module BoxCommand
 
         def vnc_port
-           lines=File.readlines(raw.vmx_path)
+           lines=File.readlines(vmx_file_path)
            matches=lines.grep(/^RemoteDisplay.vnc.port/)
            if matches.length==0
               raise Veewee::Error,"No VNC port found, maybe it is not enabled?"
@@ -42,7 +42,7 @@ module Veewee
         end
 
         def vnc_enabled?
-           lines=File.readlines(raw.vmx_path)
+           lines=File.readlines(vmx_file_path)
            matches=lines.grep(/^RemoteDisplay.vnc.enabled/)
            if matches.length==0
               return false

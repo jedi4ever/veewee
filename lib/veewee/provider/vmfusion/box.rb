@@ -33,23 +33,15 @@ module Veewee
         def initialize(name,env)
 
           require 'fission'
-
           super(name,env)
         end
 
-        def determine_vmrun_cmd
-          return "#{fusion_path}/vmrun"
+        def vmrun_cmd
+          return ::Fission.config['vmrun_bin']
         end
 
         def vm_path
-          home=ENV['HOME']
-          dir="#{home}/Documents/Virtual Machines.localized/#{name}.vmwarevm"
-          return dir
-        end
-
-        def fusion_path
-          dir="/Library/Application Support/VMware Fusion/"
-          return dir
+          return File.join(::Fission.config['vm_dir'], "#{name}.vmwarevm")
         end
 
         def vmx_file_path

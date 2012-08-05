@@ -10,12 +10,15 @@ module Veewee
         def check_requirements
           fusion_version = :unknown
 
+          require 'fission'
           if File.exists?("/Library/Application Support/VMware Fusion/vmrun")
             fusion_version = "3.x"
+            ::Fission.config.attributes["vmrun_bin"] = "/Library/Application Support/VMware Fusion/vmrun"
           end
 
           if File.exists?("/Applications/VMware Fusion.app/Contents/Library/vmrun")
             fusion_version = "4.x"
+            ::Fission.config.attributes["vmrun_bin"] = "/Applications/VMware Fusion.app/Contents/Library/vmrun"
           end
 
           if fusion_version == :unknown

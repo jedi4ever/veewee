@@ -7,6 +7,10 @@ To create a definition you use the 'define' subcommand:
 
     veewee vbox define 'myubuntu' 'ubuntu-10.10-server-amd64'
 
+If you want to use an external repo for the definition you can specify a git-url
+
+    veewee vbox define 'myubuntu' 'git://github.com/jedi4ever/myubuntu'
+
 ## Modifying a definition
 Definitions are stored under a directory 'definitions' relative to the current directory.
 

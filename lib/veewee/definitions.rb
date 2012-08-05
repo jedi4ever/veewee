@@ -67,6 +67,7 @@ module Veewee
       if template_name.start_with?("git://")
         git_template=true
       end
+
       # Check if template exists
       template=env.templates[template_name]
       if template.nil? and ! git_template
@@ -89,7 +90,7 @@ module Veewee
         end
       end
 
-      env.logger.debug("Creating definition #{definition_name} in directory '#{env.definition_dir}' ")
+      env.logger.info("Creating definition #{definition_name} in directory '#{env.definition_dir}' ")
       dst_dir="#{File.join(env.definition_dir,definition_name)}"
       FileUtils.mkdir(dst_dir)
       env.logger.debug("Definition Directory '#{File.join(env.definition_dir,definition_name)}' succesfuly created")
@@ -97,13 +98,13 @@ module Veewee
       # Start copying/cloning the directory of the template to the definition directory
       if (git_template)
         begin
-          env.logger.debug("Starting git clone #{template_name} #{dst_dir}")
+          env.logger.info("Starting git clone #{template_name} #{dst_dir}")
           g = Grit::Git.new(dst_dir)
           g.clone({ :timeout => false }, template_name, dst_dir)
         rescue Exception => ex
           err = "git clone #{template_name} #{dst_dir} failed: #{ex}"
           env.logger.fatal(err)
-          raise Veewee::Error, err
+          raise Veewee::DefinitionError, err
         end
       else
         begin
