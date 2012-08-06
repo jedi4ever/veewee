@@ -42,7 +42,7 @@ module Veewee
             # http://www.libvirt.org/html/libvirt-libvirt.html#virGetVersion
             # format major * 1,000,000 + minor * 1,000 + release
             env.logger.info "Checking libvirt version"
-            libvirt_version=conn.libversion
+            libvirt_version=conn.version
             if libvirt_version < 8003
               raise Veewee::Error,"You need at least libvirt version 0.8.3 or higher "
             end

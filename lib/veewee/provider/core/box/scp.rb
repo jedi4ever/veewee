@@ -10,7 +10,7 @@ module Veewee
             new_options=ssh_options.merge(options)
             self.when_ssh_login_works(self.ip_address,new_options) do
               begin
-                env.logger.info "About to transfer #{localfile} to #{remotefile} to the box #{name} - #{self.ip_address} - #{new_options}"
+                env.logger.info "About to transfer #{localfile} to #{remotefile} to the box #{name} - #{self.ip_address} - #{new_options.inspect}"
                 self.ssh_transfer_file(self.ip_address,localfile,remotefile,new_options)
               rescue RuntimeError => ex
                 ui.error("Error transfering file #{localfile} failed, possible not enough permissions to write? #{ex}",:prefix => false)

@@ -1,4 +1,9 @@
 #!/usr/bin/env ruby
+begin
+  require 'rubygems'
+rescue LoadError
+end
+
 require 'veewee'
 
 env = Veewee::Environment.new

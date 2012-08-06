@@ -3,7 +3,7 @@ module Veewee
     module Kvm
       module BoxCommand
         def ip_address
-          ip=@connection.servers.all(:name => "#{name}").first.addresses[:public]
+          ip=@connection.servers.all(:name => "#{name}").first.public_ip_address
           return ip.first unless ip.nil?
           return ip
         end

@@ -21,8 +21,8 @@ module Veewee
             :memory_size => definition.memory_size.to_i*1024,
             :cpus => definition.cpu_count.to_i,
             :volume_capacity => "#{definition.disk_size}M",
-            :network_interface_type => "nat",
             :domain_type => options['use_emulation'] ? 'qemu': 'kvm',
+            :network_interface_type => "network",
             :iso_file => definition.iso_file,
             :arch => definition.os_type_id.end_with?("_64") ? "x86_64" : "i686",
             :iso_dir => env.config.veewee.iso_dir
@@ -64,7 +64,7 @@ module Veewee
           # Get the raw xml of the changed document
           new_xml=domain_doc.to_xml
 
-          # Undefine the existing domain 
+          # Undefine the existing domain
           s.undefine
 
           # Re-define the domain
