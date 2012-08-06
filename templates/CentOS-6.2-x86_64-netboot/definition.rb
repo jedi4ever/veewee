@@ -8,7 +8,7 @@ Veewee::Definition.declare({
   :pae => 'on',
   :os_type_id => 'RedHat_64',
   :iso_file => "CentOS-6.2-x86_64-netinstall.iso",
-  :iso_src => "http://be.mirror.eurid.eu/centos/6.2/isos/x86_64/CentOS-6.2-x86_64-netinstall.iso",
+  :iso_src => "http://vault.centos.org/6.2/isos/x86_64/CentOS-6.2-x86_64-netinstall.iso",
   :iso_md5 => "7e7f4161a5c8c49032655e5f4ecd1f07",
   :iso_download_timeout => 1000,
   :boot_wait => "15",
