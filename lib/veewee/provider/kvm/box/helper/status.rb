@@ -15,11 +15,11 @@ module Veewee
         end
 
         def exists_volume?
-          !@connection.volumes.all(:name => "#{name}.img").nil?
+          @connection.list_volumes.find { |v| v[:name] == "#{name}.img" }
         end
 
         def exists_vm?
-          !@connection.servers.all(:name => name).nil?
+          @connection.list_domains.find { |d| d[:name] == name }
         end
 
       end # End Module
