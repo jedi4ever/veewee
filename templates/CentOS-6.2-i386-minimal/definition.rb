@@ -6,7 +6,7 @@ Veewee::Session.declare({
   :hostiocache => 'off',
   :os_type_id => 'RedHat_64',
   :iso_file => "CentOS-6.2-i386-minimal.iso",
-  :iso_src => "http://ftp.yz.yamagata-u.ac.jp/pub/linux/centos/6.2/isos/i386/CentOS-6.2-i386-minimal.iso",
+  :iso_src => "http://vault.centos.org/6.2/isos/i386/CentOS-6.2-i386-minimal.iso",
   :iso_md5 => "cc4fbd16bd305f5bf6731b4b10f8fd18",
   :iso_download_timeout => 1000,
   :boot_wait => "10",
