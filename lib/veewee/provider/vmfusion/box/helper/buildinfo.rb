@@ -5,22 +5,30 @@ module Veewee
 
         def build_info
           info=super
-          command="/Library/Application Support/VMware Fusion/vmrun"
-          output=IO.popen("#{command.shellescape}").readlines
+          output=IO.popen("#{vmrun_cmd.shellescape}").readlines
           info << {:filename => ".vmfusion_version",:content => output[1].split(/ /)[2..3].join.strip}
+        end
 
+
+       def guest_iso_directory
+          # use vmware fusion 3.x as default path
+          iso_images_dir="/Library/Application Support/VMware Fusion/isoimages"
+
+          # if path doesn't exist check for vmware fusion 4.x path
+          if( ! File.exists?(iso_images_dir) )
+            iso_images_dir="/Applications/VMware Fusion.app/Contents/Library/isoimages"
+          end
+          return iso_images_dir
         end
 
         # Determine the iso of the guest additions
         def guest_iso_path
           # So we begin by transferring the ISO file of the vmware tools
-
-          iso_image="/Library/Application Support/VMware Fusion/isoimages/linux.iso"
-          iso_image="/Library/Application Support/VMware Fusion/isoimages/darwin.iso" if definition.os_type_id=~/^Darwin/
-          iso_image="/Library/Application Support/VMware Fusion/isoimages/freebsd.iso" if definition.os_type_id=~/^Free/
-          iso_image="/Library/Application Support/VMware Fusion/isoimages/windows.iso" if definition.os_type_id=~/^Win/
+          iso_image=File.join(guest_iso_directory, "linux.iso")
+          iso_image=File.join(guest_iso_directory, "darwin.iso") if definition.os_type_id=~/^Darwin/
+          iso_image=File.join(guest_iso_directory, "freebsd.iso") if definition.os_type_id=~/^Free/
+          iso_image=File.join(guest_iso_directory, "windows.iso") if definition.os_type_id=~/^Win/
           return iso_image
-
         end
 
         # Transfer information provide by the provider to the box

@@ -9,7 +9,7 @@ module Veewee
           end
 
           raw.halt if raw.state=="running"
-          ::Fission::VM.delete(name)
+          ::Fission::VM.new(name).delete
           # remove it from memory
           @raw=nil
         end

@@ -100,7 +100,8 @@ module Veewee
 
       # Override the basename to include the subcommand name.
       def self.basename
-        "#{super} #{@_name}"
+        "#{super}"
+        #"#{super} #{@_name}"
       end
     end
   end

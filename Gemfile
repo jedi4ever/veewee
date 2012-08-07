@@ -6,6 +6,7 @@
 source "http://rubygems.org"
 
 #gem "veewee", :path => "."
+#gem "fission", :path => '/Users/patrick/dev/fission'
 
 group :test do
   gem "rake"

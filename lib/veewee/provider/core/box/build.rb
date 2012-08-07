@@ -70,7 +70,7 @@ module Veewee
           # This needs to be done after the kickstart:
           # As the dhcp request will likely occur just before the kickstart fetch
           until !self.ip_address.nil?
-            env.logger.info "wait for Ip addres"
+            env.logger.info "wait for Ip address"
             sleep 2
           end
 
@@ -119,7 +119,7 @@ module Veewee
           unless options["postinstall_exclude"].nil?
             options["postinstall_exclude"].each do |p|
               env.logger.info "Exclude pattern #{p}"
-              new_definition.postinstall_files.collect! { |f| f.match(p) ? f.gsub(/^/,"_"): f}
+              new_definition.postinstall_files.reject! { |f| f.match(p) }
             end
           end
 
