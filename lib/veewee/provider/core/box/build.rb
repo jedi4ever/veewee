@@ -193,21 +193,25 @@ module Veewee
         # It requires a box(to login to) and a definition(listing the postinstall files)
         def handle_postinstall(options)
 
+          remote_base = "/tmp/"
+          
           # Transfer all postinstall files
           definition.postinstall_files.each do |postinstall_file|
             # Filenames of postinstall_files are relative to their definition
-            filename=File.join(definition.path,postinstall_file)
-            self.scp(filename,File.basename(filename))
-            self.exec("chmod +x \"#{File.basename(filename)}\"")
+            local_file=File.join(definition.path,postinstall_file)
+            remote_file = remote_base + File.basename(local_file)
+            self.scp(local_file,remote_file)
+            self.exec("chmod +x \"#{remote_file}\"")
           end
 
           # Prepare a pre_poinstall file if needed (not nil , or not empty)
           unless definition.pre_postinstall_file.to_s.empty?
             pre_filename=File.join(definition.path, definition.pre_postinstall_file)
-            self.scp(pre_filename,File.basename(pre_filename))
-            self.exec("chmod +x \"#{File.basename(pre_filename)}\"")
+            remote_file = remote_base + File.basename(pre_filename)
+            self.scp(pre_filename,remote_file)
+            self.exec("chmod +x \"#{remote_file}\"")
             # Inject the call to the real script by executing the first argument (it will be the postinstall script file name to be executed)
-            self.exec("execute=\"\\n# We must execute the script passed as the first argument\\n\\$1\" && printf \"%b\\n\" \"$execute\" >> #{File.basename(pre_filename)}")
+            self.exec("execute=\"\\n# We must execute the script passed as the first argument\\n\\$1\" && printf \"%b\\n\" \"$execute\" >> #{remote_file}")
           end
 
           # Now iterate over the postinstall files
@@ -220,11 +224,10 @@ module Veewee
               unless definition.pre_postinstall_file.to_s.empty?
                 # Filename of pre_postinstall_file are relative to their definition
                 pre_filename=File.join(definition.path, definition.pre_postinstall_file)
-                # Upload the pre postinstall script if not already transfered
-                command = "./" + File.basename(pre_filename)
-                command = sudo(command) + " ./"+File.basename(filename)
+                command = remote_base + File.basename(pre_filename)
+                command = sudo(command) + " " + remote_base + File.basename(filename)
               else
-                command = "./"+File.basename(filename)
+                command = remote_base + File.basename(filename)
                 command = sudo(command)
               end
 
