@@ -4,6 +4,9 @@
 
 date > /etc/vagrant_box_build_time
 
+# remove zypper locks on removed packages to avoid later dependency problems
+zypper --non-interactive rl  \*
+
 # install vagrant key
 echo -e "\ninstall vagrant key ..."
 mkdir -m 0700 /home/vagrant/.ssh
