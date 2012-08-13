@@ -1,6 +1,6 @@
 Veewee::Session.declare({
   :cpu_count => '1',
-  :memory_size=> '512',
+  :memory_size=> '480',
   :disk_size => '10140',
   :disk_format => 'VDI',
   :hostiocache => 'off',
@@ -33,7 +33,8 @@ Veewee::Session.declare({
     "virtualbox.sh",
     #"kvm.sh",
     #"vmfusion.sh",
-    "cleanup.sh"
+    "cleanup.sh",
+    "zerodisk.sh"
   ],
   :postinstall_timeout => 10000
 })
