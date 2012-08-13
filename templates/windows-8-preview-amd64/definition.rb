@@ -13,9 +13,9 @@
 
 Veewee::Session.declare({
     :os_type_id => 'Windows8_64',
-    :iso_file => "WindowsDeveloperPreview-64bit-English-Developer.iso",
-    :iso_md5 => "0477c88678efb8ebc5cd7a9e9efd8b82",
-    :iso_src => "http://wdp.dlws.microsoft.com/WDPDL/9B8DFDFF736C5B1DBF956B89D8A9D4FD925DACD2/WindowsDeveloperPreview-64bit-English-Developer.iso",
+    :iso_file => "Windows8-ReleasePreview-64bit-English.iso",
+    :iso_md5 => "5901db43f3b3fa155d65f523f76d5d88",
+    :iso_src => "http://iso.esd.microsoft.com/WRPDL/D29D6C5B1D8AF956B5DA9DF738CFD92DFD4F6C8FB/Windows8-ReleasePreview-64bit-English.iso",
     :iso_download_timeout => "1000",
     :cpu_count => '1',
     :memory_size=> '384',
