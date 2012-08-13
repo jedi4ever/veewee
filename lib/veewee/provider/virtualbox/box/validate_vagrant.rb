@@ -3,7 +3,7 @@ module Veewee
     module Virtualbox
       module BoxCommand
 
-        def validate_vagrant(options)
+        def validate_vagrant(options = {})
 
           unless self.running?
             ui.error "Error:: You tried to validate box '#{name}' but it is not running"
