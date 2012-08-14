@@ -80,7 +80,9 @@ module Veewee
 
       # We need to set this variable before the first call to the logger object
       if options.has_key?("debug")
-        ENV['VEEWEE_LOG']="STDOUT"
+        if options["debug"] == true
+          ENV['VEEWEE_LOG']="STDOUT"
+        end
       end
 
       logger.info("environment") { "Environment initialized (#{self})" }
