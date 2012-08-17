@@ -17,7 +17,7 @@ this is essentially making a copy based on the  templates provided above.
 
     Veewee::Definition.declare( {
     :cpu_count => '1', :memory_size=> '256', 
-    :disk_size => '10140', :disk_format => 'VDI',
+    :disk_size => '10140', :disk_format => 'VDI', :disk_variant => 'Standard',
     :os_type_id => 'Ubuntu',
     :iso_file => "ubuntu-10.10-server-i386.iso", 
     :iso_src => "http://releases.ubuntu.com/maverick/ubuntu-10.10-server-i386.iso",

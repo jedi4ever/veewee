@@ -66,11 +66,11 @@ module Veewee
 
 
         def create_disk
-            ui.info "Creating new harddrive of size #{definition.disk_size.to_i} "
+            ui.info "Creating new harddrive of size #{definition.disk_size.to_i}, format #{definition.disk_format}, variant #{definition.disk_variant} "
 
 
             place=get_vbox_home
-            command ="#{@vboxcmd} createhd --filename \"#{File.join(place,name,name+"."+definition.disk_format.downcase)}\" --size \"#{definition.disk_size.to_i}\" --format #{definition.disk_format.downcase}"
+            command ="#{@vboxcmd} createhd --filename \"#{File.join(place,name,name+"."+definition.disk_format.downcase)}\" --size \"#{definition.disk_size.to_i}\" --format #{definition.disk_format.downcase} --variant #{definition.disk_variant.downcase}"
             shell_exec("#{command}")
 
         end
