@@ -11,7 +11,7 @@ module Veewee
     attr_accessor :path
 
     attr_accessor :cpu_count,:memory_size,:iso_file
-    attr_accessor :disk_size, :disk_format
+    attr_accessor :disk_size, :disk_format, :disk_variant
 
     attr_accessor :os_type_id
 
@@ -72,7 +72,7 @@ module Veewee
       @postinstall_files=[]; @postinstall_timeout = 10000;
 
       @iso_file=""
-      @disk_size = '10240'; @disk_format = 'VDI'
+      @disk_size = '10240'; @disk_format = 'VDI'; @disk_variant = 'Standard'
 
       #        :hostiocache => 'off' ,
       #        :os_type_id => 'Ubuntu',
