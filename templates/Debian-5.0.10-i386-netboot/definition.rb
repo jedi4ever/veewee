@@ -3,9 +3,9 @@ Veewee::Definition.declare({
   :memory_size=> '256',
   :disk_size => '10140', :disk_format => 'VDI', :hostiocache => 'off',
   :os_type_id => 'Debian_64',
-  :iso_file => "debian-508-i386-netinst.iso",
-  :iso_src => "http://cdimage.debian.org/cdimage/archive/5.0.8/i386/iso-cd/debian-508-i386-netinst.iso",
-  :iso_md5 => "39924227129d9f7375a31a1658046643",
+  :iso_file => "debian-5010-i386-netinst.iso",
+  :iso_src => "http://cdimage.debian.org/cdimage/archive/5.0.10/i386/iso-cd/debian-5010-i386-netinst.iso",
+  :iso_md5 => "b696d8c87bb428c21a22a95cd49b75c2",
   :iso_download_timeout => "1000",
   :boot_wait => "10", :boot_cmd_sequence => [
     '<Esc>',
