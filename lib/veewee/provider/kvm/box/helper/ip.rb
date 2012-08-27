@@ -4,7 +4,7 @@ module Veewee
       module BoxCommand
         def ip_address
           ip=@connection.servers.all(:name => "#{name}").first.public_ip_address
-          return ip.first unless ip.nil?
+          return [*ip].first unless ip.nil?
           return ip
         end
 
