@@ -8,24 +8,28 @@ module Veewee
         #include ::Veewee::Provider::Vmfusion::ProviderCommand
 
         def check_requirements
-          fusion_version = :unknown
-
           require 'fission'
+
           if File.exists?("/Library/Application Support/VMware Fusion/vmrun")
-            fusion_version = "3.x"
             ::Fission.config.attributes["vmrun_bin"] = "/Library/Application Support/VMware Fusion/vmrun"
-          end
-
-          if File.exists?("/Applications/VMware Fusion.app/Contents/Library/vmrun")
-            fusion_version = "4.x"
+          elsif File.exists?("/Applications/VMware Fusion.app/Contents/Library/vmrun")
             ::Fission.config.attributes["vmrun_bin"] = "/Applications/VMware Fusion.app/Contents/Library/vmrun"
-          end
-
-          if fusion_version == :unknown
+          elsif
             raise Veewee::Error,"Could not find vmrun at standard locations. Probably you don't have Vmware fusion installed"
           end
+          env.logger.info("Found fusion version: #{fusion_version}")
         end
 
+        def fusion_version
+          # We ask the system profiler for all installed software
+          shell_results = shell_exec("system_profiler SPApplicationsDataType")
+
+          env.logger.info("Checking version by querying the system_profiler")
+          env.logger.debug(shell_results.stdout)
+
+          version = shell_results.stdout.split(/VMware/)[1].split(/\n/)[2].split(/:/)[1].strip
+          return version
+        end
 
       end #End Class
     end # End Module

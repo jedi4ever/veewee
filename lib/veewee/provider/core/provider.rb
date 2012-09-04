@@ -35,6 +35,11 @@ module Veewee
 
             # Get a real box object from the Provider
             box=Object.const_get("Veewee").const_get("Provider").const_get(type.to_s.capitalize).const_get("Box").new(name,env)
+
+            # Attach the provider to the box
+            box.provider = self
+
+            return box
           rescue Error => ex
             ui.error "Could not instante the box #{name} with provider #{type} ,#{ex}"
             raise

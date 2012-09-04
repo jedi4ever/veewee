@@ -21,6 +21,7 @@ module Veewee
         attr_accessor :definition
         attr_accessor :env
         attr_accessor :name
+        attr_accessor :provider
 
         include ::Veewee::Provider::Core::Helper::Tcp
         include ::Veewee::Provider::Core::Helper::Web
