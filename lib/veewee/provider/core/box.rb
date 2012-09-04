@@ -13,6 +13,7 @@ require 'veewee/provider/core/box/sudo'
 require 'veewee/provider/core/box/ssh'
 require 'veewee/provider/core/box/issh'
 require 'veewee/provider/core/box/floppy'
+require 'veewee/provider/core/box/validate_tags'
 
 module Veewee
   module Provider

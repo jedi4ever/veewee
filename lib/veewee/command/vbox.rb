@@ -114,6 +114,7 @@ module Veewee
 
       desc "validate [NAME]", "Validates a box against vagrant compliancy rules"
       method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging"
+      method_option :tags, :type => :array , :default => %w{vagrant virtualbox puppet chef}, :aliases => "-t", :desc => "tags to validate"
       def validate(box_name)
         begin
         venv=Veewee::Environment.new(options)

@@ -16,8 +16,8 @@ module Veewee
               options['debug'] = d
             end
 
-            opts.on("-f", "--force", "force overwrite") do |f|
-              options['force'] = f
+            opts.on("-t", "--tags vagrant,puppet,chef", Array, "tags to validate") do |t|
+              options['tags'] = t
             end
 
           end
