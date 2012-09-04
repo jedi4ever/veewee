@@ -42,20 +42,39 @@ task :iso, [:template_name] do |t,args|
       response = nil
       while found==false
         uri=URI.parse(url)
-        Net::HTTP.start(uri.host,uri.port) {|http|
-          response = http.head(uri.path)
-        }
-        unless response['location'].nil?
-          #puts "Redirecting to "+response['location']
-          url=response['location']
-        else
-          found=true
+        if uri.is_a?(URI::HTTP)
+          Net::HTTP.start(uri.host,uri.port) {|http|
+            response = http.head(uri.path)
+          }
+          unless response['location'].nil?
+            #puts "Redirecting to "+response['location']
+            url=response['location']
+          else
+            length=response['content-length']
+            found=true
+          end
+        elsif uri.is_a?(URI::FTP)
+          require 'net/ftp'
+          ftp = Net::FTP.new(uri.host)
+          ftp.login
+          begin
+            length = ftp.size(uri.path)
+            found = true
+          rescue Net::FTPReplyError => e
+            reply = e.message
+            err_code = reply[0,3].to_i
+            unless err_code == 500 || err_code == 502
+              # other problem, raise
+              raise "Got ftp site but doesn't support size subcommand"
+            end
+            # fallback solution 
+          end
+
         end
       end
-      length=response['content-length']
       if length.to_i < 10000
         puts definition.iso_src
-        p response['content-type']
+        puts "Incorrect length #{length.to_i}"
         puts uri.host,uri.port, uri.path,response.code
       end
     rescue Exception => ex
