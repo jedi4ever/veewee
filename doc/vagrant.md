@@ -104,7 +104,7 @@ I suggest the easiest way is to get an account on github and fork of the veewee 
 
 If you don't use rvm, be sure to execute vagrant through bundle exec
 
-    $ alias vagrant="bundle exec vagrant"
+    $ alias veewee="bundle exec veewee"
 
 Start of an existing one
 
