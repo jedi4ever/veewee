@@ -5,9 +5,9 @@ Veewee::Session.declare({
   :disk_format => 'VDI',
   :hostiocache => 'off',
   :os_type_id => 'Ubuntu',
-  :iso_file => "ubuntu-12.04-server-i386.iso",
-  :iso_src => "http://releases.ubuntu.com/12.04/ubuntu-12.04-server-i386.iso",
-  :iso_md5 => '32184a83c8b5e6031e1264e5c499bc03',
+  :iso_file => "ubuntu-12.04.1-server-i386.iso",
+  :iso_src => "http://releases.ubuntu.com/12.04/ubuntu-12.04.1-server-i386.iso",
+  :iso_md5 => '3daaa312833a7da1e85e2a02787e4b66',
   :iso_download_timeout => "1000",
   :boot_wait => "4",
   :boot_cmd_sequence => [

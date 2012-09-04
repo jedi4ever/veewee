@@ -18,10 +18,19 @@ module Veewee
           floppy_path=File.join(definition.path,'virtualfloppy.img')
         end
 
+        # Depending on the fusion version, we need to update the virtualhw version
+        if @provider.fusion_version.start_with?('5.')
+          virtualhw_version = 9
+        else
+          virtualhw_version = 7
+        end
+
+        # Setup the variables for in the erb template
         data = {
           :cpu_count => definition.cpu_count, :memory_size => definition.memory_size,
           :controller_type => "lsilogic",
           :fusion_os_type => definition.os_type_id,
+          :virtualhw_version => virtualhw_version,
           :floppyfile => floppy_path,
           :mac_addres => "auto generated",
           :iso_file => "#{File.join(env.config.veewee.iso_dir,definition.iso_file)}",

@@ -6,7 +6,7 @@ module Veewee
         def build_info
           info=super
           output=IO.popen("#{vmrun_cmd.shellescape}").readlines
-          info << {:filename => ".vmfusion_version",:content => output[1].split(/ /)[2..3].join.strip}
+          info << {:filename => ".vmfusion_version",:content => @provider.fusion_version }
         end
 
 
@@ -14,7 +14,7 @@ module Veewee
           # use vmware fusion 3.x as default path
           iso_images_dir="/Library/Application Support/VMware Fusion/isoimages"
 
-          # if path doesn't exist check for vmware fusion 4.x path
+          # if path doesn't exist check for vmware fusion >= 4.x path
           if( ! File.exists?(iso_images_dir) )
             iso_images_dir="/Applications/VMware Fusion.app/Contents/Library/isoimages"
           end
@@ -42,7 +42,11 @@ module Veewee
 
           env.logger.info "About to transfer vmware tools iso buildinfo to the box #{name} - #{ip_address} - #{ssh_options}"
           iso_image=guest_iso_path
-          self.scp(iso_image,File.basename(iso_image))
+          if File.exists?(iso_image)
+            self.scp(iso_image,File.basename(iso_image))
+          else
+            raise Veewee::Error, "We could not find the file #{iso_image}. In newer versions of Fusion, you might have to download the Guest Additions yourself. You can do this by first manually creating a vm and than 'installing the guest additions'"
+          end
         end
 
       end

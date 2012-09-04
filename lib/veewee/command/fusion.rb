@@ -81,6 +81,7 @@ module Veewee
 
       desc "validate [NAME]", "Validates a box against vmfusion compliancy rules"
       method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging"
+      method_option :tags, :type => :array , :default => %w{vmfusion puppet chef}, :aliases => "-t", :desc => "tags to validate"
       def validate(box_name)
         venv=Veewee::Environment.new(options)
         venv.ui=env.ui
