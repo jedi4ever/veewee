@@ -11,18 +11,18 @@ Besides building Vagrant boxes, veewee can also be used for:
 
 Before you start read through:
 
-- the [requirements](veewee/tree/master/doc/requirements.md)
-- the [installation](veewee/tree/master/doc/installation.md) procedure
+- the [requirements](https://github.com/jedi4ever/veewee/tree/master/doc/requirements.md)
+- the [installation](https://github.com/jedi4ever/veewee/tree/master/doc/installation.md) procedure
 
 Depending on how you want to use veewee, read through one of the following guides: (**work in progres**)
 
-- [guide for vagrant](veewee/tree/master/doc/vagrant.md)
+- [guide for vagrant](https://github.com/jedi4ever/veewee/tree/master/doc/vagrant.md)
 
-- [guide for Virtualbox](veewee/tree/master/doc/vbox.md)
-- [guide for Vmware fusion](veewee/tree/master/doc/fusion.md)
-- [guide for KVM](veewee/tree/master/doc/kvm.md)
+- [guide for Virtualbox](https://github.com/jedi4ever/veewee/tree/master/doc/vbox.md)
+- [guide for Vmware fusion](https://github.com/jedi4ever/veewee/tree/master/doc/fusion.md)
+- [guide for KVM](https://github.com/jedi4ever/veewee/tree/master/doc/kvm.md)
 
-You can also look at the more detailed pages on each subject in the [documentation directory](veewee/tree/master/doc)
+You can also look at the more detailed pages on each subject in the [documentation directory](https://github.com/jedi4ever/veewee/tree/master/doc)
 
 People have reported good experiences, why don't you give it a try?
 
