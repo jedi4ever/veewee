@@ -42,13 +42,13 @@ make install
 cd ..
 rm -rf ruby-1.8.7-p334*
 
-# Install RubyGems 1.7.2
-wget http://production.cf.rubygems.org/rubygems/rubygems-1.7.2.tgz
-tar xzf rubygems-1.7.2.tgz
-cd rubygems-1.7.2
+# Install RubyGems 1.8.15
+wget http://production.cf.rubygems.org/rubygems/rubygems-1.8.15.tgz
+tar xzf rubygems-1.8.15.tgz
+cd rubygems-1.8.15
 /opt/ruby/bin/ruby setup.rb
 cd ..
-rm -rf rubygems-1.7.2*
+rm -rf rubygems-1.8.15*
 
 # Installing chef & Puppet
 /opt/ruby/bin/gem install chef --no-ri --no-rdoc
