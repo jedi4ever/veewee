@@ -5,7 +5,9 @@ module Veewee
     module Vagrant
       class Validate < ::Vagrant::Command::Base
         def execute
-          options = {}
+          options = {
+            'tags' => %w{vagrant puppet chef virtualbox}
+          }
 
           opts = OptionParser.new do |opts|
             opts.banner = "Validates a box against vagrant compliancy rules"

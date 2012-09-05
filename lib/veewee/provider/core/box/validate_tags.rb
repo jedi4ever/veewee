@@ -4,6 +4,12 @@ module Veewee
       module BoxCommand
 
         def validate_tags(tags,options)
+
+          unless self.exists?
+            ui.error "Error:: You tried to validate box '#{name}' but it does not exit"
+            exit -1
+          end
+
           unless self.running?
             ui.error "Error:: You tried to validate box '#{name}' but it is not running"
             exit -1
