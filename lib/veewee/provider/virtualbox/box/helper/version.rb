@@ -12,6 +12,13 @@ module Veewee
           return version
         end
 
+        def vboxga_version
+          affected_version?(self.vbox_version) ? "4.2.0" : self.vbox_version
+        end
+      protected
+        def affected_version?(ver)
+          RUBY_PLATFORM.downcase.include?("darwin") && ver == "4.2.1"
+        end
       end
     end
   end
