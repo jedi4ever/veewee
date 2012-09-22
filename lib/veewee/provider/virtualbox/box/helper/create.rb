@@ -98,7 +98,7 @@ module Veewee
         end
 
         def attach_guest_additions
-          full_iso_file=File.join(env.config.veewee.iso_dir,"VBoxGuestAdditions_#{self.vbox_version}.iso")
+          full_iso_file=File.join(env.config.veewee.iso_dir,"VBoxGuestAdditions_#{self.vboxga_version}.iso")
           ui.info "Mounting guest additions: #{full_iso_file}"
           command ="#{@vboxcmd} storageattach \"#{name}\" --storagectl \"IDE Controller\" --type dvddrive --port 1 --device 0 --medium \"#{full_iso_file}\""
           shell_exec("#{command}")
