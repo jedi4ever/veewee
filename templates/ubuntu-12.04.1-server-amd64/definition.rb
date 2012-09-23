@@ -16,7 +16,7 @@ Veewee::Session.declare({
     'debian-installer=en_US auto locale=en_US kbd-chooser/method=us ',
     'hostname=%NAME% ',
     'fb=false debconf/frontend=noninteractive ',
-    'keyboard-configuration/layout=USA keyboard-configuration/variant=USA console-setup/ask_detect=false ',
+    'keyboard-configuration/modelcode=SKIP keyboard-configuration/layout=USA keyboard-configuration/variant=USA console-setup/ask_detect=false ',
     'initrd=/install/initrd.gz -- <Enter>'
 ],
   :kickstart_port => "7122",
