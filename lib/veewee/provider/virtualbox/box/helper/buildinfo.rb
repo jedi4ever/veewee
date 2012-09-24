@@ -6,7 +6,7 @@ module Veewee
         def build_info
           info=super
           info << { :filename => ".vbox_version",
-                    :content => "#{self.vbox_version}" }
+                    :content => "#{self.vboxga_version}" }
         end
 
          # Transfer information provide by the provider to the box
