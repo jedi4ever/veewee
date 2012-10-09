@@ -76,6 +76,7 @@ module Veewee
         special['<Left>'] = :left
         special['<Right>'] = :right
         special['<Home>'] = :home
+        special['<Shift>'] = :shift
 
         special['<F1>'] = :f1
         special['<F2>'] = :f2
