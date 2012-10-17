@@ -9,7 +9,7 @@ Given /^a veeweebox was build$/ do
 end
 
 When /^I sudorun "([^\"]*)" over ssh$/ do |command|
-  @box.exec("echo '#{command}' > /tmp/validation.sh")
+  @box.exec("echo '#{command}' > /tmp/validation.sh && chmod a+x /tmp/validation.sh")
   @sshresult=@box.exec(@box.sudo("/tmp/validation.sh"))
 end
 
