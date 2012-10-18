@@ -17,7 +17,7 @@ module Veewee
             k['r'] = '13 93'       ; k['t'] = '14 94'       ; k['y'] = '15 95';
             k['u']= '16 96'        ; k['i']='17 97';      k['o'] = '18 98'       ; k['p'] = '19 99' ;
 
-            k['Q']  = '2a 10 aa' ; k['W']  = '2a 11 aa' ; k['E']  = '2a 12 aa'; k['R'] = '2a 13 aa' ; k['T'] = '2a 14 aa' ; k['Y'] = '2a 15 aa'; k['U']= '2a 16 aa' ; k['I']='2a 17 aa'; k['O'] = '2a 18 aa' ; k['P'] = '2a 19 aa' ;
+            k['Q']  = '2a 10 aa 90' ; k['W']  = '2a 11 aa 91' ; k['E']  = '2a 12 aa 92'; k['R'] = '2a 13 aa 93' ; k['T'] = '2a 14 aa 94' ; k['Y'] = '2a 15 aa 95'; k['U']= '2a 16 aa 96' ; k['I']='2a 17 aa 97'; k['O'] = '2a 18 aa 98' ; k['P'] = '2a 19 aa 99' ;
 
             k['a'] = '1e 9e'; k['s']  = '1f 9f' ; k['d']  = '20 a0' ; k['f']  = '21 a1'; k['g'] = '22 a2' ; k['h'] = '23 a3' ; k['j'] = '24 a4';
             k['k']= '25 a5' ; k['l']='26 a6';
@@ -53,7 +53,7 @@ module Veewee
             special['<Return>'] = '1c 9c'
             special['<Esc>'] = '01 81';
             special['<Tab>'] = '0f 8f';
-            special['<KillX>'] = '1d 38 0e';
+            special['<KillX>'] = '1d 38 0e b8';
             special['<Wait>'] = 'wait';
 
             special['<Up>'] = '48 c8';
