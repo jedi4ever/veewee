@@ -7,7 +7,7 @@ date > /etc/vagrant_box_build_time
 apt-get -y update
 apt-get -y upgrade
 apt-get -y install linux-headers-$(uname -r) build-essential
-apt-get -y install zlib1g-dev libssl-dev libreadline-gplv2-dev libyaml-dev
+apt-get -y install zlib1g-dev libssl-dev libreadline-gplv2-dev libyaml-dev ruby-dev
 apt-get -y install vim
 apt-get clean
 
