@@ -26,8 +26,8 @@ module Veewee
               content=displayfile.read()
               response.body=content
               #If we shut too fast it might not get the complete file
-              sleep 2
-              @server.shutdown
+              # sleep 2
+              # @server.shutdown
             end
           end
 
@@ -58,8 +58,8 @@ module Veewee
               :Logger => webrick_logger,
               :AccessLog => webrick_logger
             )
-            env.logger.debug("mounting file /#{filename}")
-            s.mount("/#{filename}", Veewee::Provider::Core::Helper::Servlet::FileServlet,File.join(web_dir,filename),env)
+            env.logger.debug("mounting file #{filename}")
+            s.mount("#{filename}", Veewee::Provider::Core::Helper::Servlet::FileServlet,File.join(web_dir,filename),env)
             trap("INT"){
               s.shutdown
               env.ui.info "Stopping webserver"
