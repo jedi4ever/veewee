@@ -15,27 +15,26 @@ module Veewee
             definition.kickstart_port=guessed_port.to_s
           end
 
-          if self.exec("cmd.exe /C dir '#{wget_vbs_file}'",{:exitcode=>"*"}).status != 0
+          if self.exec("cmd.exe /C dir #{wget_vbs_file} > %TEMP%\\null",{:exitcode=>"*"}).status != 0
             env.ui.warn "Creating wget.vbs"
             create_wget_vbs_command do |command_chunk, chunk_num|
               self.exec("cmd.exe /C echo \"Rendering '#{wget_vbs_file}' chunk #{chunk_num}\" && #{command_chunk}")
             end
           end
             
-          env.ui.warn "Spinning up a wait_for_http_request for #{localfile}"
-          env.ui.warn host_ip_as_seen_by_guest
-          allow_for_http_request(localfile,{
+          env.ui.warn "Spinning up a wait_for_http_request on http://#{host_ip_as_seen_by_guest}:#{definition.kickstart_port}/#{localfile}"
+          webthread=allow_for_http_request(localfile,{
               :port => definition.kickstart_port,
               :host => definition.kickstart_ip,
               :timeout => definition.kickstart_timeout,
-              :web_dir => ''
+              :web_dir => '/'
             })
-          env.ui.warn "Spun up"
           
           begin
             self.when_winrm_login_works(self.ip_address,winrm_options.merge(options)) do
-              env.ui.info "Going to try and copy #{localfile} to #{remotefile}"
-              self.exec("cmd.exe /C cscript %TEMP%\\wget.vbs /url:http://#{host_ip_as_seen_by_guest}:#{definition.kickstart_port}/#{localfile} /path:#{remotefile}")
+              env.ui.info "Going to try and copy #{localfile} to #{remotefile.inspect}"
+              self.exec("cmd.exe /C cscript %TEMP%\\wget.vbs /url:http://#{host_ip_as_seen_by_guest}:#{definition.kickstart_port}#{localfile} /path:#{remotefile}")
+              # sleep 0.1 # We need to wait until it is transferred, 
             end
           end
         end
