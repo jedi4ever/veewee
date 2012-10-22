@@ -31,7 +31,7 @@ module Veewee
     attr_accessor :floppy_files
 
 
-    attr_accessor :use_hw_virt_ext,:use_pae,:hostiocache
+    attr_accessor :use_hw_virt_ext,:use_pae,:hostiocache, :use_sata
 
     attr_accessor :iso_dowload_timeout, :iso_src,:iso_md5 ,:iso_download_instructions
 
@@ -73,6 +73,7 @@ module Veewee
 
       @iso_file=""
       @disk_size = '10240'; @disk_format = 'VDI'; @disk_variant = 'Standard'
+      @use_sata = true
 
       #        :hostiocache => 'off' ,
       #        :os_type_id => 'Ubuntu',
