@@ -2,6 +2,7 @@ module Veewee
   module Provider
     module Virtualbox
       module BoxCommand
+        UNSYNCED_VERSIONS = {"4.2.1" => "4.2.0", "4.1.23" => "4.1.22"}
 
         # Return the major/minor/incremental version of VirtualBox.
         # For example: 4.1.8_Debianr75467 -> 4.1.8
@@ -13,11 +14,11 @@ module Veewee
         end
 
         def vboxga_version
-          affected_version?(self.vbox_version) ? "4.2.0" : self.vbox_version
+          affected_version?(self.vbox_version) ? UNSYNCED_VERSIONS[self.vbox_version] : self.vbox_version
         end
       protected
         def affected_version?(ver)
-          RUBY_PLATFORM.downcase.include?("darwin") && ver == "4.2.1"
+          RUBY_PLATFORM.downcase.include?("darwin") && UNSYNCED_VERSIONS.has_key?(ver)
         end
       end
     end
