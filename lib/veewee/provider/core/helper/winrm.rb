@@ -110,7 +110,8 @@ module Veewee
             options = winrm_options.merge( # global default
               { # function defaults
                 :exitcode => "0",
-                :progress => "on"
+                :progress => "on",
+                :operation_timeout => 600 # ten minutes
               }.merge(
                 options # calling override
                 ))
@@ -135,7 +136,9 @@ module Veewee
               end
             end
             status = output[:exitcode]
-            env.ui.info "EXITCODE: #{status}" if status > 0
+            @session.close_shell(@remote_id)
+            @remote_id = nil
+            # env.ui.info "EXITCODE: #{status}" if status > 0
             # @session.unbind
             # FIXME: May want to look for a list of possible exitcodes
             if (status.to_s != options[:exitcode] )
