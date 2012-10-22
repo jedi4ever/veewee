@@ -75,8 +75,7 @@ module Veewee
 
         end
 
-        def attach_disk
-
+        def attach_disk_common(storagectl, device_number)
           place=get_vbox_home
           location=name+"."+definition.disk_format.downcase
 
@@ -84,16 +83,23 @@ module Veewee
           ui.info "Attaching disk: #{location}"
 
           #command => "${vboxcmd} storageattach \"${vname}\" --storagectl \"SATA Controller\" --port 0 --device 0 --type hdd --medium \"${vname}.vdi\"",
-          command ="#{@vboxcmd} storageattach \"#{name}\" --storagectl \"SATA Controller\" --port 0 --device 0 --type hdd --medium \"#{location}\""
+          command ="#{@vboxcmd} storageattach \"#{name}\" --storagectl \"#{storagectl}\" --port 0 --device #{device_number} --type hdd --medium \"#{location}\""
           shell_exec("#{command}")
+        end
 
+        def attach_disk_ide(device_number=0)
+          self.attach_disk_common("IDE Controller", device_number)
+        end
+
+        def attach_disk_sata(device_number=0)
+          self.attach_disk_common("SATA Controller", device_number)
         end
 
 
-        def attach_isofile
+        def attach_isofile(device_number=0)
           full_iso_file=File.join(env.config.veewee.iso_dir,definition.iso_file)
           ui.info "Mounting cdrom: #{full_iso_file}"
-          command ="#{@vboxcmd} storageattach \"#{name}\" --storagectl \"IDE Controller\" --type dvddrive --port 0 --device 0 --medium \"#{full_iso_file}\""
+          command ="#{@vboxcmd} storageattach \"#{name}\" --storagectl \"IDE Controller\" --type dvddrive --port 0 --device #{device_number} --medium \"#{full_iso_file}\""
           shell_exec("#{command}")
         end
 
