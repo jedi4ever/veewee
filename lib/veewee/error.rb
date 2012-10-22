@@ -17,6 +17,9 @@ module Veewee
 
     class SshError < Error
     end
+
+    class WinrmError < Error
+    end
 end
 
 #Usage (from the exceptional ruby book)

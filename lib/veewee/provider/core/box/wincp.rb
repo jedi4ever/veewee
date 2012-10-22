@@ -11,15 +11,17 @@ module Veewee
           definition.kickstart_port = "7000" if definition.kickstart_port.nil?
           guessed_port=guess_free_port(definition.kickstart_port.to_i,7199).to_s
           if guessed_port.to_s!=definition.kickstart_port
-            env.ui.warn "Changing kickstart/wincp port from #{definition.kickstart_port} to #{guessed_port}"
+            env.ui.warn "Changing wincp port from #{definition.kickstart_port} to #{guessed_port}"
             definition.kickstart_port=guessed_port.to_s
           end
 
-          env.ui.warn "Creating wget.vbs"
-          create_wget_vbs_command do |command_chunk, chunk_num|
-            self.exec("cmd.exe /C echo \"Rendering '#{wget_vbs_file}' chunk #{chunk_num}\" && #{command_chunk}")
+          if self.exec("cmd.exe /C dir '#{wget_vbs_file}'",{:exitcode=>"*"}).status != 0
+            env.ui.warn "Creating wget.vbs"
+            create_wget_vbs_command do |command_chunk, chunk_num|
+              self.exec("cmd.exe /C echo \"Rendering '#{wget_vbs_file}' chunk #{chunk_num}\" && #{command_chunk}")
+            end
           end
-
+            
           env.ui.warn "Spinning up a wait_for_http_request for #{localfile}"
           env.ui.warn host_ip_as_seen_by_guest
           allow_for_http_request(localfile,{
@@ -33,7 +35,7 @@ module Veewee
           begin
             self.when_winrm_login_works(self.ip_address,winrm_options.merge(options)) do
               env.ui.info "Going to try and copy #{localfile} to #{remotefile}"
-              self.exec("%TEMP%\\wget.vbs /url:http://#{host_ip_as_seen_by_guest}:#{definition.kickstart_port}/#{localfile} /path:#{remotefile}")
+              self.exec("cmd.exe /C cscript %TEMP%\\wget.vbs /url:http://#{host_ip_as_seen_by_guest}:#{definition.kickstart_port}/#{localfile} /path:#{remotefile}")
             end
           end
         end
@@ -54,13 +56,10 @@ module Veewee
               yield bootstrap_bat.join(" && "), chunk_num += 1
               bootstrap_bat = []
             end
-            if chunk_num == 1 # over_write if exists
-              bootstrap_bat << "> #{wget_vbs_file} (echo.#{line.chomp.strip})"
-            else
-              bootstrap_bat << ">> #{wget_vbs_file} (echo.#{line.chomp.strip})"
-            end
+            bootstrap_bat << ">> #{wget_vbs_file} (echo.#{line.chomp.strip})"
           end
           yield bootstrap_bat.join(" && "), chunk_num += 1
+          bootstrap_bat = []
         end
 
         def wget_vbs

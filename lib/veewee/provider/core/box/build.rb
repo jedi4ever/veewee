@@ -169,9 +169,9 @@ module Veewee
 
           if kickstartfiles.nil? || kickstartfiles.length == 0
             env.ui.info "Skipping webserver as no kickstartfile was specified"
+          else
+            env.ui.info "Starting a webserver #{definition.kickstart_ip}:#{definition.kickstart_port}\n"
           end
-
-          env.ui.info "Starting a webserver #{definition.kickstart_ip}:#{definition.kickstart_port}\n"
 
           # Check if the kickstart is an array or a single string
           if kickstartfiles.is_a?(String)

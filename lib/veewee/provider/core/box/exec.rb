@@ -16,9 +16,16 @@ module Veewee
         def exec(command,options={})
           raise Veewee::Error,"Box is not running" unless self.running?
           if definition.winrm_user && definition.winrm_password
-            new_options=winrm_options.merge(options)
-            result = self.winrm_execute(self.ip_address,command,new_options)
-            return result
+            begin
+              new_options=winrm_options.merge(options)
+              self.when_winrm_login_works(self.ip_address,winrm_options.merge(options)) do
+                result = self.winrm_execute(self.ip_address,command,new_options)
+                return result
+              end
+            rescue RuntimeError => ex
+              env.ui.error "Error executing command #{command} : #{ex}"
+              raise Veewee::WinrmError, ex
+            end
           elsif definition.ssh_user && definition.ssh_password
 
             begin

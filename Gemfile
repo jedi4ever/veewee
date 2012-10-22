@@ -4,5 +4,7 @@ source "http://rubygems.org"
 
 group :test do
   gem "rake"
+  gem "ruby-libvirt"
+  gem "em-winrm", :path => '../em-winrm'
 end
 gemspec

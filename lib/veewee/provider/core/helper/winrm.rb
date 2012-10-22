@@ -23,39 +23,47 @@ module Veewee
           require 'highline'
           
           def winrm_up?(ip,options)
-            @httpcli = HTTPClient.new(:agent_name => 'Ruby WinRM Client')
-            @httpcli.receive_timeout = 10
-            @httpcli.set_auth(nil, options[:user], options[:pass])
-            @httpcli.get("http://#{ip}:#{options[:port]}/wsman")
-            return true
+            if not @winrm_up
+              @httpcli = HTTPClient.new(:agent_name => 'Ruby WinRM Client')
+              @httpcli.receive_timeout = 10
+              @httpcli.set_auth(nil, options[:user], options[:pass])
+              @httpcli.get("http://#{ip}:#{options[:port]}/wsman")
+              @winrm_up = true
+            end
           rescue HTTPClient::ReceiveTimeoutError
-            return false
+            @winrm_up = false
           end
+            
 
           def when_winrm_login_works(ip="127.0.0.1", options = {}, &block)
 
             options=winrm_options.merge(options.merge({:operation_timeout => 5}))
-
-            env.ui.info  "Waiting for winrm login on #{ip} with user #{options[:user]} to windows on port => #{options[:port]} to work, timeout=#{options[:timeout]} sec"
-
-
+            @login_works ||= {}
             begin
               Timeout::timeout(options[:timeout]) do
-                connected=false
-                while !connected do
-                  begin
-                    env.ui.info ".",{:new_line => false}
-                    next if not winrm_up?(ip, options)
-                    winrm_execute(ip,"hostname",options.merge({:progress => nil}))
-                    env.ui.info "\n"
+                if @login_works[ip]
                     block.call(ip);
-                    env.ui.info ""
-                    return true
-                  rescue Exception => e  
-                    puts e.inspect
-                    puts e.message  
-                    puts e.backtrace.inspect  
-                    sleep 5
+                else
+                  env.ui.info  "Waiting for winrm login on #{ip} with user #{options[:user]} to windows on port => #{options[:port]} to work, timeout=#{options[:timeout]} sec"
+                  until @connected do
+                    begin
+                      sleep 1 
+                      env.ui.info ".",{:new_line => false}
+                      next if not winrm_up?(ip, options)
+                      winrm_execute(ip,"hostname",options.merge({:progress => nil}))
+                      @login_works[ip]=true
+                      env.ui.info "\n"
+                      block.call(ip);
+                      env.ui.info ""
+                      sleep 1
+                      @connected = true
+                      return true
+                    rescue Exception => e  
+                      puts e.inspect
+                      puts e.message  
+                      puts e.backtrace.inspect  
+                      sleep 5
+                    end
                   end
                 end
               end
@@ -71,7 +79,7 @@ module Veewee
             end
             return false
           end
-
+          
 
           def winrm_transfer_file(host,filename,destination = '.' , options = {})
             options = winrm_options.merge(options.merge({:paranoid => false }))
@@ -86,7 +94,6 @@ module Veewee
 
           def new_session(host,options)
             opts = winrm_options.merge(options)
-
             # create a session
             begin
               endpoint = "http://#{host}:#{opts[:port]}/wsman"
@@ -110,14 +117,14 @@ module Veewee
             stdout=""
             stderr=""
             status=-99999
-
-            session = new_session(host, options)
+            
+            @session ||= new_session(host, options)
 
             env.ui.info "Executing winrm command: #{command}" if options[:progress]
             
-            remote_id = session.open_shell
-            command_id = session.run_command(remote_id, command)
-            output = session.get_command_output(remote_id, command_id) do |out,error|
+            @remote_id ||= @session.open_shell
+            command_id = @session.run_command(@remote_id, command)
+            output = @session.get_command_output(@remote_id, command_id) do |out,error|
               if out
                 stdout += out 
                 env.ui.info out,{:new_line => false} if options[:progress]
@@ -129,7 +136,8 @@ module Veewee
             end
             status = output[:exitcode]
             env.ui.info "EXITCODE: #{status}" if status > 0
-
+            # @session.unbind
+            # FIXME: May want to look for a list of possible exitcodes
             if (status.to_s != options[:exitcode] )
               if (options[:exitcode]=="*")
                 #its a test so we don't need to worry
