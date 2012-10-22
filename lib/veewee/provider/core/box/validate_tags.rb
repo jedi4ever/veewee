@@ -6,7 +6,7 @@ module Veewee
         def validate_tags(tags,options)
 
           unless self.exists?
-            ui.error "Error:: You tried to validate box '#{name}' but it does not exit"
+            ui.error "Error:: You tried to validate box '#{name}' but it does not exist"
             exit -1
           end
 
