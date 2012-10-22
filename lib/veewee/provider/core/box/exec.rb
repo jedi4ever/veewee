@@ -9,7 +9,7 @@ module Veewee
         end
 
         def winrm_command_string
-          "knife winrm -m #{self.ip_address}-P #{winrm_options[:port]} -x #{definition.winrm_user}" +
+          "knife winrm -m #{self.ip_address} -P #{winrm_options[:port]} -x #{definition.winrm_user}" +
             " -P #{definition.winrm_password} COMMAND"
         end
 
