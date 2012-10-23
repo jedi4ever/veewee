@@ -37,7 +37,8 @@ module Veewee
 
           def when_winrm_login_works(ip="127.0.0.1", options = {}, &block)
 
-            options=winrm_options.merge(options.merge({:operation_timeout => 5}))
+            #options=winrm_options.merge(options.merge({:operation_timeout => 5}))
+            options=winrm_options.merge(options)
             @login_works ||= {}
             begin
               Timeout::timeout(options[:timeout]) do
@@ -98,7 +99,9 @@ module Veewee
             begin
               endpoint = "http://#{host}:#{opts[:port]}/wsman"
               client = ::WinRM::WinRMWebService.new(endpoint, :plaintext, opts)
-              client.set_timeout(opts[:operation_timeout]) if opts[:operation_timeout] 
+              if opts[:operation_timeout]
+                client.set_timeout(opts[:operation_timeout]) 
+              end
             rescue ::WinRM::WinRMAuthorizationError => error
               raise ::WinRM::WinRMAuthorizationError.new("#{error.message}@#{host}")
             end
@@ -110,8 +113,7 @@ module Veewee
             options = winrm_options.merge( # global default
               { # function defaults
                 :exitcode => "0",
-                :progress => "on",
-                :operation_timeout => 600 # ten minutes
+                :progress => "on"
               }.merge(
                 options # calling override
                 ))
