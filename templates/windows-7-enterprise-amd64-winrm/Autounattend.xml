@@ -19,7 +19,7 @@
                             <Letter>C</Letter>
                             <Order>1</Order>
                             <PartitionID>1</PartitionID>
-                            <Label>Windows 2008R2</Label>
+                            <Label>Windows 7 Enterprise</Label>
                         </ModifyPartition>
                     </ModifyPartitions>
                     <DiskID>0</DiskID>
@@ -192,7 +192,7 @@
                 <HelpCustomized>false</HelpCustomized>
             </OEMInformation>
             <!-- Rename computer here. -->
-            <ComputerName>vagrant-2008R2</ComputerName>
+            <ComputerName>vagrant-win7ent</ComputerName>
             <TimeZone>Pacific Standard Time</TimeZone>
             <RegisteredOwner>Vagrant</RegisteredOwner>
             <ShowWindowsLive>false</ShowWindowsLive>

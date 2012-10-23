@@ -29,5 +29,5 @@ Veewee::Session.declare({
     #  "oracle-cert.cer",
     # No sudo on windows
     :sudo_cmd => "%f",
-    :shutdown_cmd => "shutdown /s /t 60 /c \"Vagrant Shutdown\" /f /d p:4:1",
+    :shutdown_cmd => "shutdown /s /t 10 /c \"Vagrant Shutdown\" /f /d p:4:1",
   })
