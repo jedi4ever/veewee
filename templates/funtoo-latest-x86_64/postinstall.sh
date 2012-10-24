@@ -7,8 +7,12 @@
 password_root=vagrant
 password_vagrant=vagrant
 
-# the public key for vagrants ssh
-vagrant_ssh_key_url="https://raw.github.com/mitchellh/vagrant/master/keys/vagrant.pub"
+# static versions of programs we install
+ruby_version="1.9.3-p286"
+# ...these are for rbenv and its plugins ruby-builder and rbenv-bundler
+rbenv_version="v0.3.0"
+ruby_builder_version="v20121022"
+rbenv_bundler_version="0.94"
 
 # these two (configuring the compiler) and the stage3 url can be changed to build a 32 bit system
 accept_keywords="amd64"
@@ -18,18 +22,17 @@ chost="x86_64-pc-linux-gnu"
 stage3file="stage3-latest.tar.xz"
 stage3url="http://ftp.heanet.ie/mirrors/funtoo/funtoo-current/x86-64bit/generic_64/$stage3file"
 
-# timezone (as subdirectory of /usr/share/zoneinfo)
+# the public key for vagrants ssh
+vagrant_ssh_key_url="https://raw.github.com/mitchellh/vagrant/master/keys/vagrant.pub"
+
+# timezone (as a subdirectory of /usr/share/zoneinfo)
 timezone="UTC"
 
-# and some static versions for programs
-ruby_version="1.9.3-p194"
-# rbenv and its plugins
-rbenv_version="v0.3.0"
-ruby_builder_version="v20120815"
-rbenv_bundler_version="0.94"
+# number of cpus in the host system (to speed up make andfor kernel config)
+nr_cpus=$(</proc/cpuinfo grep processor|wc -l)
 
 
-### PARTITIONING ###
+### PARTITIONING AND FORMATTING ###
 
 # for sgdisk (scripted gdisk) see: http://www.rodsbooks.com/gdisk/sgdisk.html
 sgdisk -n 1:0:+128M -t 1:8300 -c 1:"linux-boot" \
@@ -86,12 +89,24 @@ cat <<DATAEOF > "$chroot/etc/fstab"
 none                    /dev/shm        tmpfs           nodev,nosuid,noexec      0 0
 DATAEOF
 
-# make options
-cat <<DATAEOF >> "$chroot/etc/portage/make.conf"
-ACCEPT_KEYWORDS="$accept_keywords"
+# set make options
+cat <<DATAEOF > "$chroot/etc/portage/make.conf"
 CHOST="$chost"
-MAKEOPTS="-j$(($(</proc/cpuinfo grep processor|wc -l) + 1))"
+
+CFLAGS="-mtune=generic -O2 -pipe"
+CXXFLAGS="\${CFLAGS}"
+
+ACCEPT_KEYWORDS="$accept_keywords"
+MAKEOPTS="-j$((1 + $nr_cpus)) -l$nr_cpus.5"
+EMERGE_DEFAULT_OPTS="-j$nr_cpus --quiet-build=y"
+FEATURES="\${FEATURES} parallel-fetch"
+
+# english only
 LINGUAS=""
+
+# for X support if needed
+INPUT_DEVICES="evdev"
+VIDEO_CARDS="virtualbox"
 DATAEOF
 
 # add package use flags
@@ -105,16 +120,121 @@ cat <<DATAEOF >> "$chroot/etc/portage/package.keywords"
 app-emulation/virtualbox-guest-additions
 DATAEOF
 
-# update portage tree
+# update portage tree to most current state
 chroot "$chroot" emerge --sync
 
 # set localtime
 chroot "$chroot" ln -sf "/usr/share/zoneinfo/$timezone" /etc/localtime
 
-# get and install the kernel
+# get, configure, compile and install the kernel and modules
 chroot "$chroot" /bin/bash <<DATAEOF
 emerge sys-kernel/gentoo-sources sys-kernel/genkernel sys-boot/boot-update
-genkernel --install --symlink all
+
+# specialize for VirtualBox - use loaded modules in livecd
+cd /usr/src/linux
+# use a default configuration as a starting point, then disable all currently unused modules
+make defconfig
+#make localyesconfig
+
+# add settings for VirtualBox kernels to end of .config
+cat <<EOF >>/usr/src/linux/.config
+# dependencies
+CONFIG_EXT4_FS=y
+CONFIG_EXT4_USE_FOR_EXT23=y
+CONFIG_EXT4_FS_XATTR=y
+CONFIG_SMP=y
+CONFIG_MODULE_UNLOAD=y
+CONFIG_DMA_SHARED_BUFFER=y
+# for VirtualBox
+# see http://en.gentoo-wiki.com/wiki/Virtualbox_Guest
+CONFIG_HIGH_RES_TIMERS=n
+CONFIG_X86_MCE=n
+CONFIG_SUSPEND=n
+CONFIG_HIBERNATION=n
+CONFIG_IDE=n
+CONFIG_NO_HZ=y
+CONFIG_SMP=y
+CONFIG_ACPI=y
+CONFIG_PNP=y
+CONFIG_ATA=y
+CONFIG_SATA_AHCI=y
+CONFIG_ATA_SFF=y
+CONFIG_ATA_PIIX=y
+CONFIG_PCNET32=y
+CONFIG_E1000=y
+CONFIG_INPUT_MOUSE=y
+CONFIG_DRM=y
+CONFIG_SND_INTEL8X0=m
+# for net fs
+CONFIG_AUTOFS4_FS=m
+CONFIG_NFS_V2=m
+CONFIG_NFS_V3=m
+CONFIG_NFS_V4=m
+CONFIG_NFSD=m
+CONFIG_CIFS=m
+CONFIG_CIFS_UPCAL=y
+CONFIG_CIFS_XATTR=y
+CONFIG_CIFS_DFS_UPCALL=y
+# reduce size
+CONFIG_NR_CPUS=$nr_cpus
+CONFIG_COMPAT_VDSO=n
+# propbably nice but not in defaults
+CONFIG_MODVERSIONS=y
+CONFIG_IKCONFIG_PROC=y
+CONFIG_SQUASHFS=y
+CONFIG_SQUASHFS_XATTR=y
+CONFIG_SQUASHFS_XZ=y
+#CONFIG_EFI_STUB=y
+#CONFIG_DEFAULT_DEADLINE=y
+#CONFIG_DEFAULT_CFQ=n
+#CONFIG_PREEMPT_NONE=y
+#CONFIG_PREEMPT_VOLUNTARY=n
+#CONFIG_HZ=100=y
+#CONFIG_HZ=1000=n
+# IPSec (I want to run tests with IPSec andSamba 4)
+CONFIG_NET_IPVTI=y
+CONFIG_INET_AH=y
+CONFIG_INET_ESP=y
+CONFIG_INET_IPCOMP=y
+CONFIG_INET_XFRM_MODE_TRANSPORT=y
+CONFIG_INET_XFRM_MODE_TUNNEL=y
+CONFIG_INET_XFRM_MODE_BEET=y
+CONFIG_INET6_AH=y
+CONFIG_INET6_ESP=y
+CONFIG_INET6_IPCOMP=y
+CONFIG_INET6_XFRM_MODE_TRANSPORT=y
+CONFIG_INET6_XFRM_MODE_TUNNEL=y
+CONFIG_INET6_XFRM_MODE_BEET=y
+# and some more crypto support...
+CONFIG_CRYPTO_USER=m
+CONFIG_CRYPTO_CTS=y
+CONFIG_CRYPTO_CTR=y
+CONFIG_CRYPTO_RMD128=y
+CONFIG_CRYPTO_RMD160=y
+CONFIG_CRYPTO_RMD256=y
+CONFIG_CRYPTO_RMD320=y
+CONFIG_CRYPTO_SHA1_SSSE3=m
+CONFIG_CRYPTO_SHA256=y
+CONFIG_CRYPTO_SHA512=y
+CONFIG_CRYPTO_AES_X86_64=y
+CONFIG_CRYPTO_AES_NI_INTEL=m
+CONFIG_CRYPTO_BLOWFISH_X86_64=y
+CONFIG_CRYPTO_SALSA20_X86_64=y
+CONFIG_CRYPTO_TWOFISH_X86_64_3WAY=y
+CONFIG_CRYPTO_DEFLATE=y
+EOF
+# build and install kernel, using the config created above
+genkernel --install --symlink --oldconfig all
+DATAEOF
+
+# install the virtualbox guest additions, add vagrant and root to group vboxguest
+# PREREQUISITE: kernel - we install a module, so we use the kernel sources
+chroot "$chroot" /bin/bash <<DATAEOF
+emerge app-emulation/virtualbox-guest-additions
+# we need this as gentoo doesn't do it on its own
+groupadd -r vboxsf
+mkdir /media && chgrp vboxsf /media
+rc-update add virtualbox-guest-additions default
 DATAEOF
 
 # add default users and groups, setpasswords, configure privileges and install sudo
@@ -124,10 +244,15 @@ wget --no-check-certificate "$vagrant_ssh_key_url" -O "$chroot/home/vagrant/.ssh
 chmod 600 "$chroot/home/vagrant/.ssh/authorized_keys"
 cp -f /root/.vbox_version "$chroot/home/vagrant/.vbox_version"
 
+# for passwordless logins
+mkdir -p "$chroot/root/.ssh" 2> /dev/null
+cat /tmp/ssh-root.pub >> "$chroot/root/.ssh/authorized_keys"
+
+# PREREQUISITE: virtualbox-guest-additions - the groups created on installation have to exist
 chroot $chroot /bin/bash <<DATAEOF
 groupadd -r vagrant
-groupadd rbenv
-useradd -m -r vagrant -g vagrant -G wheel,rbenv -c 'added by vagrant, veewee basebox creation'
+groupadd -r rbenv
+useradd -m -r vagrant -g vagrant -G wheel,rbenv,vboxsf,vboxguest -c 'added by vagrant, veewee basebox creation'
 
 # set passwords (for after reboot)
 passwd<<EOF
@@ -151,7 +276,7 @@ echo 'vagrant ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
 DATAEOF
 
 # configure ssh daemon
-# veewee validate uses password authentication, so we have to enable it
+# veewee validate uses password authentication (according to the other Funtoo-template), so we have to enable it
 cat <<DATAEOF > "$chroot/etc/ssh/sshd_config"
 HostBasedAuthentication no
 IgnoreUserKnownHosts yes
@@ -168,8 +293,7 @@ UsePAM yes
 UsePrivilegeSeparation sandbox
 DATAEOF
 
-# install rbenv, ruby and bundler. Configure rbenv for global usage
-# so it's usable without home directory
+# install rbenv, ruby and bundler. Configure rbenv for global usage so it's usable without home directory
 chroot "$chroot" /bin/bash <<DATAEOF
 cd /usr/local/lib
 git clone git://github.com/sstephenson/rbenv.git
@@ -218,28 +342,15 @@ EOF
 gem install bundler chef puppet
 DATAEOF
 
-# install the virtualbox guest additions
+# install logger and cron
 chroot "$chroot" /bin/bash <<DATAEOF
-emerge app-admin/rsyslog sys-process/vixie-cron app-emulation/virtualbox-guest-additions
+emerge app-admin/rsyslog sys-process/vixie-cron
 rc-update add rsyslog default
 rc-update add vixie-cron default
-rc-update add virtualbox-guest-additions default
 DATAEOF
 
-# configure boot entries
-cat <<DATAEOF > "$chroot/etc/boot.conf"
-boot {
-  generate grub
-  default "Funtoo Linux genkernel"
-  timeout 3 
-}
-
-"Funtoo Linux genkernel" {
-  kernel kernel[-v]
-  initrd initramfs[-v]
-  params += real_root=auto
-} 
-DATAEOF
+# install nfs and automount support
+# chroot "$chroot" emerge net-fs/nfs-utils net-fs/autofs
 
 # make the disk bootable
 chroot "$chroot" /bin/bash <<DATAEOF
@@ -249,23 +360,15 @@ grub-install --no-floppy /dev/sda && \
 boot-update
 DATAEOF
 
-
 ### CLEANUP TO SHRINK THE BOX ###
+
+# a fresh install probably shouldn't nag about news
+chroot "$chroot" /usr/bin/eselect news read all
 
 # cleanup time...
 chroot "$chroot" /bin/bash <<DATAEOF
-# == potential savings : squashfs for portage and linux sources (~1.2 GB) ==
-# emerge sys-fs/squashfs-tools
-# * then, after directory cleanup:
-#   squash /usr/src/linux-*
-#   squash /usr/portage
-#   fix fstab:
-#    - mount squashed linux and portage
-#    - mount secured temp folder with group "portage" to portage/distfiles
-
 # delete temp, cached and build artifact data - some low hanging fruit...
-cd /usr/src/linux
-make mrproper
+eclean -d distfiles
 rm /tmp/*
 rm -rf /var/log/*
 rm -rf /var/tmp/*
@@ -276,15 +379,11 @@ rm -rf /var/tmp/*
 # ...probably hard coded path by mistake, report to upstream? Which upstream?!?
 rm -rf /root/.gem
 
-# we can safe quite some space on portage - but then we'd have to redownload it for installations.
-# instead, we're pruning it (it still has to be recreated to update the package tree)
-rm -rf /usr/portage/.git
-rm -rf /usr/portage/distfiles/*
-
-# get rid of the history for our git based installations
-# - we could also load the tarball in the first place, comment this out if you want to be able to update rbenv...
-rm -rf /usr/local/lib/rbenv/.git
-rm -rf /usr/local/lib/rbenv/env/plugins/*/.git
+# here's some savings crippling the usage of this box (sorted descending by damage)
+#rm -rf /usr/local/lib/rbenv/.git
+#rm -rf /usr/local/lib/rbenv/env/plugins/*/.git
+#rm -rf /usr/src/linux*
+#rm -rf /usr/portage/.git
 DATAEOF
 
 # fill all free hdd space with zeros

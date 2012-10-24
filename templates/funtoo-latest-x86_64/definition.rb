@@ -1,21 +1,12 @@
 password = 'vagrant'
 
 Veewee::Session.declare({
-# READ: http://www.virtualbox.org/manual/ch08.html#vboxmanage - some nice options below...
-# ...disabled for greater compatibility - we shouldn't depend on this
-#  :virtualbox => { :vm_options => [{
-#    'firmware' => 'efi',
-#    'ioapic' => 'on',
-#    'hpet' => 'on',
-#    'pae' => 'on'
-#  }] },
   :hostiocache => 'off',
   :cpu_count => '1',
   :memory_size=> '384',
   :disk_size => '10140',
   :disk_format => 'VDI',
-#  :os_type_id => 'Gentoo',
-  :os_type_id => 'Gentoo_64',
+  :os_type_id => 'Gentoo_64', # for 32bit, change to 'Gentoo'
   :iso_file => "systemrescuecd-x86-3.0.0.iso",
   :iso_src => "http://freefr.dl.sourceforge.net/project/systemrescuecd/sysresccd-x86/3.0.0/systemrescuecd-x86-3.0.0.iso",
   :iso_md5 => "6bb6241af752b1d6dab6ae9e6e3e770e",
