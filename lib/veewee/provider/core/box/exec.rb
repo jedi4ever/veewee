@@ -21,17 +21,12 @@ module Veewee
               self.when_winrm_login_works(self.ip_address,winrm_options.merge(options)) do
                 result = self.winrm_execute(self.ip_address,command,new_options)
                 return result
-              rescue RuntimeError => ex
-                error= "Error executing command #{command} : #{ex}"
-                error+="\n#{ex.backtrace.join("\n")}" unless ex.backtrace.empty?
-                raise Veewee::SshError, error
               end
             rescue RuntimeError => ex
               env.ui.error "Error executing command #{command} : #{ex}"
               raise Veewee::WinrmError, ex
             end
-          elsif # definition.ssh_user && definition.ssh_password
-
+          else # definition.ssh_user && definition.ssh_password
             begin
               new_options=ssh_options.merge(options)
               self.when_ssh_login_works(self.ip_address,new_options) do

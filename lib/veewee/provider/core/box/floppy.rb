@@ -5,6 +5,7 @@ module Veewee
         def create_floppy(floppy_filename)
           # Todo Check for java
           # Todo check output of commands
+          # Todo allow for .erb templates
 
           # Check for floppy
           unless definition.floppy_files.nil?

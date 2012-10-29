@@ -21,8 +21,9 @@ module Veewee
               self.exec("cmd.exe /C echo \"Rendering '#{wget_vbs_file}' chunk #{chunk_num}\" && #{command_chunk}")
             end
           end
-            
-          env.ui.warn "Spinning up a wait_for_http_request on http://#{host_ip_as_seen_by_guest}:#{definition.kickstart_port}/#{localfile}"
+
+          
+          env.ui.warn "Spinning up a wait_for_http_request on http://#{host_ip_as_seen_by_guest}:#{definition.kickstart_port}#{localfile}"
           webthread=allow_for_http_request(localfile,{
               :port => definition.kickstart_port,
               :host => definition.kickstart_ip,
@@ -34,7 +35,9 @@ module Veewee
             self.when_winrm_login_works(self.ip_address,winrm_options.merge(options)) do
               env.ui.info "Going to try and copy #{localfile} to #{remotefile.inspect}"
               self.exec("cmd.exe /C cscript %TEMP%\\wget.vbs /url:http://#{host_ip_as_seen_by_guest}:#{definition.kickstart_port}#{localfile} /path:#{remotefile}")
-              # sleep 0.1 # We need to wait until it is transferred, 
+              # while true do
+              #   sleep 0.1 # used to debug
+              # end
             end
           end
         end
