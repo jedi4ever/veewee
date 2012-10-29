@@ -112,7 +112,7 @@ FreeBSD:
 FreeBSD_64:
   :fusion: FreeBSD_64
   :kvm:
-  :vbox: FreeBSD-64
+  :vbox: FreeBSD_64
   :parallels: freebsd
 Oracle:
   :fusion: oraclelinux
@@ -131,6 +131,16 @@ Debian:
   :parallels: debian
 Debian_64:
   :fusion: debian5-64
+  :kvm:
+  :vbox: Debian_64
+  :parallels: debian
+Debian6:
+  :fusion: debian6
+  :kvm:
+  :vbox: Debian
+  :parallels: debian
+Debian6_64:
+  :fusion: debian6-64
   :kvm:
   :vbox: Debian_64
   :parallels: debian
@@ -179,7 +189,27 @@ RedHat_64:
   :kvm:
   :vbox: RedHat_64
   :parallels: redhat
-Centos4:
+RedHat5:
+  :fusion: rhel5
+  :kvm:
+  :vbox: RedHat
+  :parallels: redhat
+RedHat5_64:
+  :fusion: rhel5-64
+  :kvm:
+  :vbox: RedHat_64
+  :parallels: redhat
+RedHat6:
+  :fusion: rhel6
+  :kvm:
+  :vbox: RedHat
+  :parallels: redhat
+RedHat6_64:
+  :fusion: rhel6-64
+  :kvm:
+  :vbox: RedHat_64
+  :parallels: redhat
+Centos:
   :fusion: centos
   :kvm:
   :vbox: RedHat
@@ -219,6 +249,10 @@ SUSE_64:
   :kvm:
   :vbox: OpenSUSE_64
   :parallels: suse
+SLES11:
+  :fusion: sles11
+SLES11_64:
+  :fusion: sles11-64
 Fedora:
   :fusion: fedora
   :kvm:

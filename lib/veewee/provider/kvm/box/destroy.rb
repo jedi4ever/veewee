@@ -6,7 +6,7 @@ module Veewee
         def destroy(options={})
           if @connection.servers.all(:name => name).nil?
             env.ui.error "Error:: You tried to destroy a non-existing box '#{name}'"
-            exit -1
+            raise Veewee::Error,"Error:: You tried to destroy a non-existing box '#{name}'"
           end
 
           self.poweroff if running?

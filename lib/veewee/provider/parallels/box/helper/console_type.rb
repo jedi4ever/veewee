@@ -11,123 +11,97 @@ module Veewee
 
         def send_sequence(sequence)
 
-          env.ui.info ""
+          ui.info ""
 
           counter=0
           sequence.each { |s|
             counter=counter+1
 
-            env.ui.info "Typing:[#{counter}]: "+s
+            ui.info "Typing:[#{counter}]: "+s
 
-            keycodes=self.string_to_parallels_keycode(s)
+	    # No need to send the state, we always PRESS then RELEASE.
+	    # So we send the whole string at once and press/release every string item
+            keystring=self.string_to_parallels_keycode_string(s)
 
-            # A keycode is a hash {'code' => 'U' , 'state' => 'pressed'}
-            keycodes.each do |keycode|
-              unless keycode['code']=="wait"
-                send_keycode(keycode)
-                sleep 0.01
-              else
-                sleep 1
-              end
-            end
-            #sleep after each sequence (needs to be param)
+	    send_string(keystring);
           }
 
-          env.ui.info "Done typing."
-          env.ui.info ""
+          ui.info "Done typing."
+          ui.info ""
 
 
         end
 
-        def send_keycode(keycode)
-          python_script=File.join(File.dirname(__FILE__),'..','..','..','..','..','python','parallels_send_key.py')
-          command="python #{python_script} '#{self.name}' '#{keycode['code']}' '#{keycode['state']}'"
+        def send_string(keystring)
+          python_script=File.join(File.dirname(__FILE__),'..','..','..','..','..','python','parallels_send_string.py')
+          command="python #{python_script} '#{self.name}' '#{keystring}'"
           shell_results=shell_exec("#{command}")
         end
 
-        # Returns hash
-        def k2h(key,state)
-          return { 'code' => key, 'state' => state}
-        end
-
-        # Returns hash
-        def press2h(key)
-          k2h(key,'press')
-        end
-
-        # Returns hash
-        def release2h(key)
-          k2h(key,'release')
-        end
-
         # Returns array
-        def press_release(key)
-          seq=Array.new
-          seq << press2h(key)
-          seq << release2h(key)
-          return seq
+        def press_key(key)
+	  return key
         end
 
         # Returns array
         def shift(sequence)
           seq=Array.new
-          seq << press2h('SHIFT_LEFT')
+          seq << press_key('SHIFT_LEFT')
           sequence.each do |s|
             seq << s
           end
-          seq << release2h('SHIFT_LEFT')
           return seq
         end
 
-        def string_to_parallels_keycode(thestring)
+        def string_to_parallels_keycode_string(thestring)
 
 
           # Setup one key presses
           k=Hash.new
           for key in 'A'..'Z'
-            k[key] = shift(press_release(key))
+            k[key] = shift(press_key(key))
           end
 
           for key in 'a'..'z'
-            k[key] = press_release(key.upcase)
+            k[key] = press_key(key.upcase)
           end
 
           for key in '0'..'9'
-            k[key] = press_release(key.upcase)
+            k[key] = press_key(key.upcase)
           end
 
-          k['>'] = shift(press_release('GREATER'))
-          k['.'] = press_release('GREATER')
-          k['<'] = shift(press_release('LESS'))
-          k[':'] = shift(press_release('COLON'))
-          k[';'] = press_release('COLON')
-          k['/'] = press_release('SLASH')
-          k[' '] = press_release('SPACE')
-          k['-'] = press_release('MINUS')
-          k['\''] = press_release('QUOTE')
-          k['{'] = press_release('CBRACE_LEFT')
-          k['}'] = press_release('CBRACE_RIGHT')
-          k['`'] = press_release('TILDA')
-          k['~'] = shift(press_release('TILDA'))
+          k['>'] = shift(press_key('GREATER'))
+          k['.'] = press_key('GREATER')
+          k['<'] = shift(press_key('LESS'))
+          k[':'] = shift(press_key('COLON'))
+          k[';'] = press_key('COLON')
+          k['/'] = press_key('SLASH')
+          k[' '] = press_key('SPACE')
+          k['-'] = press_key('MINUS')
+          k['\''] = press_key('QUOTE')
+          k['{'] = press_key('CBRACE_LEFT')
+          k['}'] = press_key('CBRACE_RIGHT')
+          k['`'] = press_key('TILDA')
+          k['~'] = shift(press_key('TILDA'))
 
-          k['_'] = shift(press_release('MINUS'))
-          k['?'] = shift(press_release('SLASH'))
-          k['"'] = shift(press_release('QUOTE'))
-          k[')'] = shift(press_release('0'))
-          k['!'] = shift(press_release('1'))
-          k['@'] = shift(press_release('2'))
-          k['#'] = shift(press_release('3'))
-          k['$'] = shift(press_release('4'))
-          k['%'] = shift(press_release('5'))
-          k['^'] = shift(press_release('6'))
-          k['&'] = shift(press_release('7'))
-          k['*'] = shift(press_release('8'))
-          k['('] = shift(press_release('9'))
-          k['|'] = shift(press_release('BACKSLASH'))
-          k[','] = press_release('LESS')
-          k['\\'] = press_release('BACKSLASH')
-          k['+'] = shift(press_release('PLUS'))
-          k['='] = press_release('PLUS')
+          k['_'] = shift(press_key('MINUS'))
+          k['?'] = shift(press_key('SLASH'))
+          k['"'] = shift(press_key('QUOTE'))
+          k[')'] = shift(press_key('0'))
+          k['!'] = shift(press_key('1'))
+          k['@'] = shift(press_key('2'))
+          k['#'] = shift(press_key('3'))
+          k['$'] = shift(press_key('4'))
+          k['%'] = shift(press_key('5'))
+          k['^'] = shift(press_key('6'))
+          k['&'] = shift(press_key('7'))
+          k['*'] = shift(press_key('8'))
+          k['('] = shift(press_key('9'))
+          k['|'] = shift(press_key('BACKSLASH'))
+          k[','] = press_key('LESS')
+          k['\\'] = press_key('BACKSLASH')
+          k['+'] = shift(press_key('PLUS'))
+          k['='] = press_key('PLUS')
 
           # Setup special keys
           special=Hash.new;
@@ -153,10 +127,10 @@ module Veewee
           special['<Home>'] = [{ 'code' => 'HOME', 'state' => 'press' }]
 
           for i in 1..12 do
-            special["<F#{i}>"] = press_release("F#{i}")
+            special["<F#{i}>"] = press_key("F#{i}")
           end
 
-          keycodes=Array.new
+          keycodes= ""
 
           until thestring.length == 0
             nospecial=true;
@@ -165,7 +139,7 @@ module Veewee
                 #take thestring
                 #check if it starts with a special key + pop special string
                 special[key].each do |c|
-                  keycodes << c
+                  keycodes.concat("#{c['code']} ")
                 end
                 thestring=thestring.slice(key.length,thestring.length-key.length)
                 nospecial=false;
@@ -176,10 +150,14 @@ module Veewee
               code=k[thestring.slice(0,1)]
               if !code.nil?
                 code.each do |c|
-                  keycodes << c
+		  if(c == 'SHIFT_LEFT'):
+                  	keycodes.concat("#{c}\#")
+		  else
+                  	keycodes.concat("#{c} ")
+		  end
                 end
               else
-                env.ui.info "no scan code for #{thestring.slice(0,1)}"
+                ui.info "no scan code for #{thestring.slice(0,1)}"
               end
               #pop one
               thestring=thestring.slice(1,thestring.length-1)

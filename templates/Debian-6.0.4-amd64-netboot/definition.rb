@@ -4,7 +4,7 @@ Veewee::Definition.declare({
   :disk_size => '10140', :disk_format => 'VDI', :hostiocache => 'off',
   :os_type_id => 'Debian_64',
   :iso_file => "debian-6.0.4-amd64-netinst.iso",
-  :iso_src => "http://cdimage.debian.org/debian-cd/6.0.4/amd64/iso-cd/debian-6.0.4-amd64-netinst.iso",
+  :iso_src => "http://cdimage.debian.org/cdimage/archive/6.0.4/amd64/iso-cd/debian-6.0.4-amd64-netinst.iso",
   :iso_md5 => "4ea4c72e4c9eb6af8f2fa59c3d2b5248",
   :iso_download_timeout => "1000",
   :boot_wait => "10", :boot_cmd_sequence => [

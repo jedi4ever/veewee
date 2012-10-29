@@ -11,7 +11,7 @@ module Veewee
     attr_accessor :path
 
     attr_accessor :cpu_count,:memory_size,:iso_file
-    attr_accessor :disk_size, :disk_format
+    attr_accessor :disk_size, :disk_format, :disk_variant
 
     attr_accessor :os_type_id
 
@@ -26,18 +26,28 @@ module Veewee
     attr_accessor :sudo_cmd
     attr_accessor :shutdown_cmd
 
+    attr_accessor :pre_postinstall_file
+
     attr_accessor :postinstall_files, :postinstall_timeout
 
     attr_accessor :floppy_files
 
 
-    attr_accessor :use_hw_virt_ext,:use_pae,:hostiocache
+    attr_accessor :use_hw_virt_ext,:use_pae,:hostiocache, :use_sata
 
     attr_accessor :iso_dowload_timeout, :iso_src,:iso_md5 ,:iso_download_instructions
 
     attr_accessor :virtualbox
     attr_accessor :vmfusion
     attr_accessor :kvm
+
+
+    def ui
+      return @_ui if defined?(@_ui)
+      @_ui = @env.ui.dup
+      @_ui.resource = @name
+      @_ui
+    end
 
     def initialize(name,path,env)
 
@@ -60,10 +70,12 @@ module Veewee
       @floppy_files = nil
 
       # Default there are no post install files
+      @pre_postinstall_file = nil
       @postinstall_files=[]; @postinstall_timeout = 10000;
 
       @iso_file=""
-      @disk_size = '10240'; @disk_format = 'VDI'
+      @disk_size = '10240'; @disk_format = 'VDI'; @disk_variant = 'Standard'
+      @use_sata = true
 
       #        :hostiocache => 'off' ,
       #        :os_type_id => 'Ubuntu',

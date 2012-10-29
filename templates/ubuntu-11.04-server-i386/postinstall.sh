@@ -2,6 +2,14 @@
 
 date > /etc/vagrant_box_build_time
 
+# Apt-install various things necessary for Ruby, guest additions,
+# etc., and remove optional things to trim down the machine.
+apt-get -y update
+apt-get -y upgrade
+apt-get -y install linux-headers-$(uname -r) build-essential
+apt-get -y install zlib1g-dev libssl-dev libreadline5-dev
+apt-get clean
+
 # Installing the virtualbox guest additions
 apt-get -y install dkms
 VBOX_VERSION=$(cat /home/vagrant/.vbox_version)
@@ -12,14 +20,6 @@ sh /mnt/VBoxLinuxAdditions.run
 umount /mnt
 
 rm VBoxGuestAdditions_$VBOX_VERSION.iso
-
-# Apt-install various things necessary for Ruby, guest additions,
-# etc., and remove optional things to trim down the machine.
-apt-get -y update
-apt-get -y upgrade
-apt-get -y install linux-headers-$(uname -r) build-essential
-apt-get -y install zlib1g-dev libssl-dev libreadline5-dev
-apt-get clean
 
 # Setup sudo to allow no-password sudo for "admin"
 cp /etc/sudoers /etc/sudoers.orig
@@ -43,12 +43,12 @@ cd ..
 rm -rf ruby-1.8.7-p334*
 
 # Install RubyGems 1.7.2
-wget http://production.cf.rubygems.org/rubygems/rubygems-1.7.2.tgz
-tar xzf rubygems-1.7.2.tgz
-cd rubygems-1.7.2
+wget http://production.cf.rubygems.org/rubygems/rubygems-1.8.11.tgz
+tar xzf rubygems-1.8.11.tgz
+cd rubygems-1.8.11
 /opt/ruby/bin/ruby setup.rb
 cd ..
-rm -rf rubygems-1.7.2*
+rm -rf rubygems-1.8.11
 
 # Installing chef & Puppet
 /opt/ruby/bin/gem install chef --no-ri --no-rdoc

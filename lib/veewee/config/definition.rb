@@ -14,20 +14,20 @@ module Veewee
         @env=config.env
         @components=Hash.new
       end
-      
+
       # Currently not used, this is in case we will specify the a definition in the Veeweefile
       # This is for future needs
       def define(name)
         # Depending on type, we create a variable of that type
         definition_stub=OpenStruct.new
 
-        begin        
+        begin
         # Get a real definition object
         real_definition=::Veewee::Definition.new(name,env)
         rescue Error => e
-          env.ui.error "Error loading provider with #{name},#{$!}"
+          env.ui.error("Error loading provider with #{name},#{$!}",:prefix => false)
         end
-        
+
         definition_stub.definition=real_definition
 
         env.logger.debug("config definition"){ "Start defining definition"}

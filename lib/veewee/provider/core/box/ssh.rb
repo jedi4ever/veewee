@@ -20,7 +20,7 @@ module Veewee
               fg_exec(ssh_command,options)
 
             else
-              env.ui.error "Can't ssh into '#{@name} as we couldn't figure out it's ip-address"
+              ui.error("Can't ssh into '#{@name} as we couldn't figure out it's ip-address",:prefix => false)
             end
           else
             ssh_options={:user => definition.ssh_user,:password => definition.ssh_password, :port => definition.ssh_host_port}

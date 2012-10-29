@@ -7,9 +7,9 @@ module Veewee
 
           # Requires valid definition
 
-          env.ui.info "Building Box #{name} with Definition #{definition.name}:"
+          ui.info "Building Box #{name} with Definition #{definition.name}:"
           options.each do |name,value|
-            env.ui.info "- #{name} : #{value}"
+            ui.info "- #{name} : #{value}"
           end
 
           # Checking regexp of postinstall include/excludes
@@ -24,32 +24,32 @@ module Veewee
               self.destroy
               self.reload
             else
-              env.ui.error "you need to provide --force because the box #{name} already exists"
+              ui.error("you need to provide --force because the box #{name} already exists",:prefix => false)
               raise Veewee::Error,"you need to provide --force because the box #{name} already exists"
             end
           end
 
           # By now the box should have been gone, just checking again
           if self.exists?
-            env.ui.error "The box should have been deleted by now. Something went terribly wrong. Sorry"
+            ui.error("The box should have been deleted by now. Something went terribly wrong. Sorry",:prefix => false)
             raise Veewee::Error, "The box should have been deleted by now. Something went terribly wrong. Sorry"
           end
 
           self.create(options)
 
           # Check the GUI mode required
-          env.logger.info "Provider asks the box to start: GUI enabled? #{!options[:nogui]}"
+          env.logger.info "Provider asks the box to start: GUI enabled? #{!options['nogui']}"
           self.up(options)
 
           # Waiting for it to boot
-          env.ui.info "Waiting #{definition.boot_wait.to_i} seconds for the machine to boot"
+          ui.info "Waiting #{definition.boot_wait.to_i} seconds for the machine to boot"
           sleep definition.boot_wait.to_i
 
           # Calculate an available kickstart port
           unless definition.kickstart_port.nil?
             guessed_port=guess_free_port(definition.kickstart_port.to_i,7199).to_s
             if guessed_port.to_s!=definition.kickstart_port
-              env.ui.warn "Changing kickstart port from #{definition.kickstart_port} to #{guessed_port}"
+              ui.warn "Changing kickstart port from #{definition.kickstart_port} to #{guessed_port}"
               definition.kickstart_port=guessed_port.to_s
             end
           end
@@ -70,16 +70,20 @@ module Veewee
           # This needs to be done after the kickstart:
           # As the dhcp request will likely occur just before the kickstart fetch
           until !self.ip_address.nil?
-            env.logger.info "wait for Ip addres"
+            env.logger.info "wait for Ip address"
             sleep 2
           end
 
 
           self.transfer_buildinfo(options)
+
+          # Filtering post install files based upon --postinstall-include and --postinstall--exclude
+          definition.postinstall_files=filter_postinstall_files(options)
+
           self.handle_postinstall(options)
 
-          env.ui.confirm "The box #{name} was build succesfully!"
-          env.ui.info "You can now login to the box with:"
+          ui.success "The box #{name} was build succesfully!"
+          ui.info "You can now login to the box with:"
           if (definition.winrm_user && definition.winrm_password)
             env.ui.info winrm_command_string
           else
@@ -120,7 +124,7 @@ module Veewee
           unless options["postinstall_exclude"].nil?
             options["postinstall_exclude"].each do |p|
               env.logger.info "Exclude pattern #{p}"
-              new_definition.postinstall_files.collect! { |f| f.match(p) ? f.gsub(/^/,"_"): f}
+              new_definition.postinstall_files.reject! { |f| f.match(p) }
             end
           end
 
@@ -162,8 +166,6 @@ module Veewee
         # It requires a definition to find all the necessary information
         def handle_kickstart(options)
 
-          # Filtering post install files based upon --postinstall-include and --postinstall--exclude
-          definition.postinstall_files=filter_postinstall_files(options)
           # Handling the kickstart by web
           kickstartfiles=definition.kickstart_file
 
@@ -195,18 +197,55 @@ module Veewee
         # This function handles all the post-install scripts
         # It requires a box(to login to) and a definition(listing the postinstall files)
         def handle_postinstall(options)
+
+          # Transfer all postinstall files
           definition.postinstall_files.each do |postinstall_file|
             # Filenames of postinstall_files are relative to their definition
             filename=File.join(definition.path,postinstall_file)
-            unless File.basename(postinstall_file)=~/^_/
-              self.copy_to_box(filename,File.basename(filename))
-              if (definition.winrm_user && definition.winrm_password)
-                # no sudo on windows, batch files only please?
-                self.exec(File.basename(filename))
+            self.copy_to_box(filename,File.basename(filename))
+            if not (definition.winrm_user && definition.winrm_password)
+              self.exec("chmod +x \"#{File.basename(filename)}\"")
+            end
+          end
+
+          # Prepare a pre_poinstall file if needed (not nil , or not empty)
+          unless definition.pre_postinstall_file.to_s.empty?
+            pre_filename=File.join(definition.path, definition.pre_postinstall_file)
+            self.copy_to_box(filename,File.basename(pre_filename))
+            if (definition.winrm_user && definition.winrm_password)
+              # not implemented on windows yet
+            else
+              self.exec("chmod +x \"#{File.basename(pre_filename)}\"")
+              # Inject the call to the real script by executing the first argument (it will be the postinstall script file name to be executed)
+              self.exec("execute=\"\\n# We must execute the script passed as the first argument\\n\\$1\" && printf \"%b\\n\" \"$execute\" >> #{File.basename(pre_filename)}")
+            end
+          end
+
+          # Now iterate over the postinstall files
+          definition.postinstall_files.each do |postinstall_file|
+            # Filenames of postinstall_files are relative to their definition
+            filename=File.join(definition.path,postinstall_file)
+
+            unless File.basename(postinstall_file).start_with?("_")
+
+              unless definition.pre_postinstall_file.to_s.empty?
+                raise 'not implemented on windows yet' if (definition.winrm_user && definition.winrm_password)
+                # Filename of pre_postinstall_file are relative to their definition
+                pre_filename=File.join(definition.path, definition.pre_postinstall_file)
+                # Upload the pre postinstall script if not already transfered
+                command = "./" + File.basename(pre_filename)
+                command = sudo(command) + " ./"+File.basename(filename)
               else
-                self.exec("chmod +x \"#{File.basename(filename)}\"")
-                self.exec(sudo("./"+File.basename(filename)))
+                if (definition.winrm_user && definition.winrm_password)
+                  # no sudo on windows, batch files only please?
+                  self.exec(File.basename(filename))
+                else
+                  self.exec(sudo("./"+File.basename(filename)))
+                end
               end
+
+              self.exec(command)
+
             else
               env.logger.info "Skipping postinstallfile #{postinstall_file}"
             end
@@ -220,13 +259,16 @@ module Veewee
           build_info.each do |info|
             begin
               infofile=Tempfile.open("#{info[:filename]}")
+              # Force binary mode to prevent windows from putting CR-LF end line style
+              # http://www.ruby-forum.com/topic/127453#568546
+              infofile.binmode
               infofile.puts "#{info[:content]}"
               infofile.rewind
               infofile.close
               self.copy_to_box(infofile.path,info[:filename])
               infofile.delete
             rescue RuntimeError => ex
-              env.ui.error "Error transfering file #{info[:filename]} failed, possible not enough permissions to write? #{ex}"
+              ui.error("Error transfering file #{info[:filename]} failed, possible not enough permissions to write? #{ex}",:prefix => false)
               raise Veewee::Error,"Error transfering file #{info[:filename]} failed, possible not enough permissions to write? #{ex}"
             end
           end

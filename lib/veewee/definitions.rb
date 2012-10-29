@@ -1,3 +1,4 @@
+require 'grit'
 require 'veewee/definition'
 require 'veewee/templates'
 require 'veewee/template'
@@ -39,7 +40,7 @@ module Veewee
       end
 
       if definitions.length==0
-        env.logger.debug("[Definition] no definitions found") 
+        env.logger.debug("[Definition] no definitions found")
       end
 
       definitions.each(&block)
@@ -61,9 +62,15 @@ module Veewee
 
       env.logger.debug("Forceflag : #{options['force']}")
 
+      git_template=false
+      # Check if the template is a git repo
+      if template_name.start_with?("git://")
+        git_template=true
+      end
+
       # Check if template exists
       template=env.templates[template_name]
-      if template.nil?
+      if template.nil? and ! git_template
         env.logger.fatal("Template '#{template_name}' does not exist")
         raise Veewee::TemplateError, "Template '#{template_name}' does not exist"
       else
@@ -83,19 +90,31 @@ module Veewee
         end
       end
 
-      env.logger.debug("Creating definition #{definition_name} in directory '#{env.definition_dir}' ")
+      env.logger.info("Creating definition #{definition_name} in directory '#{env.definition_dir}' ")
       dst_dir="#{File.join(env.definition_dir,definition_name)}"
       FileUtils.mkdir(dst_dir)
       env.logger.debug("Definition Directory '#{File.join(env.definition_dir,definition_name)}' succesfuly created")
 
       # Start copying/cloning the directory of the template to the definition directory
-      begin
-        env.logger.debug("Starting copy '#{template.path}' to '#{dst_dir}'")
-        FileUtils.cp_r(template.path+"/.",dst_dir)
-        env.logger.debug("Copy '#{template.path}' to '#{dst_dir}' succesfull")
-      rescue Exception => ex
-        env.logger.fatal("Copy '#{template.path}' to #{dst_dir}' failed: #{ex}")
-        raise Veewee::Error , "Copy '#{template.path}' to #{dst_dir}' failed: #{ex}"
+      if (git_template)
+        begin
+          env.logger.info("Starting git clone #{template_name} #{dst_dir}")
+          g = Grit::Git.new(dst_dir)
+          g.clone({ :timeout => false }, template_name, dst_dir)
+        rescue Exception => ex
+          err = "git clone #{template_name} #{dst_dir} failed: #{ex}"
+          env.logger.fatal(err)
+          raise Veewee::DefinitionError, err
+        end
+      else
+        begin
+          env.logger.debug("Starting copy '#{template.path}' to '#{dst_dir}'")
+          FileUtils.cp_r(template.path+"/.",dst_dir)
+          env.logger.debug("Copy '#{template.path}' to '#{dst_dir}' succesfull")
+        rescue Exception => ex
+          env.logger.fatal("Copy '#{template.path}' to #{dst_dir}' failed: #{ex}")
+          raise Veewee::Error , "Copy '#{template.path}' to #{dst_dir}' failed: #{ex}"
+        end
       end
 
       definition=env.definitions[definition_name]

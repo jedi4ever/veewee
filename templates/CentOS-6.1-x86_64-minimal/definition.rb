@@ -1,12 +1,12 @@
 Veewee::Session.declare({
   :cpu_count => '1',
-  :memory_size=> '512',
+  :memory_size=> '480',
   :disk_size => '10140',
   :disk_format => 'VDI',
   :hostiocache => 'off',
   :os_type_id => 'RedHat_64',
   :iso_file => "CentOS-6.1-x86_64-minimal.iso",
-  :iso_src => "http://centos.weepeetelecom.be/6.1/isos/x86_64/CentOS-6.1-x86_64-minimal.iso",
+  :iso_src => "http://vault.centos.org/6.1/isos/x86_64/CentOS-6.1-x86_64-minimal.iso",
   :iso_md5 => "03177dfefb4ebfeb03f457c29f00b0a1",
   :iso_download_timeout => 1000,
   :boot_wait => "10",
@@ -33,7 +33,8 @@ Veewee::Session.declare({
     "virtualbox.sh",
     #"kvm.sh",
     #"vmfusion.sh",
-    "cleanup.sh"
+    "cleanup.sh",
+    "zerodisk.sh"
   ],
   :postinstall_timeout => 10000
 })

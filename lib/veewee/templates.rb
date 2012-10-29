@@ -15,10 +15,9 @@ module Veewee
         if template.exists?
           result=template
           return result
-        else
-          return nil
         end
       end
+      return nil
     end
 
     # Fetch all Templates
@@ -46,7 +45,7 @@ module Veewee
         env.logger.debug("[Template] no templates found") 
       end
 
-      templates.each(&block)
+      Hash[templates.sort].each(&block)
     end
 
     private

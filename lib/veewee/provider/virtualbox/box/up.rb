@@ -4,12 +4,17 @@ module Veewee
       module BoxCommand
 
         def up(options={})
-          gui_enabled=options[:nogui]==true ? false : true
+
+          unless self.exists?
+            raise Veewee::Error, "Error:: You tried to up a non-existing box '#{name}'"
+          end
+
+          gui_enabled=options['nogui']==true ? false : true
 
           raise Veewee::Error,"Box is already running" if self.running?
 
           if definition.winrm_user && definition.winrm_password # prefer winrm 
-            # Before we start,correct the ssh port if needed
+            # Before we start,correct the ssh/winrm port if needed
             forward=self.forwarding("guestwinrm")
             guessed_port=guess_free_port(definition.winrm_host_port.to_i,definition.winrm_host_port.to_i+40).to_s
             definition.winrm_host_port=guessed_port.to_s
@@ -26,6 +31,7 @@ module Veewee
             end
             
           else
+
             # Before we start,correct the ssh port if needed
             forward=self.forwarding("guestssh")
             guessed_port=guess_free_port(definition.ssh_host_port.to_i,definition.ssh_host_port.to_i+40).to_s
@@ -44,14 +50,14 @@ module Veewee
             
           end
 
-          self.suppress_messages    
+          self.suppress_messages
 
           # Once assembled we start the machine
           env.logger.info "Started the VM with GUI Enabled? #{gui_enabled}"
 
-          command="#{@vboxcmd} startvm --type gui '#{name}'"
+          command="#{@vboxcmd} startvm --type gui \"#{name}\""
           unless (gui_enabled)
-            command="#{@vboxcmd} startvm --type headless '#{name}'"
+            command="#{@vboxcmd} startvm --type headless \"#{name}\""
           end
           shell_results=shell_exec("#{command}",{:mute => true})
         end

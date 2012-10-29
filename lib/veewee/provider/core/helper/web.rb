@@ -9,22 +9,27 @@ module Veewee
 
           class FileServlet < WEBrick::HTTPServlet::AbstractServlet
 
-            attr_reader :env
+            attr_reader :ui
 
-            def initialize(server,localfile,env)
+            def initialize(server,localfile,ui)
               super(server)
               @server=server
               @localfile=localfile
-              @env=env
+              @ui=ui
             end
 
             def do_GET(request,response)
               response['Content-Type']='text/plain'
               response.status = 200
-              env.ui.info "Serving file #{@localfile}"
-              displayfile=File.open(@localfile,'r')
-              content=displayfile.read()
-              response.body=content
+              content = File.open(@localfile, "r").read
+              response.body = case File.extname(@localfile)
+              when ".erb"
+                ui.info "Rendering and serving file #{@localfile}"
+                ERB.new(content).result(binding)
+              else
+                ui.info "Serving file #{@localfile}"
+                content
+              end
               #If we shut too fast it might not get the complete file
               # sleep 2
               # @server.shutdown
@@ -58,11 +63,11 @@ module Veewee
               :Logger => webrick_logger,
               :AccessLog => webrick_logger
             )
-            env.logger.debug("mounting file #{filename}")
-            s.mount("#{filename}", Veewee::Provider::Core::Helper::Servlet::FileServlet,File.join(web_dir,filename),env)
+            env.logger.debug("mounting file /#{filename}")
+            s.mount("/#{filename}", Veewee::Provider::Core::Helper::Servlet::FileServlet,File.join(web_dir,filename),ui)
             trap("INT"){
               s.shutdown
-              env.ui.info "Stopping webserver"
+              ui.info "Stopping webserver"
               exit
             }
             s

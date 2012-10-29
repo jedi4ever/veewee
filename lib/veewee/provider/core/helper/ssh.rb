@@ -25,20 +25,21 @@ module Veewee
             defaults={ :port => '22', :timeout => 20000 }
 
             options=defaults.merge(options)
+            timeout = options[:timeout]
+            timeout=ENV['VEEWEE_TIMEOUT'].to_i unless ENV['VEEWEE_TIMEOUT'].nil?
 
-            env.ui.info  "Waiting for ssh login on #{ip} with user #{options[:user]} to sshd on port => #{options[:port]} to work, timeout=#{options[:timeout]} sec"
+            ui.info  "Waiting for ssh login on #{ip} with user #{options[:user]} to sshd on port => #{options[:port]} to work, timeout=#{timeout} sec"
 
             begin
-              Timeout::timeout(options[:timeout]) do
+              Timeout::timeout(timeout) do
                 connected=false
                 while !connected do
                   begin
-                    env.ui.info ".",{:new_line => false}
-                    Net::SSH.start(ip, options[:user], { :port => options[:port] , :password => options[:password], :paranoid => false , :timeout => options[:timeout] }) do |ssh|
-                      env.ui.info "\n"
+                    env.ui.info ".",{:new_line => false , :prefix => false}
+                    Net::SSH.start(ip, options[:user], { :port => options[:port] , :password => options[:password], :paranoid => false , :timeout => timeout }) do |ssh|
 
+                      ui.info "\n", {:prefix => false}
                       block.call(ip);
-                      env.ui.info ""
                       return true
                     end
                   rescue Net::SSH::Disconnect,Errno::ECONNREFUSED, Errno::EHOSTUNREACH, Errno::ECONNABORTED, Errno::ECONNRESET, Errno::ENETUNREACH,Errno::ETIMEDOUT, Errno::ENETUNREACH
@@ -47,10 +48,9 @@ module Veewee
                 end
               end
             rescue Timeout::Error
-              env.ui.error "Ssh timeout #{options[:timeout]} sec has been reached."
-              exit -1
+              raise Veewee::Error, "Ssh timeout #{timeout} sec has been reached."
             end
-            env.ui.info ""
+            ui.info ""
             return false
           end
 
@@ -61,14 +61,13 @@ module Veewee
             options=defaults.merge(options)
 
             Net::SSH.start( host,options[:user],options ) do |ssh|
-              env.ui.info "Transferring #{filename} to #{destination} "
+              ui.info "Transferring #{filename} to #{destination} "
               ssh.scp.upload!( filename, destination ) do |ch, name, sent, total|
                 #   print "\r#{destination}: #{(sent.to_f * 100 / total.to_f).to_i}%"
-                env.ui.info ".",{:new_line => false}
-
+                env.ui.info ".",{:new_line => false , :prefix => false}
               end
             end
-            env.ui.info ""
+            ui.info "", {:prefix => false}
           end
 
 
@@ -81,7 +80,7 @@ module Veewee
             stderr=""
             status=-99999
 
-            env.ui.info "Executing command: #{command}"
+            ui.info "Executing command: #{command}"
 
             Net::SSH.start(host, options[:user], { :port => options[:port], :password => options[:password], :paranoid => false }) do |ssh|
 
@@ -102,7 +101,7 @@ module Veewee
                   ch.on_data do |c, data|
                     stdout+=data
 
-                    env.ui.info data,{:new_line => false}
+                    ui.info data
 
                   end
 
@@ -110,7 +109,7 @@ module Veewee
                   ch.on_extended_data do |c, type, data|
                     stderr+=data
 
-                    env.ui.info data,{:new_line => false}
+                    ui.info data
 
                   end
 
@@ -120,18 +119,18 @@ module Veewee
                     exit_code = data.read_long
                     status=exit_code
                     if exit_code > 0
-                      env.ui.info "ERROR: exit code #{exit_code}"
+                      ui.info "ERROR: exit code #{exit_code}"
                     else
-                      #env.ui.info "Successfully executed"
+                      #ui.info "Successfully executed"
                     end
                   end
 
                   channel.on_request("exit-signal") do |ch, data|
-                    env.ui.info "SIGNAL: #{data.read_long}"
+                    ui.info "SIGNAL: #{data.read_long}"
                   end
 
                   ch.on_close {
-                    #env.ui.info "done!"
+                    #ui.info "done!"
                   }
                   #status=ch.exec "echo $?"
                 end

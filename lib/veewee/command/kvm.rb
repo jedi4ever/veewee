@@ -10,6 +10,7 @@ module Veewee
       method_option :auto,:type => :boolean , :default => false, :aliases => "-a", :desc => "auto answers"
       method_option :postinstall_include, :type => :array, :default => [], :aliases => "-i", :desc => "ruby regexp of postinstall filenames to additionally include"
       method_option :postinstall_exclude, :type => :array, :default => [], :aliases => "-e", :desc => "ruby regexp of postinstall filenames to exclude"
+      method_option :use_emulation, :type => :boolean , :default => false, :desc => "Use QEMU emulation"
       def build(box_name)
         venv=Veewee::Environment.new(options)
         venv.ui=env.ui
@@ -74,13 +75,14 @@ module Veewee
           venv.undefine(definition_name,options)
           venv.definitions.undefine(definition_name,options)
         rescue Error => ex
-          env.ui.error "#{ex}"
+          env.ui.error("#{ex}", :prefix=> false)
           exit -1
         end
       end
 
       desc "validate [NAME]", "Validates a box against kvm compliancy rules"
       method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging"
+      method_option :tags,:type => :array , :default => %w{kvm puppet chef}, :aliases => "-t", :desc => "tags to validate"
       def validate(box_name)
         venv=Veewee::Environment.new(options)
         venv.ui=env.ui

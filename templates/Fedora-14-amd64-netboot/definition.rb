@@ -3,7 +3,7 @@ Veewee::Definition.declare({
   :disk_size => '10140', :disk_format => 'VDI', :hostiocache => 'off', :hwvirtext => 'on',
   :os_type_id => 'Fedora_64',
   :iso_file => "Fedora-14-x86_64-netinst.iso",
-  :iso_src => "http://mirror.uoregon.edu/fedora/linux/releases/14/Fedora/x86_64/iso/Fedora-14-x86_64-netinst.iso",
+  :iso_src => "http://archives.fedoraproject.org/pub/archive/fedora/linux/releases/14/Fedora/x86_64/iso/Fedora-14-x86_64-netinst.iso",
   :iso_md5 => "acd25fc1470f2497cf2a2a245adbfe1e",
   :iso_download_timeout => 1000,
   :boot_wait => "10", :boot_cmd_sequence => [ '<Tab> linux text ks=http://%IP%:%PORT%/ks.cfg<Enter><Enter>' ],

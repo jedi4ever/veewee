@@ -19,6 +19,7 @@ require 'veewee/provider/core/box/issh'
 require 'veewee/provider/core/box/winrm'
 require 'veewee/provider/core/box/iwinrm'
 require 'veewee/provider/core/box/floppy'
+require 'veewee/provider/core/box/validate_tags'
 
 module Veewee
   module Provider
@@ -27,6 +28,7 @@ module Veewee
         attr_accessor :definition
         attr_accessor :env
         attr_accessor :name
+        attr_accessor :provider
 
         include ::Veewee::Provider::Core::Helper::Tcp
         include ::Veewee::Provider::Core::Helper::Web
@@ -37,6 +39,13 @@ module Veewee
         include ::Veewee::Provider::Core::Helper::Iso
 
         include ::Veewee::Provider::Core::BoxCommand
+
+        def ui
+          return @_ui if defined?(@_ui)
+          @_ui = @env.ui.dup
+          @_ui.resource = @name
+          @_ui
+        end
 
         def initialize(name,env)
           @env=env
