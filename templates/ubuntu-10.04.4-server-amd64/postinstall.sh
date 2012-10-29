@@ -58,6 +58,15 @@ rm -rf rubygems-1.8.17*
 # Ruby, RubyGems, and Chef/Puppet are visible
 echo 'PATH=$PATH:/opt/ruby/bin/'> /etc/profile.d/vagrantruby.sh
 
+# Need conditionals around `mesg n` so that Chef doesn't throw
+# `stdin: not a tty`
+sed -i '$d' /root/.profile
+cat << 'EOH' >> /root/.profile
+if `tty -s`; then
+  mesg n
+fi
+EOH
+
 # Installing vagrant keys
 mkdir /home/vagrant/.ssh
 chmod 700 /home/vagrant/.ssh

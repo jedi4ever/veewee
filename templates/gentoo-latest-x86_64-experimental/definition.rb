@@ -1,12 +1,23 @@
-Veewee::Session.declare( {
-  :cpu_count => '2', :memory_size=> '1024',
+require 'net/http'
+
+# Name spacing variables as they are executed inside veewee code
+template_uri = 'http://distfiles.gentoo.org/releases/x86/autobuilds/latest-install-amd64-minimal.txt'
+template_build = Net::HTTP.get_response( URI.parse( template_uri ) ).body
+template_build = /^(([^#].*)\/(.*))/.match( template_build )
+template_uri = "http://distfiles.gentoo.org/releases/x86/autobuilds/#{template_build[1]}.DIGESTS"
+template_digest = Net::HTTP.get_response( URI.parse( template_uri ) ).body
+template_digest = Regexp.new( '^([a-z0-9]{32})\s+ ' + Regexp.escape( template_build[3] ) + '$').match( template_digest )[1]
+
+
+Veewee::Definition.declare( {
+  :cpu_count => '1', :memory_size=> '768',
   :disk_size => '10140', :disk_format => 'VDI',:hostiocache => 'off',
-  :os_type_id => 'Gentoo',
-  :iso_file => "install-amd64-minimal-20111208.iso",
-  :iso_src => "http://distfiles.gentoo.org/releases/amd64/autobuilds/current-iso/install-amd64-minimal-20111208.iso",
-  :iso_md5 => "8c4e10aaaa7cce35503c0d23b4e0a42a",
+  :os_type_id => 'Gentoo_64',
+  :iso_file => template_build[3],
+  :iso_src => "http://distfiles.gentoo.org/releases/x86/autobuilds/#{template_build[1]}",
+  :iso_md5 => template_digest,
   :iso_download_timeout => "1000",
-  :boot_wait => "1",:boot_cmd_sequence => [
+  :boot_wait => "10",:boot_cmd_sequence => [
         '<Wait>'*2,
         'gentoo-nofb<Enter>',
         '<Wait>'*10,
@@ -16,12 +27,12 @@ Veewee::Session.declare( {
         '<Wait><Enter>',
         '2<Enter>',
         '1<Enter>',
-	'<Wait><Wait>ifconfig -a <Enter>',
-	#'sleep 5 ;curl http://%IP%:%PORT%/stages.sh -o stages.sh &&',
-	#'bash stages.sh &<Enter>',
+  '<Wait><Wait>ifconfig -a <Enter>',
+  #'sleep 5 ;curl http://%IP%:%PORT%/stages.sh -o stages.sh &&',
+  #'bash stages.sh &<Enter>',
         'passwd<Enter><Wait><Wait>',
-	'vagrant<Enter><Wait>',
-	'vagrant<Enter><Wait>',
+  'vagrant<Enter><Wait>',
+  'vagrant<Enter><Wait>',
         '/etc/init.d/sshd start<Enter>'
     ],
   :kickstart_port => "7122", :kickstart_timeout => "10000",:kickstart_file => "",

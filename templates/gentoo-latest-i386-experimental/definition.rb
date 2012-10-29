@@ -1,12 +1,28 @@
+require 'net/http'
+
+# Name spacing variables as they are executed inside veewee code
+template_uri = 'http://distfiles.gentoo.org/releases/x86/autobuilds/latest-install-x86-minimal.txt'
+template_build = Net::HTTP.get_response( URI.parse( template_uri ) ).body
+template_build = /^(([^#].*)\/(.*))/.match( template_build )
+template_uri = "http://distfiles.gentoo.org/releases/x86/autobuilds/#{template_build[1]}.DIGESTS"
+template_digest = Net::HTTP.get_response( URI.parse( template_uri ) ).body
+template_digest = Regexp.new( '^([a-z0-9]{32})\s+ ' + Regexp.escape( template_build[3] ) + '$').match( template_digest )[1]
+
+
 Veewee::Definition.declare( {
   :cpu_count => '1', :memory_size=> '768',
   :disk_size => '10140', :disk_format => 'VDI',:hostiocache => 'off',
   :os_type_id => 'Gentoo',
-  :iso_file => "install-x86-minimal-20110726.iso",
-  :iso_src => "http://ftp.halifax.rwth-aachen.de/gentoo/releases/x86/autobuilds/20110726/install-x86-minimal-20110726.iso",
-  :iso_md5 => "29fc74988e7f86417395e376afc1af47",
+  :iso_file => template_build[3],
+  :iso_src => "http://distfiles.gentoo.org/releases/x86/autobuilds/#{template_build[1]}",
+  :iso_md5 => template_digest,
   :iso_download_timeout => "1000",
-  :boot_wait => "120",:boot_cmd_sequence => [
+  :boot_wait => "10",:boot_cmd_sequence => [
+        '<Wait>'*2,
+        'gentoo-nofb<Enter>',
+        '<Wait>'*10,
+        '<Enter>',
+        '<Wait>'*10,
         'net-setup eth0<Enter>',
         '<Wait><Enter>',
         '2<Enter>',

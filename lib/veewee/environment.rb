@@ -69,10 +69,20 @@ module Veewee
       }
 
       options = defaults.merge(options)
+      veeweefile_config = defaults.keys.inject({}) do |memo,obj|
+        if config.env.methods.include?(obj) && !config.env.send(obj).nil?
+          memo.merge({ obj => config.env.send(obj) })
+        else
+          memo
+        end
+      end
+      options = options.merge(veeweefile_config)
 
       # We need to set this variable before the first call to the logger object
       if options.has_key?("debug")
-        ENV['VEEWEE_LOG']="STDOUT"
+        if options["debug"] == true
+          ENV['VEEWEE_LOG']="STDOUT"
+        end
       end
 
       logger.info("environment") { "Environment initialized (#{self})" }
