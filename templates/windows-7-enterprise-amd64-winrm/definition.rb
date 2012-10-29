@@ -9,25 +9,18 @@ Veewee::Session.declare({
     :iso_src => "http://wb.dlservice.microsoft.com/dl/download/release/Win7/3/b/a/3bac7d87-8ad2-4b7a-87b3-def36aee35fa/7600.16385.090713-1255_x64fre_enterprise_en-us_EVAL_Eval_Enterprise-GRMCENXEVAL_EN_DVD.iso",
     :iso_md5 => "1d0d239a252cb53e466d39e752b17c28",
     :iso_download_timeout => "100000",
-
     :cpu_count => '1',
     :memory_size=> '512', 
     :disk_size => '20280', :disk_format => 'VDI', :hostiocache => 'off',
-    
     :floppy_files => [
-      "Autounattend.xml"
+      "Autounattend.xml",
+      "oracle-cert.cer"
     ],
-
-    #:winrm_login_timeout => "10005",
     :winrm_user => "vagrant", :winrm_password => "vagrant",
-    # :winrm_host_port => "6001", :winrm_guest_port => "5985",
-
-    # And run postinstall.sh for up to 10000 seconds
     :postinstall_timeout => "10000",
-    :postinstall_files => ["install-chef.bat"],
-    #"install-vbox-guest.bat",
-    #  "oracle-cert.cer",
-    # No sudo on windows
-    :sudo_cmd => "%f",
+    :postinstall_files => [
+      "install-chef.bat",
+      "install-vbox.bat"
+    ],
     :shutdown_cmd => "shutdown /s /t 10 /c \"Vagrant Shutdown\" /f /d p:4:1",
   })
