@@ -9,13 +9,14 @@ module Veewee
 
           class FileServlet < WEBrick::HTTPServlet::AbstractServlet
 
-            attr_reader :ui
+            attr_reader :ui, :threaded
 
-            def initialize(server,localfile,ui)
+            def initialize(server,localfile,ui,threaded)
               super(server)
               @server=server
               @localfile=localfile
               @ui=ui
+              @threaded=threaded
             end
 
             def do_GET(request,response)
@@ -30,18 +31,27 @@ module Veewee
                 ui.info "Serving file #{@localfile}"
                 content
               end
-              #If we shut too fast it might not get the complete file
-              sleep 2
-              @server.shutdown
+              if not @threaded
+                ui.info "Shutting down for #{@localfile}"
+                @server.shutdown
+              end
             end
           end
 
         end
         module Web
 
-          def wait_for_http_request(filename,options={:timeout => 10, :web_dir => "", :port => 7125})
+          def wait_for_http_request(filename,options) # original blocking
+            s = server_for_http_request(filename,options)
+            s.start
+          end
 
+          def allow_for_http_request(filename,options) # start in new thread
+            s = server_for_http_request(filename,options.merge({:threaded => true}))
+            Thread.new { s.start }
+          end
 
+          def server_for_http_request(filename,options={:timeout => 10, :web_dir => "", :port => 7125, :threaded => false})
             # Calculate the OS equivalent of /dev/null , on windows this is NUL:
             # http://www.ruby-forum.com/topic/115472
             fn = test(?e, '/dev/null') ? '/dev/null' : 'NUL:'
@@ -55,14 +65,15 @@ module Veewee
               :Logger => webrick_logger,
               :AccessLog => webrick_logger
             )
-            env.logger.debug("mounting file /#{filename}")
-            s.mount("/#{filename}", Veewee::Provider::Core::Helper::Servlet::FileServlet,File.join(web_dir,filename),ui)
+            mount_filename = filename.start_with?('/') ? filename : "/#{filename}"
+            env.logger.debug("mounting file #{mount_filename}")
+            s.mount("#{mount_filename}", Veewee::Provider::Core::Helper::Servlet::FileServlet,File.join(web_dir,filename),ui,options[:threaded])
             trap("INT"){
               s.shutdown
               ui.info "Stopping webserver"
               exit
             }
-            s.start
+            s
           end
 
         end #Class

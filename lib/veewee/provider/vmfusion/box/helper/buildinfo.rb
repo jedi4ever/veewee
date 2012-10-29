@@ -43,7 +43,7 @@ module Veewee
           env.logger.info "About to transfer vmware tools iso buildinfo to the box #{name} - #{ip_address} - #{ssh_options}"
           iso_image=guest_iso_path
           if File.exists?(iso_image)
-            self.scp(iso_image,File.basename(iso_image))
+            self.copy_to_box(iso_image,File.basename(iso_image))
           else
             raise Veewee::Error, "We could not find the file #{iso_image}. In newer versions of Fusion, you might have to download the Guest Additions yourself. You can do this by first manually creating a vm and than 'installing the guest additions'"
           end
