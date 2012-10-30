@@ -71,6 +71,7 @@ Veewee::Session.declare({
 # Done installing ?
    'done<Enter>',
    '<Wait>'*6,
+   '<Enter><Wait>',
 # Install non-free firmware files on first boot ? [no] <-- don't know what this is so I'm saying no
    'no<Enter><Wait>',
    'reboot<Enter>'
