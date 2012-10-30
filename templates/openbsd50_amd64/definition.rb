@@ -3,7 +3,7 @@ Veewee::Session.declare({
   :disk_size => '40960', :disk_format => 'VDI', :hostiocache => 'off',
   :os_type_id => 'OpenBSD_64',
   :iso_file => "install50.iso",
-  :iso_src => "http://ftp.plig.net/pub/OpenBSD/5.0/amd64/install50.iso",
+  :iso_src => "http://ftp3.usa.openbsd.org/pub/OpenBSD/5.0/amd64/install50.iso",
   :iso_md5 => "2b7d7ca2acc7f148bd92f065034f9f5a",
   :iso_download_timeout => "1000",
   :boot_wait => "40", :boot_cmd_sequence => [
@@ -71,6 +71,7 @@ Veewee::Session.declare({
 # Done installing ?
    'done<Enter>',
    '<Wait>'*6,
+   '<Enter><Wait>',
 # Install non-free firmware files on first boot ? [no] <-- don't know what this is so I'm saying no
    'no<Enter><Wait>',
    'reboot<Enter>'
