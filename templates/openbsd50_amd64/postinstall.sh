@@ -2,8 +2,8 @@
 echo " "
 echo " Setting PKG_PATH for users "
 echo " "
-echo " export  PKG_PATH=http://ftp.plig.net/pub/OpenBSD/`uname -r`/packages/`arch -s`/ " >> /root/.profile
-echo " export  PKG_PATH=http://ftp.plig.net/pub/OpenBSD/`uname -r`/packages/`arch -s`/ ">> /home/vagrant/.profile
+echo " export  PKG_PATH=http://ftp3.usa.openbsd.org/pub/OpenBSD/`uname -r`/packages/`arch -s`/ " >> /root/.profile
+echo " export  PKG_PATH=http://ftp3.usa.openbsd.org/pub/OpenBSD/`uname -r`/packages/`arch -s`/ ">> /home/vagrant/.profile
 
 # giving root & vagrant bash as shell
 echo " "
@@ -16,7 +16,7 @@ usermod -s /usr/local/bin/bash root
 echo " "
 echo " Installing needed packages "
 echo " "
-export  PKG_PATH=http://ftp.plig.net/pub/OpenBSD/`uname -r`/packages/`arch -s`/ 
+export  PKG_PATH=http://ftp3.usa.openbsd.org/pub/OpenBSD/`uname -r`/packages/`arch -s`/ 
 pkg_add wget curl bash vim-7.3.154p1-no_x11 rsync bzip2 ngrep
 pkg_add ruby-1.8.7.352p1
 pkg_add ruby-gems
@@ -50,7 +50,7 @@ echo " "
 echo " Installing the ports system ! "
 echo " "
 cd /tmp
-wget http://ftp.plig.net/pub/OpenBSD/5.0/ports.tar.gz
+wget http://ftp3.usa.openbsd.org/pub/OpenBSD/5.0/ports.tar.gz
 cd /usr
 sudo tar xzf /tmp/ports.tar.gz
 
