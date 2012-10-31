@@ -22,7 +22,7 @@ Veewee::Definition.declare({
      'fb=false ',
      'debconf/frontend=noninteractive ',
      'console-setup/ask_detect=false ',
-     'console-keymaps-at/keymap=us ',
+     'keyboard-configuration/xkb-keymap=us ',
      '<Enter>'
   ],
   :kickstart_port => "7122",
