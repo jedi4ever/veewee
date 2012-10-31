@@ -82,4 +82,4 @@ ethernet0.displayName = "Ethernet"
 sound.startConnected = "FALSE"
 RemoteDisplay.vnc.enabled = "TRUE"
 RemoteDisplay.vnc.port = "<%= vnc_port %>"
-bios.bootOrder = "hdd,CDROM"
+<% if fusion_version.start_with?('5.') %>bios.bootOrder = "hdd,CDROM"<% end %>
