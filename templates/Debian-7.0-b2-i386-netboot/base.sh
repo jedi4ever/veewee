@@ -7,7 +7,7 @@ apt-get clean
 
 # Set up sudo
 cp /etc/sudoers /etc/sudoers.orig
-sed -i -e 's/%sudo\s+ALL=(ALL:ALL) ALL/%sudo ALL=NOPASSWD:ALL/g' /etc/sudoers
+sed -i -e 's/%sudo[ \t]*ALL=(ALL:ALL) ALL/%sudo ALL=NOPASSWD:ALL/g' /etc/sudoers
 
 # Tweak sshd to prevent DNS resolution (speed up logins)
 echo 'UseDNS no' >> /etc/ssh/sshd_config
