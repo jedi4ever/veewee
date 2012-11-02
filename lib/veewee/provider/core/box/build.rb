@@ -74,6 +74,7 @@ module Veewee
             sleep 2
           end
 
+
           self.transfer_buildinfo(options)
 
           # Filtering post install files based upon --postinstall-include and --postinstall--exclude
@@ -81,9 +82,13 @@ module Veewee
 
           self.handle_postinstall(options)
 
-          ui.success "The box #{name} was built succesfully!"
+          ui.success "The box #{name} was build succesfully!"
           ui.info "You can now login to the box with:"
-          ui.info ssh_command_string
+          if (definition.winrm_user && definition.winrm_password)
+            env.ui.info winrm_command_string
+          else
+            env.ui.info ssh_command_string
+          end
 
           return self
         end
@@ -165,10 +170,10 @@ module Veewee
           kickstartfiles=definition.kickstart_file
 
           if kickstartfiles.nil? || kickstartfiles.length == 0
-            ui.info "Skipping webserver as no kickstartfile was specified"
+            env.ui.info "Skipping webserver as no kickstartfile was specified"
+          else
+            env.ui.info "Starting a webserver #{definition.kickstart_ip}:#{definition.kickstart_port}\n"
           end
-
-          ui.info "Starting a webserver #{definition.kickstart_ip}:#{definition.kickstart_port}\n"
 
           # Check if the kickstart is an array or a single string
           if kickstartfiles.is_a?(String)
@@ -197,17 +202,23 @@ module Veewee
           definition.postinstall_files.each do |postinstall_file|
             # Filenames of postinstall_files are relative to their definition
             filename=File.join(definition.path,postinstall_file)
-            self.scp(filename,File.basename(filename))
-            self.exec("chmod +x \"#{File.basename(filename)}\"")
+            self.copy_to_box(filename,File.basename(filename))
+            if not (definition.winrm_user && definition.winrm_password)
+              self.exec("chmod +x \"#{File.basename(filename)}\"")
+            end
           end
 
           # Prepare a pre_poinstall file if needed (not nil , or not empty)
           unless definition.pre_postinstall_file.to_s.empty?
             pre_filename=File.join(definition.path, definition.pre_postinstall_file)
-            self.scp(pre_filename,File.basename(pre_filename))
-            self.exec("chmod +x \"#{File.basename(pre_filename)}\"")
-            # Inject the call to the real script by executing the first argument (it will be the postinstall script file name to be executed)
-            self.exec("execute=\"\\n# We must execute the script passed as the first argument\\n\\$1\" && printf \"%b\\n\" \"$execute\" >> #{File.basename(pre_filename)}")
+            self.copy_to_box(filename,File.basename(pre_filename))
+            if (definition.winrm_user && definition.winrm_password)
+              # not implemented on windows yet
+            else
+              self.exec("chmod +x \"#{File.basename(pre_filename)}\"")
+              # Inject the call to the real script by executing the first argument (it will be the postinstall script file name to be executed)
+              self.exec("execute=\"\\n# We must execute the script passed as the first argument\\n\\$1\" && printf \"%b\\n\" \"$execute\" >> #{File.basename(pre_filename)}")
+            end
           end
 
           # Now iterate over the postinstall files
@@ -218,14 +229,19 @@ module Veewee
             unless File.basename(postinstall_file).start_with?("_")
 
               unless definition.pre_postinstall_file.to_s.empty?
+                raise 'not implemented on windows yet' if (definition.winrm_user && definition.winrm_password)
                 # Filename of pre_postinstall_file are relative to their definition
                 pre_filename=File.join(definition.path, definition.pre_postinstall_file)
                 # Upload the pre postinstall script if not already transfered
                 command = "./" + File.basename(pre_filename)
                 command = sudo(command) + " ./"+File.basename(filename)
               else
-                command = "./"+File.basename(filename)
-                command = sudo(command)
+                if (definition.winrm_user && definition.winrm_password)
+                  # no sudo on windows, batch files only please?
+                  self.exec(File.basename(filename))
+                else
+                  self.exec(sudo("./"+File.basename(filename)))
+                end
               end
 
               self.exec(command)
@@ -249,7 +265,7 @@ module Veewee
               infofile.puts "#{info[:content]}"
               infofile.rewind
               infofile.close
-              self.scp(infofile.path,info[:filename])
+              self.copy_to_box(infofile.path,info[:filename])
               infofile.delete
             rescue RuntimeError => ex
               ui.error("Error transfering file #{info[:filename]} failed, possible not enough permissions to write? #{ex}",:prefix => false)

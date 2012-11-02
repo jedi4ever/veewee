@@ -22,7 +22,7 @@ Gem::Specification.new do |s|
   s.add_dependency "net-ssh",  "~> 2.2.0"
 
   s.add_dependency "popen4",   "~> 0.1.2"
-  s.add_dependency "thor",     "> 0.14"
+  s.add_dependency "thor",     "~> 0.15"
   s.add_dependency "highline"
   s.add_dependency "progressbar"
   s.add_dependency "i18n"

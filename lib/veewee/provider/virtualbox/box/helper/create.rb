@@ -31,6 +31,15 @@ module Veewee
           end
         end
 
+        def add_winrm_nat_mapping
+
+          unless definition.nil?
+            #Map SSH Ports
+            command="#{@vboxcmd} modifyvm '#{name}' --natpf1 'guestwinrm,tcp,,#{definition.winrm_host_port},,#{definition.winrm_guest_port}'"
+            shell_exec("#{command}")
+          end
+        end
+
         def add_shared_folder
           command="#{@vboxcmd} sharedfolder add  \"#{name}\" --name \"veewee-validation\" --hostpath \"#{File.expand_path(env.validation_dir)}\" --automount"
           shell_exec("#{command}")
