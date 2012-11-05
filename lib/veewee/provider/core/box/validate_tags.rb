@@ -31,7 +31,13 @@ module Veewee
           ENV['VEEWEE_BOXNAME']=@name
           ENV['VEEWEE_PROVIDER']=@provider.name
 
-          feature_path=File.join(File.dirname(__FILE__),"..","..","..","..","..","validation","veewee.feature")
+          if definition.winrm_user && definition.winrm_password # prefer winrm 
+            featurefile="veewee-windows.feature"
+          else
+            featurefile="veewee.feature"
+          end
+
+          feature_path=File.join(File.dirname(__FILE__),"..","..","..","..","..","validation",featurefile)
 
           features=Array.new
           features[0]=feature_path

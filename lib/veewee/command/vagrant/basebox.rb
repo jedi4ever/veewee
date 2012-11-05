@@ -8,6 +8,7 @@ require 'veewee/command/vagrant/destroy'
 require 'veewee/command/vagrant/up'
 require 'veewee/command/vagrant/halt'
 require 'veewee/command/vagrant/ssh'
+require 'veewee/command/vagrant/winrm'
 require 'veewee/command/vagrant/define'
 require 'veewee/command/vagrant/undefine'
 require 'veewee/command/vagrant/validate'
@@ -33,6 +34,7 @@ module Veewee
           @subcommands.register(:up)    { Veewee::Command::Vagrant::Up }
           @subcommands.register(:halt)    { Veewee::Command::Vagrant::Halt }
           @subcommands.register(:ssh)    { Veewee::Command::Vagrant::Ssh }
+          @subcommands.register(:winrm)    { Veewee::Command::Vagrant::Winrm }
           @subcommands.register(:define)    { Veewee::Command::Vagrant::Define }
           @subcommands.register(:undefine)    { Veewee::Command::Vagrant::Undefine }
           @subcommands.register(:export)    { Veewee::Command::Vagrant::Export }
