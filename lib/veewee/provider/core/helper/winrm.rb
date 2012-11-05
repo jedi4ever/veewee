@@ -21,7 +21,7 @@ module Veewee
           require 'log4r'
           require 'em-winrm'
           require 'highline'
-          
+
           def winrm_up?(ip,options)
             if not @winrm_up
               @httpcli = HTTPClient.new(:agent_name => 'Ruby WinRM Client')
@@ -33,7 +33,7 @@ module Veewee
           rescue HTTPClient::ReceiveTimeoutError
             @winrm_up = false
           end
-            
+
 
           def when_winrm_login_works(ip="127.0.0.1", options = {}, &block)
 
@@ -43,7 +43,7 @@ module Veewee
             begin
               Timeout::timeout(options[:timeout]) do
                 if @login_works[ip]
-                    block.call(ip);
+                  block.call(ip);
                 else
                   env.ui.info  "Waiting for winrm login on #{ip} with user #{options[:user]} to windows on port => #{options[:port]} to work, timeout=#{options[:timeout]} sec"
                   until @connected do
@@ -80,7 +80,7 @@ module Veewee
             end
             return false
           end
-          
+
 
           def winrm_transfer_file(host,filename,destination = '.' , options = {})
             options = winrm_options.merge(options.merge({:paranoid => false }))
@@ -107,52 +107,52 @@ module Veewee
             end
             client
           end
-          
+
           def winrm_execute(host,command, options)
-            
+
             options = winrm_options.merge( # global default
-              { # function defaults
-                :exitcode => "0",
-                :progress => "on"
-              }.merge(
-                options # calling override
-                ))
-            stdout=""
-            stderr=""
-            status=-99999
-            
-            @session ||= new_session(host, options)
+                                          { # function defaults
+                                            :exitcode => "0",
+                                            :progress => "on"
+                                          }.merge(
+                                            options # calling override
+                                          ))
+                                          stdout=""
+                                          stderr=""
+                                          status=-99999
 
-            env.ui.info "Executing winrm command: #{command}" if options[:progress]
-            
-            @remote_id ||= @session.open_shell
-            command_id = @session.run_command(@remote_id, command)
-            output = @session.get_command_output(@remote_id, command_id) do |out,error|
-              if out
-                stdout += out 
-                env.ui.info out,{:new_line => false} if options[:progress]
-              end
-              if error
-                stderr += error
-                env.ui.info error,{:new_line => false} if options[:progress]
-              end
-            end
-            status = output[:exitcode]
-            @session.close_shell(@remote_id)
-            @remote_id = nil
-            # env.ui.info "EXITCODE: #{status}" if status > 0
-            # @session.unbind
-            # FIXME: May want to look for a list of possible exitcodes
-            if (status.to_s != options[:exitcode] )
-              if (options[:exitcode]=="*")
-                #its a test so we don't need to worry
-              else
-                raise "Exitcode was not what we expected"
-              end
+                                          @session ||= new_session(host, options)
 
-            end
+                                          env.ui.info "Executing winrm command: #{command}" if options[:progress]
 
-            return Veewee::Provider::Core::Helper::WinrmResult.new(stdout,stderr,status)
+                                          @remote_id ||= @session.open_shell
+                                          command_id = @session.run_command(@remote_id, command)
+                                          output = @session.get_command_output(@remote_id, command_id) do |out,error|
+                                            if out
+                                              stdout += out 
+                                              env.ui.info out,{:new_line => false} if options[:progress]
+                                            end
+                                            if error
+                                              stderr += error
+                                              env.ui.info error,{:new_line => false} if options[:progress]
+                                            end
+                                          end
+                                          status = output[:exitcode]
+                                          @session.close_shell(@remote_id)
+                                          @remote_id = nil
+                                          # env.ui.info "EXITCODE: #{status}" if status > 0
+                                          # @session.unbind
+                                          # FIXME: May want to look for a list of possible exitcodes
+                                          if (status.to_s != options[:exitcode] )
+                                            if (options[:exitcode]=="*")
+                                              #its a test so we don't need to worry
+                                            else
+                                              raise "Exitcode was not what we expected"
+                                            end
+
+                                          end
+
+                                          return Veewee::Provider::Core::Helper::WinrmResult.new(stdout,stderr,status)
 
           end
 

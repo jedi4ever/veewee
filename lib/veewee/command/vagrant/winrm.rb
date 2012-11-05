@@ -21,12 +21,12 @@ module Veewee
           # Parse the options
           argv = parse_options(opts)
           return if !argv
-          raise ::Vagrant::Errors::CLIInvalidUsage, :help => opts.help.chomp if argv.length < 2
+          raise ::Vagrant::Errors::CLIInvalidUsage, :help => opts.help.chomp if argv.length < 1
 
           begin
             venv=Veewee::Environment.new(options)
             venv.ui=@env.ui
-            venv.providers["virtualbox"].get_box(argv[0]).iwinrm(arg[1])
+            venv.providers["virtualbox"].get_box(argv[0]).winrm(argv[1])
           rescue Veewee::Error => ex
             venv.ui.error ex
             exit -1

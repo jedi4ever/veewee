@@ -62,14 +62,6 @@ module Veewee
         venv.providers["virtualbox"].get_box(box_name).winrm(command,{:exitcode => "*"})
       end
 
-      desc "iwinrm [BOXNAME] [COMMAND]", "Interactive winrm login"
-      method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging"
-      def iwinrm(box_name,command=nil)
-        venv=Veewee::Environment.new(options)
-        venv.ui=env.ui
-        venv.providers["virtualbox"].get_box(box_name).iwinrm(command)
-      end
-
       desc "copy [BOXNAME] [SRC] [DST]", "Copy a file to the VM"
       method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging"
       def copy(box_name,src,dst)
