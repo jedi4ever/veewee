@@ -25,7 +25,7 @@ module Veewee
           raise ::Fission::Error,"VM #{name} does not exist" unless self.exists?
 
           unless mac_address.nil?
-            lease = Fission::Lease.all.data.find { |l| l.mac_address=mac_address}
+            lease = Fission::Lease.find_by_mac_address(mac_address).data
             return lease.ip_address unless lease.nil?
             return nil
           else

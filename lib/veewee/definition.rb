@@ -40,7 +40,8 @@ module Veewee
     attr_accessor :virtualbox
     attr_accessor :vmfusion
     attr_accessor :kvm
-
+    attr_accessor :add_shares
+    attr_accessor :vmdk_file
 
     def ui
       return @_ui if defined?(@_ui)

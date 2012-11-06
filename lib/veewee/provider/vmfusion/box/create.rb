@@ -43,16 +43,21 @@ module Veewee
           fusion_definition=definition.dup
 
           fusion_definition.os_type_id=fusion_os_type(definition.os_type_id)
-
+ 
           FileUtils.mkdir_p(vm_path)
           current_dir=FileUtils.pwd
           FileUtils.chdir(vm_path)
+       
+          unless definition.vmdk_file.nil?
+            src = "#{File.join(definition.path,definition.vmdk_file)}"
+            FileUtils.cp(src, vm_path)
+          end
+
           aFile = File.new(vmx_file_path, "w")
           aFile.write(vmx_template(fusion_definition))
           aFile.close
           FileUtils.chdir(current_dir)
         end
-
       end
     end
   end

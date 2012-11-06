@@ -1,5 +1,20 @@
+
+
 module Veewee
   module Command
+    class Fusion < Veewee::Command::GroupBase
+      register "add_share", "Adds a Share to the Guest"
+      desc "add_share [BOX_NAME] [SHARE_NAME] [SHARE_PATH]", "hello"
+      def add_share(box_name, share_name, share_path)
+        venv=Veewee::Environment.new(options)
+        venv.ui=env.ui
+#          command="#{File.dirname().shellescape}/vmware-vdiskmanager -c -s #{definition.disk_size}M -a lsilogic -t #{disk_type} #{name}.vmdk"
+#          shell_results=shell_exec("#{command}",{:mute => true})
+        venv.providers["vmfusion"].get_box(box_name).add_share(share_name, share_path)
+        
+      end
+    end
+
     class Fusion< Veewee::Command::GroupBase
 
       register "fusion", "Subcommand for Vmware fusion"
