@@ -20,7 +20,8 @@ Veewee::Session.declare({
     :postinstall_timeout => "10000",
     :postinstall_files => [
       "install-chef.bat",
-      "_install-vbox.bat"
+      "install-puppet.bat",
+      "install-vbox.bat"
     ],
     :shutdown_cmd => "shutdown /s /t 10 /c \"Vagrant Shutdown\" /f /d p:4:1",
   })
