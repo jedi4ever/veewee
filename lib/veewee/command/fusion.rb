@@ -16,7 +16,7 @@ module Veewee
         venv.providers["vmfusion"].get_box(box_name).build(options)
       end
 
-      method_option :force,:type => :boolean , :default => false, :aliases => "-f", :desc => "force the destroy" 
+      method_option :force,:type => :boolean , :default => false, :aliases => "-f", :desc => "force the destroy"
       method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging"
       method_option :nogui,:type => :boolean , :default => false, :aliases => "-n", :desc => "no gui"
       desc "destroy [BOXNAME]", "Destroys the virtualmachine that was built"
@@ -27,7 +27,7 @@ module Veewee
       end
 
       method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging"
-      method_option :force,:type => :boolean , :default => false, :aliases => "-f", :desc => "force the shutdown" 
+      method_option :force,:type => :boolean , :default => false, :aliases => "-f", :desc => "force the shutdown"
       desc "halt [BOXNAME]", "Activates a shutdown the virtualmachine"
       def halt(box_name)
         venv=Veewee::Environment.new(options)
@@ -51,6 +51,25 @@ module Veewee
         venv.ui=env.ui
         venv.providers["vmfusion"].get_box(box_name).issh(command)
       end
+
+
+      desc "winrm [BOXNAME] [COMMAND]", "Execute command via winrm"
+      method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging"
+      def winrm(box_name,command=nil)
+        venv=Veewee::Environment.new(options)
+        venv.ui=env.ui
+        venv.providers["vmfusion"].get_box(box_name).winrm(command,{:exitcode => "*"})
+      end
+
+      desc "copy [BOXNAME] [SRC] [DST]", "Copy a file to the VM"
+      method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging"
+      def copy(box_name,src,dst)
+        venv=Veewee::Environment.new(options)
+        venv.ui=env.ui
+        venv.providers["vmfusion"].get_box(box_name).copy_to_box(src,dst)
+      end
+
+
 
       desc "define [BOXNAME] [TEMPLATE]", "Define a new basebox starting from a template"
       method_option :force,:type => :boolean , :default => false, :aliases => "-f", :desc => "overwrite the definition"
@@ -94,7 +113,7 @@ module Veewee
         venv=Veewee::Environment.new(options)
         venv.ui=env.ui
         venv.ostypes.each do |name|
-           env.ui.info "- #{name}"
+          env.ui.info "- #{name}"
         end
       end
 

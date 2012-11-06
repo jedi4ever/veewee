@@ -27,7 +27,13 @@ module Veewee
           env.logger.info("Checking version by querying the system_profiler")
           env.logger.debug(shell_results.stdout)
 
-          version = shell_results.stdout.split(/VMware/)[1].split(/\n/)[2].split(/:/)[1].strip
+          if (shell_results.stdout == "")
+            ui.warn "Could not detect the exact version of vmware. assuming 5.1"
+            version = "5.1"
+          else
+            version = shell_results.stdout.split(/VMware/)[1].split(/\n/)[2].split(/:/)[1].strip
+          end
+
           return version
         end
 
