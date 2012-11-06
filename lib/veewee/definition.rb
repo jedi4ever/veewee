@@ -67,6 +67,9 @@ module Veewee
       # Default there is no ISO file mounted
       @iso_file = nil, @iso_src = nil ; @iso_md5 = nil ; @iso_download_timeout=1000 ; @iso_download_instructions = nil
 
+      # Shares to add
+      @add_shares = []
+
       # Default is no floppy mounted
       @floppy_files = nil
 

@@ -23,15 +23,17 @@ module Veewee
           require 'highline'
 
           def winrm_up?(ip,options)
-            if not @winrm_up
-              @httpcli = HTTPClient.new(:agent_name => 'Ruby WinRM Client')
-              @httpcli.receive_timeout = 10
-              @httpcli.set_auth(nil, options[:user], options[:pass])
-              @httpcli.get("http://#{ip}:#{options[:port]}/wsman")
-              @winrm_up = true
+            begin
+              if not @winrm_up
+                @httpcli = HTTPClient.new(:agent_name => 'Ruby WinRM Client')
+                @httpcli.receive_timeout = 10
+                @httpcli.set_auth(nil, options[:user], options[:pass])
+                @httpcli.get("http://#{ip}:#{options[:port]}/wsman")
+                @winrm_up = true
+              end
+            rescue HTTPClient::ReceiveTimeoutError,HTTPClient::ConnectTimeoutError
+              @winrm_up = false
             end
-          rescue HTTPClient::ReceiveTimeoutError
-            @winrm_up = false
           end
 
 
@@ -48,7 +50,7 @@ module Veewee
                   env.ui.info  "Waiting for winrm login on #{ip} with user #{options[:user]} to windows on port => #{options[:port]} to work, timeout=#{options[:timeout]} sec"
                   until @connected do
                     begin
-                      sleep 1 
+                      sleep 1
                       env.ui.info ".",{:new_line => false}
                       next if not winrm_up?(ip, options)
                       winrm_execute(ip,"hostname",options.merge({:progress => nil}))
@@ -59,10 +61,10 @@ module Veewee
                       sleep 1
                       @connected = true
                       return true
-                    rescue Exception => e  
+                    rescue Exception => e
                       puts e.inspect
-                      puts e.message  
-                      puts e.backtrace.inspect  
+                      puts e.message
+                      puts e.backtrace.inspect
                       sleep 5
                     end
                   end
@@ -100,7 +102,7 @@ module Veewee
               endpoint = "http://#{host}:#{opts[:port]}/wsman"
               client = ::WinRM::WinRMWebService.new(endpoint, :plaintext, opts)
               if opts[:operation_timeout]
-                client.set_timeout(opts[:operation_timeout]) 
+                client.set_timeout(opts[:operation_timeout])
               end
             rescue ::WinRM::WinRMAuthorizationError => error
               raise ::WinRM::WinRMAuthorizationError.new("#{error.message}@#{host}")
@@ -129,7 +131,7 @@ module Veewee
                                           command_id = @session.run_command(@remote_id, command)
                                           output = @session.get_command_output(@remote_id, command_id) do |out,error|
                                             if out
-                                              stdout += out 
+                                              stdout += out
                                               env.ui.info out,{:new_line => false} if options[:progress]
                                             end
                                             if error
