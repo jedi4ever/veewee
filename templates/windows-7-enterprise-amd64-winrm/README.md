@@ -43,10 +43,10 @@ one of the names listed in the sources/install.wim on the install DVD .iso
 
 
 
-# Use the Name : from 'Dism.exe /Get-WIMInfo /WimFile:d:\sources\install.wim'
-# <InstallFrom>
-#     <MetaData wcm:action="add">
-#         <Key>/IMAGE/NAME</Key>
-#         <Value>Windows 7 ENTERPRISE</Value>
-#     </MetaData>
-# </InstallFrom>
+    # Use the Name : from 'Dism.exe /Get-WIMInfo /WimFile:d:\sources\install.wim'
+    # <InstallFrom>
+    #     <MetaData wcm:action="add">
+    #         <Key>/IMAGE/NAME</Key>
+    #         <Value>Windows 7 ENTERPRISE</Value>
+    #     </MetaData>
+    # </InstallFrom>
