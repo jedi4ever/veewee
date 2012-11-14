@@ -10,7 +10,7 @@ module Veewee
     attr_accessor :env
     attr_accessor :path
 
-    attr_accessor :cpu_count,:memory_size,:iso_file
+    attr_accessor :cpu_count,:memory_size,:video_memory_size,:iso_file
     attr_accessor :disk_size, :disk_format, :disk_variant
 
     attr_accessor :os_type_id
@@ -61,8 +61,8 @@ module Veewee
         @path=path
       end
 
-      # Default is 1 CPU + 256 Mem of memory
-      @cpu_count='1' ; @memory_size='256';
+      # Default is 1 CPU + 256 Mem of memory + 8 Mem of video memory
+      @cpu_count='1' ; @memory_size='256'; @video_memory_size='8'
 
       # Default there is no ISO file mounted
       @iso_file = nil, @iso_src = nil ; @iso_md5 = nil ; @iso_download_timeout=1000 ; @iso_download_instructions = nil
