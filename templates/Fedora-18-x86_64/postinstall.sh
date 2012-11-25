@@ -20,7 +20,9 @@ yum -y install \
   rubygem-rest-client \
   rubygem-treetop \
   rubygem-uuidtools \
-  wget
+  wget \
+  tar \
+  bzip2
 
 cd /tmp
 wget http://download.virtualbox.org/virtualbox/$VBOX_VERSION/VBoxGuestAdditions_$VBOX_VERSION.iso
