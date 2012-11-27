@@ -5,7 +5,7 @@ Veewee::Session.declare({
   :os_type_id => 'Fedora',
   :iso_file => "Fedora-18-Beta-TC9-i386-DVD.iso",
   :iso_src => "http://dl.fedoraproject.org/pub/alt/stage/18-Beta-TC9/Fedora/i386/iso/Fedora-18-Beta-TC9-i386-DVD.iso",
-  :iso_md5 => "",
+  :iso_md5 => "a673a3c4fa6fd731a7caeef75e3ca729",
   :iso_download_timeout => 1000,
   :boot_wait => "10", :boot_cmd_sequence => [ '<Tab> linux text biosdevname=0 ks=http://%IP%:%PORT%/ks.cfg<Enter><Enter>' ],
   :kickstart_port => "7122", :kickstart_timeout => 10000, :kickstart_file => "ks.cfg",
