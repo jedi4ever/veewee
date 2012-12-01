@@ -63,3 +63,21 @@ Add '.erb' to your files in a definition and they will get rendered (useful for 
 ## Removing a definition
 
     veewee vbox undefine 'myubuntu'
+
+## Provider ``vm_options``
+
+Each provider _can_ take options that are specific to them ; more detail will
+be available in each provider documentation but let's have a quick overview.
+
+    Veewee::Definition.declare( {
+        :cpu_count => '1', :memory_size=> '256', 
+        :disk_size => '10140', :disk_format => 'VDI', :disk_variant => 'Standard',
+        # […]
+        :postinstall_files => [ "postinstall.sh"],:postinstall_timeout => "10000"
+        :kvm => { :vm_options => ['network_type' => 'bridge', 'network_bridge_name' => 'brlxc0']}
+        :virtualbox => { :vm_options => [ 'pae' => 'on', 'ioapic' => 'one'] }
+     }
+    )
+
+This box will have ``pae`` and ``ioapic`` enabled on virtualbox, and will use
+the ``brlxc0`` bridge on with kvm (on libvirt).
