@@ -32,12 +32,12 @@ module Veewee
               raise Veewee::Error,"You need at least one (active) storage pool defined. This needs to be available if you connect to qemu:///system"
             end
 
-            env.logger.info "Checking available networks"
-            networks=conn.list_networks
-            env.logger.info "Networks: #{networks.join(',')}"
-            if networks.count < 1
-              raise Veewee::Error,"You need at least one (active) network defined. This needs to be available if you connect to qemu:///system"
-            end
+            #env.logger.info "Checking available networks"
+            #networks=conn.list_networks
+            #env.logger.info "Networks: #{networks.join(',')}"
+            #if networks.count < 1
+            #  raise Veewee::Error,"You need at least one (active) network defined. This needs to be available if you connect to qemu:///system"
+            #end
 
             # http://www.libvirt.org/html/libvirt-libvirt.html#virGetVersion
             # format major * 1,000,000 + minor * 1,000 + release
