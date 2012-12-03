@@ -33,7 +33,7 @@ module Veewee
             definition_name=argv[0]
             template_name=argv[1]
             venv.definitions.define(definition_name,template_name,options)
-            venv.ui.info "The basebox '#{definition_name}' has been succesfully created from the template '#{template_name}'"
+            venv.ui.info "The basebox '#{definition_name}' has been successfully created from the template '#{template_name}'"
             venv.ui.info "You can now edit the definition files stored in definitions/#{definition_name} or build the box with:"
             venv.ui.info "vagrant basebox build '#{definition_name}'"
           rescue Veewee::Error => ex
