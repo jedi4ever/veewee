@@ -1,10 +1,10 @@
 Veewee::Session.declare({
-  :cpu_count => '1', :memory_size=> '256', 
+  :cpu_count => '1', :memory_size=> '256',
   :disk_size => '40960', :disk_format => 'VDI', :hostiocache => 'off',
-  :os_type_id => 'OpenBSD_64',
-  :iso_file => "openbsd50_64.iso",
-  :iso_src => "http://ftp3.usa.openbsd.org/pub/OpenBSD/5.0/amd64/install50.iso",
-  :iso_md5 => "2b7d7ca2acc7f148bd92f065034f9f5a",
+  :os_type_id => 'OpenBSD_32',
+  :iso_file => "openbsd52_32.iso",
+  :iso_src => "http://ftp3.usa.openbsd.org/pub/OpenBSD/5.2/i386/install52.iso",
+  :iso_md5 => "a10f51d910052b477147e198c08089f8",
   :iso_download_timeout => "1000",
   :boot_wait => "40", :boot_cmd_sequence => [
 # I - install
@@ -12,7 +12,7 @@ Veewee::Session.declare({
 # set the keyboard
    'us<Enter>',
 # set the hostname
-   'OpenBSD50-x64<Enter>',
+   'OpenBSD52-x32<Enter>',
 # Which nic to config ? [em0]
    '<Enter>',
 # do you want dhcp ? [dhcp]
@@ -22,8 +22,6 @@ Veewee::Session.declare({
    'none<Enter>',
 # Which other nic do you wish to configure [done]
    'done<Enter>',
-# Manual netw configuration ? [no]
-   'no<Enter>',
 # Pw for root account
    'vagrant<Enter>',
    'vagrant<Enter>',
@@ -57,24 +55,26 @@ Veewee::Session.declare({
    'cd<Enter>',
 # Available cd-roms : cd0
    '<Enter>',
-# Pathneame to sets ? [5.0/amd64]
+# Pathneame to sets ? [5.2/i386]
    '<Enter>',
 # Remove games and X
-   '-game50.tgz<Enter>',
-   '-xbase50.tgz<Enter>',
-   '-xetc50.tgz<Enter>',
-   '-xshare50.tgz<Enter>',
-   '-xfont50.tgz<Enter>',
-   '-xserv50.tgz<Enter>',
+   '-game52.tgz<Enter>',
+   '-xbase52.tgz<Enter>',
+   '-xetc52.tgz<Enter>',
+   '-xshare52.tgz<Enter>',
+   '-xfont52.tgz<Enter>',
+   '-xserv52.tgz<Enter>',
    'done<Enter>',
    '<Wait>'*90,
 # Done installing ?
    'done<Enter>',
+# Time appears wrong. Set to ...? [yes]
+   'yes<Enter><Wait>',
    '<Wait>'*6,
-   '<Enter><Wait>',
 # Install non-free firmware files on first boot ? [no] <-- don't know what this is so I'm saying no
    'no<Enter><Wait>',
-   'reboot<Enter>'
+   'reboot<Enter>',
+   '<Wait>'*6
   ],
   :kickstart_port => "7122", :kickstart_timeout => "10000", :kickstart_file => "",
   :ssh_login_timeout => "10000", :ssh_user => "root", :ssh_password => "vagrant", :ssh_key => "",
