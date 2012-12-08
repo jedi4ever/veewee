@@ -5,6 +5,10 @@ module Veewee
 
         def build(options={})
 
+          if definition.nil?
+            raise Veewee::Error,"Could not find the definition. Make sure you are one level above the definitions directory when you execute the build command."
+          end
+
           # Requires valid definition
 
           ui.info "Building Box #{name} with Definition #{definition.name}:"
