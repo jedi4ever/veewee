@@ -6,7 +6,7 @@ module Veewee
         def exists?
           command="#{@vboxcmd} list vms"
           shell_results=shell_exec("#{command}",{:mute => true})
-          exists=shell_results.stdout.split(/\n/).grep(/\"#{name}\"/).size!=0
+          exists=shell_results.stdout.split(/\n/).grep(/\"#{name.gsub(/\+/,'\\\+')}\"/).size!=0
 
           env.logger.info("Vm exists? #{exists}")
           return exists
@@ -15,7 +15,7 @@ module Veewee
         def running?
           command="#{@vboxcmd} list runningvms"
           shell_results=shell_exec("#{command}",{:mute => true})
-          running=shell_results.stdout.split(/\n/).grep(/\"#{name}\"/).size!=0
+          running=shell_results.stdout.split(/\n/).grep(/\"#{name.gsub(/\+/,'\\\+')}\"/).size!=0
 
           env.logger.info("Vm running? #{running}")
           return running
