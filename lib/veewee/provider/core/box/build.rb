@@ -79,7 +79,9 @@ module Veewee
           end
 
 
-          self.transfer_buildinfo(options)
+          if ! definition.skip_iso_transfer then
+            self.transfer_buildinfo(options)
+          end
 
           # Filtering post install files based upon --postinstall-include and --postinstall--exclude
           definition.postinstall_files=filter_postinstall_files(options)
