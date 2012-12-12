@@ -69,21 +69,25 @@ module Veewee
         def set_definition(definition_name)
           @definition=env.definitions[definition_name]
 
-          # We check for windows as em-winrm is not available on ruby1.9
-          is_windows =  @definition.os_type_id.start_with?('Windows')
+          unless @definition.nil?
+            # We check for windows as em-winrm is not available on ruby1.9
+            is_windows =  @definition.os_type_id.start_with?('Windows')
 
-          # On windows systems
-          if is_windows
-            # Check if winrm is available
-            if gem_available?('em-winrm')
-              require 'veewee/provider/core/box/winrm'
-              require 'veewee/provider/core/helper/winrm'
-              require 'veewee/provider/core/box/wincp'
+            # On windows systems
+            if is_windows
+              # Check if winrm is available
+              if gem_available?('em-winrm')
+                require 'veewee/provider/core/box/winrm'
+                require 'veewee/provider/core/helper/winrm'
+                require 'veewee/provider/core/box/wincp'
 
-              self.class.send(:include, ::Veewee::Provider::Core::Helper::Winrm)
-            else
-              raise Veewee::Error, "\nTo build a windows basebox you need to install the gem 'em-winrm' first"
+                self.class.send(:include, ::Veewee::Provider::Core::Helper::Winrm)
+              else
+                raise Veewee::Error, "\nTo build a windows basebox you need to install the gem 'em-winrm' first"
+              end
             end
+          else
+            raise Veewee::Error, "definition '#{definition_name}' does not exist. Are you sure you are in the top directory?"
           end
 
           return self
