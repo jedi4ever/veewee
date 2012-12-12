@@ -16,7 +16,7 @@ module Veewee
         def check? type
           command = COMMANDS[type] % @vboxcmd
           shell_results=shell_exec("#{command}",{:mute => true})
-          status=shell_results.stdout.split(/\n/).grep(/\"#{name.gsub(/\+/,'\\\+')}\"/).size!=0
+          status=shell_results.stdout.split(/\n/).grep(/\"#{Regexp.escape(name)}\"/).size!=0
 
           env.logger.info("Vm #{type}? #{status}")
           return status
