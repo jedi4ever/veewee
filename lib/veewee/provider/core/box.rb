@@ -3,12 +3,10 @@ require 'veewee/provider/core/helper/ssh'
 require 'veewee/provider/core/helper/web'
 require 'veewee/provider/core/helper/shell'
 require 'veewee/provider/core/helper/iso'
-require 'veewee/provider/core/helper/winrm'
 require 'veewee/provider/core/helper/comm'
 
 require 'veewee/provider/core/box/build'
 require 'veewee/provider/core/box/scp'
-require 'veewee/provider/core/box/wincp'
 require 'veewee/provider/core/box/copy'
 require 'veewee/provider/core/box/exec'
 require 'veewee/provider/core/box/poweroff'
@@ -16,7 +14,8 @@ require 'veewee/provider/core/box/halt'
 require 'veewee/provider/core/box/sudo'
 require 'veewee/provider/core/box/ssh'
 require 'veewee/provider/core/box/issh'
-require 'veewee/provider/core/box/winrm'
+
+
 require 'veewee/provider/core/box/floppy'
 require 'veewee/provider/core/box/validate_tags'
 
@@ -33,7 +32,6 @@ module Veewee
         include ::Veewee::Provider::Core::Helper::Web
         include ::Veewee::Provider::Core::Helper::Shell
         include ::Veewee::Provider::Core::Helper::Ssh
-        include ::Veewee::Provider::Core::Helper::Winrm
         include ::Veewee::Provider::Core::Helper::Comm
         include ::Veewee::Provider::Core::Helper::Iso
 
@@ -52,8 +50,42 @@ module Veewee
           self.set_definition(name)
         end
 
+        def gem_available?(gemname)
+          env.logger.info "Checking for gem #{gemname}"
+          available=false
+          begin
+            available=true unless Gem::Specification::find_by_name("#{gemname}").nil?
+          rescue Gem::LoadError
+            env.logger.info "Error loading gem #{gemname}"
+            available=false
+          rescue
+            env.logger.info "Falling back to old syntax for #{gemname}"
+            available=Gem.available?("#{gemname}")
+            env.logger.info "Old syntax #{gemname}.available? #{available}"
+          end
+          return available
+        end
+
         def set_definition(definition_name)
           @definition=env.definitions[definition_name]
+
+          # We check for windows as em-winrm is not available on ruby1.9
+          is_windows =  @definition.os_type_id.start_with?('Windows')
+
+          # On windows systems
+          if is_windows
+            # Check if winrm is available
+            if gem_available?('em-winrm')
+              require 'veewee/provider/core/box/winrm'
+              require 'veewee/provider/core/helper/winrm'
+              require 'veewee/provider/core/box/wincp'
+
+              self.class.send(:include, ::Veewee::Provider::Core::Helper::Winrm)
+            else
+              raise Veewee::Error, "\nTo build a windows basebox you need to install the gem 'em-winrm' first"
+            end
+          end
+
           return self
         end
 
