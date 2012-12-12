@@ -2,6 +2,12 @@
 
 date > /etc/vagrant_box_build_time
 
+#Updating the box
+apt-get -y update
+apt-get -y install linux-headers-$(uname -r) build-essential
+apt-get -y install zlib1g-dev libssl-dev libreadline5-dev nfs-common
+apt-get clean
+
 #Installing the virtualbox guest additions
 apt-get -y install dkms
 VBOX_VERSION=$(cat /home/vagrant/.vbox_version)
@@ -12,12 +18,6 @@ sh /mnt/VBoxLinuxAdditions.run
 umount /mnt
 
 rm VBoxGuestAdditions_$VBOX_VERSION.iso
-
-#Updating the box
-apt-get -y update
-apt-get -y install linux-headers-$(uname -r) build-essential
-apt-get -y install zlib1g-dev libssl-dev libreadline5-dev nfs-common
-apt-get clean
 
 #Setting up sudo
 cp /etc/sudoers /etc/sudoers.orig
