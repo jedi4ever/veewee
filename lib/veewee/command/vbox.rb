@@ -75,12 +75,17 @@ module Veewee
       method_option :force,:type => :boolean , :default => false, :aliases => "-f", :desc => "overwrite the definition"
       method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging"
       def define(definition_name, template_name)
+        begin
         venv=Veewee::Environment.new(options)
         venv.ui=env.ui
         venv.definitions.define(definition_name,template_name,options)
         env.ui.info "The basebox '#{definition_name}' has been succesfully created from the template '#{template_name}'"
         env.ui.info "You can now edit the definition files stored in definitions/#{definition_name} or build the box with:"
         env.ui.info "veewee vbox build '#{definition_name}'"
+        rescue Error => ex
+          env.ui.error("#{ex}",:prefix => false)
+          exit -1
+        end
       end
 
       desc "undefine [BOXNAME]", "Removes the definition of a basebox "
