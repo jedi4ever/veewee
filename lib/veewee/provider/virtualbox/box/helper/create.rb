@@ -162,6 +162,10 @@ module Veewee
           command="#{@vboxcmd} modifyvm \"#{name}\" --memory #{definition.memory_size}"
           shell_exec("#{command}")
 
+          #setting video memory size
+          command="#{@vboxcmd} modifyvm \"#{name}\" --vram #{definition.video_memory_size}"
+          shell_exec("#{command}")
+          
           #setting bootorder
           command="#{@vboxcmd} modifyvm \"#{name}\" --boot1 disk --boot2 dvd --boot3 none --boot4 none"
           shell_exec("#{command}")
