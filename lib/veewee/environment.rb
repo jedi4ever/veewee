@@ -96,7 +96,7 @@ module Veewee
       # Definitions
       @definitions=Veewee::Definitions.new(self)
       @templates=Veewee::Templates.new(self)
-      @providers=Veewee::Providers.new(self)
+      @providers=Veewee::Providers.new(self,options)
 
       # Read ostypes
       yamlfile=File.join(File.dirname(__FILE__),"config","ostypes.yml")
