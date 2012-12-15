@@ -138,7 +138,7 @@ module Veewee
           env.logger.info("Entering path #{definition.path}")
           FileUtils.cd(definition.path)
           self.instance_eval(content)
-          env.logger.info("Returning to  path #{cwd}")
+          env.logger.info("Returning to path #{cwd}")
           FileUtils.cd(cwd)
         rescue NameError => ex
           raise Veewee::DefinitionError, "NameError reading definition from file #{definition_file} #{ex}"
@@ -189,6 +189,7 @@ module Veewee
     end
 
     private
+
     def ostype_valid?
       unless env.ostypes.has_key?(@os_type_id)
         env.ui.info("The ostype: #{@os_type_id} is not available")

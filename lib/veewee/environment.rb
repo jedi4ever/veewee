@@ -125,7 +125,7 @@ module Veewee
     #
     # @return [UI]
     def ui
-      @ui ||=  UI.new(self)
+      @ui ||= UI.new(self)
     end
 
     #---------------------------------------------------------------

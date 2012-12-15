@@ -49,6 +49,7 @@ module Veewee
     end
 
     private
+
     # Traverses path to see which exist or not
     # and checks if available
     def valid_paths(paths)
@@ -63,8 +64,6 @@ module Veewee
       }
       return valid_paths.compact
     end
-
-
 
   end
 end

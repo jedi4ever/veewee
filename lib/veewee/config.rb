@@ -57,7 +57,5 @@ module Veewee
       return self
     end
 
-
-
   end #End Class
 end #End Module
