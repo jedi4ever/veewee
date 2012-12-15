@@ -20,7 +20,7 @@ begin
   env.load!
 
   # Start the CLI
-  ::Veewee::CLI.start(ARGV,:env => env)
+  ::Veewee::CLI.start(ARGV, :env => env)
 
 rescue Veewee::Error => e
   env.ui.error "#{e}"
