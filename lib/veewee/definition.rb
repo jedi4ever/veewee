@@ -10,18 +10,18 @@ module Veewee
     attr_accessor :env
     attr_accessor :path
 
-    attr_accessor :cpu_count,:memory_size,:video_memory_size,:iso_file
+    attr_accessor :cpu_count, :memory_size, :video_memory_size, :iso_file
     attr_accessor :disk_size, :disk_format, :disk_variant
 
     attr_accessor :os_type_id
 
-    attr_accessor :boot_wait,:boot_cmd_sequence
+    attr_accessor :boot_wait, :boot_cmd_sequence
 
-    attr_accessor :kickstart_port,:kickstart_ip,:kickstart_timeout, :kickstart_file
+    attr_accessor :kickstart_port, :kickstart_ip, :kickstart_timeout, :kickstart_file
 
-    attr_accessor :ssh_login_timeout, :ssh_user , :ssh_password, :ssh_key, :ssh_host_port, :ssh_guest_port
+    attr_accessor :ssh_login_timeout, :ssh_user, :ssh_password, :ssh_key, :ssh_host_port, :ssh_guest_port
 
-    attr_accessor :winrm_login_timeout, :winrm_user , :winrm_password, :winrm_host_port, :winrm_guest_port
+    attr_accessor :winrm_login_timeout, :winrm_user, :winrm_password, :winrm_host_port, :winrm_guest_port
 
     attr_accessor :sudo_cmd
     attr_accessor :shutdown_cmd
@@ -32,10 +32,9 @@ module Veewee
 
     attr_accessor :floppy_files
 
+    attr_accessor :use_hw_virt_ext, :use_pae, :hostiocache, :use_sata
 
-    attr_accessor :use_hw_virt_ext,:use_pae,:hostiocache, :use_sata
-
-    attr_accessor :iso_dowload_timeout, :iso_src,:iso_md5 ,:iso_download_instructions
+    attr_accessor :iso_dowload_timeout, :iso_src, :iso_md5, :iso_download_instructions
 
     attr_accessor :virtualbox
     attr_accessor :vmfusion
@@ -50,13 +49,13 @@ module Veewee
       @_ui
     end
 
-    def initialize(name,path,env)
+    def initialize(name, path, env)
 
       @name=name
       @env=env
 
-      if path.nil? 
-        @path=File.join(env.definition_dir,name)
+      if path.nil?
+        @path = File.join(env.definition_dir, name)
       else
         @path=path
       end
@@ -111,26 +110,26 @@ module Veewee
     end
 
     # Class method to loading a definition
-    def self.load(name,env)
+    def self.load(name, env)
 
       # Construct the path to the definition
 
-      path=File.join(env.definition_dir,name)
-      definition=Veewee::Definition.new(name,path,env)
+      path = File.join(env.definition_dir, name)
+      definition = Veewee::Definition.new(name, path, env)
       env.logger.info "Loading definition directory #{definition.path}"
       unless definition.exists?
-        raise Veewee::DefinitionNotExist,"Error: Definition #{name} does not seem to exist"
+        raise Veewee::DefinitionNotExist, "Error: Definition #{name} does not seem to exist"
       end
 
       # We create this longer name to avoid clashes
       veewee_definition=definition
 
       if definition.exists?
-        definition_file=File.join(definition.path,"definition.rb")
-        content=File.read(definition_file)
+        definition_file = File.join(definition.path, "definition.rb")
+        content = File.read(definition_file)
 
-        content.gsub!("Veewee::Session.declare","veewee_definition.declare")
-        content.gsub!("Veewee::Definition.declare","veewee_definition.declare")
+        content.gsub!("Veewee::Session.declare", "veewee_definition.declare")
+        content.gsub!("Veewee::Definition.declare", "veewee_definition.declare")
 
         env.logger.info(content)
 
@@ -142,25 +141,25 @@ module Veewee
           env.logger.info("Returning to  path #{cwd}")
           FileUtils.cd(cwd)
         rescue NameError => ex
-          raise Veewee::DefinitionError,"NameError reading definition from file #{definition_file} #{ex}"
+          raise Veewee::DefinitionError, "NameError reading definition from file #{definition_file} #{ex}"
         rescue Exception => ex
-          raise Veewee::DefinitionError,"Error in the definition from file #{definition_file}\n#{ex}"
+          raise Veewee::DefinitionError, "Error in the definition from file #{definition_file}\n#{ex}"
         end
       else
         env.logger.fatal("#{definition_file} not found")
-        raise Veewee::DefinitionNotExist,"#{definition_file} not found"
+        raise Veewee::DefinitionNotExist, "#{definition_file} not found"
       end
 
       if definition.valid?
         return definition
       else
         env.logger.fatal("Invalid Definition")
-        raise Veewee::DefinitionError,"Invalid Definition"
+        raise Veewee::DefinitionError, "Invalid Definition"
       end
     end
 
     def exists?
-      filename=File.join(path,"definition.rb")
+      filename = File.join(path, "definition.rb")
       unless File.exists?(filename)
         return false
       end

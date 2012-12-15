@@ -32,7 +32,7 @@ module Veewee
     def load_veewee_config()
       veewee_configurator=self
       begin
-        filename=File.join(Dir.pwd,"Veeweefile")
+        filename = File.join(Dir.pwd, "Veeweefile")
         if File.exists?(filename)
           veeweefile=File.read(filename)
           veeweefile["Veewee::Config.run"]="veewee_configurator.define"

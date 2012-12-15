@@ -11,7 +11,7 @@ module Veewee
     def [](name)
       result=nil
       valid_paths(env.template_path).each do |template_dir|
-        template=Veewee::Template.new(name,File.join(template_dir,name),@env)
+        template = Veewee::Template.new(name, File.join(template_dir, name), @env)
         if template.exists?
           result=template
           return result

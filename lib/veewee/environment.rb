@@ -61,15 +61,15 @@ module Veewee
         :cwd => cwd,
         :veewee_filename => "Veeweefile",
         :loglevel => :info,
-        :definition_dir => File.join(cwd,"definitions"),
-        :template_path => [File.expand_path(File.join(File.dirname(__FILE__),"..","..",'templates')),"templates"],
-        :iso_dir => File.join(cwd,"iso"),
-        :validation_dir => File.join(File.expand_path(File.join(File.dirname(__FILE__),"..","..")),"validation"),
-        :tmp_dir => File.join(cwd,"tmp")
+        :definition_dir => File.join(cwd, "definitions"),
+        :template_path => [File.expand_path(File.join(File.dirname(__FILE__), "..", "..", 'templates')), "templates"],
+        :iso_dir => File.join(cwd, "iso"),
+        :validation_dir => File.join(File.expand_path(File.join(File.dirname(__FILE__), "..", "..")), "validation"),
+        :tmp_dir => File.join(cwd, "tmp")
       }
 
       options = defaults.merge(options)
-      veeweefile_config = defaults.keys.inject({}) do |memo,obj|
+      veeweefile_config = defaults.keys.inject({}) do |memo, obj|
         if config.env.methods.include?(obj) && !config.env.send(obj).nil?
           memo.merge({ obj => config.env.send(obj) })
         else
@@ -99,7 +99,7 @@ module Veewee
       @providers=Veewee::Providers.new(self,options)
 
       # Read ostypes
-      yamlfile=File.join(File.dirname(__FILE__),"config","ostypes.yml")
+      yamlfile = File.join(File.dirname(__FILE__), "config", "ostypes.yml")
       logger.info "Reading ostype yamlfile #{yamlfile}"
       @ostypes=YAML.load_file(yamlfile)
 

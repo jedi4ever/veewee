@@ -3,9 +3,9 @@ module Veewee
 
     attr_accessor :env
 
-    attr_reader :name,:path
+    attr_reader :name, :path
 
-    def initialize(name,path,env)
+    def initialize(name, path, env)
       @name=name
       @path=path
       @env=env

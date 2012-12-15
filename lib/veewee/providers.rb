@@ -13,7 +13,7 @@ module Veewee
              require_path='veewee/provider/'+name.to_s.downcase+"/provider"
              require require_path
 
-             provider=Object.const_get("Veewee").const_get("Provider").const_get(name.to_s.capitalize).const_get("Provider").new(name,@options,@env)
+        provider = Object.const_get("Veewee").const_get("Provider").const_get(name.to_s.capitalize).const_get("Provider").new(name, @options, @env)
 
              @providers[name]=provider
            rescue ::Veewee::Error => e

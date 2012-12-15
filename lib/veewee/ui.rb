@@ -13,7 +13,7 @@ module Veewee
 
     [:warn, :error, :info, :success].each do |method|
       define_method(method) do |message, *argv|
-        opts , *argv = argv
+        opts, *argv = argv
         opts ||= {}
         # Log normal console messages
         env.logger.info("ui") { message }
