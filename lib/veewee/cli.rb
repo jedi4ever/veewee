@@ -30,7 +30,7 @@ module Veewee
     #   command listing.
     # @param [Hash] opts Other options (not gone into detail here, look at
     #   the source instead).
-    def self.register(klass, name, usage, description, opts=nil)
+    def self.register(klass, name, usage, description, opts = nil)
       opts ||= {}
 
       if klass <= Command::GroupBase

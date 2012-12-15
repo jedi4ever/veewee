@@ -36,7 +36,7 @@ module Veewee
 
       [[:warn, :yellow], [:error, :red], [:info, nil], [:success, :green]].each do |method, color|
         class_eval <<-CODE
-          def #{method}(message, opts=nil)
+          def #{method}(message, opts = nil)
             super(message)
             opts ||= {}
             opts[:new_line] = true if !opts.has_key?(:new_line)
@@ -47,7 +47,7 @@ module Veewee
 
       [:ask, :no?, :yes?].each do |method|
         class_eval <<-CODE
-          def #{method}(message, opts=nil)
+          def #{method}(message, opts = nil)
             super(message)
             opts ||= {}
             @shell.send(#{method.inspect}, format_message(message, opts), opts[:color])
@@ -55,7 +55,7 @@ module Veewee
         CODE
       end
 
-      def report_progress(progress, total, show_parts=true)
+      def report_progress(progress, total, show_parts = true)
         percent = (progress.to_f / total.to_f) * 100
         line = "Progress: #{percent.to_i}%"
         line << " (#{progress} / #{total})" if show_parts
@@ -69,10 +69,10 @@ module Veewee
 
       protected
 
-      def format_message(message, opts=nil)
+      def format_message(message, opts = nil)
         opts = { :prefix => true }.merge(opts || {})
-        opts[:prefix]=false if env.resource=="veewee"
-        opts[:prefix]=false if env.resource=="vagrant"
+        opts[:prefix] = false if env.resource == "veewee"
+        opts[:prefix] = false if env.resource == "vagrant"
         message = "[#{env.resource}] #{message}" if opts[:prefix]
         message
       end

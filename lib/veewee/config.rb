@@ -10,18 +10,18 @@ module Veewee
     attr_reader :env
 
     def initialize(options)
-      @env=options[:env]
+      @env = options[:env]
 
       # Initialize with defaults
-      @veewee=::Veewee::Config::Veewee.new(self)
+      @veewee = ::Veewee::Config::Veewee.new(self)
 
     end
 
     def define()
-      config=OpenStruct.new
+      config = OpenStruct.new
 
       # Expose the veewee config
-      config.veewee=@veewee
+      config.veewee = @veewee
 
       # Process config file
       yield config
@@ -30,12 +30,12 @@ module Veewee
 
     # We put a long name to not clash with any function in the Veewee file itself
     def load_veewee_config()
-      veewee_configurator=self
+      veewee_configurator = self
       begin
         filename = File.join(Dir.pwd, "Veeweefile")
         if File.exists?(filename)
-          veeweefile=File.read(filename)
-          veeweefile["Veewee::Config.run"]="veewee_configurator.define"
+          veeweefile = File.read(filename)
+          veeweefile["Veewee::Config.run"] = "veewee_configurator.define"
           #        http://www.dan-manges.com/blog/ruby-dsls-instance-eval-with-delegation
           instance_eval(veeweefile)
         else

@@ -1,9 +1,9 @@
 module Veewee
   class Providers
     def initialize(env, options = {})
-      @env=env
-      @options=options
-      @providers=Hash.new
+      @env = env
+      @options = options
+      @providers = Hash.new
     end
 
     def [](name)

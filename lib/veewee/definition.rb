@@ -51,20 +51,20 @@ module Veewee
 
     def initialize(name, path, env)
 
-      @name=name
-      @env=env
+      @name = name
+      @env = env
 
       if path.nil?
         @path = File.join(env.definition_dir, name)
       else
-        @path=path
+        @path = path
       end
 
       # Default is 1 CPU + 256 Mem of memory + 8 Mem of video memory
-      @cpu_count='1' ; @memory_size='256'; @video_memory_size='8'
+      @cpu_count = '1' ; @memory_size = '256'; @video_memory_size = '8'
 
       # Default there is no ISO file mounted
-      @iso_file = nil, @iso_src = nil ; @iso_md5 = nil ; @iso_download_timeout=1000 ; @iso_download_instructions = nil
+      @iso_file = nil, @iso_src = nil ; @iso_md5 = nil ; @iso_download_timeout = 1000 ; @iso_download_instructions = nil
 
       # Shares to add
       @add_shares = []
@@ -74,10 +74,10 @@ module Veewee
 
       # Default there are no post install files
       @pre_postinstall_file = nil
-      @postinstall_files=[]; @postinstall_timeout = 10000;
+      @postinstall_files = [] ; @postinstall_timeout = 10000 ;
 
-      @iso_file=""
-      @disk_size = '10240'; @disk_format = 'VDI'; @disk_variant = 'Standard'
+      @iso_file = ""
+      @disk_size = '10240' ; @disk_format = 'VDI' ; @disk_variant = 'Standard'
       @use_sata = true
 
       #        :hostiocache => 'off' ,
@@ -85,17 +85,17 @@ module Veewee
       #        :boot_wait => "10", :boot_cmd_sequence => [ "boot"],
       #        :kickstart_port => "7122", :kickstart_ip => "127.0.0.1", :kickstart_timeout => 10000,#
       #        :ssh_login_timeout => "10000", :ssh_user => "vagrant", :ssh_password => "vagrant",:ssh_key => "",
-      @ssh_host_port = "2222"; @ssh_guest_port = "22"
+      @ssh_host_port = "2222" ; @ssh_guest_port = "22"
       #        :ssh_host_port => "2222", :ssh_guest_port => "22", :sudo_cmd => "echo '%p'|sudo -S sh '%f'",
       #       :shutdown_cmd => "shutdown -h now",
       #        :kickstart_file => nil,
-      @winrm_host_port = "5985"; @winrm_guest_port = "5985"
+      @winrm_host_port = "5985" ; @winrm_guest_port = "5985"
       @winrm_login_timeout = "10000"
       @boot_cmd_sequence = [] # Empty list by default
 
-      @virtualbox={:vm_options => {}}
-      @vmfusion={:vm_options => {}}
-      @kvm={:vm_options => {}}
+      @virtualbox = { :vm_options => {} }
+      @vmfusion = { :vm_options => {} }
+      @kvm = { :vm_options => {} }
 
     end
 
@@ -122,7 +122,7 @@ module Veewee
       end
 
       # We create this longer name to avoid clashes
-      veewee_definition=definition
+      veewee_definition = definition
 
       if definition.exists?
         definition_file = File.join(definition.path, "definition.rb")
@@ -134,7 +134,7 @@ module Veewee
         env.logger.info(content)
 
         begin
-          cwd=FileUtils.pwd
+          cwd = FileUtils.pwd
           env.logger.info("Entering path #{definition.path}")
           FileUtils.cd(definition.path)
           self.instance_eval(content)

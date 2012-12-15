@@ -51,13 +51,13 @@ module Veewee
     # Hash elelement of all OStypes
     attr_reader :ostypes
 
-    def initialize(options={})
+    def initialize(options = {})
 
       cwd = ENV['VEEWEE_DIR'] || Dir.pwd
       # If a cwd was provided as option it overrules the default
       cwd = options[:cwd] if options.has_key?(:cwd)
 
-      defaults={
+      defaults = {
         :cwd => cwd,
         :veewee_filename => "Veeweefile",
         :loglevel => :info,
@@ -81,7 +81,7 @@ module Veewee
       # We need to set this variable before the first call to the logger object
       if options.has_key?("debug")
         if options["debug"] == true
-          ENV['VEEWEE_LOG']="STDOUT"
+          ENV['VEEWEE_LOG'] = "STDOUT"
         end
       end
 
@@ -94,14 +94,14 @@ module Veewee
       end
 
       # Definitions
-      @definitions=Veewee::Definitions.new(self)
-      @templates=Veewee::Templates.new(self)
-      @providers=Veewee::Providers.new(self,options)
+      @definitions = Veewee::Definitions.new(self)
+      @templates = Veewee::Templates.new(self)
+      @providers = Veewee::Providers.new(self, options)
 
       # Read ostypes
       yamlfile = File.join(File.dirname(__FILE__), "config", "ostypes.yml")
       logger.info "Reading ostype yamlfile #{yamlfile}"
-      @ostypes=YAML.load_file(yamlfile)
+      @ostypes = YAML.load_file(yamlfile)
 
       return self
     end
@@ -155,7 +155,7 @@ module Veewee
     end
 
     def load_config!
-      @config=Config.new({:env => self}).load_veewee_config()
+      @config = Config.new({ :env => self }).load_veewee_config()
 
       return self
     end

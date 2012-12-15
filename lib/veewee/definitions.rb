@@ -9,7 +9,7 @@ module Veewee
     attr_accessor :env
 
     def initialize(env)
-      @env=env
+      @env = env
       return self
     end
 
@@ -24,13 +24,13 @@ module Veewee
 
     # Fetch all definitions
     def each(&block)
-      definitions=Hash.new
+      definitions = Hash.new
 
       env.logger.debug("[Definition] Searching #{env.definition_dir} for definitions:")
-      subdirs=Dir.glob("#{env.definition_dir}/*")
+      subdirs = Dir.glob("#{env.definition_dir}/*")
 
       subdirs.each do |sub|
-        name=File.basename(sub)
+        name = File.basename(sub)
         env.logger.debug("[Definition] possible definition '#{name}' found")
         begin
           definitions[name] = Veewee::Definition.load(name, env)
@@ -39,7 +39,7 @@ module Veewee
         end
       end
 
-      if definitions.length==0
+      if definitions.length == 0
         env.logger.debug("[Definition] no definitions found")
       end
 
@@ -56,18 +56,18 @@ module Veewee
     def define(definition_name, template_name, options = {})
 
       # Default is not to overwrite
-      options = {'force' => false}.merge(options)
+      options = { 'force' => false }.merge(options)
 
       env.logger.debug("Forceflag : #{options['force']}")
 
-      git_template=false
+      git_template = false
       # Check if the template is a git repo
       if template_name.start_with?("git://")
-        git_template=true
+        git_template = true
       end
 
       # Check if template exists
-      template=env.templates[template_name]
+      template = env.templates[template_name]
       if template.nil? and ! git_template
         env.logger.fatal("Template '#{template_name}' does not exist")
         raise Veewee::TemplateError, "Template '#{template_name}' does not exist"
@@ -78,7 +78,7 @@ module Veewee
       create_definition_dir_if_needed
 
       # Check if definition does not exist
-      definition=env.definitions[definition_name]
+      definition = env.definitions[definition_name]
       unless definition.nil?
         env.logger.debug("Definition '#{definition_name}' exists")
         if options['force'] == true
@@ -115,7 +115,7 @@ module Veewee
         end
       end
 
-      definition=env.definitions[definition_name]
+      definition = env.definitions[definition_name]
       return definition
     end
 
