@@ -13,10 +13,10 @@ module Veewee
     end
 
     def exists?
-          env.logger.debug("[Template] template '#{name}' is valid")
-          return true
       filename = Dir.glob("#{path}/definition.rb")
       if filename.length != 0
+        env.logger.debug("[Template] template '#{name}' is valid")
+        return true
       else
         return false
       end

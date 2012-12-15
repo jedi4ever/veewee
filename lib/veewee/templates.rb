@@ -34,7 +34,7 @@ module Veewee
             name = sub.sub(/#{template_dir}\//, '')
             template = Veewee::Template.new(name, sub, @env)
             if template.exists?
-                env.logger.debug("[Template] template '#{name}' found")
+              env.logger.debug("[Template] template '#{name}' found")
               templates[name] = template
             end
           end
