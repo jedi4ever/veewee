@@ -5,9 +5,9 @@ Veewee::Definition.declare({
   :memory_size=> '256',
   :disk_size => '10140', :disk_format => 'VDI', :hostiocache => 'off',
   :os_type_id => 'Debian',
-  :iso_file => "debian-wheezy-DI-b2-i386-netinst.iso",
-  :iso_src => "http://cdimage.debian.org/cdimage/wheezy_di_beta2/i386/iso-cd/debian-wheezy-DI-b2-i386-netinst.iso",
-  :iso_md5 => "a2be1f5efd0fd64c3036ae894f4eed0e",
+  :iso_file => "debian-wheezy-DI-b4-amd64-netinst.iso",
+  :iso_src => "http://cdimage.debian.org/cdimage/wheezy_di_beta4/amd64/iso-cd/debian-wheezy-DI-b4-amd64-netinst.iso",
+  :iso_md5 => "9fcd2bb541f9b6b32f2a17116d606bed",
   :iso_download_timeout => "1000",
   :boot_wait => "10", :boot_cmd_sequence => [
      '<Esc>',
@@ -22,7 +22,7 @@ Veewee::Definition.declare({
      'fb=false ',
      'debconf/frontend=noninteractive ',
      'console-setup/ask_detect=false ',
-     'console-keymaps-at/keymap=us ',
+     'keyboard-configuration/xkb-keymap=us ',
      '<Enter>'
   ],
   :kickstart_port => "7122",
