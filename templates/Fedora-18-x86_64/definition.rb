@@ -4,7 +4,7 @@ Veewee::Session.declare({
   :disk_size => '10140', :disk_format => 'VDI', :hostiocache => 'off', :hwvirtext => 'on',
   :os_type_id => 'Fedora_64',
   :iso_file => "Fedora-18-Beta-x86_64-DVD.iso",
-  :iso_src => "http://dl.fedoraproject.org/pub/alt/stage/18-Beta-RC1/Fedora/x86_64/iso/Fedora-18-Beta-x86_64-DVD.iso",
+  :iso_src => "http://download.fedoraproject.org/pub/fedora/linux/releases/test/18-Beta/Fedora/x86_64/iso/Fedora-18-Beta-x86_64-DVD.iso",
   :iso_md5 => "82b755826e205da0973404be937991a1",
   :iso_download_timeout => 1000,
   :boot_wait => "10", :boot_cmd_sequence => [ '<Tab> linux text biosdevname=0 ks=http://%IP%:%PORT%/ks.cfg<Enter><Enter>' ],
