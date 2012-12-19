@@ -79,7 +79,7 @@ module Veewee
         venv=Veewee::Environment.new(options)
         venv.ui=env.ui
         venv.definitions.define(definition_name,template_name,options)
-        env.ui.info "The basebox '#{definition_name}' has been succesfully created from the template '#{template_name}'"
+        env.ui.info "The basebox '#{definition_name}' has been successfully created from the template '#{template_name}'"
         env.ui.info "You can now edit the definition files stored in definitions/#{definition_name} or build the box with:"
         env.ui.info "veewee vbox build '#{definition_name}'"
         rescue Error => ex
@@ -96,7 +96,7 @@ module Veewee
           venv=Veewee::Environment.new(options)
           venv.ui=env.ui
           venv.definitions.undefine(definition_name,options)
-          env.ui.info "Definition #{definition_name} succesfully removed" , :prefix => false
+          env.ui.info "Definition #{definition_name} successfully removed" , :prefix => false
         rescue Error => ex
           env.ui.error("#{ex}",:prefix => false)
           exit -1
