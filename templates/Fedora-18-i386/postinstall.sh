@@ -4,13 +4,14 @@ date > /etc/vagrant_box_build_time
 
 VBOX_VERSION=$(cat /home/vagrant/.vbox_version)
 
-yum -y update
+yum -y update --exclude kernel*
 
 yum -y install \
   ruby \
   ruby-devel \
   puppet \
   rubygems \
+  rubygem-bunny \
   rubygem-erubis \
   rubygem-highline \
   rubygem-json \
@@ -18,6 +19,7 @@ yum -y install \
   rubygem-net-ssh \
   rubygem-polyglot \
   rubygem-rest-client \
+  rubygem-systemu \
   rubygem-treetop \
   rubygem-uuidtools \
   wget \
