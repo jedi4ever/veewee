@@ -4,13 +4,17 @@ date > /etc/vagrant_box_build_time
 
 VBOX_VERSION=$(cat /home/vagrant/.vbox_version)
 
-yum -y update
+# Must exclude kernel for now. Otherwise, kernel gets upgraded before reboot,
+# but VirtualBox tools get compiled against the old kernel, so the fresh
+# image will refuse to start under Vagrant.
+yum -y update --exclude kernel*
 
 yum -y install \
   ruby \
   ruby-devel \
   puppet \
   rubygems \
+  rubygem-bunny \
   rubygem-erubis \
   rubygem-highline \
   rubygem-json \
@@ -18,6 +22,7 @@ yum -y install \
   rubygem-net-ssh \
   rubygem-polyglot \
   rubygem-rest-client \
+  rubygem-systemu \
   rubygem-treetop \
   rubygem-uuidtools \
   wget \
