@@ -1,10 +1,19 @@
+# sudo acpid and wget are not included in the minimal DVD ISO. To fix
+# this, use the *bin* ISO or run "yum install ..." in %post
 Veewee::Session.declare({
   :cpu_count => '1',
   :memory_size=> '480',
   :disk_size => '10140',
   :disk_format => 'VDI',
-  :hostiocache => 'off',
-  :os_type_id => 'RedHat_64',
+  :hostiocache => 'on',
+  :os_type_id => 'RedHat',
+  :virtualbox => { :vm_options => [ 
+                                   'hwvirtex' => 'off',
+                                   'hwvirtexexcl' => 'off',
+                                   'nestedpaging' => 'off',
+                                   'natdnshostresolver1' => 'on'
+                                  ]
+                          },
   :iso_file => "CentOS-6.3-i386-minimal.iso",
   :iso_src => "http://www.mirrorservice.org/sites/mirror.centos.org/6.3/isos/i386/CentOS-6.3-i386-minimal.iso",
   :iso_md5 => "081ce8ba3e9f761a35d47f1c345562c1",
