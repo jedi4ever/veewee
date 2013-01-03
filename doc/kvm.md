@@ -25,9 +25,7 @@ There is currently few options supported :
 2. **network_bridge_name**: the name of the bridge. It is used just in case
    **network_type** is set to _bridge_.
 3. **pool_name**: the _storage_ pool name to be used when creating the box. If
-   not specified, the default one is used. _Note: it is currently not working
-   with the current fog version (1.7.0) but should be fixed as soon as the fog
-   gem is released_.
+   not specified, the default one is used.
 
 ## Notes
 
