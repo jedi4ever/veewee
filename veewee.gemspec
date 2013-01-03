@@ -29,7 +29,7 @@ Gem::Specification.new do |s|
   s.add_dependency "cucumber", ">=1.0.0"
   s.add_dependency "ansi", "~> 1.3.0"
   s.add_dependency "ruby-vnc", "~> 1.0.0"
-  s.add_dependency "fog", "~> 1.4"
+  s.add_dependency "fog", "~> 1.8"
   s.add_dependency "childprocess"
   s.add_dependency "grit"
   s.add_dependency "fission", "0.4.0"
