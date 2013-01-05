@@ -19,8 +19,8 @@ class TestVeeweeBuild < Test::Unit::TestCase
   # - postinstall execution
   def test_box_1_build
     assert_nothing_raised {
-      #@box.build({"auto" => true,:force => true, #:nogui => true })
-      @box.build({"auto" => true,"force" => true })
+      @box.build({'auto' => true,'force' => true, 'nogui' => true })
+      #@box.build({"auto" => true,"force" => true })
     }
   end
 
@@ -51,8 +51,8 @@ class TestVeeweeBuild < Test::Unit::TestCase
   # Now try build again (with no force flag)
   def test_box_5_build
     assert_raise(Veewee::Error) {
-      @box.build({"auto" => true})
-      #@box.build({"auto" => true,:force => true, :nogui => true })
+      #@box.build({"auto" => true})
+      @box.build({"auto" => true,'force' => true, 'nogui' => true })
     }
   end
 
