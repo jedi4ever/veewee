@@ -72,7 +72,6 @@ module Veewee
         begin
           venv=Veewee::Environment.new(options)
           venv.ui=env.ui
-          venv.undefine(definition_name,options)
           venv.definitions.undefine(definition_name,options)
         rescue Error => ex
           env.ui.error("#{ex}", :prefix=> false)
