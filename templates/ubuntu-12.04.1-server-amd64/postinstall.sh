@@ -22,13 +22,12 @@ sh /mnt/VBoxLinuxAdditions.run
 umount /mnt
 
 rm VBoxGuestAdditions_$VBOX_VERSION.iso
+rm /home/vagrant/VBoxGuestAdditions_$VBOX_VERSION.iso
 
-# Setup sudo to allow no-password sudo for "admin"
-groupadd -r admin
-usermod -a -G admin vagrant
+# Setup sudo to allow no-password sudo for "sudo"
+usermod -a -G sudo vagrant
 cp /etc/sudoers /etc/sudoers.orig
-sed -i -e '/Defaults\s\+env_reset/a Defaults\texempt_group=admin' /etc/sudoers
-sed -i -e 's/%admin ALL=(ALL) ALL/%admin ALL=NOPASSWD:ALL/g' /etc/sudoers
+sed -i -e 's/%sudo   ALL=(ALL:ALL) ALL/%sudo   ALL=(ALL:ALL) NOPASSWD:ALL/' /etc/sudoers
 
 # Add puppet user and group
 adduser --system --group --home /var/lib/puppet puppet
