@@ -1,7 +1,7 @@
 **VeeWee:** the tool to easily build vagrant base boxes or kvm,virtualbox and fusion images
 
 Vagrant is a great tool to test new things or changes in a virtual machine(Virtualbox) using either chef or puppet.
-The first step is to download an existing 'base box'. I believe this scares a lot of people as they don't know who or how this box was build. Therefore lots of people end up first building their own base box to use with vagrant.
+The first step is to download an existing 'base box'. I believe this scares a lot of people as they don't know who or how this box was built. Therefore lots of people end up first building their own base box to use with vagrant.
 
 Besides building Vagrant boxes, veewee can also be used for:
 
