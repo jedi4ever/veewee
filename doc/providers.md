@@ -18,6 +18,6 @@ To interact with the screen , veewee enables VNC on the created vmware fusion ma
 
 ## KVM
 
-To interact  with KVM veewee, uses [libvirt support](http://libvirt.org/ruby/) provided through [Fog gem](http://fog.io) libvirt support
+To interact  with KVM veewee, uses [libvirt support](http://libvirt.org/ruby/) provided through [Fog gem](http://fog.io).
 
-To interact with the screen , veewee enables VNC on the created vmware fusion machines and use the [Ruby-VNC gem](http://code.google.com/p/ruby-vnc/) to send the keystrokes. Here too , sending keystrokes too fast is a problem.
+To interact with the screen , veewee enables VNC on the created kvm machines and use the [Ruby-VNC gem](http://code.google.com/p/ruby-vnc/) to send the keystrokes. Here too , sending keystrokes too fast is a problem.

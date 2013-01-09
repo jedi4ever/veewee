@@ -1,8 +1,10 @@
-NOTE:Virtualbox doesn't like KVM to be enabled
+# KVM Provider
 
-## Prerequires
+NOTE: Virtualbox doesn't like KVM to be enabled
 
-To check if you're kernel can run kvm :
+## Prerequisites
+
+To check if your kernel can run kvm :
 
     # kvm_ok or kvm-ok command (on Ubuntu at least)
     kvm_ok
@@ -11,10 +13,59 @@ To check if you're kernel can run kvm :
 
 The modules needed are the following : kvm, kvm_intel or kvm-amd.
 
-## Define a new box
+You need to have at least one storage pool defined in libvirt. You can check all
+available storage pools with
 
-The workflow to create a box is almost the same as with the Virtualbox
-provider (and others).
+    virsh pool-list
+
+If no storage pool is listed, you can create a new storage pool which saves all
+VM images in the directory /var/lib/libvirt/images with
+
+    mkdir -p /var/lib/libvirt/images
+    cat > /tmp/pool.xml << EOF
+    <pool type="dir">
+      <name>virtimages</name>
+      <target>
+        <path>/var/lib/libvirt/images</path>
+        <format type='qcow2'/>
+      </target>
+    </pool>
+    EOF
+    virsh pool-create /tmp/pool.xml
+
+You need to have at least one network defined. You can check all available
+networks with
+
+    virsh net-list
+
+If there is no default network, consult the documentation of your operating
+system to find out how to creat it.
+
+If you are using libvirt with a URI different than the default `qemu:///system`,
+you need to create a config file for fog.io. If your libvirt endpoint is
+accessible at `qemu+ssh://cloud@myhost.com/system` you can create the .fog config
+file with
+
+    cat > ~/.fog << EOF
+    :default:
+      :libvirt_uri: qemu+ssh://cloud@myhost.com/system
+
+## Using VeeWee
+
+List available templates
+
+    veewee kvm templates
+
+Use one of the listed templates to define a new box e.g. with
+
+    veewee kvm define 'My Ubuntu 12.10 box' 'ubuntu-12.10-server-amd64'
+
+Build the box using KVM / Quemu (this will take a while)
+
+    veewee build 'My Ubuntu 12.10 box'
+
+You may want to use the VNC console (e.g. through virt-manager) to monitor /
+check the build process.
 
 ## Options
 
