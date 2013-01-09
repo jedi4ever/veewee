@@ -29,14 +29,9 @@ module Veewee
 
         def initialize(name,env)
 
-          require 'libvirt'
-          require 'fog'
-
           super(name,env)
 
-          @connection=::Fog::Compute.new(:provider => "Libvirt",
-                                         :libvirt_uri => "qemu:///system",
-                                         :libvirt_ip_command => "arp -an |grep $mac|cut -d '(' -f 2 | cut -d ')' -f 1")
+          @connection=::Fog::Compute[:libvirt]
 
         end
 

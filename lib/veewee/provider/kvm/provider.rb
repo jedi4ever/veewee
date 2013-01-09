@@ -5,62 +5,49 @@ module Veewee
     module Kvm
       class Provider < Veewee::Provider::Core::Provider
 
-        # Translate the definition ssh options to ssh options that can be passed to Net::Ssh calls
-        # We expect plain ssh for a connection
-
         def check_requirements
-          ["ruby-libvirt","fog"].each do |gemname|
-            unless gem_available?(gemname)
-              raise Veewee::Error,"The kvm provider requires the gem '#{gemname}' to be installed\n"    + "gem install #{gemname}"
-            end
-          end
+          require 'fog'
 
-          env.logger.info "Checking for version of libvirt"
+          env.logger.info "Falling back to qemu:///system for libvirt URI if no value is specified in the .fog config file"
+          Fog.credentials[:libvirt_uri] ||= "qemu:///system"
+
+          env.logger.info "Setting libvirt IP Command if not already defined in .fog config file"
+          Fog.credentials[:libvirt_ip_command] ||= "arp -an |grep $mac|cut -d '(' -f 2 | cut -d ')' -f 1"
+
           begin
-            require 'libvirt'
-            env.logger.info "Opening a libvirt connection to qemu:///system"
-            conn = ::Libvirt::open("qemu:///system")
+            env.logger.info "Opening a libvirt connection using fog.io"
+            conn = Fog::Compute[:libvirt]
             env.logger.info "Libvirt connection established"
 
-            env.logger.info "Found capabilities:"
-            env.logger.info "#{conn.capabilities}"
+            env.logger.debug "Found capabilities:"
+            env.logger.debug "#{conn.client.capabilities}"
 
             env.logger.info "Checking available storagepools"
-            pools=conn.list_storage_pools
-            env.logger.info "Storagepools: #{pools.join(',')}"
-            if pools.count < 1
-              raise Veewee::Error,"You need at least one (active) storage pool defined. This needs to be available if you connect to qemu:///system"
-            end
+            conn.pools.any? or raise Veewee::Error, "You need at least one (active) storage pool defined in #{Fog.credentials[:libvirt_uri]}."
 
-            #env.logger.info "Checking available networks"
-            #networks=conn.list_networks
-            #env.logger.info "Networks: #{networks.join(',')}"
-            #if networks.count < 1
-            #  raise Veewee::Error,"You need at least one (active) network defined. This needs to be available if you connect to qemu:///system"
-            #end
+            env.logger.info "Checking available networks"
+            conn.networks.any? or raise Veewee::Error,"You need at least one (active) network defined. This needs to be available if you connect to qemu:///system"
 
             # http://www.libvirt.org/html/libvirt-libvirt.html#virGetVersion
             # format major * 1,000,000 + minor * 1,000 + release
             env.logger.info "Checking libvirt version"
-            libvirt_version=conn.version
-            if libvirt_version < 8003
-              raise Veewee::Error,"You need at least libvirt version 0.8.3 or higher "
+            if conn.client.libversion < 8003
+              raise Veewee::Error, "You need at least libvirt version 0.8.3 or higher "
             end
-            conn.close
           rescue Exception => ex
             raise Veewee::Error, "There was a problem opening a connection to libvirt: #{ex}"
           end
 
           unless self.shell_exec("arp").status == 0
-            raise Veewee::Error,"Could not execute the arp command. This is required to find the IP address of the VM"
+            raise Veewee::Error, "Could not execute the arp command. This is required to find the IP address of the VM"
           end
 
         end
 
 
-        def build(definition_name,box_name,options)
+        def build(definition_name, box_name, options)
 
-          super(definition_name,box_name,options)
+          super(definition_name, box_name, options)
 
         end
 
