@@ -4,6 +4,9 @@ NOTE: Virtualbox doesn't like KVM to be enabled
 
 ## Prerequisites
 
+Depending on your operating system you may need to install packages for kvm,
+qemu and libvirt.
+
 To check if your kernel can run kvm :
 
     # kvm_ok or kvm-ok command (on Ubuntu at least)
@@ -11,10 +14,12 @@ To check if your kernel can run kvm :
     # or look for vmx or svm in /proc/cpuinfo
     egrep '^flags.*(vmx|svm)' /proc/cpuinfo
 
-The modules needed are the following : kvm, kvm_intel or kvm-amd.
+The kernel modules needed are the following : kvm, kvm_intel or kvm-amd.
 
-You need to have at least one storage pool defined in libvirt. You can check all
-available storage pools with
+### Storage Pool
+
+You need to have at least one storage pool defined in libvirt where your VM
+images will be stored. You can check all available storage pools with
 
     virsh pool-list
 
@@ -33,13 +38,16 @@ VM images in the directory /var/lib/libvirt/images with
     EOF
     virsh pool-create /tmp/pool.xml
 
+### Network
+
 You need to have at least one network defined. You can check all available
 networks with
 
     virsh net-list
 
-If there is no default network, consult the documentation of your operating
-system to find out how to creat it.
+If there is no network, consult the documentation of your operating
+system to find out how to creat it. More information can also be found in the
+[libvirt documentation](http://libvirt.org/formatdomain.html#elementsNICS).
 
 If you are using libvirt with a URI different than the default `qemu:///system`,
 you need to create a config file for fog.io. If your libvirt endpoint is
@@ -49,8 +57,17 @@ file with
     cat > ~/.fog << EOF
     :default:
       :libvirt_uri: qemu+ssh://cloud@myhost.com/system
+    EOF
+
+For more information have a look at the
+[libvirt documentation](http://libvirt.org/drvqemu.html#uris).
 
 ## Using VeeWee
+
+You can always get help by using the the built in help with every command.
+e.g. for the build command use
+
+    veewee kvm help build
 
 List available templates
 
@@ -64,23 +81,8 @@ Build the box using KVM / Quemu (this will take a while)
 
     veewee kvm build 'My Ubuntu 12.10 box'
 
-You may want to use the VNC console (e.g. through virt-manager) to monitor /
-check the build process.
+You can specify the name of the storage pool and the network to be used when
+building a VM. Use the options`--pool-name` and `--network-name` with the built
+command:
 
-## Options
-
-There is currently few options supported :
-
-1. **network_type**: the type of network used by this box on libvirt. It could
-   be either _network_ (for using the default network) or _bridge_.
-2. **network_bridge_name**: the name of the bridge. It is used just in case
-   **network_type** is set to _bridge_.
-3. **pool_name**: the _storage_ pool name to be used when creating the box. If
-   not specified, the default one is used.
-
-## Notes
-
-Remove modules:
-
-    rmmod kvm_intel
-    rmmod kvm
+    veewee kvm build 'My Ubuntu 12.10 box' --pool-name virtimages --network-name default
