@@ -14,36 +14,32 @@ module Veewee
           env.logger.info "Setting libvirt IP Command if not already defined in .fog config file"
           Fog.credentials[:libvirt_ip_command] ||= "arp -an |grep $mac|cut -d '(' -f 2 | cut -d ')' -f 1"
 
+          env.logger.info "Opening a libvirt connection using fog.io"
           begin
-            env.logger.info "Opening a libvirt connection using fog.io"
             conn = Fog::Compute[:libvirt]
-            env.logger.info "Libvirt connection established"
-
-            env.logger.debug "Found capabilities:"
-            env.logger.debug "#{conn.client.capabilities}"
-
-            env.logger.info "Checking available storagepools"
-            conn.pools.any? or raise Veewee::Error, "You need at least one (active) storage pool defined in #{Fog.credentials[:libvirt_uri]}."
-
-            env.logger.info "Checking available networks"
-            conn.networks.any? or raise Veewee::Error,"You need at least one (active) network defined. This needs to be available if you connect to qemu:///system"
-
-            # http://www.libvirt.org/html/libvirt-libvirt.html#virGetVersion
-            # format major * 1,000,000 + minor * 1,000 + release
-            env.logger.info "Checking libvirt version"
-            if conn.client.libversion < 8003
-              raise Veewee::Error, "You need at least libvirt version 0.8.3 or higher "
-            end
           rescue Exception => ex
             raise Veewee::Error, "There was a problem opening a connection to libvirt: #{ex}"
           end
+          env.logger.info "Libvirt connection established"
 
-          unless self.shell_exec("arp").status == 0
-            raise Veewee::Error, "Could not execute the arp command. This is required to find the IP address of the VM"
-          end
+          env.logger.debug "Found capabilities:"
+          env.logger.debug "#{conn.client.capabilities}"
+
+          env.logger.info "Checking libvirt version"
+          # http://www.libvirt.org/html/libvirt-libvirt.html#virGetVersion
+          # format major * 1,000,000 + minor * 1,000 + release
+          conn.client.libversion > 8003 or raise Veewee::Error, "You need at least libvirt version 0.8.3 or higher "
+
+          env.logger.info "Checking available networks"
+          conn.networks.any? or raise Veewee::Error, "You need at least one (active) network defined in #{Fog.credentials[:libvirt_uri]}."
+
+          env.logger.info "Checking available storagepools"
+          conn.pools.any? or raise Veewee::Error, "You need at least one (active) storage pool defined in #{Fog.credentials[:libvirt_uri]}."
+
+          env.logger.info "Checking availability of the arp utility"
+          shell_exec("arp").status.zero? or raise Veewee::Error, "Could not execute the arp command. This is required to find the IP address of the VM"
 
         end
-
 
         def build(definition_name, box_name, options)
 
