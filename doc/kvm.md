@@ -86,6 +86,3 @@ building a VM. Use the options`--pool-name` and `--network-name` with the built
 command:
 
     veewee kvm build 'My Ubuntu 12.10 box' --pool-name virtimages --network-name default
-
-You may want to use the VNC console (e.g. through virt-manager) to monitor /
-check the build process.
