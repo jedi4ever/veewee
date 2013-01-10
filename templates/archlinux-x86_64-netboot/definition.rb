@@ -15,7 +15,7 @@ Veewee::Session.declare({
     'vagrant<Enter>',
     'vagrant<Enter>',
     '/etc/rc.d/sshd start<Enter><Wait>',
-	'sleep 3 && wget 10.0.2.2:7122/aif.cfg<Enter>',
+	'sleep 10 && wget 10.0.2.2:7122/aif.cfg<Enter>',
   ],
   :kickstart_port => "7122", :kickstart_timeout => "10000", :kickstart_file => "aif.cfg",
   :ssh_login_timeout => "10000", :ssh_user => "root", :ssh_password => "vagrant", :ssh_key => "",
