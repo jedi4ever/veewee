@@ -11,6 +11,8 @@ module Veewee
       method_option :postinstall_include, :type => :array, :default => [], :aliases => "-i", :desc => "ruby regexp of postinstall filenames to additionally include"
       method_option :postinstall_exclude, :type => :array, :default => [], :aliases => "-e", :desc => "ruby regexp of postinstall filenames to exclude"
       method_option :use_emulation, :type => :boolean , :default => false, :desc => "Use QEMU emulation"
+      method_option :pool_name, :type => :string, :default => nil, :desc => "Name of the libvirt storage pool to be used"
+      method_option :network_name, :type => :string, :default => "default", :desc => "Name of the libvirt network to be used"
       def build(box_name)
         venv=Veewee::Environment.new(options)
         venv.ui=env.ui
