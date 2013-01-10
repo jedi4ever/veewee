@@ -4,5 +4,5 @@ end
 
 # Only set the version constant if it wasn't set before
 unless defined?(Veewee::VERSION)
-  ::Veewee::VERSION="0.3.6"
+  ::Veewee::VERSION="0.3.7"
 end
