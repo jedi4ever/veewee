@@ -62,7 +62,7 @@ Use one of the listed templates to define a new box e.g. with
 
 Build the box using KVM / Quemu (this will take a while)
 
-    veewee build 'My Ubuntu 12.10 box'
+    veewee kvm build 'My Ubuntu 12.10 box'
 
 You may want to use the VNC console (e.g. through virt-manager) to monitor /
 check the build process.
