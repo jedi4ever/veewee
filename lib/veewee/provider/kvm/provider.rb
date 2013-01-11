@@ -15,6 +15,13 @@ module Veewee
           Fog.credentials[:libvirt_ip_command] ||= "arp -an |grep $mac|cut -d '(' -f 2 | cut -d ')' -f 1"
 
           begin
+            unless gems_available?(["ruby-libvirt"])
+              raise Veewee::Error, "Please install ruby-libvirt gem"
+            end
+          end
+
+          begin
+
             env.logger.info "Opening a libvirt connection using fog.io"
             conn = Fog::Compute[:libvirt]
             env.logger.info "Libvirt connection established"
