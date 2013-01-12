@@ -18,3 +18,4 @@ pkg/*
 .vagrant
 virtualfloppy.vfd
 *.swp
+AutoPartition.app

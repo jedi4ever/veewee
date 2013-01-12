@@ -338,3 +338,18 @@ ESXi5:
   :kvm:
   :vbox: 
   :parallels: 
+Darwin_10_7:
+  :fusion: darwin11
+  :kvm:
+  :vbox:
+  :parallels:
+Darwin_10_7_64:
+  :fusion: darwin11-64
+  :kvm:
+  :vbox:
+  :parallels:
+Darwin_10_8_64:
+  :fusion: darwin12-64
+  :kvm:
+  :vbox:
+  :parallels:
