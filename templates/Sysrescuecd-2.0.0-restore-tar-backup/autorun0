@@ -1,0 +1,11 @@
+#!/bin/bash
+
+echo "Please wait while postinstall_files are run (see veewee terminal window)"
+echo "Then: "
+echo "2. reboot"
+echo
+echo "To restart, You may have to manually get the"
+echo "linux system to boot off the right partition (use option E, pick 32/64 bit kernel)"
+echo
+echo "Thereafter:"
+echo "5. /root/run-after-rebooted.sh (this will continue configuration)"
