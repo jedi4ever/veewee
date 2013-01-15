@@ -20,18 +20,15 @@ Preamble Per https://github.com/jedi4ever/veewee/issues/475
 
 To Run
 ------
-0. Have working vagrant, veewee, makeself and rvm installations
-- Download makeself.sh from https://github.com/megastep/makeself
-- put makeself as a sibling directory to veewee
-1. Edit restorebackup.sh and set the BACKUPLOCATION
-2. Edit MAKE-TEMPLATE.sh and fix up:
-- paths
-- which subtemplate you want to use, to go in the payload
-3. If necessary*, edit the scripts in run-after-rebooted
-4. Run MAKE-TEMPLATE.sh - this creates the payload 
-5. Watch the machine boot off the SysRescue ISO, it will restore the TBZ file
-6. Reboot it again, this time off the Hard drive, and log you in as root
-7. Run /root/run-after-rebooted.sh
+0. Have working vagrant, veewee, makeself and rvm installations 
+1. (Download makeself.sh from https://github.com/megastep/makeself and put makeself as a sibling directory to veewee)
+2. Edit restorebackup.sh and set the BACKUPLOCATION
+3. Edit MAKE-TEMPLATE.sh and fix up (a) paths and (b) which subtemplate you want to use, to go in the payload
+4. If necessary*, edit the scripts in run-after-rebooted
+5. Run MAKE-TEMPLATE.sh - this creates the payload 
+6. Watch the machine boot off the SysRescue ISO, it will restore the TBZ file
+7. Reboot it again, this time off the Hard drive, and log you in as root
+8. Run /root/run-after-rebooted.sh
 
 Theory of Operation
 -------------------
