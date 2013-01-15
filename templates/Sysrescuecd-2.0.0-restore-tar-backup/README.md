@@ -54,30 +54,28 @@ TBZ file that also has the effects of the subtemplate applied to it.
 
 1. Boots Sysrescuecd ISO
 
-definition.rb:
-a. formatandmountdisk.sh: /dev/sda,  mounts as /mnt/rootfs, /mnt/boot + swap
-b. restorebackup.sh: Expands TBZ
-c. installgrub.sh: Sets up Grub (broken)
-d. run-after-rebooted.sh: Copies the payload + Guest ISO into /mnt/rootfs
-e. manual reboot
+    definition.rb:
+    a. formatandmountdisk.sh: /dev/sda,  mounts as /mnt/rootfs, /mnt/boot + swap
+    b. restorebackup.sh: Expands TBZ
+    c. installgrub.sh: Sets up Grub (broken)
+    d. run-after-rebooted.sh: Copies the payload + Guest ISO into /mnt/rootfs
+    e. manual reboot
 
 2. Restart - Boots /dev/sda 
 
-a. passwd (Set the passwd for root!)
-b. cd /root
-c. sh run-after-rebooted.sh:
- i.  Extracts the payload, and runs each numbered script. Uses Guest ISO
- ii. Numbered scripts fix any prerequisites for running payloaded subtemplate
- iii. One of these scripts is to call each subtemplate/*.sh in correct order
+a. cd /root
+b. sh run-after-rebooted.sh:
+    > Extracts the payload, and runs each numbered script. Uses Guest ISO
+    > Numbered scripts fix any prerequisites for running payloaded subtemplate
+    > One of these scripts is to call each subtemplate/*.sh in correct order
+
+c. The last script (6-) sets the passwords for root and vagrant to 'vagrant'
 
 3. veewee box validate restore
-
 4. shutdown the box 
+5. veewee box export restore  
 
-4. veewee box export restore  
 
-
-`
 Known Issues
 ------------
 - grub doesn't work the first time
