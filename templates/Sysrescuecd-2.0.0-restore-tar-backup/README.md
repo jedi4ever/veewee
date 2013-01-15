@@ -93,7 +93,7 @@ Known Issues
   is in the TBZ. Now, sysrescue is GenToo, but the TBZ is likely to contain
   something different. This makes the parent definition.rb file incapable 
   of controlling the chick... e.g. veewee tries to use the wrong shutdown
-  syntax. This only affects 
+  syntax. Just shut it down manually.
 
 Caveats
 -------
