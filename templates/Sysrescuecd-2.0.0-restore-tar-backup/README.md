@@ -55,8 +55,8 @@ TBZ file that also has the effects of the subtemplate applied to it.
 1. Boots Sysrescuecd ISO
 
     definition.rb:
-    a. formatandmountdisk.sh: /dev/sda,  mounts as /mnt/rootfs, /mnt/boot + swap
-    b. restorebackup.sh: Expands TBZ
+        a. formatandmountdisk.sh: /dev/sda,  mounts as /mnt/rootfs, /mnt/boot + swap
+        b. restorebackup.sh: Expands TBZ
     c. installgrub.sh: Sets up Grub (broken)
     d. run-after-rebooted.sh: Copies the payload + Guest ISO into /mnt/rootfs
     e. manual reboot
