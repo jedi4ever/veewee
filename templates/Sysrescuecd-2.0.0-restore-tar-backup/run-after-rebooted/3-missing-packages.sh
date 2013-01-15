@@ -7,7 +7,7 @@ apt-get -y install sudo
 # THIS IS INTERACTIVE, AND SEEMS TO CONFLICT WITH EARLY GRUB STUFF
 # - earlier grub stuff left empty grub files?
 # - grub is also set later, in base.sh :/
-apt-get -y install grub
+#apt-get -y install grub
 
 # needed for chef.sh
 apt-get -y install make

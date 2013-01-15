@@ -22,11 +22,13 @@ else
   $ROOTHOME/run-after-rebooted.sh --tar xvf -C $DIR
   for script in ?-*.sh ; do
       sh $script
-      if [ $? -ne 0]; then
+      if [ $? -ne 0 ]; then
 	  echo "$script finished with non-zero ($?) exit code, aborting"
 	  exit $?
       fi
   done
 fi
 
+echo "ALL DONE"
+echo "BTW: run-after-rebooted.sh provides --help"
 

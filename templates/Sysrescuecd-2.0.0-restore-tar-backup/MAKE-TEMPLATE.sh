@@ -5,7 +5,7 @@ BASEDIR=~/SoftwareDevelopment
 VEEWEEDIR=$BASEDIR/veewee/
 # From https://github.com/megastep/makeself
 MAKESELF=$BASEDIR/makeself/makeself.sh
-TEMPLATE=Sysrescuecd-2.0.0-restore-debian-6.0.6-backup
+TEMPLATE=Sysrescuecd-2.0.0-restore-tar-backup
 SUBTEMPLATE=Debian-6.0.6-amd64-netboot
 IMAGE=restore
 

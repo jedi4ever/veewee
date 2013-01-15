@@ -8,4 +8,4 @@ if [ ! -x $MAKESELF ]; then
   exit 1
 fi
 
-~/SoftwareDevelopment/makeself/makeself.sh run-after-rebooted run-after-rebooted.sh "Files to be run after rebooted, in the restored system" ./run-after-rebooted-runner.sh
+$MAKESELF run-after-rebooted run-after-rebooted.sh "Files to be run after rebooted, in the restored system" ./run-after-rebooted-runner.sh
