@@ -53,24 +53,24 @@ Once all the subtemplate scripts have finished, in theory you have a restored
 TBZ file that also has the effects of the subtemplate applied to it. 
 
 1. Boots Sysrescuecd ISO
-
+<pre>
     definition.rb:
         a. formatandmountdisk.sh: /dev/sda,  mounts as /mnt/rootfs, /mnt/boot + swap
         b. restorebackup.sh: Expands TBZ
-    c. installgrub.sh: Sets up Grub (broken)
-    d. run-after-rebooted.sh: Copies the payload + Guest ISO into /mnt/rootfs
-    e. manual reboot
+        c. installgrub.sh: Sets up Grub (broken)
+        d. run-after-rebooted.sh: Copies the payload + Guest ISO into /mnt/rootfs
+        e. manual reboot
+</pre>
 
 2. Restart - Boots /dev/sda 
-
-a. cd /root
-b. sh run-after-rebooted.sh:
-    > Extracts the payload, and runs each numbered script. Uses Guest ISO
-    > Numbered scripts fix any prerequisites for running payloaded subtemplate
-    > One of these scripts is to call each subtemplate/*.sh in correct order
-
-c. The last script (6-) sets the passwords for root and vagrant to 'vagrant'
-
+<pre>
+    a. cd /root
+    b. sh run-after-rebooted.sh:
+        Extracts the payload, and runs each numbered script. Uses Guest ISO
+        Numbered scripts fix any prerequisites for running payloaded subtemplate
+        One of these scripts is to call each subtemplate/*.sh in correct order
+    c. The last script (6-) sets the passwords for root and vagrant to 'vagrant'
+</pre>
 3. veewee box validate restore
 4. shutdown the box 
 5. veewee box export restore  
