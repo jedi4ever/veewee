@@ -55,12 +55,12 @@ The following command are available: change the vbox to fusion or kvm if you wan
 ## Non-Vagrant usage
 A typical cycle would be:
 
-  $ veewee vbox define 'mybuntu' 'ubuntu-10.10-amd64'
-  $ veewee vbox build 'myubuntu'
-  $ veewee vbox ssh 'myubuntu'
-  $ veewee vbox halt 'myubuntu'
-  $ veewee vbox up 'myubuntu'
-  $ veewee vbox export 'myubuntu'
+    $ veewee vbox define 'mybuntu' 'ubuntu-10.10-amd64'
+    $ veewee vbox build 'myubuntu'
+    $ veewee vbox ssh 'myubuntu'
+    $ veewee vbox halt 'myubuntu'
+    $ veewee vbox up 'myubuntu'
+    $ veewee vbox export 'myubuntu'
 
 ## Vagrant usage
 
