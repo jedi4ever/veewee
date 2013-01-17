@@ -3,8 +3,15 @@
 Veewee::Definition.declare({
   :cpu_count => '1',
   :memory_size=> '256',
-  :disk_size => '10140', :disk_format => 'VDI', :hostiocache => 'off',
+  :disk_size => '10140', :disk_format => 'VDI', :hostiocache => 'on',
   :os_type_id => 'Debian',
+  :virtualbox => { :vm_options => [ 
+                                   'hwvirtex' => 'off',
+                                   'hwvirtexexcl' => 'off', 
+                                   'nestedpaging' => 'off',
+                                   'natdnshostresolver1' => 'on'
+                                  ]
+                          },
   :iso_file => "debian-6.0.6-i386-netinst.iso",
   :iso_src => "http://cdimage.debian.org/debian-cd/6.0.6/i386/iso-cd/debian-6.0.6-i386-netinst.iso",
   :iso_md5 => "a5fdc1b74cd573d505a084baf7cc1462",
