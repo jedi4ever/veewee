@@ -14,7 +14,7 @@ Before you start read through:
 - the [requirements](https://github.com/jedi4ever/veewee/tree/master/doc/requirements.md)
 - the [installation](https://github.com/jedi4ever/veewee/tree/master/doc/installation.md) procedure
 
-Depending on how you want to use veewee, read through one of the following guides: (**work in progres**)
+Depending on how you want to use veewee, read through one of the following guides: (**work in progress**)
 
 - [guide for vagrant](https://github.com/jedi4ever/veewee/tree/master/doc/vagrant.md)
 
