@@ -66,7 +66,7 @@ module Veewee
           })
 
           # Type the boot sequence
-          self.console_type(boot_sequence)
+          Thread.new { self.console_type(boot_sequence) }
 
           self.handle_kickstart(options)
 
