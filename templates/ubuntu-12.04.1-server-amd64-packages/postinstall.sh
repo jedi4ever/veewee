@@ -26,7 +26,7 @@ rm /home/vagrant/VBoxGuestAdditions_$VBOX_VERSION.iso
 # Setup sudo to allow no-password sudo for "sudo"
 usermod -a -G sudo vagrant
 cp /etc/sudoers /etc/sudoers.orig
-sed -i -e 's/%sudo   ALL=(ALL:ALL) ALL/%sudo   ALL=(ALL:ALL) NOPASSWD: ALL/' /etc/sudoers
+sed -i -e 's/%sudo\tALL=(ALL:ALL) ALL/%sudo\tALL=(ALL:ALL) NOPASSWD: ALL/' /etc/sudoers
 
 # Add puppet user and group
 adduser --system --group --home /var/lib/puppet puppet
