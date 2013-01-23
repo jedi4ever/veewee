@@ -42,6 +42,8 @@ module Veewee
     attr_accessor :add_shares
     attr_accessor :vmdk_file
 
+    attr_accessor :skip_iso_transfer
+      
     def ui
       return @_ui if defined?(@_ui)
       @_ui = @env.ui.dup
@@ -97,6 +99,8 @@ module Veewee
       @vmfusion = { :vm_options => {} }
       @kvm = { :vm_options => {} }
 
+      @skip_iso_transfer = false
+      
     end
 
 
