@@ -47,6 +47,9 @@ module Veewee
                   end
                 end
               end
+            rescue IOError
+              ui.info "Received a disconnect; moving on"
+              sleep 5
             rescue Timeout::Error
               raise Veewee::Error, "Ssh timeout #{timeout} sec has been reached."
             end
