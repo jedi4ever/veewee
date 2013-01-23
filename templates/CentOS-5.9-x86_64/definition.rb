@@ -3,7 +3,7 @@ Veewee::Session.declare({
   :disk_size => '10140', :disk_format => 'VDI', :hostiocache => 'off', :ioapic => 'on', :pae => 'on',
   :os_type_id => 'RedHat_64',
   :iso_file => "CentOS-5.9-x86_64-bin-DVD-1of2.iso",
-  :iso_src => "http://mirrors.gigenet.com/centos/5.9/isos/x86_64/CentOS-5.9-x86_64-bin-DVD-1of2.iso",
+  :iso_src => "http://mirrors.kernel.org/centos/5.9/isos/x86_64/CentOS-5.9-x86_64-bin-DVD-1of2.iso",
   :iso_md5 => "c8caaa18400dfde2065d8ef58eb9e9bf",
   :iso_download_timeout => 10000,
   :boot_wait => "10", :boot_cmd_sequence => [ 'linux text ks=http://%IP%:%PORT%/ks.cfg<Enter>' ],
