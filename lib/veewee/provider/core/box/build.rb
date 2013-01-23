@@ -88,7 +88,7 @@ module Veewee
 
           self.handle_postinstall(options)
 
-          ui.success "The box #{name} was build successfully!"
+          ui.success "The box #{name} was built successfully!"
           ui.info "You can now login to the box with:"
           if (definition.winrm_user && definition.winrm_password)
             env.ui.info winrm_command_string
