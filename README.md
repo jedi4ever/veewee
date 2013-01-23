@@ -12,7 +12,7 @@ Besides building Vagrant boxes, veewee can also be used for:
 Before you start read through:
 
 - the [requirements](https://github.com/jedi4ever/veewee/tree/master/doc/requirements.md)
-- the [installation](https://github.com/jedi4ever/veewee/tree/master/doc/installation.md) procedure
+- the [installation](https://github.com/jedi4ever/veewee/tree/master/doc/installation.md) procedure and [osx 10.8 install hints](https://github.com/lucap/veewee/blob/master/doc/osx10-8.md).
 
 Depending on how you want to use veewee, read through one of the following guides: (**work in progress**)
 
