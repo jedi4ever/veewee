@@ -1,12 +1,12 @@
 Veewee::Session.declare({
   :cpu_count => '1', :memory_size=> '256',
   :disk_size => '40960', :disk_format => 'VDI', :hostiocache => 'off',
-  :os_type_id => 'OpenBSD_32',
+  :os_type_id => 'OpenBSD',
   :iso_file => "openbsd52_32.iso",
   :iso_src => "http://ftp3.usa.openbsd.org/pub/OpenBSD/5.2/i386/install52.iso",
   :iso_md5 => "a10f51d910052b477147e198c08089f8",
   :iso_download_timeout => "1000",
-  :boot_wait => "40", :boot_cmd_sequence => [
+  :boot_wait => "50", :boot_cmd_sequence => [
 # I - install
    'I<Enter>',
 # set the keyboard
@@ -68,11 +68,7 @@ Veewee::Session.declare({
    '<Wait>'*90,
 # Done installing ?
    'done<Enter>',
-# Time appears wrong. Set to ...? [yes]
-   'yes<Enter><Wait>',
    '<Wait>'*6,
-# Install non-free firmware files on first boot ? [no] <-- don't know what this is so I'm saying no
-   'no<Enter><Wait>',
    'reboot<Enter>',
    '<Wait>'*6
   ],
