@@ -47,7 +47,7 @@ module Veewee
         def shift(sequence)
           seq=Array.new
           seq << press_key('SHIFT_LEFT')
-          sequence.each do |s|
+          sequence.each_char do |s|
             seq << s
           end
           return seq
@@ -138,8 +138,12 @@ module Veewee
               if thestring.start_with?(key)
                 #take thestring
                 #check if it starts with a special key + pop special string
-                special[key].each do |c|
-                  keycodes.concat("#{c['code']} ")
+                if key=="<Wait>"
+                  sleep 1
+                else
+                  special[key].each do |c|
+                    keycodes.concat("#{c['code']} ")
+                  end
                 end
                 thestring=thestring.slice(key.length,thestring.length-key.length)
                 nospecial=false;
@@ -149,8 +153,9 @@ module Veewee
             if nospecial
               code=k[thestring.slice(0,1)]
               if !code.nil?
+                code=[code] if code.class==String
                 code.each do |c|
-		  if(c == 'SHIFT_LEFT'):
+		  if(c == 'SHIFT_LEFT')
                   	keycodes.concat("#{c}\#")
 		  else
                   	keycodes.concat("#{c} ")
