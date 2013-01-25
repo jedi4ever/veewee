@@ -68,11 +68,7 @@ Veewee::Session.declare({
    '<Wait>'*90,
 # Done installing ?
    'done<Enter>',
-# Time appears wrong. Set to ...? [yes]
-   'yes<Enter><Wait>',
    '<Wait>'*6,
-# Install non-free firmware files on first boot ? [no] <-- don't know what this is so I'm saying no
-   'no<Enter><Wait>',
    'reboot<Enter>',
    '<Wait>'*6
   ],
