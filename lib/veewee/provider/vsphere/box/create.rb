@@ -6,10 +6,11 @@ module Veewee
         # When we create a new box
         # We assume the box is not running
         def create(options)
-          datastore_name = retrieve_datastore options["datastore"]
+          network_name = retrieve_network options
+          datastore_name = retrieve_datastore options
 
           load_iso datastore_name
-          create_vm datastore_name
+          create_vm datastore_name, network_name
           create_disk
           enable_vnc
         end
@@ -29,18 +30,36 @@ module Veewee
           end
         end
 
-        def retrieve_datastore name
+        def retrieve_datastore options
           dc = vim.serviceInstance.find_datacenter
-          name = dc.datastoreFolder.childEntity[0].name if name.nil? 
+          # TODO Figure out whether there should be a default
+          name ||= options["datastore"]
+          name ||= definition.vsphere[:vm_options][:datastore]
+          name ||= dc.datastoreFolder.childEntity[0].name
           datastore = dc.find_datastore name
 
           raise Veewee::Error, "Datastore #{name} does not exist" if datastore.nil? 
+          env.ui.info "Using datastore #{name}"
+          
+          return name 
+        end
+
+        def retrieve_network options
+          dc = vim.serviceInstance.find_datacenter
+          # TODO Figure out whether there should be a default
+          name ||= options["network"]
+          name ||= definition.vsphere[:vm_options][:network]
+          name ||= dc.networkFolder.childEntity[0].name
+          network = dc.network.find { |x| x.name == name }
+
+          raise Veewee::Error, "Network #{name} does not exist" if network.nil? 
+          env.ui.info "Using network #{name}"
 
           return name 
         end
 
         def create_disk
-          env.ui.info "Creating disk"
+          env.ui.info "Creating virtual disk"
           add_disk "#{definition.disk_size}M"
         end
 
@@ -51,7 +70,7 @@ module Veewee
           return vspheretype
         end
 
-        def create_vm datastore_name
+        def create_vm(datastore_name,network_name)
           dc = vim.serviceInstance.find_datacenter
           pool = dc.hostFolder.childEntity[0].resourcePool
           vmFolder = dc.vmFolder
@@ -94,10 +113,10 @@ module Veewee
                 :device => VIM.VirtualE1000(
                   :key => -1,
                   :deviceInfo => {
-                    :summary => definition.vsphere[:vm_options][:network],
+                    :summary => network_name,
                     :label => "",
                   },
-                  :backing => VIM.VirtualEthernetCardNetworkBackingInfo(:deviceName => definition.vsphere[:vm_options][:network]),
+                  :backing => VIM.VirtualEthernetCardNetworkBackingInfo(:deviceName => network_name),
                   :addressType => 'generated'
                 )
               }

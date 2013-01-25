@@ -1,3 +1,5 @@
+require 'rbvmomi'
+
 require 'veewee/provider/core/box'
 require 'veewee/provider/core/box/vnc'
 require 'veewee/provider/core/helper/tcp'
@@ -16,10 +18,13 @@ require 'veewee/provider/vsphere/box/create'
 require 'veewee/provider/vsphere/box/poweroff'
 require 'veewee/provider/vsphere/box/halt'
 require 'veewee/provider/vsphere/box/destroy'
+require 'veewee/provider/vsphere/box/validate_vsphere'
 require 'veewee/provider/vsphere/box/ssh'
-require 'veewee/provider/vsphere/box/template'
-#require 'veewee/provider/vsphere/box/export_ova'
+require 'veewee/provider/vsphere/box/export_ova'
 
+#VIM = RbVmomi::VIM
+# Include RbVmomi extensions for uploading files without curl
+#VIM.add_extension_dir File.join(File.dirname(__FILE__), "extensions")
 
 module Veewee
   module Provider
@@ -31,7 +36,6 @@ module Veewee
 
 
         def initialize(name,env)
-          require 'rbvmomi'
       	  super(name,env)
         end
 	
@@ -44,6 +48,13 @@ module Veewee
 
         def raw
           @raw ||= vim.serviceInstance.find_datacenter.find_vm(name) 
+        end
+
+        #Path to the VM relative to the host server (vCenter of vSphere)
+        def path
+          datacenter = vim.serviceInstance.find_datacenter
+
+          path = datacenter.name + "/" + datacenter.vmFolder.name + "/" + name
         end
       end # End Class
     end # End Module

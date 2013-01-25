@@ -7,7 +7,8 @@ module Veewee
       method_option :vsphere_host,:type => :string , :default => nil, :aliases => "-h", :desc => "VSphere Host"
       method_option :vsphere_user,:type => :string , :default => nil, :aliases => "-u", :desc => "VSphere User"
       method_option :vsphere_password,:type => :string , :default => nil, :aliases => "-p", :desc => "VSphere Password"
-      method_option :datastore,:type => :string , :default => nil, :aliases => "-s", :desc => "VSphere Datastore"
+      method_option :datastore,:type => :string , :default => nil, :aliases => "--ds", :desc => "VSphere Datastore"
+      method_option :network,:type => :string , :default => nil, :aliases => "--net", :desc => "VSphere Virtual Network"
       method_option :force,:type => :boolean , :default => false, :aliases => "-f", :desc => "force the build"
       method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging"
       method_option :nogui,:type => :boolean , :default => false, :aliases => "-n", :desc => "no gui"
@@ -18,20 +19,6 @@ module Veewee
         venv=Veewee::Environment.new(options)
         venv.ui=env.ui
         venv.providers["vsphere"].get_box(box_name).build(options)
-      end
-
-      method_option :vsphere_host,:type => :string , :default => nil, :aliases => "-h", :desc => "VSphere Host"
-      method_option :vsphere_user,:type => :string , :default => nil, :aliases => "-u", :desc => "VSphere User"
-      method_option :vsphere_password,:type => :string , :default => nil, :aliases => "-p", :desc => "VSphere Password"
-      method_option :datastore,:type => :string , :default => nil, :aliases => "-s", :desc => "VSphere Datastore"
-      method_option :force,:type => :boolean , :default => false, :aliases => "-f", :desc => "force the destroy" 
-      method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging"
-      method_option :nogui,:type => :boolean , :default => false, :aliases => "-n", :desc => "no gui"
-      desc "create [BOXNAME]", "Creates the virtualmachine without building"
-      def create(box_name)
-        venv=Veewee::Environment.new(options)
-        venv.ui=env.ui
-        venv.providers["vsphere"].get_box(box_name).create(options)
       end
 
       method_option :vsphere_host,:type => :string , :default => nil, :aliases => "-h", :desc => "VSphere Host"
@@ -119,7 +106,7 @@ module Veewee
           exit -1
         end
       end
-=begin
+
       desc "validate [NAME]", "Validates a box against vsphere compliancy rules"
       method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging"
       method_option :tags, :type => :array , :default => %w{vsphere puppet chef}, :aliases => "-t", :desc => "tags to validate"
@@ -139,6 +126,15 @@ module Veewee
         end
       end
 
+      desc "path [NAME]", "Prints the vms path"
+      method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging"
+      method_option :force,:type => :boolean , :default => false, :aliases => "-f", :desc => "overwrite existing file"
+      def path(box_name)
+        venv=Veewee::Environment.new(options)
+        venv.ui=env.ui
+        env.ui.info venv.providers["vsphere"].get_box(box_name).path
+      end
+
       desc "export [NAME]", "Exports the basebox to the ova format"
       method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging"
       method_option :force,:type => :boolean , :default => false, :aliases => "-f", :desc => "overwrite existing file"
@@ -147,8 +143,6 @@ module Veewee
         venv.ui=env.ui
         venv.providers["vsphere"].get_box(box_name).export_ova(options)
       end
-
-=end
 
       desc "templates", "List the currently available templates"
       method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging"

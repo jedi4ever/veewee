@@ -1,4 +1,3 @@
-require 'rbvmomi'
 require 'veewee/provider/core/provider'
 
 module Veewee
@@ -12,7 +11,6 @@ module Veewee
 
         #include ::Veewee::Provider::Vsphere::ProviderCommand
         def initialize(name, options, env)
-          ::RbVmomi::VIM.add_extension_dir File.join(File.dirname(__FILE__), "extensions")
           super(name, options, env)
         end
 
@@ -21,7 +19,6 @@ module Veewee
           # Credentials are used in this order
           #   Command Line
           #   ENV File
-          #ip = definition.vsphere[:kickstart_ip]
           @host = options['vsphere_host']
           @user = options['vsphere_user']
           @password = options['vsphere_password']
@@ -36,8 +33,8 @@ module Veewee
             @password ||= credentials["password"]
           end
 
-          fail "Must define host" if @host.nil?
-          fail "Must define user" if @user.nil?
+          raise Veewee::Error, "Must define host" if @host.nil?
+          raise Veewee::Error, "Must define user" if @user.nil?
 
           @password ||= ask("#{@user}@#{@host} password: ") {|q| q.echo = false}
         end

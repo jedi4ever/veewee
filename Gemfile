@@ -14,7 +14,7 @@ end
 
 group :test do
   gem "rake"
-  gem "em-winrm", :git => 'git://github.com/hh/em-winrm.git', :ref => '31745601d3'
+  gem "em-winrm", :git => 'http://github.com/hh/em-winrm.git', :ref => '31745601d3'
   #gem "chef"
   #gem "knife-windows"
 end
