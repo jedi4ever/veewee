@@ -16,16 +16,21 @@ module Veewee
         end
 
         def load_iso datastore_name
-          env.ui.info "Loading ISO to Host"
           filename = definition.iso_file
           local_path=File.join(env.config.veewee.iso_dir,filename)
           File.exists?(local_path) or fail "ISO does not exist"
+
           dc = vim.serviceInstance.find_datacenter
           datastore = dc.find_datastore datastore_name
+
+          # These checks need to be done in this order
+          # otherwise the requests to the datastore over
+          # http will hang. (Observed in ESXi 4.1 update 3)
+          unless datastore.exists? "isos/"
+            vim.serviceContent.fileManager.MakeDirectory :name => "[#{datastore_name}] isos", :datacenter => dc
+          end
           unless datastore.exists? "isos/"+filename
-            unless datastore.exists? "isos/"
-              vim.serviceContent.fileManager.MakeDirectory :name => "[#{datastore_name}] isos", :datacenter => dc
-            end
+            env.ui.info "Loading ISO to vSphere Host"
             datastore.upload "isos/"+filename, local_path
           end
         end
@@ -40,7 +45,7 @@ module Veewee
 
           raise Veewee::Error, "Datastore #{name} does not exist" if datastore.nil? 
           env.ui.info "Using datastore #{name}"
-          
+
           return name 
         end
 
@@ -95,8 +100,8 @@ module Veewee
                   :backing => VIM.VirtualCdromIsoBackingInfo(
                     :fileName => datastore_path + " isos/" + definition.iso_file
                   ),
-                  :controllerKey => 200,
-                  :unitNumber => 0
+                    :controllerKey => 200,
+                    :unitNumber => 0
                 )
               },
               {
@@ -123,8 +128,8 @@ module Veewee
             ],
           } 
 
-          vmFolder.CreateVM_Task(:config=>config,
-                                 :pool=>pool).wait_for_completion
+            vmFolder.CreateVM_Task(:config=>config,
+                                   :pool=>pool).wait_for_completion
 
         end
       end
