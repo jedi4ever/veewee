@@ -15,11 +15,15 @@ module Veewee
         end
 
         def exists_volume?
-          @connection.list_volumes.find { |v| v[:name] == "#{name}.img" }
+          !@connection.list_volumes(:name => @volume_name).first.empty?
         end
 
         def exists_vm?
-          @connection.list_domains.find { |d| d[:name] == name }
+          begin
+            @connection.list_domains(:name => name)
+          rescue Libvirt::RetrieveError
+            false
+          end
         end
 
       end # End Module

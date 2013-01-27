@@ -46,6 +46,7 @@ module Veewee
               :arch => definition.os_type_id.end_with?("_64") ? "x86_64" : "i686",
               :iso_dir => env.config.veewee.iso_dir,
               :volume_pool_name => volume_pool_name,
+              :volume_format_type => definition.disk_format,
               :network_nat_network => network_name
           }
 

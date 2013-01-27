@@ -4,7 +4,7 @@ module Veewee
       module BoxCommand
         # Destroy a vm
         def destroy(options={})
-          if @connection.servers.all(:name => name).nil?
+          unless exists_vm? or exists_volume?
             env.ui.error "Error:: You tried to destroy a non-existing box '#{name}'"
             raise Veewee::Error,"Error:: You tried to destroy a non-existing box '#{name}'"
           end
@@ -12,9 +12,9 @@ module Veewee
           self.poweroff if running?
           destroy_vm if exists_vm?
 
-          vol_exists=!@connection.volumes.all(:name => "#{name}.img").nil?
-          env.logger.info "Volume exists? : #{vol_exists}"
-          destroy_volume if exists_volume?
+          vol_exists = exists_volume?
+          env.logger.info "Volume exists?: #{vol_exists}"
+          destroy_volume if vol_exists
         end
 
         def destroy_vm
@@ -23,8 +23,7 @@ module Veewee
         end
 
         def destroy_volume
-          vol=@connection.volumes.all(:name => "#{name}.img").first
-          vol.destroy
+          @connection.volumes.all(:name => @volume_name).first.destroy
         end
       end # End Module
 
