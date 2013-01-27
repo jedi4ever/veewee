@@ -33,6 +33,12 @@ module Veewee
 
           @connection=::Fog::Compute[:libvirt]
 
+          # Many of the existing templates have disk_format set to "VDI"
+          # Use "raw" instead as a Libvirt-compatible default
+          definition.disk_format.downcase!
+          definition.disk_format = "raw" if definition.disk_format == "vdi"
+          @volume_name = "#{name}.#{definition.disk_format}"
+
         end
 
       end # End Class
