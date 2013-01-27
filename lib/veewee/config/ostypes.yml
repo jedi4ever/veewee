@@ -333,3 +333,8 @@ NetBSD_64:
   :kvm:
   :vbox: NetBSD_64
   :parallels: other
+ESXi5:
+  :fusion: vmkernel5 
+  :kvm:
+  :vbox: 
+  :parallels: 
