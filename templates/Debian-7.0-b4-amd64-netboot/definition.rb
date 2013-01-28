@@ -4,7 +4,7 @@ Veewee::Definition.declare({
   :cpu_count => '1',
   :memory_size=> '256',
   :disk_size => '10140', :disk_format => 'VDI', :hostiocache => 'off',
-  :os_type_id => 'Debian',
+  :os_type_id => 'Debian_64',
   :iso_file => "debian-wheezy-DI-b4-amd64-netinst.iso",
   :iso_src => "http://cdimage.debian.org/cdimage/wheezy_di_beta4/amd64/iso-cd/debian-wheezy-DI-b4-amd64-netinst.iso",
   :iso_md5 => "9fcd2bb541f9b6b32f2a17116d606bed",
