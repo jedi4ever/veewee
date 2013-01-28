@@ -31,7 +31,7 @@ genfstab -U /mnt >> /mnt/etc/fstab
 # chroot into the new system
 arch-chroot /mnt <<ENDCHROOT
 # make sure network is up and a nameserver is available
-dhcpcd eth0
+systemctl start dhcpcd
 
 # choose a mirror
 sed -i 's/^#\(.*leaseweb.*\)/\1/' /etc/pacman.d/mirrorlist
@@ -76,8 +76,11 @@ echo "sshd:	ALL" > /etc/hosts.allow
 # and everything else isn't
 echo "ALL:	ALL" > /etc/hosts.deny
 
-# make sure sshd starts
-sed -i 's:^DAEMONS\(.*\))$:DAEMONS\1 sshd):' /etc/rc.conf
+# make sure to have dhcpcd at startup
+systemctl enable dhcpcd
+
+# make sure sshd starts too
+systemctl enable ssh
 
 # install mitchellh's ssh key
 mkdir /home/vagrant/.ssh
@@ -94,14 +97,8 @@ git clone https://github.com/puppetlabs/puppet.git
 cd puppet
 ruby install.rb --bindir=/usr/bin --sbindir=/sbin
 
-# set up networking
-[[ $PKGSRC == 'net' ]] && sed -i 's/^\(interface=*\)/\1eth0/' /etc/rc.conf
-
 # leave the chroot
 ENDCHROOT
 
-# take down network to prevent next postinstall.sh from starting too soon
-#/etc/rc.d/network stop
-
-# and reboot!
+# and final reboot!
 reboot
