@@ -21,8 +21,7 @@ rm VBoxGuestAdditions_"$VBOX_VERSION".iso
 cat >> /etc/rc.local <<EOF
 # enable DHCP at boot on eth0
 # See https://wiki.archlinux.org/index.php/Network#DHCP_fails_at_boot
-dhcpcd -k eth0
-dhcpcd -nd eth0
+systemctl restart dhcpcd@eth0
 EOF
 
 # clean out pacman cache
