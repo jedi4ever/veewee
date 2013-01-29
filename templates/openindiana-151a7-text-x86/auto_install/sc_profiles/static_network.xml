@@ -1,0 +1,105 @@
+<!--
+CDDL HEADER START
+
+The contents of this file are subject to the terms of the
+Common Development and Distribution License (the "License").
+You may not use this file except in compliance with the License.
+
+You can obtain a copy of the license at usr/src/OPENSOLARIS.LICENSE
+or http://www.opensolaris.org/os/licensing.
+See the License for the specific language governing permissions
+and limitations under the License.
+
+When distributing Covered Code, include this CDDL HEADER in each
+file and include the License file at usr/src/OPENSOLARIS.LICENSE.
+If applicable, add the following below this CDDL HEADER, with the
+fields enclosed by brackets "[]" replaced with your own identifying
+information: Portions Copyright [yyyy] [name of copyright owner]
+
+CDDL HEADER END
+
+Copyright (c) 2010, Oracle and/or its affiliates. All rights reserved.
+-->
+
+<!DOCTYPE service_bundle SYSTEM "/usr/share/lib/xml/dtd/service_bundle.dtd.1">
+<service_bundle type="profile" name="system configuration">
+    <service name="system/install/config" version="1" type="service">
+        <instance name="default" enabled="true">
+            <property_group name="user_account" type="application">
+                <propval name="login" type="astring" value="jack"/>
+                <propval name="password" type="astring" value="9Nd/cwBcNWFZg"/>
+                <propval name="description" type="astring" value="default_user"/>
+                <propval name="shell" type="astring" value="/usr/bin/bash"/>
+                <propval name="uid" type='count' value='101'/>
+                <propval name="gid" type='count' value='10'/>
+                <propval name="type" type="astring" value="normal"/>
+                <propval name="roles" type="astring" value="root"/>
+            </property_group>
+
+            <property_group name="root_account" type="application">
+                <propval name="password" type="astring" value="$5$VgppCOxA$ycFmYW4ObRRHhtsGEygDdexk5bugqgSiaSR9niNCouC"/>
+                <propval name="type" type="astring" value="role"/>
+            </property_group>
+
+            <property_group name="other_sc_params" type="application">
+                <propval name="timezone" type="astring" value="GMT"/>
+                <propval name="hostname" type="astring" value="solaris"/>
+            </property_group>
+        </instance>
+    </service>
+
+    <service name="system/console-login" version="1" type="service">
+        <property_group name="ttymon" type="application">
+            <propval name="terminal_type" type="astring" value="sun"/>
+        </property_group>
+    </service>
+
+    <service name='system/keymap' version='1' type='service'>
+        <instance name='default' enabled='true'>
+            <property_group name='keymap' type='system'>
+                <propval name='layout' type='astring' value='US-English'/>
+            </property_group>
+        </instance>
+    </service>
+
+    <service name="network/physical" version="1" type="service">
+        <instance name="nwam" enabled="false"/>
+        <instance name="default" enabled="true"/>
+    </service>
+
+    <service name='network/install' version='1' type='service'>
+        <instance name='default' enabled='true'>
+            <property_group name='install_ipv4_interface' type='application'>
+                <propval name='name' type='astring' value='net0/v4'/>
+                <propval name='address_type' type='astring' value='static'/>
+                <propval name='static_address' type='net_address_v4' value='x.x.x.x/n'/>
+                <propval name='default_route' type='net_address_v4' value='x.x.x.x'/>
+            </property_group>
+
+            <property_group name='install_ipv6_interface' type='application'>
+                <propval name='name' type='astring' value='net0/v6'/>
+                <propval name='address_type' type='astring' value='addrconf'/>
+                <propval name='stateless' type='astring' value='yes'/>
+                <propval name='stateful' type='astring' value='yes'/>
+            </property_group>
+        </instance>
+    </service>
+
+    <service name='network/dns/install' version='1' type='service'>
+        <instance name='default' enabled='true'>
+            <property_group name='install_props' type='application'>
+                <property name='nameserver' type='net_address'>
+                    <net_address_list>
+                        <value_node value='x.x.x.x'/>
+                    </net_address_list>
+                </property>
+                <property name='search' type='astring'>
+                    <astring_list>
+                        <value_node value='example.com'/>
+                    </astring_list>
+                </property>
+            </property_group>
+        </instance>
+    </service>
+</service_bundle>
+
