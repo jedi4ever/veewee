@@ -40,7 +40,7 @@ module Veewee
           # When we get here, ssh is available and no postinstall scripts have been executed yet
           # So we begin by transferring the ISO file of the vmware tools
 
-          if not (definition.winrm_user && definition.winrm_password)
+          if not ((definition.winrm_user && definition.winrm_password) || definition.os_type_id.start_with?('ESX'))
             # with windows, we just use the mounted volume
             env.logger.info "About to transfer vmware tools iso buildinfo to the box #{name} - #{ip_address} - #{ssh_options}"
             iso_image=guest_iso_path
