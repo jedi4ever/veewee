@@ -41,7 +41,7 @@ module Veewee
           # before exporting the system needs to be shut down
 
           # otherwise the debug log will show - The specified virtual disk needs repair
-          shell_exec("#{File.dirname(vmrun_cmd).shellescape}/ovftool/ovftool.bin #{debug} #{flags} #{vmx_file_path.shellescape} #{name}.ova")
+          shell_exec("#{File.dirname(vmrun_cmd).shellescape}#{"/VMware OVF Tool/ovftool".shellescape} #{debug} #{flags} #{vmx_file_path.shellescape} #{name}.ova")
         end
       end
     end
