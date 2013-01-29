@@ -31,6 +31,7 @@ Veewee::Session.declare({
     "puppet.sh",
     "vagrant.sh",
     "virtualbox.sh",
+    "nfs.sh",
     #"kvm.sh",
     #"vmfusion.sh",
     "cleanup.sh",
