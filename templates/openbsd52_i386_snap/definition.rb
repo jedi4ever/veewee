@@ -2,17 +2,17 @@ Veewee::Session.declare({
   :cpu_count => '1', :memory_size=> '256',
   :disk_size => '40960', :disk_format => 'VDI', :hostiocache => 'off',
   :os_type_id => 'OpenBSD',
-  :iso_file => "openbsd52_32.iso",
-  :iso_src => "http://ftp3.usa.openbsd.org/pub/OpenBSD/5.2/i386/install52.iso",
+  :iso_file => "openbsd52snap_32.iso",
+  :iso_src => "http://ftp3.usa.openbsd.org/pub/OpenBSD/snapshots/i386/install52.iso",
   :iso_md5 => "a10f51d910052b477147e198c08089f8",
   :iso_download_timeout => "1000",
-  :boot_wait => "50", :boot_cmd_sequence => [
+  :boot_wait => "80", :boot_cmd_sequence => [
 # I - install
    'I<Enter>',
 # set the keyboard
    'us<Enter>',
 # set the hostname
-   'OpenBSD52-x32<Enter>',
+   'OpenBSD52snap-x32<Enter>',
 # Which nic to config ? [em0]
    '<Enter>',
 # do you want dhcp ? [dhcp]
