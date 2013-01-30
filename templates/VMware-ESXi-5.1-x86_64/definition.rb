@@ -21,5 +21,7 @@ Veewee::Session.declare({
     :ssh_host_port => "7222", :ssh_guest_port => "22",
     :sudo_cmd => "echo '%p'|sudo -S sh '%f'",
     :shutdown_cmd => "/bin/halt",
-    :postinstall_files => [ ], :postinstall_timeout => 10000,
+    :postinstall_files => ["vagrant_key.py", "vnc_enable.sh" ], :postinstall_timeout => 10000,
+    # Enable Hypervisor support to allow 64-bit guest VMs
+    :vmfusion => { :vm_options => { 'enable_hypervisor_support' => true,  'download_tools' => false } }
 })
