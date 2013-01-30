@@ -82,6 +82,7 @@ ethernet0.displayName = "Ethernet"
 sound.startConnected = "FALSE"
 RemoteDisplay.vnc.enabled = "TRUE"
 RemoteDisplay.vnc.port = "<%= vnc_port %>"
+<% if enable_hypervisor_support == true %>vhv.enable = "TRUE"<% end %>
 <% if fusion_version.start_with?('5.') %>bios.bootOrder = "hdd,CDROM"<% end %>
 <% unless vmdk_file.nil? %>
 scsi0:2.present = "TRUE"

@@ -18,6 +18,9 @@ module Veewee
           floppy_path=File.join(definition.path,'virtualfloppy.img')
         end
         
+        # Property to support enabling hypervisor support in a VM
+        enable_hypervisor_support = definition.vmfusion[:vm_options]['enable_hypervisor_support']
+        
         # Depending on the fusion version, we need to update the virtualhw version
         if @provider.fusion_version.start_with?('5.')
           virtualhw_version = 9
@@ -39,7 +42,8 @@ module Veewee
           :box_name => name,
           :vnc_port => guess_vnc_port,
           :fusion_version => @provider.fusion_version,
-          :vmdk_file => vmdk_file
+          :vmdk_file => vmdk_file,
+          :enable_hypervisor_support => enable_hypervisor_support
         }
 
         vars = ErbBinding.new(data)
