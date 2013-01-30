@@ -185,7 +185,7 @@ RedHat:
   :vbox: RedHat
   :parallels: redhat
 RedHat_64:
-  :fusion: RedHat_64
+  :fusion: rhel6-64
   :kvm:
   :vbox: RedHat_64
   :parallels: redhat
