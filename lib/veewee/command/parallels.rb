@@ -7,6 +7,7 @@ module Veewee
       method_option :force,:type => :boolean , :default => false, :aliases => "-f", :desc => "force the build"
       method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging"
       method_option :auto,:type => :boolean , :default => false, :aliases => "-a", :desc => "auto answers"
+      method_option :checksum , :type => :boolean , :default => false, :desc => "verify checksum"
       method_option :postinstall_include, :type => :array, :default => [], :aliases => "-i", :desc => "ruby regexp of postinstall filenames to additionally include"
       method_option :postinstall_exclude, :type => :array, :default => [], :aliases => "-e", :desc => "ruby regexp of postinstall filenames to exclude"
       def build(box_name)

@@ -40,8 +40,8 @@ module Veewee
               options['postinstall_list'] = e
             end
 
-            opts.on("--[no-]md5","force to check iso file md5 sum") do |v|
-              options['md5check'] = v
+            opts.on("--[no-]checksum","force to check iso file check sum") do |v|
+              options['checksum'] = v
             end
 
           end
