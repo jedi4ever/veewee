@@ -2,18 +2,6 @@
 
 module Veewee
   module Command
-    class Fusion < Veewee::Command::GroupBase
-      register "add_share", "Adds a Share to the Guest"
-      desc "add_share [BOX_NAME] [SHARE_NAME] [SHARE_PATH]", "hello"
-      def add_share(box_name, share_name, share_path)
-        venv=Veewee::Environment.new(options)
-        venv.ui=env.ui
-#          command="#{File.dirname().shellescape}/vmware-vdiskmanager -c -s #{definition.disk_size}M -a lsilogic -t #{disk_type} #{name}.vmdk"
-#          shell_results=shell_exec("#{command}",{:mute => true})
-        venv.providers["vmfusion"].get_box(box_name).add_share(share_name, share_path)
-        
-      end
-    end
 
     class Fusion< Veewee::Command::GroupBase
 
@@ -23,6 +11,7 @@ module Veewee
       method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging"
       method_option :nogui,:type => :boolean , :default => false, :aliases => "-n", :desc => "no gui"
       method_option :auto,:type => :boolean , :default => false, :aliases => "-a", :desc => "auto answers"
+      method_option :checksum , :type => :boolean , :default => false, :desc => "verify checksum"
       method_option :postinstall_include, :type => :array, :default => [], :aliases => "-i", :desc => "ruby regexp of postinstall filenames to additionally include"
       method_option :postinstall_exclude, :type => :array, :default => [], :aliases => "-e", :desc => "ruby regexp of postinstall filenames to exclude"
       def build(box_name)
@@ -164,6 +153,16 @@ module Veewee
         end
       end
 
+      desc "add_share [BOX_NAME] [SHARE_NAME] [SHARE_PATH]", "Adds a share to the guest"
+      method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging"
+      def add_share(box_name, share_name, share_path)
+        venv=Veewee::Environment.new(options)
+        venv.ui=env.ui
+#          command="#{File.dirname().shellescape}/vmware-vdiskmanager -c -s #{definition.disk_size}M -a lsilogic -t #{disk_type} #{name}.vmdk"
+#          shell_results=shell_exec("#{command}",{:mute => true})
+        venv.providers["vmfusion"].get_box(box_name).add_share(share_name, share_path)
+
+      end
 
     end
 
