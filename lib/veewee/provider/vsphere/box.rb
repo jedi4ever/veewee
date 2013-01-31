@@ -38,23 +38,21 @@ module Veewee
         def initialize(name,env)
       	  super(name,env)
         end
-	
+
         def vim
-      	  host = provider.host
-	    	  user = provider.user
-	    	  password = provider.password
-          @vim ||= RbVmomi::VIM.connect host: host, user: user, password: password, insecure: true 
+      	  vsphere_server = provider.vsphere_server
+	    	  vsphere_user = provider.vsphere_user
+	    	  vsphere_password = provider.vsphere_password
+          @vim ||= RbVmomi::VIM.connect host: vsphere_server, user: vsphere_user, password: vsphere_password, insecure: true
         end
 
         def raw
-          @raw ||= vim.serviceInstance.find_datacenter.find_vm(name) 
+          @raw ||= dc.find_vm(name)
         end
 
         #Path to the VM relative to the host server (vCenter of vSphere)
         def path
-          datacenter = vim.serviceInstance.find_datacenter
-
-          path = datacenter.name + "/" + datacenter.vmFolder.name + "/" + name
+          path = dc.name + "/" + dc.vmFolder.name + "/" + name
         end
       end # End Class
     end # End Module

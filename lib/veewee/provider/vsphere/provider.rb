@@ -5,9 +5,9 @@ module Veewee
     module Vsphere
       class Provider < Veewee::Provider::Core::Provider
 
-        attr_reader :host
-        attr_reader :user
-        attr_reader :password
+        attr_reader :vsphere_server
+        attr_reader :vsphere_user
+        attr_reader :vsphere_password
 
         #include ::Veewee::Provider::Vsphere::ProviderCommand
         def initialize(name, options, env)
@@ -19,24 +19,24 @@ module Veewee
           # Credentials are used in this order
           #   Command Line
           #   ENV File
-          @host = options['vsphere_host']
-          @user = options['vsphere_user']
-          @password = options['vsphere_password']
+          @vsphere_server = options['vsphere_server']
+          @vsphere_user = options['vsphere_user']
+          @vsphere_password = options['vsphere_password']
 
           cred_path = ENV["VEEWEE_VSPHERE_AUTHFILE"]
           unless cred_path.nil?
             env.logger.info "Reading credentials yamlfile #{cred_path}"
             credentials=YAML.load_file(cred_path)
 
-            @host ||= credentials["host"]
-            @user ||= credentials["user"]
-            @password ||= credentials["password"]
+            @vsphere_server   ||= credentials["vsphere_server"]
+            @vsphere_user     ||= credentials["vsphere_user"]
+            @vsphere_password ||= credentials["vsphere_password"]
           end
 
-          raise Veewee::Error, "Must define host" if @host.nil?
-          raise Veewee::Error, "Must define user" if @user.nil?
+          raise Veewee::Error, "Must define vsphere_server" if @vsphere_server.nil?
+          raise Veewee::Error, "Must define vsphere_user" if @vsphere_user.nil?
 
-          @password ||= ask("#{@user}@#{@host} password: ") {|q| q.echo = false}
+          @vsphere_password ||= ask("#{@vsphere_user}@#{@vsphere_server} password: ") {|q| q.echo = false}
         end
       end #End Class
     end # End Module
