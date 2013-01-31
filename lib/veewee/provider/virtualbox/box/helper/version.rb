@@ -8,7 +8,7 @@ module Veewee
         # For example: 4.1.8_Debianr75467 -> 4.1.8
         def vbox_version
           command="#{@vboxcmd} --version"
-          shell_results=shell_exec("#{command}",{:mute => true})
+          shell_results=shell_exec("#{command}",{:mute => true, :stderr => "/dev/null"})
           version=shell_results.stdout.strip.split(/[^0-9\.]/)[0]
           return version
         end
