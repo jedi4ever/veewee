@@ -7,6 +7,9 @@ NOTE: Virtualbox doesn't like KVM to be enabled
 Depending on your operating system you may need to install packages for kvm,
 qemu and libvirt.
 
+If you have problems compiling the libvirt gem, check if you have the 'dev' parts installed too. 
+f.i ``apt-get install libvirt libvirt-dev``
+
 To check if your kernel can run kvm :
 
     # kvm_ok or kvm-ok command (on Ubuntu at least)
