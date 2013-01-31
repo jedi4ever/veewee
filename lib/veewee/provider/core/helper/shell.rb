@@ -20,7 +20,7 @@ module Veewee
           # http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-talk/185404
           # This should work on windows too now
           # This will result in a ShellResult structure with stdout, stderr and status
-          def shell_exec(command,options = {:mute => true,:status => 0})
+          def shell_exec(command,options = {:mute => true,:status => 0,:stderr => "&1"})
             defaults={:mute => true, :status => 0}
             options=defaults.merge(options)
             result=ShellResult.new("","",-1)
@@ -29,7 +29,8 @@ module Veewee
             env.logger.debug "Output:"
             env.logger.debug "-------"
             escaped_command=command
-            IO.popen("#{escaped_command}"+ " 2>&1") { |p|
+            stderr_redirect = options[:stderr]? options[:stderr] : "&1"
+            IO.popen("#{escaped_command}"+ " 2>#{stderr_redirect}") { |p|
               p.each_line{ |l|
                 result.stdout+=l
                 ui.info(l,{:new_line => false})  unless options[:mute]
