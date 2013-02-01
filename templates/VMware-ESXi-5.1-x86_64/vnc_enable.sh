@@ -14,7 +14,7 @@ echo "
   <service id='0033'>
     <id>vnc</id>
     <rule id='0000'>
-      <direction>outbound</direction>
+      <direction>inbound</direction>
       <protocol>tcp</protocol>
       <porttype>dst</porttype>
       <port>
