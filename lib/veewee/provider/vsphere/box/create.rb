@@ -6,29 +6,18 @@ module Veewee
         # When we create a new box
         # We assume the box is not running
         def create(options)
-
           network = retrieve_network options
           datastore = retrieve_datastore options
-          host = retrieve_host options
+          compute_resource = retrieve_compute_resource
 
-          load_iso datastore, host
-          create_vm datastore, network, host
+          load_iso datastore
+          create_vm datastore, network, compute_resource
           create_disk
           enable_vnc
         end
 
-        def dc
-          name ||= definition.vsphere[:vm_options][:datacenter]
-          # if there's only one datacenter, use it (also works in standalone ESXi cases)
-          if vim.serviceContent.rootFolder.children.grep(RbVmomi::VIM::Datacenter) == 1
-            name ||= vim.serviceInstance.find_datacenter.name
-          end
-          @dc ||= vim.serviceInstance.find_datacenter name
-          raise Veewee::Error, "Must specify a datacenter in the :vm_options section of your definition.rb" if @dc.nil?
-          return @dc
-        end
-
-        def load_iso datastore, host_name
+        # Load ISO to vSphere datastore, assumes same datastore as VM will be built on
+        def load_iso datastore
           filename = definition.iso_file
           local_path=File.join(env.config.veewee.iso_dir,filename)
           File.exists?(local_path) or fail "ISO does not exist"
@@ -45,8 +34,15 @@ module Veewee
           end
         end
 
+        # Retrieve datastore to install to
+        #
+        # Logic should look for the network in the following order:
+        #   If datastore is specified as command line option and it exists, use that datastore
+        #   If datastore is specified as vm option in definition and it exists, use that datastore
+        #   If only one datastore exists and no datastore is specified, use that datastore
+        # TODO All other use cases should result in an error being thrown
+        #
         def retrieve_datastore options
-          # TODO Figure out whether there should be a default
           name ||= options["datastore"]
           name ||= definition.vsphere[:vm_options][:datastore]
           name ||= dc.datastore.first.name
@@ -59,24 +55,15 @@ module Veewee
           return datastore
         end
 
-        def retrieve_host options
-          name ||= definition.vsphere[:vm_options][:host]
-          if dc.hostFolder.children.count == 1
-            # this is a standalone ESXi
-            name ||= dc.hostFolder.children[0].host[0].name
-          end
-          raise Veewee::Error, "Must specify a host in the :vm_options section of your definition.rb" if name.nil?
-
-          host = vim.searchIndex.FindByDnsName(:dnsName => name, :vmSearch => false)
-
-          raise Veewee::Error, "Network #{name} does not exist" if host.nil?
-          env.ui.info "Using host #{name}"
-
-          return host
-        end
-
+        # Retrieve the specified network to attach the VM to
+        #
+        # Logic should look for the network in the following order:
+        #   If network is specified as command line option and it exists, use that network
+        #   If network is specified as vm option in definition and it exists, use that network
+        #   If only one network exists and no network is specified, use that network
+        # TODO All other use cases should result in an error being thrown
+        #
         def retrieve_network options
-          # TODO Figure out whether there should be a default
           name ||= options["network"]
           name ||= definition.vsphere[:vm_options][:network]
           name ||= dc.network.first.name
@@ -100,9 +87,9 @@ module Veewee
           return vspheretype
         end
 
-        def create_vm datastore, network, host
-          # TODO add cluster options so specifying a host can be optional
-          pool = host.parent.resourcePool
+        def create_vm datastore, network, compute_resource
+          # TODO verify that single host compute resources and clusters cannot create name collisions
+          pool = compute_resource.resourcePool
           vmFolder = dc.vmFolder
           datastore_path = "[#{datastore.name}]"
           config = {
@@ -145,6 +132,7 @@ module Veewee
                     :summary => network.name,
                     :label => "",
                   },
+                  # TODO Verify this works with Distributed vSwitch configurations
                   :backing => VIM.VirtualEthernetCardNetworkBackingInfo(:deviceName => network.name),
                   :addressType => 'generated'
                 )

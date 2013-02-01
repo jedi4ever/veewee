@@ -11,6 +11,8 @@ require 'veewee/provider/vsphere/box/helper/vnc'
 require 'veewee/provider/vsphere/box/helper/console_type'
 require 'veewee/provider/vsphere/box/helper/buildinfo'
 require 'veewee/provider/vsphere/box/helper/vsphere'
+require 'veewee/provider/vsphere/box/helper/datacenter'
+require 'veewee/provider/vsphere/box/helper/compute_resource'
 
 require 'veewee/provider/vsphere/box/build'
 require 'veewee/provider/vsphere/box/up'
@@ -48,6 +50,10 @@ module Veewee
 
         def raw
           @raw ||= dc.find_vm(name)
+        end
+
+        def dc
+          @dc ||= retrieve_datacenter
         end
 
         #Path to the VM relative to the host server (vCenter of vSphere)
