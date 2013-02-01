@@ -4,7 +4,7 @@ module Veewee
 
       register "vsphere", "Subcommand for Vmware vsphere"
       desc "build [BOX_NAME]", "Build box"
-      method_option :vsphere_host,:type => :string , :default => nil, :aliases => "-h", :desc => "VSphere Host"
+      method_option :vsphere_server,:type => :string , :default => nil, :aliases => "-h", :desc => "VSphere Server"
       method_option :vsphere_user,:type => :string , :default => nil, :aliases => "-u", :desc => "VSphere User"
       method_option :vsphere_password,:type => :string , :default => nil, :aliases => "-p", :desc => "VSphere Password"
       method_option :datastore,:type => :string , :default => nil, :aliases => "--ds", :desc => "VSphere Datastore"
@@ -21,10 +21,10 @@ module Veewee
         venv.providers["vsphere"].get_box(box_name).build(options)
       end
 
-      method_option :vsphere_host,:type => :string , :default => nil, :aliases => "-h", :desc => "VSphere Host"
+      method_option :vsphere_server,:type => :string , :default => nil, :aliases => "-h", :desc => "VSphere Server"
       method_option :vsphere_user,:type => :string , :default => nil, :aliases => "-u", :desc => "VSphere User"
       method_option :vsphere_password,:type => :string , :default => nil, :aliases => "-p", :desc => "VSphere Password"
-      method_option :force,:type => :boolean , :default => false, :aliases => "-f", :desc => "force the destroy" 
+      method_option :force,:type => :boolean , :default => false, :aliases => "-f", :desc => "force the destroy"
       method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging"
       method_option :nogui,:type => :boolean , :default => false, :aliases => "-n", :desc => "no gui"
       desc "destroy [BOXNAME]", "Destroys the virtualmachine that was built"
@@ -34,11 +34,11 @@ module Veewee
         venv.providers["vsphere"].get_box(box_name).destroy(options)
       end
 
-      method_option :vsphere_host,:type => :string , :default => nil, :aliases => "-h", :desc => "VSphere Host"
+      method_option :vsphere_server,:type => :string , :default => nil, :aliases => "-h", :desc => "VSphere Server"
       method_option :vsphere_user,:type => :string , :default => nil, :aliases => "-u", :desc => "VSphere User"
       method_option :vsphere_password,:type => :string , :default => nil, :aliases => "-p", :desc => "VSphere Password"
       method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging"
-      method_option :force,:type => :boolean , :default => false, :aliases => "-f", :desc => "force the shutdown" 
+      method_option :force,:type => :boolean , :default => false, :aliases => "-f", :desc => "force the shutdown"
       desc "halt [BOXNAME]", "Activates a shutdown the virtualmachine"
       def halt(box_name)
         venv=Veewee::Environment.new(options)
@@ -46,7 +46,7 @@ module Veewee
         venv.providers["vsphere"].get_box(box_name).halt(options)
       end
 
-      method_option :vsphere_host,:type => :string , :default => nil, :aliases => "-h", :desc => "VSphere Host"
+      method_option :vsphere_server,:type => :string , :default => nil, :aliases => "-h", :desc => "VSphere Server"
       method_option :vsphere_user,:type => :string , :default => nil, :aliases => "-u", :desc => "VSphere User"
       method_option :vsphere_password,:type => :string , :default => nil, :aliases => "-p", :desc => "VSphere Password"
       method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging"
@@ -59,7 +59,7 @@ module Veewee
       end
 
       desc "scp [BOXNAME] [LOCAL FILE] [REMOTE FILE]", "SCP to box"
-      method_option :vsphere_host,:type => :string , :default => nil, :aliases => "-h", :desc => "VSphere Host"
+      method_option :vsphere_server,:type => :string , :default => nil, :aliases => "-h", :desc => "VSphere Server"
       method_option :vsphere_user,:type => :string , :default => nil, :aliases => "-u", :desc => "VSphere User"
       method_option :vsphere_password,:type => :string , :default => nil, :aliases => "-p", :desc => "VSphere Password"
       method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging"
@@ -70,7 +70,7 @@ module Veewee
       end
 
       desc "ssh [BOXNAME] [COMMAND]", "SSH to box"
-      method_option :vsphere_host,:type => :string , :default => nil, :aliases => "-h", :desc => "VSphere Host"
+      method_option :vsphere_server,:type => :string , :default => nil, :aliases => "-h", :desc => "VSphere Server"
       method_option :vsphere_user,:type => :string , :default => nil, :aliases => "-u", :desc => "VSphere User"
       method_option :vsphere_password,:type => :string , :default => nil, :aliases => "-p", :desc => "VSphere Password"
       method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging"
