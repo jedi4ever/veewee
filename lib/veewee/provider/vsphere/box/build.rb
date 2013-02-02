@@ -3,7 +3,7 @@ module Veewee
     module Vsphere
       module BoxCommand
 
-        def build(options)
+        def build(options={})
           env.ui.warn "Boot wait is less than 10 seconds...build may fail" if Integer(definition.boot_wait) < 10
           validate_host
           super(options)

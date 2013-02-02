@@ -10,6 +10,14 @@ module Veewee
           datastore = retrieve_datastore options
           compute_resource = retrieve_compute_resource
 
+          # Verify network and datastore are not only accessible from the datacenter
+          # but also from the specific compute resource (host or cluster) being used
+          if compute_resource.network.find { |x| x.name == network.name }.nil?
+            raise Veewee::Error, "Network #{network.name} is not accessible from compute resource #{compute_resource.name}"
+          elsif compute_resource.datastore.find { |x| x.name == datastore.name }.nil?
+            raise Veewee::Error, "Datastore #{datastore.name} is not accessible from compute resource #{compute_resource.name}"
+          end
+
           load_iso datastore
           create_vm datastore, network, compute_resource
           create_disk
@@ -32,47 +40,6 @@ module Veewee
             env.ui.info "Loading ISO to vSphere Host"
             datastore.upload "isos/"+filename, local_path
           end
-        end
-
-        # Retrieve datastore to install to
-        #
-        # Logic should look for the network in the following order:
-        #   If datastore is specified as command line option and it exists, use that datastore
-        #   If datastore is specified as vm option in definition and it exists, use that datastore
-        #   If only one datastore exists and no datastore is specified, use that datastore
-        # TODO All other use cases should result in an error being thrown
-        #
-        def retrieve_datastore options
-          name ||= options["datastore"]
-          name ||= definition.vsphere[:vm_options][:datastore]
-          name ||= dc.datastore.first.name
-
-          datastore = dc.find_datastore name
-
-          raise Veewee::Error, "Datastore #{name} does not exist" if datastore.nil?
-          env.ui.info "Using datastore #{name}"
-
-          return datastore
-        end
-
-        # Retrieve the specified network to attach the VM to
-        #
-        # Logic should look for the network in the following order:
-        #   If network is specified as command line option and it exists, use that network
-        #   If network is specified as vm option in definition and it exists, use that network
-        #   If only one network exists and no network is specified, use that network
-        # TODO All other use cases should result in an error being thrown
-        #
-        def retrieve_network options
-          name ||= options["network"]
-          name ||= definition.vsphere[:vm_options][:network]
-          name ||= dc.network.first.name
-          network = dc.network.find { |x| x.name == name }
-
-          raise Veewee::Error, "Network #{name} does not exist" if network.nil?
-          env.ui.info "Using network #{name}"
-
-          return network
         end
 
         def create_disk

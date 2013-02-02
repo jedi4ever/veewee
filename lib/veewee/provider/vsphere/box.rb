@@ -13,6 +13,8 @@ require 'veewee/provider/vsphere/box/helper/buildinfo'
 require 'veewee/provider/vsphere/box/helper/vsphere'
 require 'veewee/provider/vsphere/box/helper/datacenter'
 require 'veewee/provider/vsphere/box/helper/compute_resource'
+require 'veewee/provider/vsphere/box/helper/datastore'
+require 'veewee/provider/vsphere/box/helper/network'
 
 require 'veewee/provider/vsphere/box/build'
 require 'veewee/provider/vsphere/box/up'
@@ -23,10 +25,6 @@ require 'veewee/provider/vsphere/box/destroy'
 require 'veewee/provider/vsphere/box/validate_vsphere'
 require 'veewee/provider/vsphere/box/ssh'
 require 'veewee/provider/vsphere/box/export_ova'
-
-#VIM = RbVmomi::VIM
-# Include RbVmomi extensions for uploading files without curl
-#VIM.add_extension_dir File.join(File.dirname(__FILE__), "extensions")
 
 module Veewee
   module Provider
