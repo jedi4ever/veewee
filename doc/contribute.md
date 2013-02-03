@@ -1,26 +1,37 @@
 # Contribute or Improving a Veewee Template
 
-## How to add a new OS/installation (needs some love)
+If you have a setup working, share your 'definition' with me. That would be fun!
 
-I suggest the easiest way is to get an account on github and fork of the veewee repository
+## How to add a new OS/installation
+
+I suggest the easiest way is to get an account on [Github](https://github.com).
+
+Then fork [the veewee repository](https://github.com/jedi4ever/veewee) to your account and clone it to your computer:
 
     $ git clone https://github.com/*your account*/veewee.git
     $ cd veewee
     $ gem install bundler
     $ bundle install
 
-If you don't use rvm, be sure to execute vagrant through bundle exec
+TODO ct 2013-02-4 Move this to "Requirements"?
+
+If you don't use [rvm](https://rvm.io/), be sure to execute vagrant through `bundle exec`:
 
     $ alias veewee="bundle exec veewee"
 
-Start of an existing one
+Start your new definition on base of an existing one by executing:
 
-    $ veewee vbox define 'mynewos' 'ubuntu...'
+    $ veewee vbox define 'mynewos' '<your_os_of_choice>'
 
-- Do changes in the currentdir/definitions/mynewos
-- When it builds ok, move the definition/mynewos to a sensible directory under templates
-- commit the changes (git commit -a)
-- push the changes to github (git push)
-- go to the github gui and issue a pull request for it
+Now follow these best practices:
 
-## If you have a setup working, share your 'definition' with me. That would be fun!
+- Apply your changes in `./definitions/mynewos`
+- Build it with `veewee vbox build 'mynewos'`
+- Validate with `veewee vbox validate 'mynewos'`
+- When it builds OK and all tests are green, move `definition/mynewos` to a sensible directory under templates
+  Follow the naming schema of existing boxes
+- Commit the changes: `git commit -a`
+- Push the changes to github: `git push`
+- Go to the github gui and issue a pull request for it: `https://github.com/*your account*/veewee/pull/new/master`
+
+TODO ct 2013-02-4 Bonuspoints for feature-branches and adding tests to verify new post installs?
