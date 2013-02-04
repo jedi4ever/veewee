@@ -6,8 +6,24 @@ module Veewee
         def build(options={})
           env.ui.warn "Boot wait is less than 10 seconds...build may fail" if Integer(definition.boot_wait) < 10
           validate_host
-          super(options)
-          close_vnc
+
+          
+          begin
+            super(options)
+            close_vnc
+          rescue Veewee::VncError
+            # If VncError is seen, then assume installation will fail and cleanup
+            # TODO Cleanup retrieval of host, possibly abstract this call 
+            runtime_host = raw.runtime.host
+            config = runtime_host.config
+            env.ui.error "Veewee could not reach VM over VNC at #{runtime_host.name} (#{@vnc_host}:#{@vnc_port+5900})"
+            env.ui.error "* Ensure network firewalls are not blocking the connection"
+            env.ui.error "* See documentation on configuring ESXi 5.x hosts internal firewall here: https://gist.github.com/4670943" if /^5/ =~ config.product.version 
+            env.ui.error "* Check the #{config.product.fullName} documentation to ensure it is configured properly."
+            env.ui.error "Destroying partially created VM"
+            self.destroy(options)
+            raise Veewee::Error, "VNC Error Occurred"
+          end
         end
 
         # Validate the host configuration is set before

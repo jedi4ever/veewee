@@ -7,7 +7,12 @@ module Veewee
         def console_type(sequence,type_options={})
           enable_vnc unless vnc_enabled?
           if vnc_enabled?
-            vnc_type(sequence,vnc_host,vnc_port)
+            begin
+              vnc_type(sequence,vnc_host,vnc_port)
+            rescue Errno::ETIMEDOUT
+              # Raise VncError if connectin times out
+              raise Veewee::VncError, "Connection to VNC timed out"
+            end
           else
             raise Veewee::Error, "VNC is not enabled"
           end
