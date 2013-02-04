@@ -20,6 +20,8 @@ Now, install Ruby 1.9.2 using RVM:
 
 Ok, now that we have RVM installed, you can now install Veewee.
 
+TODO ct 2013-02-4 Also see requirements.md
+
 
 ## Install
 

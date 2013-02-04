@@ -2,11 +2,11 @@
 
 ## Listing available templates
 
-Veewee provides templates for a lot of different os-es.
+Veewee provides templates for a lot of different Operation Systems.
 
 To see all the templates provided:
 
-    veewee vbox templates
+    $ veewee vbox templates
 
     The following templates are available:
     veewee vbox define '<box_name>' 'archlinux-i386'
