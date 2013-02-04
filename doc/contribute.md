@@ -1,4 +1,4 @@
-# Contribute or Improving a Veewee Template
+# Contribute or Improving a Veewee Templates
 
 If you have a setup working, share your 'definition' with me. That would be fun!
 
