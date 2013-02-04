@@ -53,13 +53,15 @@ If you want to modify these settings take a look at [customization instructions]
 
 ## Getting the CD-ROM file in place
 
-The CD-ROM file (.iso) file is needed to start the installation process.
+The CD-ROM file (also called `.iso` or *disk image* file) provides all files needed to install the OS.
+
+This file is essential for starting the installation process.
+
+If you already have an `.iso` file for the desired distribution on your disk put it inside the `./iso` directory.
+
+Create this directory if it does not exist. Otherwise Veewee will ask you to download the ISO file from the web.
 
 Depending on your internet connection fetching a ISO file can take several minutes.
-
-If you already have an .iso file for the desired distribution you can put the isofile inside the `./iso` directory.
-
-Create this directory if it does not exist. Otherwise Veewee will ask you to download the ISO file fro the web.
 
 
 ## Build the new box:
