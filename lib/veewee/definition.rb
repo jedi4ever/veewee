@@ -38,6 +38,7 @@ module Veewee
 
     attr_accessor :virtualbox
     attr_accessor :vmfusion
+    attr_accessor :vsphere
     attr_accessor :kvm
     attr_accessor :add_shares
     attr_accessor :vmdk_file
@@ -98,6 +99,7 @@ module Veewee
       @virtualbox = { :vm_options => {} }
       @vmfusion = { :vm_options => {} }
       @kvm = { :vm_options => {} }
+      @vsphere = { :vm_options => {} }
 
       @skip_iso_transfer = false
       

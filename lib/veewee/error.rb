@@ -23,6 +23,9 @@ module Veewee
 
   class WinrmError < Error
   end
+
+  class VncError < Error
+  end
 end
 
 #Usage (from the exceptional ruby book)

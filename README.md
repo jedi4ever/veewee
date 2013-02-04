@@ -21,6 +21,7 @@ Depending on how you want to use veewee, read through one of the following guide
 - [guide for Virtualbox](https://github.com/jedi4ever/veewee/tree/master/doc/vbox.md)
 - [guide for Vmware fusion](https://github.com/jedi4ever/veewee/tree/master/doc/fusion.md)
 - [guide for KVM](https://github.com/jedi4ever/veewee/tree/master/doc/kvm.md)
+- [guide for VMware vSphere](https://github.com/jedi4ever/veewee/tree/master/doc/vsphere.md)
 
 You can also look at the more detailed pages on each subject in the [documentation directory](https://github.com/jedi4ever/veewee/tree/master/doc)
 
