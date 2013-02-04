@@ -6,13 +6,13 @@ The first step to build a new Virtual Machine is to download an existing 'base b
 
 I believe this scares a lot of people as they don't know who or how this box was built. Therefore lots of people end up first building their own base box which is time consuming and often cumbersome.
 
-Veewee aims to automate all the steps for building base boxes and to collect best practices in a transparent way. 
+Veewee aims to automate all the steps for building base boxes and to collect best practices in a transparent way.
 
 Besides building Vagrant boxes, veewee can also be used for:
 
-- create Virtual Machines for VMware (Fusion) and kvm
+- create Virtual Machines for [VMware (Fusion)](http://www.vmware.com/products/fusion/) and [KVM](http://www.linux-kvm.org/)
 - interact with with those VMs (up, destroy, halt, ssh)
-- export them to `OVA` for fusion, `IMG` for KVM and `OVF` for Virtualbox
+- export them to `OVA` for [Fusion](http://www.vmware.com/products/fusion/), `IMG` for [KVM](http://www.linux-kvm.org/) and `OVF` for [Virtualbox](https://www.virtualbox.org/)
 
 
 ## Get started
@@ -38,6 +38,7 @@ People have reported good experiences, why don't you give it a try?
 
 If you have a setup working, share your 'definition' with me. That would be fun!
 
+See [CONTRIBUTE](CONTRIBUTE.md).
 
 ## Ideas
 
