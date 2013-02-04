@@ -48,7 +48,7 @@ Veewee now asks for downloading the ISO and will start his magic.
 You can tweak and customize every detail of the box by modifying and extending the (sane) default settings
 that come with a template.
 
-If you want to modify these settings take a look at [customization instructions](doc/customize.md).
+If you want to modify these settings take a look at [customization instructions](customize.md).
 
 
 ## Getting the CD-ROM file in place
