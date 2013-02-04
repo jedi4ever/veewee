@@ -46,4 +46,4 @@ All other settings are used internally by veewee, the virtualization tool or sim
 
 IMPORTANT: If you need to change values in the templates, be sure to run `veewee vbox undefine` to remove the old definition and then `veewee vbox define` again to copy the updated template files into the definition.
 
-PRO Tipp: If you change template settings please let us know why. We are very interested in improving the templates.
+PRO Tip: If you change template settings please let us know why. We are very interested in improving the templates.
