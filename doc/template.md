@@ -144,10 +144,12 @@ To see all the templates provided:
 
 
 ## Structure
+
 Templates have the same structure as a <definition> but are provided by veewee as templates for definitions.
+
+Definitions are *your* box templates.
+
 
 ## Extending templates
 
-- fork veewee
-- add a new template under the templates directory
-- send me a pull request
+See contribute.md for details.
