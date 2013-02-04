@@ -53,7 +53,8 @@ If you want to modify these settings take a look at [customization instructions]
 
 ## Getting the CD-ROM file in place
 
-The CD-ROM file (also called `.iso` or *disk image* file) provides all files needed to install the OS.
+The [CD-ROM file](http://en.wikipedia.org/wiki/ISO_image) (also called `.iso` or *disk image* file)
+provides all files needed to install the OS.
 
 This file is essential for starting the installation process.
 
