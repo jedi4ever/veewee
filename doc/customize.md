@@ -1,5 +1,14 @@
 # Customize Veewee Definitions
 
+A definition usually consists of these files:
+
+    definition.rb   - Core definition of a box like CPU, RAM and the commands for the initial boot sequence
+    postinstall.sh  - Steps that run 'after' installing the OS
+    preseed.cfg     - Default options for the installer. See https://help.ubuntu.com/12.04/installation-guide/i386/preseed-using.html
+
+Newer definitions contain of even more files to get a finer separation of concerns for the installation.
+
+
 ## definition.rb
 
 The core definition of a box. All crucial properties are defined here.
