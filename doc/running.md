@@ -3,7 +3,8 @@
 ## Calling veewee
 
 ### Using veewee cli
-The first way to call veewee is through the 'veewee' cli command:
+
+The first way to call veewee is through the `veewee` cli command:
 
     $ veewee
     Tasks:
@@ -14,6 +15,7 @@ The first way to call veewee is through the 'veewee' cli command:
       veewee version      # Prints the Veewee version information
 
 ### Using veewee as a vagrant plugin
+
 The second way is to use it a vagrant plugin. Veewee registeres itself as a subcommand 'basebox'
 
     $ vagrant basebox
@@ -34,6 +36,7 @@ The second way is to use it a vagrant plugin. Veewee registeres itself as a subc
 
     For help on any individual command run `vagrant basebox COMMAND -h`
 
+
 ## Available commands
 
 The following command are available: change the vbox to fusion or kvm if you want to use a different <provider>
@@ -52,7 +55,9 @@ The following command are available: change the vbox to fusion or kvm if you wan
       veewee vbox up [BOXNAME]                 # Starts a Box
       veewee vbox validate [NAME]              # Validates a box against vagrant ...
 
+
 ## Non-Vagrant usage
+
 A typical cycle would be:
 
     $ veewee vbox define 'mybuntu' 'ubuntu-10.10-amd64'
@@ -62,20 +67,23 @@ A typical cycle would be:
     $ veewee vbox up 'myubuntu'
     $ veewee vbox export 'myubuntu'
 
+
 ## Vagrant usage
 
 A typical cycle would be:
 
     $ vagrant basebox define 'myubuntu' 'ubuntu-10.10-amd64'
-    $ vagrant basebox  build 'myubuntu'
-    $ vagrant basebox  export 'myubuntu'
+    $ vagrant basebox build 'myubuntu'
+    $ vagrant basebox export 'myubuntu'
 
     $ vagrant basebox add 'myubuntu' 'myubuntu.box'
     $ vagrant init 'mybuntu'
     $ vagrant up
     $ vagrant ssh
 
+
 ## Exporting a vm
+
 The export format depends on the provider:
 
 - fusion : exports to an 'ova' file

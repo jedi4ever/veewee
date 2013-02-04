@@ -17,11 +17,11 @@ A definition is created by 'cloning' a *template*.
 
 To create a definition you use the `define` subcommand:
 
-    veewee vbox define 'myubuntu' 'ubuntu-12.10-server-amd64'
+    veewee vbox define 'myubuntubox' 'ubuntu-12.10-server-amd64'
 
 If you want to use an external repo for the definition you can specify a git-url
 
-    veewee vbox define 'myubuntu' 'git://github.com/jedi4ever/myubuntu'
+    veewee vbox define 'myubuntubox' 'git://github.com/jedi4ever/myubuntubox'
 
 ## Modifying a definition
 
@@ -94,7 +94,7 @@ Thanks @mconigilaro for the contribution!
 
 ## Remove a definition
 
-    veewee vbox undefine 'myubuntu'
+    veewee vbox undefine 'myubuntubox'
 
 ## Provider `vm_options`
 
