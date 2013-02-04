@@ -2,7 +2,7 @@
 
 Veewee uses `definitions` to create new boxes. Every definition is based on a `template`.
 
-A `template is represented by a sub-directory in the folder `templates`. Here you find all the templates you can use.
+A `template` is represented by a sub-directory in the folder `templates`. Here you find all the templates you can use.
 
 The folder name has a schema to help you choosing the right template:
 
@@ -46,17 +46,9 @@ Veewee now asks for downloading the ISO and will start his magic.
 ## Modify the definition (optional)
 
 You can tweak and customize every detail of the box by modifying and extending the (sane) default settings
-that come with the template.
+that come with a template.
 
-A definition usually consists of these files:
-
-    definition.rb   - Core definition of a box like CPU, RAM and the commands for the initial boot sequence
-    postinstall.sh  - Steps that run 'after' installing the OS
-    preseed.cfg     - Default options for the installer. See https://help.ubuntu.com/12.04/installation-guide/i386/preseed-using.html
-
-Newer definitions contain of even more files to get a finer separation of concerns for the installation.
-
-TODO ct 2013-02-3 Add link to details
+If you want to modify these settings take a look at [customization instructions](doc/customize.md).
 
 
 ## Getting the CD-ROM file in place
