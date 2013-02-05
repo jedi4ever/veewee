@@ -1,7 +1,9 @@
-More Coming Soon
+# Requirements
 
-Development Libraries:
+*More Coming Soon*
 
-libxslt1-dev
-libxml2-dev
-zlib1g-dev
+## Development Libraries:
+
+    libxslt1-dev
+    libxml2-dev
+    zlib1g-dev
