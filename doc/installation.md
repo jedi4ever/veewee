@@ -30,6 +30,8 @@ This will then create a [gemset](https://rvm.io/gemsets/basics/) for veewee.
     $ gem install bundler
     $ bundle install
 
+Now start [building baseboxes](running.md) or learn more about [veewee's internals](definition.md)!
+
 ### Important Note on testing `kvm` while running from source git repo_
 
 By default the `:kvm` gem group is *disabled* to prevent the installation of `ruby-libvirt` on systems
