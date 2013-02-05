@@ -1,5 +1,10 @@
 # Requirements
 
+Veewee is written in Ruby. In order to use it you need Ruby installed and some header files
+in order to compile native extensions that come as dependencies with veewee.
+
+If you already have experiences with Ruby this should be very straightforward.
+
 ## Development Libraries
 
 In order to build native rubygems you may need these packages:
