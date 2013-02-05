@@ -5,7 +5,7 @@ Initially veewee started as provider for Virtualbox.
 From v0.3 VMware Fusion and KVM support are introduced.
 
 
-## Virtualbox
+## [Virtualbox](vbox.md)
 
 To interact with virtualbox, veewee executes shell-commands through the 'VboxManage' command.
 The `virtualbox` gem library proved to be less stable.
@@ -22,7 +22,7 @@ And as this buffer is small, we can't type fast(er). This is why you have the de
 Speeding it up, will make the keyboard buffer loose keystrokes.
 
 
-## VMware Fusion
+## [VMware Fusion](fusion.md)
 
 To interact with VMware Fusion, we leverage (a currently patched) version of [Fission gem](https://github.com/thbishop/fission).
 
@@ -34,7 +34,7 @@ and use the [Ruby-VNC gem](http://code.google.com/p/ruby-vnc/) to send the keyst
 Sending keystrokes too fast is a problem as well.
 
 
-## KVM
+## [KVM](kvm.md)
 
 To interact with KVM veewee uses [libvirt support](http://libvirt.org/ruby/) provided through [Fog gem](http://fog.io).
 
