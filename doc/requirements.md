@@ -13,6 +13,7 @@ In order to build native rubygems you may need these packages:
     libxml2-dev
     zlib1g-dev
 
+
 ## Ruby Environment
 
 First, if you are not using [RVM](https://rvm.io/), it's recommended that you do so
@@ -32,4 +33,4 @@ Now, install Ruby 1.9.2 using RVM:
 
     $ rvm install 1.9.2
 
-Ok, now that we have RVM installed, you can now [install Veewee](installation.md).
+Ok, now that we have RVM installed, you can move on with [installing Veewee](installation.md).
