@@ -9,11 +9,11 @@ First, if you are not using [RVM](https://rvm.io/), it's recommended that you do
 as veewee will install in it's own [gemset](https://rvm.io/gemsets/basics/) which keeps veewee and it's dependancies
 completely separate from your other Rubygems.
 
-See https://rvm.io/gemsets/basics/ for details if you are new to this concept.
+See https://rvm.io/gemsets/basics/ for details if you are new to the concept of 'gemsets'.
 
 TODO ct 2013-02-4 Check if gemset is needed when using bundler
 
-You can install it as follows:
+You can install RVM as follows:
 
     $ bash -s stable < <(curl -s https://raw.github.com/wayneeseguin/rvm/master/binscripts/rvm-installer)
     $ source ~/.bash_profile
