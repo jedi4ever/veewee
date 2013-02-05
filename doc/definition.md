@@ -26,6 +26,19 @@ To list all available definitions run this command:
     veewee vbox list
 
 
+## Listing available templates
+
+Veewee provides templates for a lot of different Operation Systems.
+
+To see all the templates provided:
+
+    $ veewee vbox templates
+
+Templates have the same structure as a <definition> but are provided by veewee as templates for definitions.
+
+Definitions are *your* box templates.
+
+
 ## Creating a definition
 
 A definition is created by 'cloning' a *template* into the `definitions` folder.
@@ -148,3 +161,5 @@ The export format depends on the provider. You can currently choose from these p
 - `fusion`: exports to an '.ova' file
 - `kvm`: export to a raw '.img' file
 - `vbox`: exports to a '.box' format (e.g. for use in vagrant)
+
+For more details on the providers have a look at [providers.md](providers.md).
