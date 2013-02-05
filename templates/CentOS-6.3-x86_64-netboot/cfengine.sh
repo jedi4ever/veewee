@@ -4,6 +4,8 @@
 Trusted_GPG_Fingerprint="EF49F970C3D4AEF5E557FB6D8D5A7684F97E94BE"
 GPGURL="http://cfengine.com/pub/gpg.key"
 GPGKEY="/tmp/cfengine_gpg.key"
+YUMREPO="http://cfengine.com/pub/yum"
+
 
 
 function main
@@ -21,7 +23,7 @@ function configure_repo
     cat > /etc/yum.repos.d/cfengine.repo << EOM && return 0 || return 1
 [cfengine]
 name=cfengine
-baseurl=http://cfengine.com/pub/yum/\$basearch
+baseurl=$YUMREPO
 enabled=1
 gpgcheck=1
 EOM
