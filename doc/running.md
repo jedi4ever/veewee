@@ -64,14 +64,4 @@ if you are already working with vagrant.
 
 ### Typical Vagrant Usage
 
-A typical workflow would be:
-
-    $ vagrant basebox define 'mybuntubox' 'ubuntu-10.12-amd64'
-    $ vagrant basebox build 'mybuntubox'
-    $ vagrant basebox export 'mybuntubox'
-
-Now you can import the generated '.box' file to the vagrant box repository:
-
-    $ vagrant basebox add 'mybuntubox' 'mybuntubox.box'
-
 See "[Use it in vagrant](vagrant.md)" for more details.
