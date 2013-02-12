@@ -6,7 +6,7 @@ Veewee::Definition.declare({
   :hostiocache => 'off',
   :os_type_id => 'Ubuntu_64',
   :iso_file => "ubuntu-10.10-server-amd64.iso",
-  :iso_src => "http://releases.ubuntu.com/maverick/ubuntu-10.10-server-amd64.iso",
+  :iso_src => "http://old-releases.ubuntu.com/releases/maverick/ubuntu-10.10-server-amd64.iso",
   :iso_md5 => "ab66a1d59a8d78e9ea8ef9b021d6574a",
   :iso_download_timeout => "1000",
   :boot_wait => "10",
