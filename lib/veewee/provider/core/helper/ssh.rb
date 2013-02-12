@@ -3,7 +3,7 @@ module Veewee
     module Core
       module Helper
 
-        class SshResult
+        class SshResult < RuntimeError
           attr_accessor :stdout
           attr_accessor :stderr
           attr_accessor :status
@@ -106,6 +106,7 @@ module Veewee
                   end
 
                   # "on_extended_data" is called when the process writes something to stderr
+                  # NOTE: When requesting a pty (ch.request_pty), everything goes to stdout
                   ch.on_extended_data do |c, type, data|
                     stderr+=data
 
@@ -143,7 +144,7 @@ module Veewee
               if (options[:exitcode]=="*")
                 #its a test so we don't need to worry
               else
-                raise "Exitcode was not what we expected"
+                raise Veewee::Provider::Core::Helper::SshResult.new(stdout,stderr,status), "Exitcode was not what we expected"
               end
 
             end
