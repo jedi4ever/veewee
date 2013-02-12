@@ -3,7 +3,7 @@ Veewee::Session.declare({
   :disk_size => '10140', :disk_format => 'VDI', :hostiocache => 'off', :ioapic => 'on', :pae => 'on',
   :os_type_id => 'RedHat',
   :iso_file => "CentOS-5.8-i386-bin-DVD-1of2.iso",
-  :iso_src => "http://mirrors.arsc.edu/centos/5.8/isos/i386/CentOS-5.8-i386-bin-DVD-1of2.iso",
+  :iso_src => "http://vault.centos.org/5.8/isos/i386/CentOS-5.8-i386-bin-DVD-1of2.iso",
   :iso_md5 => "0fdd45c43b5d8fb9e05f4255c5855f9c",
   :iso_download_timeout => 10000,
   :boot_wait => "10", :boot_cmd_sequence => [ 'linux text ks=http://%IP%:%PORT%/ks.cfg<Enter>' ],

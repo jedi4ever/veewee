@@ -3,7 +3,7 @@ Veewee::Session.declare({
   :disk_size => '10140', :disk_format => 'VDI', :hostiocache => 'off', :ioapic => 'on', :pae => 'on',
   :os_type_id => 'RedHat_64',
   :iso_file => "CentOS-5.8-x86_64-netinstall.iso",
-  :iso_src => "http://mirrors.arsc.edu/centos/5.8/isos/x86_64/CentOS-5.8-x86_64-netinstall.iso",
+  :iso_src => "http://vault.centos.org/5.8/isos/x86_64/CentOS-5.8-x86_64-netinstall.iso",
   :iso_md5 => "6425035e9adee4b8653a85f59877ac5b",
   :iso_download_timeout => 1000,
   :boot_wait => "10", :boot_cmd_sequence => [ 'linux text ks=http://%IP%:%PORT%/ks.cfg<Enter>' ],
