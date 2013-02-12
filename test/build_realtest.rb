@@ -50,7 +50,8 @@ class TestVeeweeBuild < Test::Unit::TestCase
 
   # Now try build again (with no force flag)
   def test_box_5_build
-    assert_nothing_raise(Veewee::Error) {
+    #assert_raise(Veewee::Error) {
+    assert_nothing_raised {
       #@box.build({"auto" => true})
       @box.build({"auto" => true,'force' => true, 'nogui' => true })
     }
