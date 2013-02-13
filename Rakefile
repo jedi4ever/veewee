@@ -67,7 +67,7 @@ task :iso, [:template_name] do |t, args|
               # other problem, raise
               raise "Got ftp site but doesn't support size subcommand"
             end
-            # fallback solution 
+            # fallback solution
           end
 
         end
@@ -83,18 +83,22 @@ task :iso, [:template_name] do |t, args|
   end
 end
 
-desc 'Autobuilds all templates and runs validation.'
-task :autotest, [:pattern] do |t, args|
+desc 'Builds a template and runs validation.'
+task :autotest, [:name] do |t, args|
+
+  # Disable color if the proper argument was passed
+  shell = ARGV.include?("--no-color") ? Thor::Shell::Basic.new : Thor::Base.shell.new
 
   # We overrule all timeouts for tcp and ssh
   #ENV['VEEWEE_TIMEOUT']='600'
 
   ve = Veewee::Environment.new
+  ve.ui = ::Veewee::UI::Shell.new(ve, shell)
   ve.templates.each do |name, template|
 
     # If pattern was given, only take the ones that match the pattern
-    unless args[:pattern].nil?
-      next unless name.match(args[:pattern])
+    unless args[:name].nil?
+      next unless name == args[:name]
     end
 
     begin
@@ -118,6 +122,7 @@ task :autotest, [:pattern] do |t, args|
           puts "AUTO: Error taking screenshot"
         end
       end
+      exit -1
     end
 
   end
