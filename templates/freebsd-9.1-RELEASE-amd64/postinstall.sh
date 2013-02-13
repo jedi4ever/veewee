@@ -1,7 +1,11 @@
+#Set the time correctly
+ntpdate -v -b in.pool.ntp.org
+
 date > /etc/vagrant_box_build_time
 
 # Get the latest portstree (needed for virtualbox to be on 4.x)
 portsnap fetch update
+portsnap extract
 
 #First install sudo
 cd /usr/ports/security/sudo
