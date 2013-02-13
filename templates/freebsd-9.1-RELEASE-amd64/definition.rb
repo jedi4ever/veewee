@@ -2,9 +2,9 @@ Veewee::Definition.declare({
   :cpu_count => '1', :memory_size=> '256',
   :disk_size => '10140', :disk_format => 'VDI', :hostiocache => 'off',
   :os_type_id => 'FreeBSD_64',
-  :iso_file => "mfsbsd-9.0-RELEASE-amd64.iso",
-  :iso_src => "http://mfsbsd.vx.sk/files/iso/mfsbsd-9.0-RELEASE-amd64.iso",
-  :iso_md5 => "a8aaac460d30f80fce2c6a96e0837db6",
+  :iso_file => "mfsbsd-9.1-RELEASE-amd64.iso",
+  :iso_src => "http://mfsbsd.vx.sk/files/iso/amd64/9/mfsbsd-9.1-RELEASE-amd64.iso",
+  :iso_md5 => "cbe0f0eaaf5e46545292313dfb939891",
   :iso_download_timeout => "1000",
   :boot_wait => "10", :boot_cmd_sequence => [
    '<Enter>'
