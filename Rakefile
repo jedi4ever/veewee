@@ -108,7 +108,7 @@ task :autotest, [:name] do |t, args|
       puts "AUTO: Building #{name}"
       box.build({ "auto" => true, "force" => true, 'nogui' => true })
       puts "AUTO: Validating #{name}"
-      box.validate_vagrant
+      box.validate_vagrant({'tags' => ['virtualbox']})
       puts "AUTO: Success #{name}"
       box.destroy
     rescue Exception => ex
