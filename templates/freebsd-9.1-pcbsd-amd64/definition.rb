@@ -1,7 +1,7 @@
 Veewee::Definition.declare({
   :cpu_count => '1', :memory_size=> '768',
   :disk_size => '10140', :disk_format => 'VDI', :hostiocache => 'off',
-  :os_type_id => 'FreeBSD',
+  :os_type_id => 'FreeBSD_64',
   :iso_file => "PCBSD9.1-x64-DVD.iso",
   :iso_src => "http://mirrors.isc.org/pub/pcbsd/9.1/amd64/PCBSD9.1-x64-DVD.iso",
   :iso_md5 => "d48c1493726b7f36b5ac0635d9b6e838",
