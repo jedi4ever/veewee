@@ -37,7 +37,7 @@ Veewee::Definition.declare({
   :ssh_host_port     => '7222',
   :ssh_guest_port    => '22',
   :sudo_cmd          => "cat '%f'|su -",
-  :shutdown_cmd      => 'shutdown -p now',
+  :shutdown_cmd      => 'shutdown -h now',
   :postinstall_files => [
     'settings.sh',
     'base.sh',
