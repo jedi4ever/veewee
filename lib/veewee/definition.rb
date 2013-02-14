@@ -10,7 +10,9 @@ module Veewee
     attr_accessor :env
     attr_accessor :path
 
-    attr_accessor :cpu_count, :memory_size, :video_memory_size, :iso_file
+    attr_writer   :cpu_count, :memory_size
+
+    attr_accessor :video_memory_size, :iso_file
     attr_accessor :disk_size, :disk_format, :disk_variant
 
     attr_accessor :os_type_id
@@ -190,6 +192,22 @@ module Veewee
       end
 
       return true
+    end
+
+    def memory_size
+      if ENV['VEEWEE_MEMORY_SIZE'].nil?
+        return @memory_size
+      else
+        return ENV['VEEWEE_MEMORY_SIZE'].to_i
+      end
+    end
+
+    def cpu_count
+      if ENV['VEEWEE_CPU_COUNT'].nil?
+        return @cpu_count
+      else
+        return ENV['VEEWEE_CPU_COUNT'].to_i
+      end
     end
 
     private
