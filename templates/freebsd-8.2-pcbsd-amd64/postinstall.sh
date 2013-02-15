@@ -74,16 +74,6 @@ echo "==========================================================================
 
 exit
 
-# The iso from virtualbox will only install windows/solaris or linux, no BSD
-# Research is on it's way to have 4.x in the main portstree
-# http://www.listware.net/201102/freebsd-ports/65201-call-for-testers-virtualbox-404.html
-# Virtualbox additions - http://wiki.freebsd.org/VirtualBox
-# Currently this will only work for 4.0.4
-cd /tmp
-wget http://home.bluelife.at/ports/virtualbox-cft-20110218.tar.gz
-cd /usr/ports
-tar -xzvf /tmp/virtualbox-cft-20110218.tar.gz
-
 # This requires libtool >= 2.4
 cd /usr/ports/devel/libtool
 make clean
@@ -92,5 +82,12 @@ make install -DBATCH
 cd /usr/ports/emulators/virtualbox-ose-additions
 make install -DBATCH
 
+echo 'vboxdrv_load="YES"' >> /boot/loader.conf
+echo 'vboxnet_enable="YES"' >> /etc/rc.conf
 echo 'vboxguest_enable="YES"' >> /etc/rc.conf
 echo 'vboxservice_enable="YES"' >> /etc/rc.conf
+
+pw groupmod vboxusers -m vagrant
+
+#Bash needs to be the shell for tests to validate
+pw usermod vagrant -s /usr/local/bin/bash
