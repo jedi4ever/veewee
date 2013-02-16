@@ -1,7 +1,11 @@
+#Set the time correctly
+ntpdate -v -b in.pool.ntp.org
+
 date > /etc/vagrant_box_build_time
 
 # Get the latest portstree (needed for virtualbox to be on 4.x)
 portsnap fetch update
+portsnap extract
 
 #First install sudo
 cd /usr/ports/security/sudo
@@ -11,13 +15,16 @@ make install -DBATCH
 cd /usr/ports/shells/bash
 make install -DBATCH
 
-
 #Off to rubygems to get first ruby running
 cd /usr/ports/devel/ruby-gems
 make install -DBATCH
 
 #Gem chef - does install chef 9.12 (latest in ports?)
 cd /usr/ports/sysutils/rubygem-chef
+make install -DBATCH
+
+#Need ruby iconv in order for chef to run
+cd /usr/ports/converters/ruby-iconv
 make install -DBATCH
 
 #Installing chef & Puppet
@@ -54,6 +61,30 @@ echo "vagrant ALL=(ALL) NOPASSWD: ALL" >> /usr/local/etc/sudoers
 # Restore correct su permissions
 # I'll leave that up to the reader :)
 
+# This requires libtool >= 2.4
+cd /usr/ports/devel/libtool
+make clean
+make install -DBATCH
+
+cd /usr/ports/emulators/virtualbox-ose
+make install -DBATCH
+
+cd /usr/ports/emulators/virtualbox-ose-additions
+make install -DBATCH
+
+cd /usr/ports/emulators/virtualbox-ose-additions
+make install -DBATCH
+
+echo 'vboxdrv_load="YES"' >> /boot/loader.conf
+echo 'vboxnet_enable="YES"' >> /etc/rc.conf
+echo 'vboxguest_enable="YES"' >> /etc/rc.conf
+echo 'vboxservice_enable="YES"' >> /etc/rc.conf
+
+pw groupmod vboxusers -m vagrant
+
+#Bash needs to be the shell for tests to validate
+pw usermod vagrant -s /usr/local/bin/bash
+
 echo "=============================================================================="
 echo "NOTE: FreeBSD - Vagrant"
 echo "When using this basebox you need to do some special stuff in your Vagrantfile"
@@ -67,27 +98,4 @@ echo "4) Use nfs instead of shared folders"
 echo "		:nfs => true"
 echo "============================================================================="
 
-
-
 exit
-
-# The iso from virtualbox will only install windows/solaris or linux, no BSD
-# Research is on it's way to have 4.x in the main portstree
-# http://www.listware.net/201102/freebsd-ports/65201-call-for-testers-virtualbox-404.html
-# Virtualbox additions - http://wiki.freebsd.org/VirtualBox
-# Currently this will only work for 4.0.4
-cd /tmp
-wget http://home.bluelife.at/ports/virtualbox-cft-20110218.tar.gz
-cd /usr/ports
-tar -xzvf /tmp/virtualbox-cft-20110218.tar.gz
-
-# This requires libtool >= 2.4
-cd /usr/ports/devel/libtool
-make clean
-make install -DBATCH
-
-cd /usr/ports/emulators/virtualbox-ose-additions
-make install -DBATCH
-
-echo 'vboxguest_enable="YES"' >> /etc/rc.conf
-echo 'vboxservice_enable="YES"' >> /etc/rc.conf

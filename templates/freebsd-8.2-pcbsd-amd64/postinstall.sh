@@ -23,6 +23,10 @@ make install -DBATCH
 cd /usr/ports/sysutils/rubygem-chef
 make install -DBATCH
 
+#Need ruby iconv in order for chef to run
+cd /usr/ports/converters/ruby-iconv
+make install -DBATCH
+
 #Installing chef & Puppet
 /usr/local/bin/gem update chef --no-ri --no-rdoc
 /usr/local/bin/gem install puppet --no-ri --no-rdoc
@@ -57,26 +61,15 @@ echo "vagrant ALL=(ALL) NOPASSWD: ALL" >> /usr/local/etc/sudoers
 # Restore correct su permissions
 # I'll leave that up to the reader :)
 
-echo "=============================================================================="
-echo "NOTE: FreeBSD - Vagrant"
-echo "When using this basebox you need to do some special stuff in your Vagrantfile"
-echo "1) Include the correct system"
-echo "		require 'vagrant/systems/freebsd' "
-echo "2) Add after your config.vm.box = ..."
-echo "		  config.vm.system = :freebsd"
-echo "3) Enable HostOnly network"
-echo "	 config.vm.network ...."
-echo "4) Use nfs instead of shared folders"
-echo "		:nfs => true"
-echo "============================================================================="
-
-
-
-exit
-
 # This requires libtool >= 2.4
 cd /usr/ports/devel/libtool
 make clean
+make install -DBATCH
+
+cd /usr/ports/emulators/virtualbox-ose
+make install -DBATCH
+
+cd /usr/ports/emulators/virtualbox-ose-additions
 make install -DBATCH
 
 cd /usr/ports/emulators/virtualbox-ose-additions
@@ -91,3 +84,18 @@ pw groupmod vboxusers -m vagrant
 
 #Bash needs to be the shell for tests to validate
 pw usermod vagrant -s /usr/local/bin/bash
+
+echo "=============================================================================="
+echo "NOTE: FreeBSD - Vagrant"
+echo "When using this basebox you need to do some special stuff in your Vagrantfile"
+echo "1) Include the correct system"
+echo "		require 'vagrant/systems/freebsd' "
+echo "2) Add after your config.vm.box = ..."
+echo "		  config.vm.system = :freebsd"
+echo "3) Enable HostOnly network"
+echo "	 config.vm.network ...."
+echo "4) Use nfs instead of shared folders"
+echo "		:nfs => true"
+echo "============================================================================="
+
+exit
