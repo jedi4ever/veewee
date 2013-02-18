@@ -1,9 +1,8 @@
-# Running veewee
+# Running veewee commands
 
-## Calling veewee
+The first way to call veewee is through the `veewee` cli command.
 
-### Using veewee cli
-The first way to call veewee is through the 'veewee' cli command:
+Simply type `veewee` to get a list for the basic commands:
 
     $ veewee
     Tasks:
@@ -13,71 +12,56 @@ The first way to call veewee is through the 'veewee' cli command:
       veewee vbox         # Subcommand for virtualbox
       veewee version      # Prints the Veewee version information
 
-### Using veewee as a vagrant plugin
-The second way is to use it a vagrant plugin. Veewee registeres itself as a subcommand 'basebox'
+Each of these commands provides more details if you execute them.
+
+The following command gives you a list of all available subcommands:
+
+    veewee vbox
+
+Change `vbox` to `fusion` or `kvm` if you want to use a different provider.
+
+
+## Typical Usage
+
+A typical workflow to build a new basebox with veewee would be:
+
+    1. Define a box definition from a template
+    2. Build the box from an ISO file
+    3. Export the box e.g. for distribution
+
+The following commands take care of this:
+
+    $ veewee vbox define 'mybuntubox' 'ubuntu-10.12-amd64'
+    $ veewee vbox build 'mybuntubox'
+    $ veewee vbox export 'mybuntubox'
+
+The export format depends on the provider. You can currently choose from these providers:
+
+- `fusion`: exports to an '.ova' file
+- `kvm`: export to a raw '.img' file
+- `vbox`: exports to a '.box' format (e.g. for use in vagrant)
+
+If you want to tweak things on the box you can login to the box with this command:
+
+    $ veewee vbox ssh 'mybuntubox'
+
+PRO TIP: Be aware that every manual change on the box is considered harmful.
+Have a look at [customize.md](customize.md) to see how you can customize the box in a more 'reproducible' way.
+
+
+## Using veewee as a Vagrant Plugin
+
+You can also use veewee as a [vagrant plugin](http://docs.vagrantup.com/v1/docs/plugins.html).
+
+Veewee introduces the subcommand `basebox` on top of the `vagrant` command:
 
     $ vagrant basebox
     Usage: vagrant basebox <command> [<args>]
 
-    Available subcommands:
-         build
-         define
-         destroy
-         export
-         halt
-         list
-         ostypes
-         ssh
-         templates
-         undefine
-         up
+This allows you to use the 'vagrant' command style, which may feel more natural
+if you are already working with vagrant.
 
-    For help on any individual command run `vagrant basebox COMMAND -h`
 
-## Available commands
+### Typical Vagrant Usage
 
-The following command are available: change the vbox to fusion or kvm if you want to use a different <provider>
-
-    Tasks:
-      veewee vbox build [BOX_NAME]             # Build box
-      veewee vbox define [BOXNAME] [TEMPLATE]  # Define a new basebox starting fr...
-      veewee vbox destroy [BOXNAME]            # Destroys the basebox that was built
-      veewee vbox halt [BOXNAME]               # Activates a shutdown on the basebox
-      veewee vbox help [COMMAND]               # Describe subcommands or one spec...
-      veewee vbox list                         # Lists all defined boxes
-      veewee vbox ostypes                      # List the available Operating Sys...
-      veewee vbox ssh [BOXNAME] [COMMAND]      # Shows SSH information
-      veewee vbox templates                    # List the currently available tem...
-      veewee vbox undefine [BOXNAME]           # Removes the definition of a base...
-      veewee vbox up [BOXNAME]                 # Starts a Box
-      veewee vbox validate [NAME]              # Validates a box against vagrant ...
-
-## Non-Vagrant usage
-A typical cycle would be:
-
-    $ veewee vbox define 'mybuntu' 'ubuntu-10.10-amd64'
-    $ veewee vbox build 'myubuntu'
-    $ veewee vbox ssh 'myubuntu'
-    $ veewee vbox halt 'myubuntu'
-    $ veewee vbox up 'myubuntu'
-    $ veewee vbox export 'myubuntu'
-
-## Vagrant usage
-
-A typical cycle would be:
-
-    $ vagrant basebox define 'myubuntu' 'ubuntu-10.10-amd64'
-    $ vagrant basebox  build 'myubuntu'
-    $ vagrant basebox  export 'myubuntu'
-
-    $ vagrant basebox add 'myubuntu' 'myubuntu.box'
-    $ vagrant init 'mybuntu'
-    $ vagrant up
-    $ vagrant ssh
-
-## Exporting a vm
-The export format depends on the provider:
-
-- fusion : exports to an 'ova' file
-- kvm : export to a raw '.img' file
-- vbox: exports to a '.box' format (for use in vagrant)
+See "[Use it in vagrant](vagrant.md)" for more details.

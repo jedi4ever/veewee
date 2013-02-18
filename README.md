@@ -1,37 +1,47 @@
-**VeeWee:** the tool to easily build vagrant base boxes or kvm,virtualbox and fusion images
+**VeeWee:** the tool to easily build vagrant base boxes or kvm, virtualbox and fusion images.
 
-Vagrant is a great tool to test new things or changes in a virtual machine(Virtualbox) using either chef or puppet.
-The first step is to download an existing 'base box'. I believe this scares a lot of people as they don't know who or how this box was built. Therefore lots of people end up first building their own base box to use with vagrant.
+Vagrant is a great tool to test out new things or changes in a Virtual Machine (Virtualbox) using either chef or puppet.
+
+The first step to build a new Virtual Machine is to download an existing 'base box'.
+
+I believe this scares a lot of people as they don't know who or how this box was built. Therefore lots of people end up first building their own base box which is time consuming and often cumbersome.
+
+Veewee aims to automate all the steps for building base boxes and to collect best practices in a transparent way.
 
 Besides building Vagrant boxes, veewee can also be used for:
 
-- create vmware (fusion), kvm  virtual machines 
-- interact with with those vms (up, destroy, halt, ssh)
-- export them : OVA for fusion, IMG for KVM and ovf for virtualbox
+- create Virtual Machines for [VMware (Fusion)](http://www.vmware.com/products/fusion/) and [KVM](http://www.linux-kvm.org/)
+- interact with with those VMs (up, destroy, halt, ssh)
+- export them to `OVA` for [Fusion](http://www.vmware.com/products/fusion/), `IMG` for [KVM](http://www.linux-kvm.org/) and `OVF` for [Virtualbox](https://www.virtualbox.org/)
 
-Before you start read through:
 
-- the [requirements](https://github.com/jedi4ever/veewee/tree/master/doc/requirements.md)
-- the [installation](https://github.com/jedi4ever/veewee/tree/master/doc/installation.md) procedure
+## Get started
 
-Depending on how you want to use veewee, read through one of the following guides: (**work in progress**)
+Before you start we recommend to read through these pages:
 
-- [guide for vagrant](https://github.com/jedi4ever/veewee/tree/master/doc/vagrant.md)
+- the [requirements](doc/requirements.md)
+- the [installation](doc/installation.md) procedure
 
-- [guide for Virtualbox](https://github.com/jedi4ever/veewee/tree/master/doc/vbox.md)
-- [guide for Vmware fusion](https://github.com/jedi4ever/veewee/tree/master/doc/fusion.md)
-- [guide for KVM](https://github.com/jedi4ever/veewee/tree/master/doc/kvm.md)
+Depending on how you want to use veewee, we suggest to read through one of the following guides: (**work in progress**)
 
-You can also look at the more detailed pages on each subject in the [documentation directory](https://github.com/jedi4ever/veewee/tree/master/doc)
+- [Guide for Vagrant](doc/vagrant.md)
+- [Guide for Virtualbox](doc/vbox.md)
+- [Guide for VMware Fusion](doc/fusion.md)
+- [Guide for KVM](doc/kvm.md)
+
+More detailed pages on each subject are located in the [documentation directory](doc).
+
+
+## Contribute
 
 People have reported good experiences, why don't you give it a try?
 
-## If you have a setup working, share your 'definition' with me. That would be fun! 
+If you have a setup working, share your 'definition' with me. That would be fun!
 
-IDEAS:
+See [CONTRIBUTE](CONTRIBUTE.md).
 
-- Now you integrate this with your CI build to create a daily basebox
+## Ideas
 
-[whren - 2012/04/12]
-
-See [use of pre_postinstall_file in definition.rb](https://github.com/whren/veewee/wiki/Use-of-pre_postinstall_file-in-definition.rb)
+- Integrate veewee with your CI build to create baseboxes on a daily basis
+- Use of pre_postinstall_file in `definition.rb` by whren - 2012/04/12 <br>
+  See [use of pre_postinstall_file in definition.rb](https://github.com/whren/veewee/wiki/Use-of-pre_postinstall_file-in-definition.rb)
