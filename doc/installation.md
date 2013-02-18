@@ -1,33 +1,44 @@
-This needs to be bulked out more, but for now, here is a basic guide to installing Veewee from source.
+# Overview
 
-First, if you are not using RVM, it's recommended that you do so as veewee will install in it's own gemset which keeps veewee and it's dependancies completely separate from your other Ruby gems.
+Veewee is a tool to help you building a Virtual Machine from an ISO-file.
 
-RVM is available here: http://beginrescueend.com/
 
-You can install it as follows:
+## Requirements
 
-    $ bash -s stable < <(curl -s https://raw.github.com/wayneeseguin/rvm/master/binscripts/rvm-installer)
-    $ source ~/.bash_profile
+Please see [requirements.md](requirements.md) for detailed instructions.
 
-Now, install Ruby 1.9.2 using RVM:
 
-    $ rvm install 1.9.2
+## Install
 
-Ok, now that we have RVM installed, you can now install Veewee.
+These instructions need to be bulked out more, but for now, here is a basic guide to installing Veewee.
 
-When you cd into the veewee directory, rvm should automatically read the .rvmrc file and prompt you to verify it - you can do so by pressing Y. This will then create a gemset for veewee.
+The Veewee project is moving quickly and the Rubygem might be outdated. We recommend installing Veewee from source.
+
+__as a gem__
+
+    $ gem install veewee
+
+__from source__
+
+When you cd into the veewee directory, rvm should automatically read the `.rvmrc` file
+and prompt you to verify it - you can do so by pressing `Y`.
+
+This will then create a [gemset](https://rvm.io/gemsets/basics/) for veewee.
 
     $ git clone https://github.com/jedi4ever/veewee.git
     $ cd veewee
     $ gem install bundler
     $ bundle install
 
-_Note: testing kvm while running from source git repo_
+Now start [building baseboxes](running.md) or learn more about [veewee's internals](definition.md)!
 
-By default the ``:kvm`` gem group is disabled - this to prevent the installation of ``ruby-libvirt`` on systems that don't need it.
-This is done by the file ``.bundle/config`` .
+### Important Note on testing `kvm` while running from source git repo_
 
-If you do need it, run ``bundle install --without restrictions`` . (restrictions is a dummy name)
-This will change the file ``.bundle/config`` . This files is gitignored by default and should not be included in any commits back.
+By default the `:kvm` gem group is *disabled* to prevent the installation of `ruby-libvirt` on systems
+that don't need it. This is done by the file `.bundle/config`.
 
-As this is a remembered option, you don't have to specify it everytime. If you want to switch to the default behavior run ``bundle install --without kvm``.
+If you do need it, run `bundle install --without restrictions` (restrictions is a dummy name).
+This will change the file `.bundle/config`, which is ignored by Git per default and must not be included in any commits.
+
+As this is a remembered option, you don't have to specify it every time.
+If you want to switch to the default behavior run `bundle install --without kvm` to enable restrictions.
