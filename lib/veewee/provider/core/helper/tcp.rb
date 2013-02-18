@@ -28,6 +28,10 @@ module Veewee
           def guess_free_port(min_port,max_port)
             ui.info "Received port hint - #{min_port}"
 
+            if definition.force_ssh_port
+              return min_port
+            end
+
             guessed_port=nil
 
             for port in (min_port..max_port)
