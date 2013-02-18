@@ -2,6 +2,12 @@
 
 date > /etc/vagrant_box_build_time
 
+# Compress apt indexes
+cat <<EOF > /etc/apt/apt.conf.d/02compress-indexes
+Acquire::GzipIndexes "true";
+Acquire::CompressionTypes::Order:: "gz";
+EOF
+
 # Apt-install various things necessary for Ruby, guest additions,
 # etc., and remove optional things to trim down the machine.
 apt-get -y update
@@ -9,7 +15,6 @@ apt-get -y upgrade
 apt-get -y install linux-headers-$(uname -r) build-essential
 apt-get -y install zlib1g-dev libssl-dev libreadline-gplv2-dev libyaml-dev
 apt-get -y install vim
-apt-get clean
 
 # Installing the virtualbox guest additions
 apt-get -y install dkms
@@ -58,9 +63,18 @@ apt-get -y autoremove
 dd if=/dev/zero of=/EMPTY bs=1M
 rm -f /EMPTY
 
+dd if=/dev/zero of=/boot/EMPTY bs=1M
+rm -f /boot/EMPTY
+
 # Removing leftover leases and persistent rules
 echo "cleaning up dhcp leases"
 rm /var/lib/dhcp/*
+
+# Clean apt cache
+apt-get clean
+
+# Clean gem cache
+rm /var/lib/gems/1.9.1/cache/*
 
 # Make sure Udev doesn't block our network
 # http://6.ptmc.org/?p=164
