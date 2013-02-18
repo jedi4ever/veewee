@@ -8,7 +8,7 @@ A typical workflow with Vagrant would be:
 
 Now you can import the generated '.box' file to the vagrant box repository:
 
-    $ vagrant basebox add 'mybuntubox' 'mybuntubox.box'
+    $ vagrant box add 'mybuntubox' 'mybuntubox.box'
 
 
 ## Export the vm to a .box file
