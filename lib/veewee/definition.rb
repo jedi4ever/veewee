@@ -46,6 +46,7 @@ module Veewee
     attr_accessor :vmdk_file
 
     attr_accessor :skip_iso_transfer
+    attr_accessor :skip_nat_mapping
 
     def ui
       return @_ui if defined?(@_ui)
@@ -104,6 +105,7 @@ module Veewee
 
       @skip_iso_transfer = false
 
+      @skip_nat_mapping = false
       @params = {}
     end
 

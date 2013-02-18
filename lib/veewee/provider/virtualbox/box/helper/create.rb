@@ -24,10 +24,12 @@ module Veewee
 
         def add_ssh_nat_mapping
 
-          unless definition.nil? || definition.no_nat
-            #Map SSH Ports
-            command="#{@vboxcmd} modifyvm \"#{name}\" --natpf#{self.natinterface} \"guestssh,tcp,,#{definition.ssh_host_port},,#{definition.ssh_guest_port}\""
-            shell_exec("#{command}")
+          unless definition.nil?
+            unless definition.skip_nat_mapping == true
+              #Map SSH Ports
+              command="#{@vboxcmd} modifyvm \"#{name}\" --natpf#{self.natinterface} \"guestssh,tcp,,#{definition.ssh_host_port},,#{definition.ssh_guest_port}\""
+              shell_exec("#{command}")
+            end
           end
         end
 
@@ -35,8 +37,10 @@ module Veewee
 
           unless definition.nil?
             #Map SSH Ports
-            command="#{@vboxcmd} modifyvm \"#{name}\" --natpf1 'guestwinrm,tcp,,#{definition.winrm_host_port},,#{definition.winrm_guest_port}'"
-            shell_exec("#{command}")
+            unless definition.skip_nat_mapping == true
+              command="#{@vboxcmd} modifyvm \"#{name}\" --natpf1 'guestwinrm,tcp,,#{definition.winrm_host_port},,#{definition.winrm_guest_port}'"
+              shell_exec("#{command}")
+            end
           end
         end
 
@@ -75,12 +79,12 @@ module Veewee
 
 
         def create_disk
-            ui.info "Creating new harddrive of size #{definition.disk_size.to_i}, format #{definition.disk_format}, variant #{definition.disk_variant} "
+          ui.info "Creating new harddrive of size #{definition.disk_size.to_i}, format #{definition.disk_format}, variant #{definition.disk_variant} "
 
 
-            place=get_vbox_home
-            command ="#{@vboxcmd} createhd --filename \"#{File.join(place,name,name+"."+definition.disk_format.downcase)}\" --size \"#{definition.disk_size.to_i}\" --format #{definition.disk_format.downcase} --variant #{definition.disk_variant.downcase}"
-            shell_exec("#{command}")
+          place=get_vbox_home
+          command ="#{@vboxcmd} createhd --filename \"#{File.join(place,name,name+"."+definition.disk_format.downcase)}\" --size \"#{definition.disk_size.to_i}\" --format #{definition.disk_format.downcase} --variant #{definition.disk_variant.downcase}"
+          shell_exec("#{command}")
 
         end
 
@@ -165,7 +169,7 @@ module Veewee
           #setting video memory size
           command="#{@vboxcmd} modifyvm \"#{name}\" --vram #{definition.video_memory_size}"
           shell_exec("#{command}")
-          
+
           #setting bootorder
           command="#{@vboxcmd} modifyvm \"#{name}\" --boot1 disk --boot2 dvd --boot3 none --boot4 none"
           shell_exec("#{command}")
