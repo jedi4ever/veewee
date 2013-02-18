@@ -4,7 +4,7 @@ module Veewee
       module BoxCommand
 
         def poweroff(options={})
-          raw.halt unless raw.nil?
+          raw.stop(:hard => true) unless raw.nil?
         end
 
       end
