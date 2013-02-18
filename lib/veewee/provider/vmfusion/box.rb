@@ -19,7 +19,7 @@ require 'veewee/provider/vmfusion/box/destroy'
 require 'veewee/provider/vmfusion/box/ssh'
 require 'veewee/provider/vmfusion/box/template'
 require 'veewee/provider/vmfusion/box/validate_vmfusion'
-require 'veewee/provider/vmfusion/box/export_ova'
+require 'veewee/provider/vmfusion/box/export'
 require 'veewee/provider/vmfusion/box/add_share'
 
 

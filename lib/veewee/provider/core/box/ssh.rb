@@ -9,10 +9,11 @@ module Veewee
 
           raise Veewee::Error,"Box is not running" unless self.running?
 
+          host_ip=self.ip_address
+
           if (options[:interactive]==true)
             # Command line options
             extended_command="#{command}"
-            host_ip=self.ip_address
 
             unless host_ip.nil? || host_ip==""
               ssh_command="ssh #{ssh_commandline_options(options)} #{host_ip} \"#{extended_command}\""
@@ -92,4 +93,3 @@ module Veewee
     end # Module
   end # Module
 end # Module
-
