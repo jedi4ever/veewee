@@ -37,7 +37,7 @@ module Veewee
             featurefile="veewee.feature"
           end
 
-          feature_path=File.join(File.dirname(__FILE__),"..","..","..","..","..","validation",featurefile)
+          feature_path=File.join(definition.env.validation_dir,featurefile)
 
           features=Array.new
           features[0]=feature_path
