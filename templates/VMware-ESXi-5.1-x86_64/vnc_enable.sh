@@ -14,7 +14,7 @@ echo "
   <service id='0033'>
     <id>vnc</id>
     <rule id='0000'>
-      <direction>outbound</direction>
+      <direction>inbound</direction>
       <protocol>tcp</protocol>
       <porttype>dst</porttype>
       <port>
@@ -32,8 +32,10 @@ echo "
 cp /store/firewall/service.xml /etc/vmware/firewall/service.xml
 esxcli network firewall refresh
 
-# Add steps to profile.local to repeat these steps on reboot
+sed -i "s/exit 0//" /etc/rc.local.d/local.sh
+
+# Add steps to /etc/rc.local/local.sh to repeat these steps on reboot
 echo "
 cp /store/firewall/service.xml /etc/vmware/firewall/service.xml
-esxcli network firewall refresh" >> /etc/profile.local
-
+esxcli network firewall refresh
+exit 0" >> /etc/rc.local.d/local.sh
