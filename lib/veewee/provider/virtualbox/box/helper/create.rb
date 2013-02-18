@@ -24,7 +24,7 @@ module Veewee
 
         def add_ssh_nat_mapping
 
-          unless definition.nil?
+          unless definition.nil? || definition.force_ssh_port
             #Map SSH Ports
             command="#{@vboxcmd} modifyvm \"#{name}\" --natpf#{self.natinterface} \"guestssh,tcp,,#{definition.ssh_host_port},,#{definition.ssh_guest_port}\""
             shell_exec("#{command}")
