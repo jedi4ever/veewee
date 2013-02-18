@@ -9,6 +9,7 @@ module Veewee
     attr_accessor :name
     attr_accessor :env
     attr_accessor :path
+    attr_accessor :params
 
     attr_writer   :cpu_count, :memory_size
 
@@ -102,7 +103,8 @@ module Veewee
       @kvm = { :vm_options => {} }
 
       @skip_iso_transfer = false
-      
+
+      @params = {}
     end
 
 
