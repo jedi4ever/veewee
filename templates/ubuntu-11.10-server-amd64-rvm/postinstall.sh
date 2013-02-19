@@ -45,15 +45,15 @@ echo "gem: --no-rdoc --no-ri" > /home/vagrant/.gemrc
 chown vagrant:vagrant /home/vagrant/.gemrc
 
 # Install Ruby using RVM
-echo "Installing Ruby 1.9.2 as default ruby"
+echo "Installing Ruby 1.9.3 as default ruby"
 bash -c '
  source /etc/profile
- rvm install 1.9.2-p290
- rvm alias create default ruby-1.9.2-p290
- rvm use 1.9.2-p290 --default
+ rvm install 1.9.3
+ rvm alias create default ruby-1.9.3
+ rvm use 1.9.3 --default
 
  echo "Installing default RubyGems"
- gem install --no-rdoc --no-ri chef puppet ruby-debug-ide19 ruby-debug-base19 ruby-debug19 rails mysql mysql2'
+ gem install --no-rdoc --no-ri chef puppet bundler debugger'
 
 # Make default user member of RVM group
 usermod -a -G rvm vagrant
