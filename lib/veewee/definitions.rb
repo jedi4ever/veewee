@@ -2,6 +2,7 @@ require 'grit'
 require 'veewee/definition'
 require 'veewee/templates'
 require 'veewee/template'
+require 'erb'
 
 module Veewee
   class Definitions
@@ -113,6 +114,22 @@ module Veewee
           env.logger.fatal("Copy '#{template.path}' to #{dst_dir}' failed: #{ex}")
           raise Veewee::Error, "Copy '#{template.path}' to #{dst_dir}' failed: #{ex}"
         end
+      end
+
+      # If the template includes a NOTICE.erb or NOTICE.txt file, display it to the user
+      # .erb file takes priority, then .txt
+      notice_erb = File.join(dst_dir, 'NOTICE.erb')
+      notice_txt = File.join(dst_dir, 'NOTICE.txt')
+      if File.exist?(notice_erb)
+        template = File.read(notice_erb)
+        text = ERB.new(template).result(binding)
+      elsif File.exist?(notice_txt)
+        text = File.read(notice_txt)
+      end
+
+      if text
+        env.ui.warn("Template #{template_name} includes this NOTICE text you should first read:\n")
+        env.ui.info("#{text}\n")
       end
 
       definition = env.definitions[definition_name]
