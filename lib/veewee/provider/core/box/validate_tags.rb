@@ -129,7 +129,7 @@ module Veewee
           },
           { :description => 'Checking shared folder',
             :tags => [ 'vagrant'],
-            :command => 'mount|grep veewee-validation',
+            :command => 'mount|grep veewee-validation; echo $?',
             :expected_string => "0",
             :sudo => false
           }
