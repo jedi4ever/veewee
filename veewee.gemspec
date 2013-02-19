@@ -14,7 +14,6 @@ Gem::Specification.new do |s|
   s.required_rubygems_version = ">= 1.3.6"
   s.rubyforge_project         = "veewee"
 
-  s.add_dependency "vagrant", ">= 0.9"
 
   # Currently locked to 2.2.0
   # if specifying to >= 2.2.0 it would use 2.3 and bundler would go in a resolver loop
@@ -26,7 +25,7 @@ Gem::Specification.new do |s|
   s.add_dependency "highline"
   s.add_dependency "progressbar"
   s.add_dependency "i18n"
-  s.add_dependency "cucumber", ">=1.0.0"
+  #s.add_dependency "cucumber", ">=1.0.0"
   s.add_dependency "ansi", "~> 1.3.0"
   s.add_dependency "ruby-vnc", "~> 1.0.0"
   s.add_dependency "fog", "~> 1.8"
@@ -39,7 +38,7 @@ Gem::Specification.new do |s|
   # See : https://github.com/jedi4ever/veewee/issues/6
   #s.add_dependency "CFPropertyList", ">= 2.1.1"
 #  s.add_dependency "libvirt"
-  s.add_dependency "rspec", "~> 2.5"
+  s.add_development_dependency "rspec", "~> 2.5"
 
   s.add_development_dependency "bundler", ">= 1.0.0"
   #s.add_development_dependency('ruby-libvirt','~>0.4.0')

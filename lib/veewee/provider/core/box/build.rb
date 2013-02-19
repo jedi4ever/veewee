@@ -301,7 +301,7 @@ module Veewee
 
           # Iterate over params
           params.each do |key,value|
-            content += "#{key}='#{value}'\n"
+            content += "export #{key}='#{value}'\n"
           end
 
           begin

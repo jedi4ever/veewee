@@ -15,47 +15,154 @@ module Veewee
             exit -1
           end
 
-          require 'cucumber'
-
-          require 'cucumber/rspec/disable_option_parser'
-          require 'cucumber/cli/main'
-
-          # Passing ssh options via ENV varialbles to cucumber
-          # VEEWEE_SSH_USER, VEEWEE_SSH_PASSWORD ,VEEWEE_SSH_PORT
-          cucumber_vars=ssh_options
-          cucumber_vars.each do |key,value|
-            ENV['VEEWEE_'+key.to_s.upcase]=cucumber_vars[key].to_s
-          end
-
-          # Pass the name of the box
-          ENV['VEEWEE_BOXNAME']=@name
-          ENV['VEEWEE_PROVIDER']=@provider.name
-
-          if definition.winrm_user && definition.winrm_password # prefer winrm 
-            featurefile="veewee-windows.feature"
+          if definition.winrm_user && definition.winrm_password # prefer winrm
+            checks = checks_windows
           else
-            featurefile="veewee.feature"
+            checks = checks_linux
           end
 
-          feature_path=File.join(definition.env.validation_dir,featurefile)
+          # Some reject here based on tags
+          checks.reject! { |c|
+            tagged = false
+            c[:tags].each do |t|
+              tagged = true if tags.include?(t)
+            end
+            ! tagged
+          }
 
-          features=Array.new
-          features[0]=feature_path
-          features << "--tags"
-          features << tags.map {|t| "@#{t}"}.join(',')
+          # Assume clean exitcode
+          exitcode = 0
+
+          # Loop over checks
+          checks.each do |check|
+            if check[:sudo]
+              result = check_output_sudorun(check[:command],check[:expected_string])
+            else
+              result = check_output_run(check[:command],check[:expected_string])
+            end
+
+            if result[:match]
+              ui.success("#{check[:description]} - OK")
+            else
+              ui.error("#{check[:description]} - FAILED")
+              ui.error("Command: #{check[:command]}")
+              ui.error("Expected string #{check[:expected_string]}")
+              ui.error("Output: #{check[:output]}")
+              exitcode = -1
+            end
+          end
+
+          exit -1 if exitcode < 0
+        end
+
+        def check_output_sudorun(command,expected_string)
+          result = { :command => command,
+                     :expected_string => expected_string,
+                     :output => nil
+                   }
 
           begin
-            # The dup is to keep ARGV intact, so that tools like ruby-debug can respawn.
-            failure = Cucumber::Cli::Main.execute(features.dup)
-            Kernel.exit(failure ? 1 : 0)
-          rescue SystemExit => e
-            Kernel.exit(e.status)
-          rescue Exception => e
-            ui.error("#{e.message} (#{e.class})")
-            ui.error(e.backtrace.join("\n"))
-            Kernel.exit(1)
-          end
+            self.exec("echo '#{command}' > /tmp/validation.sh && chmod a+x /tmp/validation.sh", :mute => true)
+            sshresult = self.exec(self.sudo("/tmp/validation.sh"),:mute => true)
 
+            result[:output]   = sshresult.stdout
+            result[:match]    = ! sshresult.stdout.match(/#{expected_string}/).nil?
+          rescue
+            result[:match] = false
+          end
+          return result
+        end
+
+        def check_output_run(command,expected_string)
+          result = { :command => command,
+                     :expected_string => expected_string,
+                     :output => nil
+                   }
+
+          begin
+            sshresult = self.exec(command, {:exitcode => '*',:mute => true})
+            result[:output]   = sshresult.stdout
+            result[:match]    = ! sshresult.stdout.match(/#{expected_string}/).nil?
+          rescue
+            result[:match] = false
+          end
+          return result
+        end
+
+        def checks_linux
+          return [
+            { :description => 'Checking user',
+              :tags => [ 'virtualbox','kvm', 'parallels'],
+              :command => 'who am i',
+              :expected_string => definition.ssh_user,
+              :sudo => false
+          },
+          { :description => 'Checking sudo',
+            :tags => [ 'virtualbox','kvm', 'parallels'],
+            :command => 'whoami',
+            :expected_string => 'root',
+            :sudo => true
+          },
+          { :description => 'Checking ruby',
+            :tags => [ 'virtualbox','kvm', 'parallels','ruby'],
+            :command => '. /etc/profile ;ruby --version 2> /dev/null 1> /dev/null;  echo $?',
+            :expected_string => "0",
+            :sudo => false
+          },
+          { :description => 'Checking gem',
+            :tags => [ 'virtualbox','kvm', 'parallels','gem'],
+            :command => '. /etc/profile ;gem --version 2> /dev/null 1> /dev/null;  echo $?',
+            :expected_string => "0",
+            :sudo => false
+          },
+          { :description => 'Checking chef',
+            :tags => [ 'chef'],
+            :command => '. /etc/profile ;chef-client --version 2> /dev/null 1>/dev/null; echo $?',
+            :expected_string => "0",
+            :sudo => false
+          },
+          { :description => 'Checking puppet',
+            :tags => [ 'puppet'],
+            :command => '. /etc/profile ;puppet --version 2> /dev/null 1>/dev/null; echo $?',
+            :expected_string => "0",
+            :sudo => false
+          },
+          { :description => 'Checking shared folder',
+            :tags => [ 'vagrant'],
+            :command => 'mount|grep veewee-validation',
+            :expected_string => "0",
+            :sudo => false
+          }
+          ]
+        end
+
+        def checks_windows
+          return [
+            { :description => 'Checking user',
+              :tags => [ 'virtualbox','kvm','vmfusion'],
+              :command => 'whoami',
+              :expected_string => definition.ssh_user,
+              :sudo => false
+          },
+          { :description => 'Checking ruby',
+            :tags => [ 'virtualbox','kvm','vmfusion'],
+            :command => 'ruby --version > %TEMP%\devnull && echo %ERRORLEVEL%',
+            :expected_string => "0",
+            :sudo => false
+          },
+          { :description => 'Checking gem',
+            :tags => [ 'virtualbox','kvm','vmfusion'],
+            :command => 'gem --version > %TEMP%\devnull && echo %ERRORLEVEL%',
+            :expected_string => "0",
+            :sudo => false
+          },
+          { :description => 'Checking chef',
+            :tags => [ 'chef'],
+            :command => 'chef-client --version > %TEMP%\devnull && echo %ERRORLEVEL%',
+            :expected_string => "0",
+            :sudo => false
+          },
+          ]
         end
       end #Module
 
