@@ -2,10 +2,6 @@
 
 date > /etc/vagrant_box_build_time
 
-# Add groups puppet and chef
-groupadd puppet
-groupadd chef
-
 # Create the user vagrant with password vagrant
 useradd -G sudo -p $(perl -e'print crypt("vagrant", "vagrant")') -m -s /bin/bash -N vagrant
 
