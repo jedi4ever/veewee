@@ -108,7 +108,7 @@ module Veewee
       else
         begin
           env.logger.debug("Starting copy '#{template.path}' to '#{dst_dir}'")
-          FileUtils.cp_r(template.path + "/.", dst_dir)
+          FileUtils.cp_r(template.path + "/.", dst_dir, :preserve => true)
           env.logger.debug("Copy '#{template.path}' to '#{dst_dir}' succesful")
         rescue Exception => ex
           env.logger.fatal("Copy '#{template.path}' to #{dst_dir}' failed: #{ex}")
