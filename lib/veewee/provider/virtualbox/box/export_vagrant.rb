@@ -1,8 +1,15 @@
 require 'pathname'
+require 'erb'
 module Veewee
   module Provider
     module Virtualbox
       module BoxCommand
+
+        class ErbBinding < OpenStruct
+          def get_binding
+            return binding()
+          end
+        end
 
         #    Shellutil.execute("vagrant package --base #{vmname} --include /tmp/Vagrantfile --output /tmp/#{vmname}.box", {:progress => "on"})
 
@@ -51,24 +58,85 @@ module Veewee
           full_path=File.join(boxdir,name+".box")
           path1=Pathname.new(full_path)
           path2=Pathname.new(Dir.pwd)
-          box_path=path1.relative_path_from(path2).to_s
+          box_path=File.expand_path(path1.relative_path_from(path2).to_s)
 
           if File.exists?("#{box_path}")
             raise Veewee::Error, "box #{name}.box already exists"
           end
 
-          ui.info "Executing vagrant voodoo:"
-          export_command="vagrant package --base '#{name}' --output '#{box_path}'"
-          export_command += " --include #{options["include"].join(',')}" unless options["include"].empty?
-          export_command += " --vagrantfile #{options["vagrantfile"].join(' ')}" unless options["vagrantfile"].empty?
-          ui.info "#{export_command}"
-          shell_exec("#{export_command}") #hmm, needs to get the gem_home set?
+          # Create temp directory
+          current_dir = FileUtils.pwd
+          ui.info "Creating a temporary directory for export"
+          tmp_dir = Dir.mktmpdir
+          env.logger.debug("Create temporary directory for export #{tmp_dir}")
+
+          begin
+
+            ui.info "Adding additional files"
+
+            # Handling the Vagrantfile
+            if options["vagrantfile"].nil?
+
+              # Fetching mac address
+
+              data = {
+                :macaddress => get_mac_address
+              }
+
+              # Prepare the vagrant erb
+              vars = ErbBinding.new(data)
+              template_path = File.join(File.dirname(__FILE__),'..','..','..','templates',"Vagrantfile.erb")
+              template = File.open(template_path).readlines.join
+              erb = ERB.new(template)
+              vars_binding = vars.send(:get_binding)
+              result = erb.result(vars_binding)
+              ui.info("Creating Vagrantfile")
+              vagrant_path = File.join(tmp_dir,'Vagrantfile')
+              env.logger.debug("Path: #{vagrant_path}")
+              env.logger.debug(result)
+              File.open(vagrant_path,'w') {|f| f.write(result) }
+            else
+              options["vagrantfile"].each do |f|
+                env.logger.debug("Including file: #{f}")
+                FileUtils.cp(f,File.join(tmp_dir,f))
+              end
+            end
+
+            # Handling other includes
+            unless options["include"].nil?
+              options["include"].each do |f|
+                env.logger.debug("Including file: #{f}")
+                FileUtils.cp(f,File.join(tmp_dir,f))
+              end
+            end
+
+            ui.info "Exporting the box"
+            command = "#{@vboxcmd} export #{name} --output #{File.join(tmp_dir,'box.ovf')}"
+            env.logger.debug("Command: #{command}")
+            shell_exec(command, {:mute => false})
+
+            ui.info "Packaging the box"
+            FileUtils.cd(tmp_dir)
+            command = "tar -cvf #{box_path} ."
+            env.logger.debug(command)
+            shell_exec (command)
+
+          rescue Error => ex
+            raise Veewee::Error, "Packaging of the box failed:\n+#{ex}"
+          ensure
+            # Remove temporary directory
+            ui.info "Cleaning up temporary directory"
+            env.logger.debug("Removing temporary dir #{tmp_dir}")
+            FileUtils.rm_rf(tmp_dir)
+
+            FileUtils.cd(current_dir)
+          end
           ui.info ""
 
           #add_ssh_nat_mapping back!!!!
           #vagrant removes the mapping
           #we need to restore it in order to be able to login again
-          self.add_ssh_nat_mapping
+          #self.add_ssh_nat_mapping
 
           ui.info "To import it into vagrant type:"
           ui.info "vagrant box add '#{name}' '#{box_path}'"
@@ -77,6 +145,14 @@ module Veewee
           ui.info "vagrant init '#{name}'"
           ui.info "vagrant up"
           ui.info "vagrant ssh"
+        end
+
+        def get_mac_address
+          command = "#{@vboxcmd} showvminfo --details --machinereadable \"#{self.name}\""
+          shell_results = shell_exec("#{command}")
+          mac = shell_results.stdout.split(/\n/).grep(/^macaddress1/)[0].split('=')[1].split('"')[1]
+          env.logger.debug("mac address: #{mac}")
+          return mac
         end
 
       end #Module

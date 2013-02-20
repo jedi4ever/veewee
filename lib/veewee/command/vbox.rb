@@ -18,7 +18,7 @@ module Veewee
         venv.providers["virtualbox"].get_box(box_name).build(options)
       end
 
-      method_option :force,:type => :boolean , :default => false, :aliases => "-f", :desc => "force the destroy" 
+      method_option :force,:type => :boolean , :default => false, :aliases => "-f", :desc => "force the destroy"
       method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging"
       method_option :nogui,:type => :boolean , :default => false, :aliases => "-n", :desc => "no gui"
       desc "destroy [BOXNAME]", "Destroys the basebox that was built"
@@ -29,7 +29,7 @@ module Veewee
       end
 
       method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging"
-      method_option :force,:type => :boolean , :default => false, :aliases => "-f", :desc => "force the shutdown" 
+      method_option :force,:type => :boolean , :default => false, :aliases => "-f", :desc => "force the shutdown"
       desc "halt [BOXNAME]", "Activates a shutdown on the basebox"
       def halt(box_name)
         venv=Veewee::Environment.new(options)
@@ -77,12 +77,12 @@ module Veewee
       method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging"
       def define(definition_name, template_name)
         begin
-        venv=Veewee::Environment.new(options)
-        venv.ui=env.ui
-        venv.definitions.define(definition_name,template_name,options)
-        env.ui.info "The basebox '#{definition_name}' has been successfully created from the template '#{template_name}'"
-        env.ui.info "You can now edit the definition files stored in definitions/#{definition_name} or build the box with:"
-        env.ui.info "veewee vbox build '#{definition_name}'"
+          venv=Veewee::Environment.new(options)
+          venv.ui=env.ui
+          venv.definitions.define(definition_name,template_name,options)
+          env.ui.info "The basebox '#{definition_name}' has been successfully created from the template '#{template_name}'"
+          env.ui.info "You can now edit the definition files stored in definitions/#{definition_name} or build the box with:"
+          env.ui.info "veewee vbox build '#{definition_name}'"
         rescue Error => ex
           env.ui.error("#{ex}",:prefix => false)
           exit -1
@@ -104,13 +104,25 @@ module Veewee
         end
       end
 
+
+
+      desc "export [NAME]", "Exports the basebox to the vagrant format"
+      method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging"
+      method_option :force,:type => :boolean , :default => false, :aliases => "-f", :desc => "overwrite existing file"
+      def export(box_name)
+        venv=Veewee::Environment.new(options)
+        venv.ui=env.ui
+        venv.providers["virtualbox"].get_box(box_name).export_vagrant(options)
+      end
+
+
       desc "ostypes", "List the available Operating System types"
       method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging"
       def ostypes
         venv=Veewee::Environment.new(options)
         venv.ui=env.ui
         venv.ostypes.each do |name|
-           env.ui.info "- #{name}"
+          env.ui.info "- #{name}"
         end
       end
 
@@ -141,10 +153,10 @@ module Veewee
       method_option :tags, :type => :array , :default => %w{vagrant virtualbox puppet chef}, :aliases => "-t", :desc => "tags to validate"
       def validate(box_name)
         begin
-        venv=Veewee::Environment.new(options)
-        venv.ui = ::Veewee::UI::Shell.new(venv, shell)
+          venv=Veewee::Environment.new(options)
+          venv.ui = ::Veewee::UI::Shell.new(venv, shell)
 
-        venv.providers["virtualbox"].get_box(box_name).validate_vagrant(options)
+          venv.providers["virtualbox"].get_box(box_name).validate_vagrant(options)
         rescue Veewee::Error => ex
           venv.ui.error(ex, :prefix => false)
           exit -1
@@ -154,10 +166,10 @@ module Veewee
       desc "screenshot [NAME] [PNGFILENAME]", "Takes a screenshot of the box"
       def screenshot(box_name,pngfilename)
         begin
-        venv=Veewee::Environment.new(options)
-        venv.ui = ::Veewee::UI::Shell.new(venv, shell)
+          venv=Veewee::Environment.new(options)
+          venv.ui = ::Veewee::UI::Shell.new(venv, shell)
 
-        venv.providers["virtualbox"].get_box(box_name).screenshot(pngfilename,options)
+          venv.providers["virtualbox"].get_box(box_name).screenshot(pngfilename,options)
         rescue Veewee::Error => ex
           venv.ui.error(ex, :prefix => false)
           exit -1
