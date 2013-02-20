@@ -3,6 +3,7 @@ apt-get -y update
 apt-get -y install linux-headers-$(uname -r) build-essential
 apt-get -y install zlib1g-dev libssl-dev libreadline-gplv2-dev
 apt-get -y install curl unzip
+apt-get -y install --no-install-recommends libdbus-1-3
 apt-get clean
 
 # Set up sudo
