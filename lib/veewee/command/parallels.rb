@@ -1,11 +1,11 @@
 module Veewee
   module Command
     class Parallels< Veewee::Command::GroupBase
+      class_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging"
 
       register "parallels", "Subcommand for Parallels"
       desc "build [BOX_NAME]", "Build box"
       method_option :force,:type => :boolean , :default => false, :aliases => "-f", :desc => "force the build"
-      method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging"
       method_option :auto,:type => :boolean , :default => false, :aliases => "-a", :desc => "auto answers"
       method_option :checksum , :type => :boolean , :default => false, :desc => "verify checksum"
       method_option :postinstall_include, :type => :array, :default => [], :aliases => "-i", :desc => "ruby regexp of postinstall filenames to additionally include"
@@ -17,7 +17,6 @@ module Veewee
       end
 
       method_option :force,:type => :boolean , :default => false, :aliases => "-f", :desc => "force the destroy" 
-      method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging"
       desc "destroy [BOXNAME]", "Destroys the virtualmachine that was built"
       def destroy(box_name)
         venv=Veewee::Environment.new(options)
@@ -25,8 +24,7 @@ module Veewee
         venv.providers["parallels"].get_box(box_name).destroy(options)
       end
 
-      method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging"
-      method_option :force,:type => :boolean , :default => false, :aliases => "-f", :desc => "force the shutdown" 
+      method_option :force,:type => :boolean , :default => false, :aliases => "-f", :desc => "force the shutdown"
       desc "halt [BOXNAME]", "Activates a shutdown the virtualmachine"
       def halt(box_name)
         venv=Veewee::Environment.new(options)
@@ -34,7 +32,6 @@ module Veewee
         venv.providers["parallels"].get_box(box_name).halt(options)
       end
 
-      method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging"
       method_option :nogui,:type => :boolean , :default => false, :aliases => "-n", :desc => "no gui"
       desc "up [BOXNAME]", "Starts a Box"
       def up(box_name)
@@ -44,7 +41,6 @@ module Veewee
       end
 
       desc "ssh [BOXNAME] [COMMAND]", "SSH to box"
-      method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging"
       def ssh(box_name,command=nil)
         venv=Veewee::Environment.new(options)
         venv.ui=env.ui
@@ -53,7 +49,6 @@ module Veewee
 
       desc "define [BOXNAME] [TEMPLATE]", "Define a new basebox starting from a template"
       method_option :force,:type => :boolean , :default => false, :aliases => "-f", :desc => "overwrite the definition"
-      method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging"
       def define(definition_name, template_name)
         venv=Veewee::Environment.new(options)
         venv.ui=env.ui
@@ -64,7 +59,6 @@ module Veewee
       end
 
       desc "undefine [BOXNAME]", "Removes the definition of a basebox "
-      method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging"
       def undefine(definition_name)
         env.ui.info "Removing definition #{definition_name}" , :prefix => false
         begin
@@ -79,7 +73,6 @@ module Veewee
       end
 
       desc "validate [NAME]", "Validates a box against parallels compliancy rules"
-      method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging"
       method_option :tags,:type => :array, :default => %w{parallels puppet chef}, :aliases => "-t", :desc => "tags to validate"
       def validate(box_name)
         venv=Veewee::Environment.new(options)
@@ -88,7 +81,6 @@ module Veewee
       end
 
       desc "ostypes", "List the available Operating System types"
-      method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging"
       def ostypes
         venv=Veewee::Environment.new(options)
         venv.ui=env.ui
@@ -98,7 +90,6 @@ module Veewee
       end
 
       desc "templates", "List the currently available templates"
-      method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging"
       def templates
         env.ui.info "The following templates are available:",:prefix => false
         venv=Veewee::Environment.new(options)
@@ -109,7 +100,6 @@ module Veewee
       end
 
       desc "list", "Lists all defined boxes"
-      method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging"
       def list
         env.ui.info "The following local definitions are available:",:prefix => false
         venv=Veewee::Environment.new(options)
@@ -118,9 +108,6 @@ module Veewee
           env.ui.info "- #{name}"
         end
       end
-
-
     end
-
   end
 end
