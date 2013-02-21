@@ -165,6 +165,14 @@ module Veewee
       end
 
 
+      # TODO pull up to GroupBase - since console_type is supported for every provider
+      desc "type [NAME] [SEQUENCE]", "Sends the key sequence (comma separated) to the box. E.g for testing the :boot_cmd_sequence"
+      def sendkeys(box_name, sequence)
+        venv=Veewee::Environment.new(options)
+        venv.ui = ::Veewee::UI::Shell.new(venv, shell)
+
+        venv.providers["virtualbox"].get_box(box_name).console_type(sequence.split(","))
+      end
     end
 
   end
