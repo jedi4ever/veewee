@@ -61,6 +61,9 @@ module Veewee
             # F1 .. F10
             (1..10).each { |num| special["<F#{num}>"] = sprintf('%02x', num + 0x3a) }
 
+            # VT1 - VT12 (Switch to Virtual Terminal #. e.g Alt+F1)
+            (1..12).each { |num| special["<VT#{num}>"] = sprintf('38 %02x b8 %02x', num + 0x3a, num + 0xba) }
+
             keycodes=''
             thestring.gsub!(/ /,"<Spacebar>")
 

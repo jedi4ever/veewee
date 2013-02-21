@@ -151,7 +151,7 @@ module Veewee
         end
       end
 
-      desc "screenshot [NAME] [PNGFILENAME]", "Takes a screenshot of the box"
+      desc "screenshot [BOXNAME] [PNGFILENAME]", "Takes a screenshot of the box"
       def screenshot(box_name,pngfilename)
         begin
           venv=Veewee::Environment.new(options)
@@ -166,7 +166,7 @@ module Veewee
 
 
       # TODO pull up to GroupBase - since console_type is supported for every provider
-      desc "type [NAME] [SEQUENCE]", "Sends the key sequence (comma separated) to the box. E.g for testing the :boot_cmd_sequence"
+      desc "sendkeys [BOXNAME] [SEQUENCE]", "Sends the key sequence (comma separated) to the box. E.g for testing the :boot_cmd_sequence"
       def sendkeys(box_name, sequence)
         venv=Veewee::Environment.new(options)
         venv.ui = ::Veewee::UI::Shell.new(venv, shell)
