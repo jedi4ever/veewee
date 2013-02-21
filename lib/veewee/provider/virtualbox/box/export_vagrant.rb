@@ -75,7 +75,7 @@ module Veewee
             ui.info "Adding additional files"
 
             # Handling the Vagrantfile
-            if options["vagrantfile"].nil?
+            if options["vagrantfile"].to_s == ""
 
               # Fetching mac address
 
@@ -96,10 +96,9 @@ module Veewee
               env.logger.debug(result)
               File.open(vagrant_path,'w') {|f| f.write(result) }
             else
-              options["vagrantfile"].each do |f|
-                env.logger.debug("Including file: #{f}")
-                FileUtils.cp(f,File.join(tmp_dir,f))
-              end
+              f = options["vagrantfile"]
+              env.logger.debug("Including vagrantfile: #{f}")
+              FileUtils.cp(f,File.join(tmp_dir,"Vagrantfile"))
             end
 
             # Handling other includes
@@ -121,6 +120,8 @@ module Veewee
             env.logger.debug(command)
             shell_exec (command)
 
+          rescue Errno::ENOENT => ex
+            raise Veewee::Error, "#{ex}"
           rescue Error => ex
             raise Veewee::Error, "Packaging of the box failed:\n+#{ex}"
           ensure
