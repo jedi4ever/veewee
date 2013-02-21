@@ -11,6 +11,9 @@ if test -f .vbox_version ; then
 
   apt-get install -y dkms
 
+  # If libdbus is not installed, virtualbox will not autostart
+  apt-get -y install --no-install-recommends libdbus-1-3
+
   # Install the VirtualBox guest additions
   VBOX_VERSION=$(cat .vbox_version)
   VBOX_ISO=VBoxGuestAdditions_$VBOX_VERSION.iso
