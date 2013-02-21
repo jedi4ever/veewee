@@ -1,7 +1,7 @@
 module Veewee
   module Command
     class Parallels< Veewee::Command::GroupBase
-      class_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging"
+      class_option :debug,:type => :boolean , :default => false, :desc => "enable debugging"
 
       register "parallels", "Subcommand for Parallels"
       desc "build [BOX_NAME]", "Build box"
