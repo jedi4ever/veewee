@@ -48,7 +48,7 @@ module Veewee
 
       def string_to_vnccode(thestring)
 
-        # http://code.google.com/p/ruby-vnc/source/browse/trunk/data/keys.yaml
+	# https://github.com/aquasync/ruby-vnc/blob/master/data/keys.yaml
 
         special=Hash.new
         # Specific veewee
