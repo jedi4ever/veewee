@@ -9,6 +9,7 @@ tmp/*
 definitions/*
 Vagrantfile
 Vagrantfile.*
+!lib/veewee/templates/Vagrantfile.erb
 cookbooks/*
 manifests/*
 boxes/*
