@@ -2,7 +2,9 @@ module Veewee
   module Command
     class Parallels< Veewee::Command::GroupBase
 
-      register "parallels", "Subcommand for Parallels"
+      register :command => "parallels",
+               :description => "Subcommand for Parallels",
+               :provider => "parallels"
 
       desc "build [BOX_NAME]", "Build box"
       # TODO move common build options into array
@@ -12,17 +14,13 @@ module Veewee
       method_option :postinstall_include, :type => :array, :default => [], :aliases => "-i", :desc => "ruby regexp of postinstall filenames to additionally include"
       method_option :postinstall_exclude, :type => :array, :default => [], :aliases => "-e", :desc => "ruby regexp of postinstall filenames to exclude"
       def build(box_name)
-        venv=Veewee::Environment.new(options)
-        venv.ui=env.ui
-        venv.providers["parallels"].get_box(box_name).build(options)
+        box(box_name).build(options)
       end
 
       desc "validate [BOX_NAME]", "Validates a box against parallels compliancy rules"
       method_option :tags,:type => :array, :default => %w{parallels puppet chef}, :aliases => "-t", :desc => "tags to validate"
       def validate(box_name)
-        venv=Veewee::Environment.new(options)
-        venv.ui=env.ui
-        venv.providers["parallels"].get_box(box_name).validate_parallels(options)
+        box(box_name).validate_parallels(options)
       end
     end
   end

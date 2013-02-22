@@ -2,7 +2,9 @@ module Veewee
   module Command
     class Kvm< Veewee::Command::GroupBase
 
-      register "kvm", "Subcommand for KVM"
+      register :command => "kvm",
+               :description => "Subcommand for KVM",
+               :provider => "kvm"
 
       desc "build [BOX_NAME]", "Build box"
       # TODO move common build options into array
@@ -17,18 +19,14 @@ module Veewee
       method_option :pool_name, :type => :string, :default => nil, :desc => "Name of the libvirt storage pool to be used"
       method_option :network_name, :type => :string, :default => "default", :desc => "Name of the libvirt network to be used"
       def build(box_name)
-        venv=Veewee::Environment.new(options)
-        venv.ui=env.ui
-        venv.providers["kvm"].get_box(box_name).build(options)
+        box(box_name).build(options)
       end
 
 
       desc "validate [BOX_NAME]", "Validates a box against kvm compliancy rules"
       method_option :tags,:type => :array , :default => %w{kvm puppet chef}, :aliases => "-t", :desc => "tags to validate"
       def validate(box_name)
-        venv=Veewee::Environment.new(options)
-        venv.ui=env.ui
-        venv.providers["kvm"].get_box(box_name).validate_kvm(options)
+        box(box_name).validate_kvm(options)
       end
 
     end

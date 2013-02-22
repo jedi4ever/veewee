@@ -2,7 +2,9 @@ module Veewee
   module Command
     class Vbox< Veewee::Command::GroupBase
 
-      register "vbox", "Subcommand for VirtualBox"
+      register :command => "vbox",
+               :description => "Subcommand for VirtualBox",
+               :provider => "virtualbox"
 
       desc "build [BOX_NAME]", "Build box"
       # TODO move common build options into array
@@ -14,18 +16,14 @@ module Veewee
       method_option :postinstall_include, :type => :array, :default => [], :aliases => "-i", :desc => "ruby regexp of postinstall filenames to additionally include"
       method_option :postinstall_exclude, :type => :array, :default => [], :aliases => "-e", :desc => "ruby regexp of postinstall filenames to exclude"
       def build(box_name)
-        venv=Veewee::Environment.new(options)
-        venv.ui=env.ui
-        venv.providers["virtualbox"].get_box(box_name).build(options)
+        box(box_name).build(options)
       end
 
       desc "export [BOX_NAME]", "Exports the basebox to the vagrant format"
       method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging"
       method_option :force,:type => :boolean , :default => false, :aliases => "-f", :desc => "overwrite existing file"
       def export(box_name)
-        venv=Veewee::Environment.new(options)
-        venv.ui=env.ui
-        venv.providers["virtualbox"].get_box(box_name).export_vagrant(options)
+       box(box_name).export_vagrant(options)
       end
 
       desc "validate [BOX_NAME]", "Validates a box against vagrant compliancy rules"
@@ -34,8 +32,7 @@ module Veewee
         begin
           venv=Veewee::Environment.new(options)
           venv.ui = ::Veewee::UI::Shell.new(venv, shell)
-
-          venv.providers["virtualbox"].get_box(box_name).validate_vagrant(options)
+          venv.providers[@provider].get_box(box_name).validate_vagrant(options)
         rescue Veewee::Error => ex
           venv.ui.error(ex, :prefix => false)
           exit -1
@@ -48,7 +45,7 @@ module Veewee
           venv=Veewee::Environment.new(options)
           venv.ui = ::Veewee::UI::Shell.new(venv, shell)
 
-          venv.providers["virtualbox"].get_box(box_name).screenshot(pngfilename,options)
+          venv.providers[@provider].get_box(box_name).screenshot(pngfilename,options)
         rescue Veewee::Error => ex
           venv.ui.error(ex, :prefix => false)
           exit -1

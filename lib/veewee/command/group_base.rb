@@ -89,24 +89,21 @@ module Veewee
       #  for the same command. For example, `veewee version` is also
       #  `veewee --version` and `veewee -v`
       #
-      # @param [String] usage
-      # @param [String] description
-      # @param [Hash] opts
-      def self.register(usage, description, opts=nil)
-        name = Base.extract_name_from_usage(usage)
+      def self.register(options = {})
         # self refers to the class object of the provider subclass
-        self.class_variable_set(:@@name, name)
-        self.class_variable_set(:@@description, description)
-        self.class_variable_set(:@@usage, usage)
-        CLI.register(self, name, usage, description, opts)
+        self.class_variable_set(:@@command, options[:command])
+        self.class_variable_set(:@@description, options[:description])
+        self.class_variable_set(:@@provider, options[:provider])
+        CLI.register(self, options[:command], options[:command], options[:description], options[:opts])
       end
 
       def initialize(*args)
         super
         initialize_environment(*args)
         # make provider class variables easily available to global task methods
-        @name = self.class.class_variable_get(:@@name)
+        @command = self.class.class_variable_get(:@@command)
         @description = self.class.class_variable_get(:@@description)
+        @provider = self.class.class_variable_get(:@@provider)
       end
 
       desc "templates", "List the currently available templates"
@@ -114,7 +111,7 @@ module Veewee
       def templates
         env.ui.info "The following templates are available:",:prefix => false
         environment.templates.each do |name,template|
-          env.ui.info "veewee #{@name} define '#{options[:box_name]}' '#{name}' --workdir=#{options[:cwd]}",:prefix => false
+          env.ui.info "veewee #{@command} define '#{options[:box_name]}' '#{name}' --workdir=#{options[:cwd]}",:prefix => false
         end
       end
 
@@ -134,7 +131,7 @@ module Veewee
           environment.definitions.define(definition_name,template_name,options)
           env.ui.info "The basebox '#{definition_name}' has been successfully created from the template '#{template_name}'"
           env.ui.info "You can now edit the definition files stored in #{options[:cwd]}definitions/#{definition_name} or build the box with:"
-          env.ui.info "veewee #{@name} build '#{definition_name}' --workdir=#{options[:cwd]}"
+          env.ui.info "veewee #{@command} build '#{definition_name}' --workdir=#{options[:cwd]}"
         rescue Error => ex
           env.ui.error("#{ex}",:prefix => false)
           exit -1
@@ -142,7 +139,7 @@ module Veewee
       end
 
       desc "winrm [BOX_NAME] [COMMAND]", "Execute command via winrm"
-      def winrm(box_name,command=nil)
+      def winrm(box_name, command=nil)
         venv=Veewee::Environment.new(options)
         venv.ui=env.ui
         venv.providers["virtualbox"].get_box(box_name).winrm(command,{:exitcode => "*"})
@@ -168,12 +165,12 @@ module Veewee
       end
 
       desc "ssh [BOX_NAME] [COMMAND]", "SSH to box"
-      def ssh(box_name,command=nil)
+      def ssh(box_name, command=nil)
         box(box_name).issh(command)
       end
 
       desc "copy [BOX_NAME] [SRC] [DST]", "Copy a file to the VM"
-      def copy(box_name,src,dst)
+      def copy(box_name, src, dst)
         box(box_name).copy_to_box(src,dst)
       end
 
@@ -200,7 +197,7 @@ module Veewee
       def sendkeys(box_name, sequence)
         venv=Veewee::Environment.new(options)
         venv.ui = ::Veewee::UI::Shell.new(venv, shell)
-        venv.providers[@name].get_box(box_name).console_type(sequence.split(","))
+        venv.providers[@provider].get_box(box_name).console_type(sequence.split(","))
       end
 
 protected
@@ -212,7 +209,7 @@ protected
       end
 
       def box(box_name)
-        environment.providers[@name].get_box(box_name)
+        environment.providers[@provider].get_box(box_name)
       end
 
       # Override the basename to include the subcommand name.
