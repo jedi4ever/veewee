@@ -23,7 +23,7 @@ module Veewee
 
       method_option :force,:type => :boolean , :default => false, :aliases => "-f", :desc => "force the destroy" 
       method_option :nogui,:type => :boolean , :default => false, :aliases => "-n", :desc => "no gui"
-      desc "destroy [BOXNAME]", "Destroys the virtualmachine that was built"
+      desc "destroy [BOX_NAME]", "Destroys the virtualmachine that was built"
       def destroy(box_name)
         venv=Veewee::Environment.new(options)
         venv.ui=env.ui
@@ -31,7 +31,7 @@ module Veewee
       end
 
       method_option :force,:type => :boolean , :default => false, :aliases => "-f", :desc => "force the shutdown"
-      desc "halt [BOXNAME]", "Activates a shutdown the virtualmachine"
+      desc "halt [BOX_NAME]", "Activates a shutdown the virtualmachine"
       def halt(box_name)
         venv=Veewee::Environment.new(options)
         venv.ui=env.ui
@@ -39,21 +39,21 @@ module Veewee
       end
 
       method_option :nogui,:type => :boolean , :default => false, :aliases => "-n", :desc => "no gui"
-      desc "up [BOXNAME]", "Starts a Box"
+      desc "up [BOX_NAME]", "Starts a Box"
       def up(box_name)
         venv=Veewee::Environment.new(options)
         venv.ui=env.ui
         venv.providers["kvm"].get_box(box_name).up(options)
       end
 
-      desc "ssh [BOXNAME] [COMMAND]", "SSH to box"
+      desc "ssh [BOX_NAME] [COMMAND]", "SSH to box"
       def ssh(box_name,command=nil)
         venv=Veewee::Environment.new(options)
         venv.ui=env.ui
         venv.providers["kvm"].get_box(box_name).issh(command)
       end
 
-      desc "define [BOXNAME] [TEMPLATE]", "Define a new basebox starting from a template"
+      desc "define [BOX_NAME] [TEMPLATE]", "Define a new basebox starting from a template"
       method_option :force,:type => :boolean , :default => false, :aliases => "-f", :desc => "overwrite the definition"
       def define(definition_name, template_name)
         venv=Veewee::Environment.new(options)
@@ -64,7 +64,7 @@ module Veewee
         env.ui.info "veewee kvm build '#{definition_name}'"
       end
 
-      desc "undefine [BOXNAME]", "Removes the definition of a basebox "
+      desc "undefine [BOX_NAME]", "Removes the definition of a basebox "
       def undefine(definition_name)
         env.ui.info "Removing definition #{definition_name}"
         begin
@@ -77,7 +77,7 @@ module Veewee
         end
       end
 
-      desc "validate [NAME]", "Validates a box against kvm compliancy rules"
+      desc "validate [BOX_NAME]", "Validates a box against kvm compliancy rules"
       method_option :tags,:type => :array , :default => %w{kvm puppet chef}, :aliases => "-t", :desc => "tags to validate"
       def validate(box_name)
         venv=Veewee::Environment.new(options)

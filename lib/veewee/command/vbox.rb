@@ -20,7 +20,7 @@ module Veewee
 
       method_option :force,:type => :boolean , :default => false, :aliases => "-f", :desc => "force the destroy"
       method_option :nogui,:type => :boolean , :default => false, :aliases => "-n", :desc => "no gui"
-      desc "destroy [BOXNAME]", "Destroys the basebox that was built"
+      desc "destroy [BOX_NAME]", "Destroys the basebox that was built"
       def destroy(box_name)
         venv=Veewee::Environment.new(options)
         venv.ui=env.ui
@@ -28,7 +28,7 @@ module Veewee
       end
 
       method_option :force,:type => :boolean , :default => false, :aliases => "-f", :desc => "force the shutdown"
-      desc "halt [BOXNAME]", "Activates a shutdown on the basebox"
+      desc "halt [BOX_NAME]", "Activates a shutdown on the basebox"
       def halt(box_name)
         venv=Veewee::Environment.new(options)
         venv.ui=env.ui
@@ -36,14 +36,14 @@ module Veewee
       end
 
       method_option :nogui,:type => :boolean , :default => false, :aliases => "-n", :desc => "no gui"
-      desc "up [BOXNAME]", "Starts a Box"
+      desc "up [BOX_NAME]", "Starts a Box"
       def up(box_name)
         venv=Veewee::Environment.new(options)
         venv.ui=env.ui
         venv.providers["virtualbox"].get_box(box_name).up(options)
       end
 
-      desc "ssh [BOXNAME] [COMMAND]", "Interactive ssh login"
+      desc "ssh [BOX_NAME] [COMMAND]", "Interactive ssh login"
       def ssh(box_name,command=nil)
         venv=Veewee::Environment.new(options)
         venv.ui=env.ui
@@ -51,14 +51,14 @@ module Veewee
       end
 
 
-      desc "winrm [BOXNAME] [COMMAND]", "Execute command via winrm"
+      desc "winrm [BOX_NAME] [COMMAND]", "Execute command via winrm"
       def winrm(box_name,command=nil)
         venv=Veewee::Environment.new(options)
         venv.ui=env.ui
         venv.providers["virtualbox"].get_box(box_name).winrm(command,{:exitcode => "*"})
       end
 
-      desc "copy [BOXNAME] [SRC] [DST]", "Copy a file to the VM"
+      desc "copy [BOX_NAME] [SRC] [DST]", "Copy a file to the VM"
       def copy(box_name,src,dst)
         venv=Veewee::Environment.new(options)
         venv.ui=env.ui
@@ -66,7 +66,7 @@ module Veewee
       end
 
 
-      desc "define [BOXNAME] [TEMPLATE]", "Define a new basebox starting from a template"
+      desc "define [BOX_NAME] [TEMPLATE]", "Define a new basebox starting from a template"
       method_option :force,:type => :boolean , :default => false, :aliases => "-f", :desc => "overwrite the definition"
       def define(definition_name, template_name)
         begin
@@ -82,7 +82,7 @@ module Veewee
         end
       end
 
-      desc "undefine [BOXNAME]", "Removes the definition of a basebox "
+      desc "undefine [BOX_NAME]", "Removes the definition of a basebox "
       def undefine(definition_name)
         env.ui.info  "Removing definition #{definition_name}", :prefix => false
         begin
@@ -98,7 +98,7 @@ module Veewee
 
 
 
-      desc "export [NAME]", "Exports the basebox to the vagrant format"
+      desc "export [BOX_NAME]", "Exports the basebox to the vagrant format"
       method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging"
       method_option :force,:type => :boolean , :default => false, :aliases => "-f", :desc => "overwrite existing file"
       def export(box_name)
@@ -137,7 +137,7 @@ module Veewee
         end
       end
 
-      desc "validate [NAME]", "Validates a box against vagrant compliancy rules"
+      desc "validate [BOX_NAME]", "Validates a box against vagrant compliancy rules"
       method_option :tags, :type => :array , :default => %w{vagrant virtualbox puppet chef}, :aliases => "-t", :desc => "tags to validate"
       def validate(box_name)
         begin
@@ -151,7 +151,7 @@ module Veewee
         end
       end
 
-      desc "screenshot [BOXNAME] [PNGFILENAME]", "Takes a screenshot of the box"
+      desc "screenshot [BOX_NAME] [PNGFILENAME]", "Takes a screenshot of the box"
       def screenshot(box_name,pngfilename)
         begin
           venv=Veewee::Environment.new(options)
@@ -166,7 +166,7 @@ module Veewee
 
 
       # TODO pull up to GroupBase - since console_type is supported for every provider
-      desc "sendkeys [BOXNAME] [SEQUENCE]", "Sends the key sequence (comma separated) to the box. E.g for testing the :boot_cmd_sequence"
+      desc "sendkeys [BOX_NAME] [SEQUENCE]", "Sends the key sequence (comma separated) to the box. E.g for testing the :boot_cmd_sequence"
       def sendkeys(box_name, sequence)
         venv=Veewee::Environment.new(options)
         venv.ui = ::Veewee::UI::Shell.new(venv, shell)
