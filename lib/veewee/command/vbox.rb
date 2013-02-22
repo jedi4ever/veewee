@@ -1,7 +1,7 @@
 module Veewee
   module Command
     class Vbox< Veewee::Command::GroupBase
-      class_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging"
+      class_option :debug,:type => :boolean , :default => false, :desc => "enable debugging"
 
       register "vbox", "Subcommand for VirtualBox"
       desc "build [BOX_NAME]", "Build box"
@@ -151,7 +151,7 @@ module Veewee
         end
       end
 
-      desc "screenshot [NAME] [PNGFILENAME]", "Takes a screenshot of the box"
+      desc "screenshot [BOXNAME] [PNGFILENAME]", "Takes a screenshot of the box"
       def screenshot(box_name,pngfilename)
         begin
           venv=Veewee::Environment.new(options)
@@ -165,6 +165,14 @@ module Veewee
       end
 
 
+      # TODO pull up to GroupBase - since console_type is supported for every provider
+      desc "sendkeys [BOXNAME] [SEQUENCE]", "Sends the key sequence (comma separated) to the box. E.g for testing the :boot_cmd_sequence"
+      def sendkeys(box_name, sequence)
+        venv=Veewee::Environment.new(options)
+        venv.ui = ::Veewee::UI::Shell.new(venv, shell)
+
+        venv.providers["virtualbox"].get_box(box_name).console_type(sequence.split(","))
+      end
     end
 
   end

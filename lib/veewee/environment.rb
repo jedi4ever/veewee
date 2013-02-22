@@ -18,8 +18,6 @@ module Veewee
     # The valid name for a Veeweefile for this environment
     attr_accessor :veewee_filename
 
-    attr_accessor :loglevel
-
     # This initializes a new Veewee Environment
     # settings argument is a hash with the following options
     # - :definition_dir   : where definitions are located
@@ -60,7 +58,6 @@ module Veewee
       defaults = {
         :cwd => cwd,
         :veewee_filename => "Veeweefile",
-        :loglevel => :info,
         :definition_dir => File.join(cwd, "definitions"),
         :template_path => [File.expand_path(File.join(File.dirname(__FILE__), "..", "..", 'templates')), "templates"],
         :iso_dir => File.join(cwd, "iso"),
@@ -77,13 +74,6 @@ module Veewee
         end
       end
       options = options.merge(veeweefile_config)
-
-      # We need to set this variable before the first call to the logger object
-      if options.has_key?("debug")
-        if options["debug"] == true
-          ENV['VEEWEE_LOG'] = "STDOUT"
-        end
-      end
 
       logger.info("environment") { "Environment initialized (#{self})" }
 
@@ -188,24 +178,21 @@ module Veewee
     def logger
       return @logger if @logger
 
-      # Figure out where the output should go to.
       output = nil
-      if ENV["VEEWEE_LOG"] == "STDOUT"
+      loglevel = Logger::ERROR
+
+      # Figure out where the output should go to.
+      if ENV["VEEWEE_LOG"]
         output = STDOUT
-      elsif ENV["VEEWEE_LOG"] == "NULL"
-        output = nil
-      elsif ENV["VEEWEE_LOG"]
-        output = ENV["VEEWEE_LOG"]
-      else
-        output = nil #log_path.join("#{Time.now.to_i}.log")
+        loglevel = Logger.const_get(ENV["VEEWEE_LOG"].upcase)
       end
 
-      # Create the logger and custom formatter
+        # Create the logger and custom formatter
       @logger = ::Logger.new(output)
+      @logger.level = loglevel
       @logger.formatter = Proc.new do |severity, datetime, progname, msg|
         "#{datetime} - #{progname} - [#{resource}] #{msg}\n"
       end
-
       @logger
     end
 
