@@ -6,6 +6,7 @@ end
 
 require 'veewee'
 
+ENV["VEEWEE_LOG"] = "debug" if ARGV.include?('--debug')
 env = Veewee::Environment.new
 
 begin
