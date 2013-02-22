@@ -11,13 +11,13 @@ make install
 cd ..
 rm -rf ruby-1.8.7-p334*
 
-# Install RubyGems 1.7.2
-wget http://production.cf.rubygems.org/rubygems/rubygems-1.7.2.tgz
-tar xzf rubygems-1.7.2.tgz
-cd rubygems-1.7.2
+# Install RubyGems 1.8.24
+wget http://production.cf.rubygems.org/rubygems/rubygems-1.8.24.tgz
+tar xzf rubygems-1.8.24.tgz
+cd rubygems-1.8.24
 /opt/ruby/bin/ruby setup.rb
 cd ..
-rm -rf rubygems-1.7.2*
+rm -rf rubygems-1.8.24*
 
 # Add /opt/ruby/bin to the global path as the last resort so
 # Ruby, RubyGems, and Chef/Puppet are visible

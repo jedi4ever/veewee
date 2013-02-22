@@ -1,5 +1,6 @@
 # Remove items used for building, since they aren't needed anymore
 apt-get -y remove linux-headers-$(uname -r) build-essential
+apt-get -y clean
 apt-get -y autoremove
 
 # Removing leftover leases and persistent rules
@@ -16,4 +17,3 @@ rm /lib/udev/rules.d/75-persistent-net-generator.rules
 
 echo "Adding a 2 sec delay to the interface up, to make the dhclient happy"
 echo "pre-up sleep 2" >> /etc/network/interfaces
-exit
