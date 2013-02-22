@@ -49,6 +49,9 @@ module Veewee
     # Hash element of all OS types
     attr_reader :ostypes
 
+    # Path to the config file
+    attr_reader :config_filepath
+
     def initialize(options = {})
       # symbolify commandline options
       options = options.inject({}) {|result,(key,value)| result.update({key.to_sym => value})}
@@ -69,6 +72,9 @@ module Veewee
       }
 
       options = defaults.merge(options)
+
+      @config_filepath = File.join(options[:cwd], options[:veewee_filename])
+
       veeweefile_config = defaults.keys.inject({}) do |memo, obj|
         if config.env.methods.include?(obj) && !config.env.send(obj).nil?
           memo.merge({ obj => config.env.send(obj) })
@@ -153,7 +159,6 @@ module Veewee
 
     def load_config!
       @config = Config.new({ :env => self }).load_veewee_config()
-
       return self
     end
 
