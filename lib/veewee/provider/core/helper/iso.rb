@@ -28,7 +28,8 @@ module Veewee
 
           def download_progress(url,localfile)
             pbar = nil
-            URI.parse(url).open(
+            uri = URI.parse(url)
+            uri.open(
               :content_length_proc => lambda {|t|
               if t && 0 < t
                 pbar = ProgressBar.new("Fetching file", t)
@@ -37,7 +38,10 @@ module Veewee
             },
               :progress_proc => lambda {|s|
               pbar.set s if pbar
-            }) { |src|
+            },
+              #consider proxy env vars only if host is not excluded
+              :proxy => !no_proxy?(uri.host)
+            ) { |src|
               # We assume large 10K files, so this is tempfile object
               env.logger.info "#{src.class}"
                 ui.info "Moving #{src.path} to #{localfile}"
@@ -49,6 +53,15 @@ module Veewee
                   #dst.write(src.read)
                 #}
             }
+          end
+
+          #return true if host is excluded from proxy via no_proxy env var, false otherwise
+          def no_proxy? host
+            @no_proxy ||= (ENV['NO_PROXY'] || ENV['no_proxy'] || 'localhost, 127.0.0.1').split(/\s*,\s*/)
+            @no_proxy.each do |host_addr|
+              return true if host.match(Regexp.quote(host_addr)+'$')
+            end
+            return false
           end
 
           # Compute hash code
