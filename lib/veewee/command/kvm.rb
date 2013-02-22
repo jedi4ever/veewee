@@ -3,6 +3,7 @@ module Veewee
     class Kvm< Veewee::Command::GroupBase
 
       register "kvm", "Subcommand for KVM"
+
       desc "build [BOX_NAME]", "Build box"
       method_option :force,:type => :boolean , :default => false, :aliases => "-f", :desc => "force the build"
       method_option :nogui,:type => :boolean , :default => false, :aliases => "-n", :desc => "no gui"
@@ -93,27 +94,6 @@ module Veewee
         end
       end
 
-      desc "templates", "List the currently available templates"
-      def templates
-        env.ui.info "The following templates are available:"
-        venv=Veewee::Environment.new(options)
-        venv.ui=env.ui
-        venv.templates.each do |name,template|
-          env.ui.info "veewee kvm define '<box_name>' '#{name}'",:prefix => false
-        end
-      end
-
-      desc "list", "Lists all defined boxes"
-      def list
-        env.ui.info "The following local definitions are available:"
-        venv=Veewee::Environment.new(options)
-        venv.ui=env.ui
-        venv.ui=env.ui
-        venv.definitions.each do |name,definition|
-          env.ui.info "- #{name}"
-        end
-      end
     end
-
   end
 end

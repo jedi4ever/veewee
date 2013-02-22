@@ -93,16 +93,50 @@ module Veewee
       # @param [String] description
       # @param [Hash] opts
       def self.register(usage, description, opts=nil)
-        @_name = Base.extract_name_from_usage(usage)
-        CLI.register(self, @_name, usage, description, opts)
+        name = Base.extract_name_from_usage(usage)
+        # self refers to the class object of the provider subclass
+        self.class_variable_set(:@@name, name)
+        self.class_variable_set(:@@description, description)
+        self.class_variable_set(:@@usage, usage)
+        CLI.register(self, name, usage, description, opts)
       end
 
       def initialize(*args)
         super
         initialize_environment(*args)
+        # make provider class variables easily available to global task methods
+        @name = self.class.class_variable_get(:@@name)
+        @description = self.class.class_variable_get(:@@description)
+      end
+
+      desc "templates", "List the currently available templates"
+      def templates
+        env.ui.info "The following templates are available:",:prefix => false
+        environment.templates.each do |name,template|
+          env.ui.info "veewee #{@name} define '<box_name>' '#{name}'",:prefix => false
+        end
+      end
+
+      desc "list", "Lists all defined boxes"
+      def list
+        venv=environment
+        env.ui.info "The following definitions are available in #{venv.cwd}: ",:prefix => false
+        venv.definitions.each do |name,definition|
+          env.ui.info "- #{name}",:prefix => false
+        end
       end
 
       protected
+
+      def environment
+        venv=Veewee::Environment.new(options)
+        venv.ui=env.ui
+        venv
+      end
+
+      def box(name)
+        environment.providers[@name]
+      end
 
       # Override the basename to include the subcommand name.
       def self.basename

@@ -3,6 +3,7 @@ module Veewee
     class Vbox< Veewee::Command::GroupBase
 
       register "vbox", "Subcommand for VirtualBox"
+
       desc "build [BOX_NAME]", "Build box"
       method_option :force,:type => :boolean , :default => false, :aliases => "-f", :desc => "force the build"
       method_option :nogui,:type => :boolean , :default => false, :aliases => "-n", :desc => "no gui"
@@ -64,7 +65,6 @@ module Veewee
         venv.providers["virtualbox"].get_box(box_name).copy_to_box(src,dst)
       end
 
-
       desc "define [BOX_NAME] [TEMPLATE]", "Define a new basebox starting from a template"
       method_option :force,:type => :boolean , :default => false, :aliases => "-f", :desc => "overwrite the definition"
       def define(definition_name, template_name)
@@ -95,8 +95,6 @@ module Veewee
         end
       end
 
-
-
       desc "export [BOX_NAME]", "Exports the basebox to the vagrant format"
       method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging"
       method_option :force,:type => :boolean , :default => false, :aliases => "-f", :desc => "overwrite existing file"
@@ -106,33 +104,12 @@ module Veewee
         venv.providers["virtualbox"].get_box(box_name).export_vagrant(options)
       end
 
-
       desc "ostypes", "List the available Operating System types"
       def ostypes
         venv=Veewee::Environment.new(options)
         venv.ui=env.ui
         venv.ostypes.each do |name|
           env.ui.info "- #{name}"
-        end
-      end
-
-      desc "templates", "List the currently available templates"
-      def templates
-        env.ui.info "The following templates are available:",:prefix => false
-        venv=Veewee::Environment.new(options)
-        venv.ui=env.ui
-        venv.templates.each do |name,template|
-          env.ui.info "veewee vbox define '<box_name>' '#{name}'",:prefix => false
-        end
-      end
-
-      desc "list", "Lists all defined boxes"
-      def list
-        env.ui.info "The following local definitions are available:",:prefix => false
-        venv=Veewee::Environment.new(options)
-        venv.ui=env.ui
-        venv.definitions.each do |name,definition|
-          env.ui.info "- #{name}",:prefix => false
         end
       end
 
@@ -162,7 +139,6 @@ module Veewee
           exit -1
         end
       end
-
 
       # TODO pull up to GroupBase - since console_type is supported for every provider
       desc "sendkeys [BOX_NAME] [SEQUENCE]", "Sends the key sequence (comma separated) to the box. E.g for testing the :boot_cmd_sequence"

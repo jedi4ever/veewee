@@ -3,6 +3,7 @@ module Veewee
     class Parallels< Veewee::Command::GroupBase
 
       register "parallels", "Subcommand for Parallels"
+
       desc "build [BOX_NAME]", "Build box"
       method_option :force,:type => :boolean , :default => false, :aliases => "-f", :desc => "force the build"
       method_option :auto,:type => :boolean , :default => false, :aliases => "-a", :desc => "auto answers"
@@ -88,25 +89,6 @@ module Veewee
         end
       end
 
-      desc "templates", "List the currently available templates"
-      def templates
-        env.ui.info "The following templates are available:",:prefix => false
-        venv=Veewee::Environment.new(options)
-        venv.ui=env.ui
-        venv.templates.each do |name,template|
-          env.ui.info "veewee parallels define '<box_name>' '#{name}'",:prefix => false
-        end
-      end
-
-      desc "list", "Lists all defined boxes"
-      def list
-        env.ui.info "The following local definitions are available:",:prefix => false
-        venv=Veewee::Environment.new(options)
-        venv.ui=env.ui
-        venv.definitions.each do |name,definition|
-          env.ui.info "- #{name}"
-        end
-      end
     end
   end
 end

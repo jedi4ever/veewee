@@ -43,10 +43,10 @@ module Veewee
     # Hash element of all templates available
     attr_accessor :templates
 
-    # Hash element of all templates available
+    # Hash element of all providers available
     attr_accessor :providers
 
-    # Hash elelement of all OStypes
+    # Hash element of all OS types
     attr_reader :ostypes
 
     def initialize(options = {})
