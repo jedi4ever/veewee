@@ -50,10 +50,13 @@ module Veewee
     attr_reader :ostypes
 
     def initialize(options = {})
+      # symbolify commandline options
+      options = options.inject({}) {|result,(key,value)| result.update({key.to_sym => value})}
 
-      cwd = ENV['VEEWEE_DIR'] || Dir.pwd
       # If a cwd was provided as option it overrules the default
-      cwd = options[:cwd] if options.has_key?(:cwd)
+      # cwd is again merged later with all options but it has to merged here
+      # because several defaults are generated from it
+      cwd = options[:cwd] || Veewee::Environment.workdir
 
       defaults = {
         :cwd => cwd,
@@ -94,6 +97,10 @@ module Veewee
       @ostypes = YAML.load_file(yamlfile)
 
       return self
+    end
+
+    def self.workdir
+      ENV['VEEWEE_DIR'] || Dir.pwd
     end
 
     #---------------------------------------------------------------

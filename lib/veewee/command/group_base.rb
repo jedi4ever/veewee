@@ -1,5 +1,6 @@
 require 'thor'
 require 'thor/actions'
+require 'veewee/environment'
 
 module Veewee
   module Command
@@ -67,6 +68,9 @@ module Veewee
       include Helpers
 
       class_option :debug,:type => :boolean , :default => false, :desc => "enable debugging"
+
+      class_option :cwd, :aliases => ['--workdir'],  :type => :string,
+                   :default => Veewee::Environment.workdir, :desc => "Change the working directory. (The folder containing the definitions folder)."
 
       attr_reader :env
 
