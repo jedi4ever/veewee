@@ -110,10 +110,11 @@ module Veewee
       end
 
       desc "templates", "List the currently available templates"
+      method_option :box_name, :default => '<box_name>', :aliases => ['-b'], :desc => "Name of the box you want create."
       def templates
         env.ui.info "The following templates are available:",:prefix => false
         environment.templates.each do |name,template|
-          env.ui.info "veewee #{@name} define '<box_name>' '#{name}'",:prefix => false
+          env.ui.info "veewee #{@name} define '#{options[:box_name]}' '#{name}' --workdir=#{options[:cwd]}",:prefix => false
         end
       end
 
@@ -126,7 +127,83 @@ module Veewee
         end
       end
 
-      protected
+      desc "define [BOX_NAME] [TEMPLATE]", "Define a new basebox starting from a template"
+      method_option :force,:type => :boolean , :default => false, :aliases => "-f", :desc => "overwrite the definition"
+      def define(definition_name, template_name)
+        begin
+          environment.definitions.define(definition_name,template_name,options)
+          env.ui.info "The basebox '#{definition_name}' has been successfully created from the template '#{template_name}'"
+          env.ui.info "You can now edit the definition files stored in #{options[:cwd]}/definitions/#{definition_name} or build the box with:"
+          env.ui.info "veewee #{@name} build '#{definition_name}'"
+        rescue Error => ex
+          env.ui.error("#{ex}",:prefix => false)
+          exit -1
+        end
+      end
+
+      desc "winrm [BOX_NAME] [COMMAND]", "Execute command via winrm"
+      def winrm(box_name,command=nil)
+        venv=Veewee::Environment.new(options)
+        venv.ui=env.ui
+        venv.providers["virtualbox"].get_box(box_name).winrm(command,{:exitcode => "*"})
+      end
+
+      method_option :force,:type => :boolean , :default => false, :aliases => "-f", :desc => "force the destroy"
+      method_option :nogui,:type => :boolean , :default => false, :aliases => "-n", :desc => "no gui"
+      desc "destroy [BOX_NAME]", "Destroys the virtualmachine that was built"
+      def destroy(box_name)
+        box(box_name).destroy(options)
+      end
+
+      method_option :force,:type => :boolean , :default => false, :aliases => "-f", :desc => "force the shutdown"
+      desc "halt [BOX_NAME]", "Activates a shutdown the virtualmachine"
+      def halt(box_name)
+        box(box_name).halt(options)
+      end
+
+      method_option :nogui,:type => :boolean , :default => false, :aliases => "-n", :desc => "no gui"
+      desc "up [BOX_NAME]", "Starts a Box"
+      def up(box_name)
+        box(box_name).up(options)
+      end
+
+      desc "ssh [BOX_NAME] [COMMAND]", "SSH to box"
+      def ssh(box_name,command=nil)
+        box(box_name).issh(command)
+      end
+
+      desc "copy [BOX_NAME] [SRC] [DST]", "Copy a file to the VM"
+      def copy(box_name,src,dst)
+        box(box_name).copy_to_box(src,dst)
+      end
+
+      desc "undefine [BOX_NAME]", "Removes the definition of a basebox "
+      def undefine(definition_name)
+        env.ui.info "Removing definition #{definition_name}" , :prefix => false
+        begin
+          environment.definitions.undefine(definition_name,options)
+          env.ui.info "Definition #{definition_name} successfully removed",:prefix => false
+        rescue Error => ex
+          env.ui.error "#{ex}" , :prefix => false
+          exit -1
+        end
+      end
+
+      desc "ostypes", "List the available Operating System types"
+      def ostypes
+        environment.ostypes.each do |name|
+          env.ui.info "- #{name}"
+        end
+      end
+
+      desc "sendkeys [BOX_NAME] [SEQUENCE]", "Sends the key sequence (comma separated) to the box. E.g for testing the :boot_cmd_sequence"
+      def sendkeys(box_name, sequence)
+        venv=Veewee::Environment.new(options)
+        venv.ui = ::Veewee::UI::Shell.new(venv, shell)
+        venv.providers[@name].get_box(box_name).console_type(sequence.split(","))
+      end
+
+protected
 
       def environment
         venv=Veewee::Environment.new(options)
@@ -134,8 +211,8 @@ module Veewee
         venv
       end
 
-      def box(name)
-        environment.providers[@name]
+      def box(box_name)
+        environment.providers[@name].get_box(box_name)
       end
 
       # Override the basename to include the subcommand name.
