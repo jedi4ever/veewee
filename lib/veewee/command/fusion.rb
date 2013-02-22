@@ -3,7 +3,6 @@
 module Veewee
   module Command
     class Fusion< Veewee::Command::GroupBase
-      class_option :debug,:type => :boolean , :default => false, :desc => "enable debugging"
 
       register "fusion", "Subcommand for Vmware fusion"
       desc "build [BOX_NAME]", "Build box"

@@ -1,7 +1,6 @@
 module Veewee
   module Command
     class Vbox< Veewee::Command::GroupBase
-      class_option :debug,:type => :boolean , :default => false, :desc => "enable debugging"
 
       register "vbox", "Subcommand for VirtualBox"
       desc "build [BOX_NAME]", "Build box"

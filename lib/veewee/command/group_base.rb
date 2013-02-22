@@ -66,6 +66,8 @@ module Veewee
       include Thor::Actions
       include Helpers
 
+      class_option :debug,:type => :boolean , :default => false, :desc => "enable debugging"
+
       attr_reader :env
 
       # Register the command with the main Veewee CLI under the given

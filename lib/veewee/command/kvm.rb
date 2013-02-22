@@ -1,7 +1,6 @@
 module Veewee
   module Command
     class Kvm< Veewee::Command::GroupBase
-      class_option :debug,:type => :boolean , :default => false, :desc => "enable debugging"
 
       register "kvm", "Subcommand for KVM"
       desc "build [BOX_NAME]", "Build box"
