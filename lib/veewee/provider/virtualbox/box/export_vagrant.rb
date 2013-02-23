@@ -116,7 +116,7 @@ module Veewee
 
             ui.info "Packaging the box"
             FileUtils.cd(tmp_dir)
-            command = "tar -cvf #{box_path} ."
+            command = "tar -cvf '#{box_path}' ."
             env.logger.debug(command)
             shell_exec (command)
 
