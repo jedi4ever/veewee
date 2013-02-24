@@ -43,17 +43,23 @@ module Veewee
     # Hash element of all templates available
     attr_accessor :templates
 
-    # Hash element of all templates available
+    # Hash element of all providers available
     attr_accessor :providers
 
-    # Hash elelement of all OStypes
+    # Hash element of all OS types
     attr_reader :ostypes
 
-    def initialize(options = {})
+    # Path to the config file
+    attr_reader :config_filepath
 
-      cwd = ENV['VEEWEE_DIR'] || Dir.pwd
+    def initialize(options = {})
+      # symbolify commandline options
+      options = options.inject({}) {|result,(key,value)| result.update({key.to_sym => value})}
+
       # If a cwd was provided as option it overrules the default
-      cwd = options[:cwd] if options.has_key?(:cwd)
+      # cwd is again merged later with all options but it has to merged here
+      # because several defaults are generated from it
+      cwd = options[:cwd] || Veewee::Environment.workdir
 
       defaults = {
         :cwd => cwd,
@@ -66,6 +72,9 @@ module Veewee
       }
 
       options = defaults.merge(options)
+
+      @config_filepath = File.join(options[:cwd], options[:veewee_filename])
+
       veeweefile_config = defaults.keys.inject({}) do |memo, obj|
         if config.env.methods.include?(obj) && !config.env.send(obj).nil?
           memo.merge({ obj => config.env.send(obj) })
@@ -94,6 +103,10 @@ module Veewee
       @ostypes = YAML.load_file(yamlfile)
 
       return self
+    end
+
+    def self.workdir
+      ENV['VEEWEE_DIR'] || Dir.pwd
     end
 
     #---------------------------------------------------------------
@@ -146,7 +159,6 @@ module Veewee
 
     def load_config!
       @config = Config.new({ :env => self }).load_veewee_config()
-
       return self
     end
 

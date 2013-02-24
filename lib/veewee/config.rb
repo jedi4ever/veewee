@@ -11,10 +11,8 @@ module Veewee
 
     def initialize(options)
       @env = options[:env]
-
       # Initialize with defaults
       @veewee = ::Veewee::Config::Veewee.new(self)
-
     end
 
     def define()
@@ -32,8 +30,9 @@ module Veewee
     def load_veewee_config()
       veewee_configurator = self
       begin
-        filename = File.join(Dir.pwd, "Veeweefile")
+        filename = @env.config_filepath
         if File.exists?(filename)
+          env.logger.info("Loading config file: #{filename}")
           veeweefile = File.read(filename)
           veeweefile["Veewee::Config.run"] = "veewee_configurator.define"
           #        http://www.dan-manges.com/blog/ruby-dsls-instance-eval-with-delegation
