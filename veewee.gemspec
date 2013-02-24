@@ -30,13 +30,15 @@ Gem::Specification.new do |s|
   s.add_dependency "ruby-vnc", "~> 1.0.0"
   s.add_dependency "fog", "~> 1.8"
   s.add_dependency "childprocess"
-  s.add_dependency "grit"
   s.add_dependency "fission", "0.4.0"
+
+  # Grit is not a hard requirment any more
+  #s.add_dependency "grit"
 
   # Modified dependency version, as libxml-ruby dependency has been removed in version 2.1.1
   # See : https://github.com/ckruse/CFPropertyList/issues/14
   # See : https://github.com/jedi4ever/veewee/issues/6
-  #s.add_dependency "CFPropertyList", ">= 2.1.1"
+  s.add_dependency "CFPropertyList", ">= 2.1.1"
 #  s.add_dependency "libvirt"
   s.add_development_dependency "rspec", "~> 2.5"
 
