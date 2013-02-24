@@ -21,7 +21,7 @@ module Veewee
               env.logger.info "Removing previous floppy file"
               FileUtils.rm(floppy_file)
             end
-            command="java -jar #{javacode_dir}/dir2floppy.jar \"#{temp_dir}\" \"#{floppy_file}\""
+            command="java -jar \"#{javacode_dir}/dir2floppy.jar\" \"#{temp_dir}\" \"#{floppy_file}\""
             shell_exec("#{command}")
           end
         end
