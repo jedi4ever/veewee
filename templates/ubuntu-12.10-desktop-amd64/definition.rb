@@ -1,6 +1,7 @@
 Veewee::Session.declare({
   :cpu_count => '1',
   :memory_size=> '2048',
+  :video_memory_size => '48',
   :disk_size => '10140',
   :disk_format => 'VDI',
   :hostiocache => 'off',
@@ -31,5 +32,9 @@ Veewee::Session.declare({
   :sudo_cmd => "echo '%p'|sudo -S sh '%f'",
   :shutdown_cmd => "shutdown -P now",
   :postinstall_files => [ "postinstall.sh"],
-  :postinstall_timeout => "10000"
+  :postinstall_timeout => "10000",
+  :virtualbox => { :vm_options => [
+    'accelerate3d' => 'on'      # Necessary for X to start in Ubuntu 12.10
+    ] }
+
 })
