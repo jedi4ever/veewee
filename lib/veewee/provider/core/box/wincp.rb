@@ -23,18 +23,22 @@ module Veewee
             definition.kickstart_port=guessed_port.to_s
           end
 
-          env.ui.warn "Spinning up a wait_for_http_request on http://#{host_ip_as_seen_by_guest}:#{definition.kickstart_port}#{localfile}"
-          webthread=allow_for_http_request(localfile,{
+          #localfile = 'c:\\windows\\temp\\hello.txt'
+          #localfile = '/windows/temp/hello.txt'
+          localuri = localfile.gsub('\\', '/').sub(/([a-zA-Z]):/, '\1')
+          localuri = localuri.start_with?('/') ? localuri : '/' + localuri
+
+          env.ui.warn "Spinning up a wait_for_http_request on http://#{host_ip_as_seen_by_guest}:#{definition.kickstart_port}#{localuri}"
+          webthread=allow_for_http_request(localfile, localuri, {
               :port => definition.kickstart_port,
               :host => definition.kickstart_ip,
-              :timeout => definition.kickstart_timeout,
-              :web_dir => '/'
+              :timeout => definition.kickstart_timeout
             })
           
           begin
             self.when_winrm_login_works(self.ip_address,winrm_options.merge(options)) do
               env.ui.info "Going to try and copy #{localfile} to #{remotefile.inspect}"
-              self.exec("cmd.exe /C cscript %TEMP%\\wget.vbs /url:http://#{host_ip_as_seen_by_guest}:#{definition.kickstart_port}#{localfile} /path:#{remotefile}")
+              self.exec("cmd.exe /C cscript %TEMP%\\wget.vbs /url:http://#{host_ip_as_seen_by_guest}:#{definition.kickstart_port}#{localuri} /path:#{remotefile}")
               # while true do
               #   sleep 0.1 # used to debug
               # end

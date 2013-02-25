@@ -46,28 +46,27 @@ module Veewee
             s.start
           end
 
-          def allow_for_http_request(filename,options) # start in new thread
-            s = server_for_http_request(filename,options.merge({:threaded => true}))
+          def allow_for_http_request(filename, fileuri, options) # start in new thread
+            s = server_for_http_request(filename,fileuri,options.merge({:threaded => true}))
             Thread.new { s.start }
           end
 
-          def server_for_http_request(filename,options={:timeout => 10, :web_dir => "", :port => 7125, :threaded => false})
+          def server_for_http_request(filename, fileuri, options={:timeout => 10, :web_dir => "", :port => 7125, :threaded => false})
             # Calculate the OS equivalent of /dev/null , on windows this is NUL:
             # http://www.ruby-forum.com/topic/115472
             fn = test(?e, '/dev/null') ? '/dev/null' : 'NUL:'
 
             webrick_logger=WEBrick::Log.new(fn, WEBrick::Log::INFO)
 
-            web_dir=options[:web_dir]
-            filename=filename
             s= ::WEBrick::HTTPServer.new(
               :Port => options[:port],
               :Logger => webrick_logger,
               :AccessLog => webrick_logger
             )
-            mount_filename = filename.start_with?('/') ? filename : "/#{filename}"
-            env.logger.debug("mounting file #{mount_filename}")
-            s.mount("#{mount_filename}", Veewee::Provider::Core::Helper::Servlet::FileServlet,File.join(web_dir,filename),ui,options[:threaded])
+            
+            env.logger.debug("mounting #{filename} for file #{fileuri}")
+
+            s.mount("#{fileuri}", Veewee::Provider::Core::Helper::Servlet::FileServlet,filename,ui,options[:threaded])
             trap("INT"){
               s.shutdown
               ui.info "Stopping webserver"

@@ -20,10 +20,10 @@ module Veewee
             definition.winrm_host_port=guessed_port.to_s
             
             unless forward.nil?
-              if guessed_port!=forward[:guest_port]
+              if guessed_port!=forward[:host_port]
                 # Remove the existing one
                 self.delete_forwarding("guestwinrm")
-                env.ui.warn "Changing winrm port on UP from #{forward[:guest_port]} to #{guessed_port}"
+                env.ui.warn "Changing winrm port on UP from #{forward[:host_port]} to #{guessed_port}"
               self.add_winrm_nat_mapping
               end
             else
@@ -38,10 +38,10 @@ module Veewee
             definition.ssh_host_port=guessed_port.to_s
             
             unless forward.nil?
-              if guessed_port!=forward[:guest_port]
+              if guessed_port!=forward[:host_port]
                 # Remove the existing one
                 self.delete_forwarding("guestssh")
-                env.ui.warn "Changing ssh port from #{forward[:guest_port]} to #{guessed_port}"
+                env.ui.warn "Changing ssh port from #{forward[:host_port]} to #{guessed_port}"
               self.add_ssh_nat_mapping
               end
             else

@@ -139,6 +139,12 @@ module Veewee
           #we need to restore it in order to be able to login again
           #self.add_ssh_nat_mapping
 
+          if definition.winrm_user && definition.winrm_password
+            self.add_winrm_nat_mapping
+          else
+            self.add_ssh_nat_mapping
+          end
+
           ui.info "To import it into vagrant type:"
           ui.info "vagrant box add '#{name}' '#{box_path}'"
           ui.info ""
