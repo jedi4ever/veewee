@@ -24,6 +24,16 @@ WindowsNT:
   :kvm:
   :vbox: WindowsNT
   :parallels: win-net
+Windows2012:
+  :fusion: WindowsServer8
+  :kvm:
+  :vbox: Windows2012
+  :parallels: win-2012
+Windows2012_64:
+  :fusion: WindowsServer8-64
+  :kvm:
+  :vbox: Windows2012_64
+  :parallels: win-2012
 Windows2008:
   :fusion: longhorn
   :kvm:
@@ -333,8 +343,3 @@ NetBSD_64:
   :kvm:
   :vbox: NetBSD_64
   :parallels: other
-ESXi5:
-  :fusion: vmkernel5 
-  :kvm:
-  :vbox: 
-  :parallels: 
