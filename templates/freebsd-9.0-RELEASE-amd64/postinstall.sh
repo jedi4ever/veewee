@@ -1,39 +1,62 @@
+#!/usr/local/bin/bash -ux
+
+#Set the time correctly
+ntpdate -v -b in.pool.ntp.org
+
 date > /etc/vagrant_box_build_time
 
-# Get the latest portstree (needed for virtualbox to be on 4.x)
-portsnap fetch update
+# allow freebsd-update to run fetch without stdin attached to a terminal
+sed 's/\[ ! -t 0 \]/false/' /usr/sbin/freebsd-update > /tmp/freebsd-update
+chmod +x /tmp/freebsd-update
 
-#First install sudo
+# update FreeBSD
+PAGER=/bin/cat /tmp/freebsd-update fetch
+PAGER=/bin/cat /tmp/freebsd-update install
+
+# allow portsnap to run fetch without stdin attached to a terminal
+sed 's/\[ ! -t 0 \]/false/' /usr/sbin/portsnap > /tmp/portsnap
+chmod +x /tmp/portsnap
+
+# reduce the ports we extract to a minimum
+cat >> /etc/portsnap.conf << EOT
+REFUSE accessibility arabic archivers astro audio benchmarks biology cad
+REFUSE chinese comms databases deskutils distfiles dns editors finance french
+REFUSE ftp games german graphics hebrew hungarian irc japanese java korean
+REFUSE mail math multimedia net net-im net-mgmt net-p2p news packages palm
+REFUSE polish portuguese print russian science sysutils ukrainian
+REFUSE vietnamese www x11 x11-clocks x11-drivers x11-fm x11-fonts x11-servers
+REFUSE x11-themes x11-toolkits x11-wm
+EOT
+
+# get new ports
+/tmp/portsnap fetch extract
+
+# build packages for sudo and bash
+pkg_delete -af
 cd /usr/ports/security/sudo
-make install -DBATCH
-
-#We prefer bash to be there
-cd /usr/ports/shells/bash
-make install -DBATCH
-
+make -DBATCH package-recursive clean
+cd /usr/ports/shells/bash-static
+make -DBATCH package clean
 
 #Off to rubygems to get first ruby running
 cd /usr/ports/devel/ruby-gems
 make install -DBATCH
 
-#Gem chef - does install chef 9.12 (latest in ports?)
-#cd /usr/ports/sysutils/rubygem-chef
-#make install -DBATCH
+#Need ruby iconv in order for chef to run
+cd /usr/ports/converters/ruby-iconv
+make install -DBATCH
 
 #Installing chef & Puppet
-#/usr/local/bin/gem update chef --no-ri --no-rdoc
+/usr/local/bin/gem install chef --no-ri --no-rdoc
 /usr/local/bin/gem install puppet --no-ri --no-rdoc
-
-#Get wget
-cd /usr/ports/ftp/wget
-make install -DBATCH
 
 #Installing vagrant keys
 mkdir /home/vagrant/.ssh
 chmod 700 /home/vagrant/.ssh
 cd /home/vagrant/.ssh
-/usr/local/bin/wget --no-check-certificate 'https://raw.github.com/mitchellh/vagrant/master/keys/vagrant.pub' -O authorized_keys
+fetch -am 'https://raw.github.com/mitchellh/vagrant/master/keys/vagrant.pub' -O authorized_keys
 chown -R vagrant /home/vagrant/.ssh
+chmod -R go-rwsx /home/vagrant/.ssh
 
 # Cleaning portstree to save space
 # http://www.freebsd.org/doc/en_US.ISO8859-1/books/handbook/ports-using.html
@@ -54,40 +77,45 @@ echo "vagrant ALL=(ALL) NOPASSWD: ALL" >> /usr/local/etc/sudoers
 # Restore correct su permissions
 # I'll leave that up to the reader :)
 
-echo "=============================================================================="
-echo "NOTE: FreeBSD - Vagrant"
-echo "When using this basebox you need to do some special stuff in your Vagrantfile"
-echo "1) Include the correct system"
-echo "		require 'vagrant/systems/freebsd' "
-echo "2) Add after your config.vm.box = ..."
-echo "		  config.vm.system = :freebsd"
-echo "3) Enable HostOnly network"
-echo "	 config.vm.network ...."
-echo "4) Use nfs instead of shared folders"
-echo "		:nfs => true"
-echo "============================================================================="
-
-
-
-exit
-
-# The iso from virtualbox will only install windows/solaris or linux, no BSD
-# Research is on it's way to have 4.x in the main portstree
-# http://www.listware.net/201102/freebsd-ports/65201-call-for-testers-virtualbox-404.html
-# Virtualbox additions - http://wiki.freebsd.org/VirtualBox
-# Currently this will only work for 4.0.4
-#cd /tmp
-#wget http://home.bluelife.at/ports/virtualbox-cft-20110218.tar.gz
-#cd /usr/ports
-#tar -xzvf /tmp/virtualbox-cft-20110218.tar.gz
-
-# This requires libtool >= 2.4
 cd /usr/ports/devel/libtool
 make clean
 make install -DBATCH
 
-cd /usr/ports/emulators/virtualbox-ose-additions
-make install -DBATCH
+# disable X11 because vagrants are (usually) headless
+cat >> /etc/make.conf << EOT
+WITHOUT_X11="YES"
+EOT
 
+# help out by grabbing the matching sources from virtualbox.org's mirrors
+cd /usr/ports/distfiles
+ver=`cat /home/vagrant/.vbox_version`
+fetch -am http://download.virtualbox.org/virtualbox/4.2.6/VirtualBox-4.2.6.tar.bz2
+
+cd /usr/ports/emulators/virtualbox-ose-additions
+make -DBATCH package clean
+
+# undo our customizations
+sed -i '' -e '/^REFUSE /d' /etc/portsnap.conf
+sed -i '' -e '/^WITHOUT_X11/d' /etc/make.conf
+
+
+echo 'vboxdrv_load="YES"' >> /boot/loader.conf
+echo 'vboxnet_enable="YES"' >> /etc/rc.conf
 echo 'vboxguest_enable="YES"' >> /etc/rc.conf
 echo 'vboxservice_enable="YES"' >> /etc/rc.conf
+
+pw groupmod vboxusers -m vagrant
+
+#Bash needs to be the shell for tests to validate
+pw usermod vagrant -s /usr/local/bin/bash
+
+echo "=============================================================================="
+echo "NOTE: FreeBSD - Vagrant"
+echo "When using this basebox you need to do some special stuff in your Vagrantfile"
+echo "1) Enable HostOnly network"
+echo "	 config.vm.network ...."
+echo "2) Use nfs instead of shared folders"
+echo '		config.vm.share_folder("v-root", "/vagrant", ".", :nfs => true)'
+echo "============================================================================="
+
+exit
