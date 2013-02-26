@@ -1,11 +1,7 @@
-#Set the time correctly
-ntpdate -v -b in.pool.ntp.org
-
 date > /etc/vagrant_box_build_time
 
 # Get the latest portstree (needed for virtualbox to be on 4.x)
 portsnap fetch update
-portsnap extract
 
 #First install sudo
 cd /usr/ports/security/sudo
@@ -15,16 +11,17 @@ make install -DBATCH
 cd /usr/ports/shells/bash
 make install -DBATCH
 
+
 #Off to rubygems to get first ruby running
 cd /usr/ports/devel/ruby-gems
 make install -DBATCH
 
 #Gem chef - does install chef 9.12 (latest in ports?)
-cd /usr/ports/sysutils/rubygem-chef
-make install -DBATCH
+#cd /usr/ports/sysutils/rubygem-chef
+#make install -DBATCH
 
 #Installing chef & Puppet
-/usr/local/bin/gem update chef --no-ri --no-rdoc
+#/usr/local/bin/gem update chef --no-ri --no-rdoc
 /usr/local/bin/gem install puppet --no-ri --no-rdoc
 
 #Get wget
@@ -79,10 +76,10 @@ exit
 # http://www.listware.net/201102/freebsd-ports/65201-call-for-testers-virtualbox-404.html
 # Virtualbox additions - http://wiki.freebsd.org/VirtualBox
 # Currently this will only work for 4.0.4
-cd /tmp
-wget http://home.bluelife.at/ports/virtualbox-cft-20110218.tar.gz
-cd /usr/ports
-tar -xzvf /tmp/virtualbox-cft-20110218.tar.gz
+#cd /tmp
+#wget http://home.bluelife.at/ports/virtualbox-cft-20110218.tar.gz
+#cd /usr/ports
+#tar -xzvf /tmp/virtualbox-cft-20110218.tar.gz
 
 # This requires libtool >= 2.4
 cd /usr/ports/devel/libtool

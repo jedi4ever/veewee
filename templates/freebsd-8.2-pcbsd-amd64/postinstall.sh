@@ -61,18 +61,16 @@ echo "vagrant ALL=(ALL) NOPASSWD: ALL" >> /usr/local/etc/sudoers
 # Restore correct su permissions
 # I'll leave that up to the reader :)
 
-# This requires libtool >= 2.4
 cd /usr/ports/devel/libtool
 make clean
 make install -DBATCH
 
-cd /usr/ports/emulators/virtualbox-ose
+cd /usr/ports/emulators/virtualbox-ose-kmod
+make clean
 make install -DBATCH
 
 cd /usr/ports/emulators/virtualbox-ose-additions
-make install -DBATCH
-
-cd /usr/ports/emulators/virtualbox-ose-additions
+make clean
 make install -DBATCH
 
 echo 'vboxdrv_load="YES"' >> /boot/loader.conf
@@ -88,14 +86,10 @@ pw usermod vagrant -s /usr/local/bin/bash
 echo "=============================================================================="
 echo "NOTE: FreeBSD - Vagrant"
 echo "When using this basebox you need to do some special stuff in your Vagrantfile"
-echo "1) Include the correct system"
-echo "		require 'vagrant/systems/freebsd' "
-echo "2) Add after your config.vm.box = ..."
-echo "		  config.vm.system = :freebsd"
-echo "3) Enable HostOnly network"
+echo "1) Enable HostOnly network"
 echo "	 config.vm.network ...."
-echo "4) Use nfs instead of shared folders"
-echo "		:nfs => true"
+echo "2) Use nfs instead of shared folders"
+echo '		config.vm.share_folder("v-root", "/vagrant", ".", :nfs => true)'
 echo "============================================================================="
 
 exit
