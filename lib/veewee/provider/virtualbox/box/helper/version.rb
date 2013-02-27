@@ -9,7 +9,8 @@ module Veewee
         def vbox_version
           command="#{@vboxcmd} --version"
           stderr = "/dev/null"
-          stderr = "nul" if definition.os_type_id=~/^Win/
+          is_windows = (RbConfig::CONFIG['host_os'] =~ /mswin|mingw|cygwin/)
+          stderr = "nul" if is_windows
           shell_results=shell_exec("#{command}",{:mute => true, :stderr => stderr})
           version=shell_results.stdout.strip.split(/[^0-9\.]/)[0]
           return version
