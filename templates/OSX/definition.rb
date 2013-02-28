@@ -24,7 +24,8 @@ Veewee::Definition.declare({
     "xcode-cli-tools.sh",     # Xcode CLI tools
     # "rvm.bash",               # RVM (not using to allow chef/puppet to use system Ruby by default)
     "chef-omnibus.sh",        # Chef Omnibus install
-    "puppet.sh"               # Puppet install from Hashicorp's puppet-boostrap repo
+    "puppet.sh",               # Puppet install from Hashicorp's puppet-boostrap repo
+    "fix_user_perms.sh"        # some folders in vagrant's got created as root in the above script
   ],
   :postinstall_timeout => "10000"
 })
