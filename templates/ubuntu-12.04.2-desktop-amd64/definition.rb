@@ -1,6 +1,7 @@
 Veewee::Session.declare({
   :cpu_count => '1',
   :memory_size=> '2048',
+  :video_memory_size => '32',
   :disk_size => '10140',
   :disk_format => 'VDI',
   :hostiocache => 'off',
