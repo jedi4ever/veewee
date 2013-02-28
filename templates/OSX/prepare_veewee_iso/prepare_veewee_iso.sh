@@ -260,7 +260,7 @@ rm -rf "$MNT_ESD"
 msg_status "Fixing permissions.."
 chown -R $VEEWEE_UID:$VEEWEE_GID \
 	"$OUTPUT_DMG" \
-	"$AUTOPART_TOOL"
+	"$SUPPORT_DIR/AutoPartition-10.${DMG_OS_VERS_MAJOR}"
 
 if [ -n "$DEFAULT_ISO_DIR" ]; then
 	DEFINITION_FILE="$DEFINITION_DIR/definition.rb"
