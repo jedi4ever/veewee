@@ -104,6 +104,7 @@ echo 'vboxnet_enable="YES"' >> /etc/rc.conf
 echo 'vboxguest_enable="YES"' >> /etc/rc.conf
 echo 'vboxservice_enable="YES"' >> /etc/rc.conf
 
+pw groupadd vboxusers
 pw groupmod vboxusers -m vagrant
 
 #Bash needs to be the shell for tests to validate
