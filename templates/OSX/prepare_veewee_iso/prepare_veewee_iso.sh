@@ -165,6 +165,7 @@ if [ $DMG_OS_VERS_MAJOR -eq 8 ]; then
 			msg_error "We're on Mountain Lion, and should have System Image Utility available at $AUTOPART_TOOL, but it's not available for some reason."
 			exit 1
 		fi
+		cp -R "$AUTOPART_TOOL" "$SUPPORT_DIR/AutoPartition-10.${DMG_OS_VERS_MAJOR}/"
 	fi
 # on Lion, we first check if Server Admin Tools are already installed..
 elif [ $DMG_OS_VERS_MAJOR -eq 7 ]; then
