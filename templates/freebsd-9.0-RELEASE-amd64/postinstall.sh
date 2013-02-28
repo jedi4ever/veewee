@@ -86,11 +86,6 @@ cat >> /etc/make.conf << EOT
 WITHOUT_X11="YES"
 EOT
 
-# help out by grabbing the matching sources from virtualbox.org's mirrors
-cd /usr/ports/distfiles
-ver=`cat /home/vagrant/.vbox_version`
-fetch -am http://download.virtualbox.org/virtualbox/4.2.6/VirtualBox-4.2.6.tar.bz2
-
 cd /usr/ports/emulators/virtualbox-ose-additions
 make -DBATCH package clean
 
