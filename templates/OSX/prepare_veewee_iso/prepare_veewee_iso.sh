@@ -154,7 +154,7 @@ if [ $DMG_OS_VERS_MAJOR -eq 8 ]; then
 		msg_status "Copying out AutoPartition.app.."
 		cp -R "$SIU_TMPDIR/ditto/System/Library/CoreServices/$AUTOPART_APP_IN_SIU" "$SUPPORT_DIR/AutoPartition-10.${DMG_OS_VERS_MAJOR}/"
 		msg_status "Removing temporary extracted files.."
-		rm "$SIU_TMPDIR"
+		rm -rf "$SIU_TMPDIR"
 		rm "$SUPPORT_DIR/BOM"
 
 		AUTOPART_TOOL="$SUPPORT_DIR/AutoPartition-10.${DMG_OS_VERS_MAJOR}/AutoPartition.app"
