@@ -115,6 +115,7 @@ module Veewee
             shell_exec(command, {:mute => false})
 
             ui.info "Packaging the box"
+            FileUtils.cd(tmp_dir)
             command_box_path = box_path
             is_windows = (RbConfig::CONFIG['host_os'] =~ /mswin|mingw|cygwin/)
             if is_windows
