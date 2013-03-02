@@ -80,7 +80,7 @@ module Veewee
 
         def create_disk
             place=get_vbox_home
-            1.upto(definition.disk_count) do |f|
+            1.upto(definition.disk_count.to_i) do |f|
               ui.info "Creating new harddrive of size #{definition.disk_size.to_i}, format #{definition.disk_format}, variant #{definition.disk_variant} "
               command ="#{@vboxcmd} createhd --filename \"#{File.join(place,name,name+"#{f}."+definition.disk_format.downcase)}\" --size \"#{definition.disk_size.to_i}\" --format #{definition.disk_format.downcase} --variant #{definition.disk_variant.downcase}"
               shell_exec("#{command}")
@@ -90,7 +90,7 @@ module Veewee
         def attach_disk_common(storagectl, device_number)
           place=get_vbox_home
           
-          1.upto(definition.disk_count) do |f|
+          1.upto(definition.disk_count.to_i) do |f|
             location=name+"#{f}."+definition.disk_format.downcase
   
             location="#{File.join(place,name,location)}"
