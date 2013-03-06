@@ -47,7 +47,7 @@ module Veewee
           end
 
           def allow_for_http_request(filename,options) # start in new thread
-            s = server_for_http_request(filename,options.merge({:threaded => true}))
+            s = server_for_http_request(filename,options.merge({:threaded => false}))
             Thread.new { s.start }
           end
 
