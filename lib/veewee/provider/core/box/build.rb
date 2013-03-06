@@ -245,6 +245,8 @@ module Veewee
                 # Upload the pre postinstall script if not already transfered
                 command = "./" + File.basename(pre_filename)
                 command = sudo(command) + " ./"+File.basename(filename)
+
+                self.exec(command)
               else
                 if (definition.winrm_user && definition.winrm_password)
                   # no sudo on windows, batch files only please?
@@ -253,8 +255,6 @@ module Veewee
                   self.exec(sudo("./"+File.basename(filename)))
                 end
               end
-
-              self.exec(command)
 
             else
               env.logger.info "Skipping postinstallfile #{postinstall_file}"
