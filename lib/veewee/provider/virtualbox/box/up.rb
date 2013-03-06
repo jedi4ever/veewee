@@ -6,7 +6,7 @@ module Veewee
         def up(options={})
 
           unless self.exists?
-            raise Veewee::Error, "Error:: You tried to up a non-existing box '#{name}'"
+            raise Veewee::Error, "Error:: You tried to up a non-existing box '#{name}'. Please run 'veewee vbox build #{name}' first."
           end
 
           gui_enabled=options['nogui']==true ? false : true
@@ -34,7 +34,7 @@ module Veewee
 
             # Before we start,correct the ssh port if needed
             forward=self.forwarding("guestssh")
-            guessed_port=guess_free_port(definition.ssh_host_port.to_i,definition.ssh_host_port.to_i+40).to_s
+            guessed_port=guess_free_ssh_port(definition.ssh_host_port.to_i,definition.ssh_host_port.to_i+40).to_s
             definition.ssh_host_port=guessed_port.to_s
             
             unless forward.nil?
