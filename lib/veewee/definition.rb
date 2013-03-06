@@ -14,7 +14,7 @@ module Veewee
     attr_writer   :cpu_count, :memory_size
 
     attr_accessor :video_memory_size, :iso_file
-    attr_accessor :disk_size, :disk_format, :disk_variant
+    attr_accessor :disk_size, :disk_format, :disk_variant, :disk_count
 
     attr_accessor :os_type_id
 
@@ -83,7 +83,7 @@ module Veewee
       @postinstall_files = [] ; @postinstall_timeout = 10000 ;
 
       @iso_file = ""
-      @disk_size = '10240' ; @disk_format = 'VDI' ; @disk_variant = 'Standard'
+      @disk_size = '10240' ; @disk_format = 'VDI' ; @disk_variant = 'Standard' ; @disk_count = 1
       @use_sata = true
 
       #        :hostiocache => 'off' ,
