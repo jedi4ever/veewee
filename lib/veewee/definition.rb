@@ -48,6 +48,8 @@ module Veewee
     attr_accessor :skip_iso_transfer
     attr_accessor :skip_nat_mapping
 
+    attr_accessor :force_ssh_port
+
     def ui
       return @_ui if defined?(@_ui)
       @_ui = @env.ui.dup
@@ -106,6 +108,9 @@ module Veewee
       @skip_iso_transfer = false
 
       @skip_nat_mapping = false
+
+      @force_ssh_port = false
+
       @params = {}
     end
 
@@ -223,10 +228,6 @@ module Veewee
       else
         return true
       end
-    end
-
-    def method_missing(m, *args, &block)
-      env.logger.info "There's no attribute #{m} defined for definition #{@name}-- ignoring it"
     end
 
   end #End Class
