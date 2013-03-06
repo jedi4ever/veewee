@@ -6,7 +6,7 @@ module Veewee
         def up(options={})
 
           unless self.exists?
-            raise Veewee::Error, "Error:: You tried to up a non-existing box '#{name}'"
+            raise Veewee::Error, "Error:: You tried to up a non-existing box '#{name}'. Please run 'veewee vbox build #{name}' first."
           end
 
           gui_enabled=options['nogui']==true ? false : true
