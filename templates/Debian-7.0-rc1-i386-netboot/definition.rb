@@ -1,3 +1,4 @@
+#Based on Debian-7.0-b4-i386 template
 #Thanks to Fletcher Nichol - https://github.com/fnichol
 
 Veewee::Definition.declare({
@@ -5,9 +6,9 @@ Veewee::Definition.declare({
   :memory_size=> '256',
   :disk_size => '10140', :disk_format => 'VDI', :hostiocache => 'off',
   :os_type_id => 'Debian',
-  :iso_file => "debian-wheezy-DI-b4-i386-netinst.iso",
-  :iso_src => "http://cdimage.debian.org/cdimage/wheezy_di_beta4/i386/iso-cd/debian-wheezy-DI-b4-i386-netinst.iso",
-  :iso_md5 => "34d0ae973715c7a31646281c70839809",
+  :iso_file => "debian-wheezy-DI-rc1-i386-netinst.iso",
+  :iso_src => "http://cdimage.debian.org/cdimage/wheezy_di_rc1/i386/iso-cd/debian-wheezy-DI-rc1-i386-netinst.iso",
+  :iso_md5 => "db12ca9554bb8f121c98e268682a55d0",
   :iso_download_timeout => "1000",
   :boot_wait => "10", :boot_cmd_sequence => [
      '<Esc>',
