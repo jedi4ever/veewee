@@ -36,14 +36,13 @@
             </DiskConfiguration>
 
             <UserData>
-              <!-- Product Key from http://technet.microsoft.com/en-us/library/ff793406.aspx -->
-                <ProductKey>YC6KT-GKW9T-YTKYR-T4X34-R7VHC
-                    <WillShowUI>Never</WillShowUI>
-                </ProductKey>
-
                 <AcceptEula>true</AcceptEula>
                 <FullName>Vagrant Fullname</FullName>
                 <Organization>Vagrant Inc</Organization>
+                <!-- Product Key from http://technet.microsoft.com/en-us/library/ff793406.aspx -->
+                <ProductKey>
+                    <WillShowUI>Never</WillShowUI>
+                </ProductKey>
             </UserData>
 
             <ImageInstall>
