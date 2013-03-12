@@ -27,7 +27,7 @@ module Veewee
           # Use alternate method to retrieve the IP address using vmrun readVariable
           
           ip_address = shell_exec("vmrun readVariable \"#{vmx_file_path}\" guestVar ip", { :mute => true})
-          return ip_address.stdout
+          return ip_address.stdout.strip
         
           # unless mac_address.nil?
           #   lease = Fission::Lease.find_by_mac_address(mac_address).data
