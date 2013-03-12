@@ -41,12 +41,14 @@
                 </OSImage>
             </ImageInstall>
             <UserData>
-                <ProductKey>
-                    <WillShowUI>OnError</WillShowUI>
-					<!-- Change Product Key here. -->
-                    <Key>......</Key>
-                </ProductKey>
                 <AcceptEula>true</AcceptEula>
+                <FullName>Vagrant Fullname</FullName>
+                <Organization>Vagrant Inc</Organization>
+                <!-- Product Key from http://technet.microsoft.com/en-us/library/ff793406.aspx -->
+                <ProductKey>
+                    <Key>YC6KT-GKW9T-YTKYR-T4X34-R7VHC</Key>
+                    <WillShowUI>OnError</WillShowUI>
+                </ProductKey>
             </UserData>
         </component>
         <component name="Microsoft-Windows-International-Core-WinPE" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
