@@ -34,10 +34,13 @@ module Veewee
 
           ensure_vm_stopped(options)
 
+          optimize_disk
+
           # get a temp dir
           Dir.mktmpdir do |tmpdir|
             # export to box.ovf
-            shell_exec("#{File.dirname(vmrun_cmd).shellescape}#{"/VMware OVF Tool/ovftool".shellescape} #{debug} #{flags} #{vmx_file_path.shellescape} #{File.join(tmpdir, 'box.ovf')}")
+            #shell_exec("#{File.dirname(vmrun_cmd).shellescape}#{"/VMware OVF Tool/ovftool".shellescape} #{debug} #{flags} #{vmx_file_path.shellescape} #{File.join(tmpdir, 'box.ovf')}")
+            FileUtils.cp_r(Dir["#{vm_path}/*"],tmpdir)
 
             # Inject a Vagrantfile unless one is provided
             if options['vagrantfile']
@@ -45,10 +48,12 @@ module Veewee
             else
               File.open(File.join(tmpdir, 'Vagrantfile'), 'w') {|f| f.write(template_vagrantfile()) }
             end
+            #Inject a metadata.json file
+            File.open(File.join(tmpdir, 'metadata.json'), 'w') {|f| f.write(template_metadatafile()) }
 
             # Tar it up into the destination
             pwd = Dir.pwd
-            shell_exec("cd #{tmpdir} && tar -cf #{File.join(pwd, name)}.box *")
+            shell_exec("cd #{tmpdir} && tar -czf #{File.join(pwd, name)}.box *")
           end
         end
 
@@ -73,6 +78,12 @@ module Veewee
           end
         end
 
+        def template_metadatafile
+          <<EOF
+{"provider":"vmware_fusion"}
+EOF
+        end
+
         def template_vagrantfile
           <<EOF
 Vagrant::Config.run do |config|
@@ -87,6 +98,24 @@ end
 include_vagrantfile = File.expand_path("../include/_Vagrantfile", __FILE__)
 load include_vagrantfile if File.exist?(include_vagrantfile)
 EOF
+        end
+
+        def optimize_disk
+          current_dir=FileUtils.pwd
+          FileUtils.chdir(vm_path)
+          env.ui.info "Optimizing Disk"
+          shell_exec("#{File.dirname(vmrun_cmd).shellescape}#{"/vmware-vdiskmanager".shellescape} -d #{name}.vmdk")
+          shell_exec("#{File.dirname(vmrun_cmd).shellescape}#{"/vmware-vdiskmanager".shellescape} -k #{name}.vmdk")
+
+          [name,
+           "#{name}.plist",
+           "quicklook-cache.png"
+          ].each do |file|
+            File.delete(file) if File.exist?(file)
+          end
+
+          Dir.glob("*.log").map { |f| File.delete(f) }
+          FileUtils.chdir(current_dir)
         end
 
       end

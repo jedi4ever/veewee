@@ -29,7 +29,7 @@ module Veewee
       desc "export [BOX_NAME]", "Exports the basebox to the ova format"
       method_option :force,:type => :boolean , :default => false, :aliases => "-f", :desc => "overwrite existing file"
       def export(box_name)
-        box(box_name).export_ova(options)
+        box(box_name).export_vagrant(options)
       end
 
       desc "add_share [BOX_NAME] [SHARE_NAME] [SHARE_PATH]", "Adds a share to the guest"
