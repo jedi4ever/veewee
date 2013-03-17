@@ -4,7 +4,7 @@ Veewee::Session.declare({
   :disk_size => '10140',
   :disk_format => 'VDI',
   :hostiocache => 'off',
-  :os_type_id => 'RedHat_64',
+  :os_type_id => 'RedHat',
   :iso_file => "CentOS-6.4-i386-netinstall.iso",
   :iso_src => "http://www.mirrorservice.org/sites/mirror.centos.org/6.4/isos/i386/CentOS-6.4-i386-netinstall.iso",
   :iso_md5 => "7cde1479be934ad8463a35f2a3a48a2b",
