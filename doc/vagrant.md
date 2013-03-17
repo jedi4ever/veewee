@@ -2,7 +2,7 @@
 
 A typical workflow with Vagrant would be:
 
-    $ vagrant basebox define 'mybuntubox' 'ubuntu-10.12-amd64'
+    $ vagrant basebox define 'mybuntubox' 'ubuntu-12.10-server-amd64'
     $ vagrant basebox build 'mybuntubox'
     $ vagrant basebox export 'mybuntubox'
 
