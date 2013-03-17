@@ -26,17 +26,17 @@ module Veewee
           
           # Use alternate method to retrieve the IP address using vmrun readVariable
           
-          ip_address = shell_exec("vmrun readVariable \"#{vmx_file_path}\" guestVar ip", { :mute => true})
-          return ip_address.stdout.strip
+          ip_address = shell_exec("#{vmrun_cmd.shellescape} readVariable \"#{vmx_file_path}\" guestVar ip", { :mute => true}).stdout.strip
+          return ip_address unless ip_address.empty?
         
-          # unless mac_address.nil?
-          #   lease = Fission::Lease.find_by_mac_address(mac_address).data
-          #   return lease.ip_address unless lease.nil?
-          #   return nil
-          # else
-          #     # No mac address was found for this machine so we can't calculate the ip-address
-          #     return nil
-          #   end
+          unless mac_address.nil?
+            lease = Fission::Lease.find_by_mac_address(mac_address).data
+            return lease.ip_address unless lease.nil?
+            return nil
+          else
+            # No mac address was found for this machine so we can't calculate the ip-address
+            return nil
+          end
         end
 
         # http://www.thirdbit.net/articles/2008/03/04/dhcp-on-vmware-fusion/
