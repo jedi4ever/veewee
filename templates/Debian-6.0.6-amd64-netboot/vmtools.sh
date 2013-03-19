@@ -1,3 +1,15 @@
+if test -f .vmfusion_version ; then
+
+  cd /tmp
+  mkdir -p /mnt/cdrom
+  mount -o loop /home/vagrant/linux.iso /mnt/cdrom
+  tar zxvf /mnt/cdrom/VMwareTools-*.tar.gz -C /tmp/
+  /tmp/vmware-tools-distrib/vmware-install.pl -d
+  rm /home/vagrant/linux.iso
+  umount /mnt/cdrom
+
+fi
+
 if test -f .vbox_version ; then
 
   # Without libdbus virtualbox would not start automatically after compile
@@ -15,4 +27,7 @@ if test -f .vbox_version ; then
   mount -o loop $VBOX_ISO /mnt
   yes|sh /mnt/VBoxLinuxAdditions.run
   umount /mnt
+
+  #Cleanup VirtualBox
+  rm $VBOX_ISO
 fi
