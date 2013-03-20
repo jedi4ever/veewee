@@ -33,7 +33,8 @@ Veewee::Session.declare({
   :postinstall_files => [
     "base.sh",
     "vagrant.sh",
-    "vmtools.sh",
+    "virtualbox.sh",
+    "vmfusion.sh",
     "ruby.sh",
     "puppet.sh",
     "chef.sh",
