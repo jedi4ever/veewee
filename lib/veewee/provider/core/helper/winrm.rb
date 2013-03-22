@@ -34,6 +34,7 @@ module Veewee
             rescue HTTPClient::ReceiveTimeoutError,HTTPClient::ConnectTimeoutError
               @winrm_up = false
             end
+            @winrm_up
           end
 
 
@@ -62,6 +63,8 @@ module Veewee
                       @connected = true
                       return true
                     rescue Exception => e
+                      @winrm_up = false
+                      next if e.message =~ /401/ # 2012 gives 401 errors
                       puts e.inspect
                       puts e.message
                       puts e.backtrace.inspect
