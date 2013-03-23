@@ -105,7 +105,7 @@ EOF
         end
 
         def optimize_disk
-          current_dir=FileUtils.pwd
+          current_dir=Dir.pwd
           FileUtils.chdir(vm_path)
           env.ui.info "Optimizing Disk"
           shell_exec("#{File.dirname(vmrun_cmd).shellescape}#{"/vmware-vdiskmanager".shellescape} -d #{name}.vmdk")
