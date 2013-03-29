@@ -2,7 +2,7 @@
 # can install their own Rubies using packages or however.
 
 apt-get -y install libyaml-0-2
-RUBY_VERSION=1.9.3-p385
+RUBY_VERSION=1.9.3-p392
 wget http://ftp.ruby-lang.org/pub/ruby/1.9/ruby-$RUBY_VERSION.tar.gz
 tar xvzf ruby-$RUBY_VERSION.tar.gz
 cd ruby-$RUBY_VERSION

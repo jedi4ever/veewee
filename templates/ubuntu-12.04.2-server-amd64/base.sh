@@ -9,8 +9,12 @@ apt-get -y install vim curl
 apt-get clean
 
 # Setup sudo to allow no-password sudo for "sudo"
-cp /etc/sudoers /etc/sudoers.orig
-sed -i -e 's/%sudo\tALL=(ALL:ALL) ALL/%sudo\tALL=(ALL:ALL) NOPASSWD:ALL/' /etc/sudoers
+( cat <<'EOP'
+Defaults exempt_group=vagrant
+%vagrant ALL=NOPASSWD:ALL
+EOP
+) > /etc/sudoers.d/vagrant
+chmod 0440 /etc/sudoers.d/vagrant
 
 # Install NFS client
 apt-get -y install nfs-common
