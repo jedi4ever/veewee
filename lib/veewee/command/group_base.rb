@@ -130,7 +130,7 @@ module Veewee
         begin
           environment.definitions.define(definition_name,template_name,options)
           env.ui.info "The basebox '#{definition_name}' has been successfully created from the template '#{template_name}'"
-          env.ui.info "You can now edit the definition files stored in #{options[:cwd]}definitions/#{definition_name} or build the box with:"
+          env.ui.info "You can now edit the definition files stored in #{options[:cwd]}/definitions/#{definition_name} or build the box with:"
           env.ui.info "veewee #{@command} build '#{definition_name}' --workdir=#{options[:cwd]}"
         rescue Error => ex
           env.ui.error("#{ex}",:prefix => false)
