@@ -28,8 +28,12 @@ module Veewee
 
         def delete_forwarding(name)
           forward=self.forwarding(name)
-          command="#{@vboxcmd} controlvm \"#{self.name}\" natpf#{self.natinterface} delete #{name}"
-          shell_results=shell_exec("#{command}")
+          natpf=self.natinterface
+
+          if natpf
+            command="#{@vboxcmd} controlvm \"#{self.name}\" natpf#{natpf} delete #{name}"
+            shell_results=shell_exec("#{command}")
+          end
         end
 
       end

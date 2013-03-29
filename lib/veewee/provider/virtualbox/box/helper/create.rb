@@ -9,7 +9,7 @@ module Veewee
           shell_exec("#{command}")
         end
 
-        def add_sata_controller 
+        def add_sata_controller
           #unless => "${vboxcmd} showvminfo \"${vname}\" | grep \"SATA Controller\" ";
           command ="#{@vboxcmd} storagectl \"#{name}\" --name \"SATA Controller\" --add sata --hostiocache #{definition.hostiocache} --sataportcount #{definition.disk_count}"
           shell_exec("#{command}")
@@ -27,8 +27,12 @@ module Veewee
           unless definition.nil?
             unless definition.skip_nat_mapping == true
               #Map SSH Ports
-              command="#{@vboxcmd} modifyvm \"#{name}\" --natpf#{self.natinterface} \"guestssh,tcp,,#{definition.ssh_host_port},,#{definition.ssh_guest_port}\""
-              shell_exec("#{command}")
+              natpf=self.natinterface
+
+              if natpf
+                command="#{@vboxcmd} modifyvm \"#{name}\" --natpf#{natpf} \"guestssh,tcp,,#{definition.ssh_host_port},,#{definition.ssh_guest_port}\""
+                shell_exec("#{command}")
+              end
             end
           end
         end
@@ -36,9 +40,11 @@ module Veewee
         def add_winrm_nat_mapping
 
           unless definition.nil?
-            #Map SSH Ports
-            unless definition.skip_nat_mapping == true
-              command="#{@vboxcmd} modifyvm \"#{name}\" --natpf1 'guestwinrm,tcp,,#{definition.winrm_host_port},,#{definition.winrm_guest_port}'"
+            #Map WinRM Ports
+            natpf=self.natinterface
+
+            if natpf
+              command="#{@vboxcmd} modifyvm \"#{name}\" --natpf#{natpf} 'guestwinrm,tcp,,#{definition.winrm_host_port},,#{definition.winrm_guest_port}'"
               shell_exec("#{command}")
             end
           end
@@ -89,13 +95,13 @@ module Veewee
 
         def attach_disk_common(storagectl, device_number)
           place=get_vbox_home
-          
+
           1.upto(definition.disk_count.to_i) do |f|
             location=name+"#{f}."+definition.disk_format.downcase
-  
+
             location="#{File.join(place,name,location)}"
             ui.info "Attaching disk: #{location}"
-  
+
             #command => "${vboxcmd} storageattach \"${vname}\" --storagectl \"SATA Controller\" --port 0 --device 0 --type hdd --medium \"${vname}.vdi\"",
             command ="#{@vboxcmd} storageattach \"#{name}\" --storagectl \"#{storagectl}\" --port #{f-1} --device #{device_number} --type hdd --medium \"#{location}\""
             shell_exec("#{command}")
