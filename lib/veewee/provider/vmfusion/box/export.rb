@@ -83,9 +83,7 @@ module Veewee
         end
 
         def template_metadatafile
-          <<EOF
-{"provider":"vmware_fusion"}
-EOF
+          %Q({"provider": "vmware_fusion"}\n)
         end
 
         def template_vagrantfile
