@@ -1,10 +1,5 @@
 date > /etc/vagrant_box_build_time
 
-# Add /opt/ruby/bin to the global path as the last resort so
-# Ruby, RubyGems, and Chef/Puppet are visible
-echo 'PATH=$PATH:/opt/ruby/bin/'> /etc/profile.d/vagrantruby.sh
-
-
 # Setup sudo to allow no-password sudo for "sudo"
 usermod -a -G sudo vagrant
 

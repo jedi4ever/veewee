@@ -20,3 +20,7 @@ cd rubygems-$RUBYGEMS_VERSION
 /opt/ruby/bin/ruby setup.rb
 cd ..
 rm -rf rubygems-$RUBYGEMS_VERSION
+
+# Add /opt/ruby/bin to the global path as the last resort so
+# Ruby, RubyGems, and Chef/Puppet are visible
+echo 'PATH=$PATH:/opt/ruby/bin/'> /etc/profile.d/vagrantruby.sh

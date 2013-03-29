@@ -8,13 +8,13 @@ apt-get -y install zlib1g-dev libssl-dev libreadline-gplv2-dev libyaml-dev
 apt-get -y install vim curl
 apt-get clean
 
-# Setup sudo to allow no-password sudo for "sudo"
+# Set up sudo
 ( cat <<'EOP'
-Defaults exempt_group=vagrant
 %vagrant ALL=NOPASSWD:ALL
 EOP
-) > /etc/sudoers.d/vagrant
-chmod 0440 /etc/sudoers.d/vagrant
+) > /tmp/vagrant
+chmod 0440 /tmp/vagrant
+mv /tmp/vagrant /etc/sudoers.d/
 
 # Install NFS client
 apt-get -y install nfs-common
