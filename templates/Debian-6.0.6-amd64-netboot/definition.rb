@@ -1,6 +1,6 @@
 Veewee::Definition.declare({
   :cpu_count => '1',
-  :memory_size=> '256',
+  :memory_size=> '512',
   :disk_size => '10140', :disk_format => 'VDI', :hostiocache => 'off',
   :os_type_id => 'Debian_64',
   :iso_file => "debian-6.0.6-amd64-netinst.iso",
@@ -37,11 +37,11 @@ Veewee::Definition.declare({
   :postinstall_files => [
     "base.sh",
     "vagrant.sh",
+    "vmfusion.sh",
     "virtualbox.sh",
     "ruby.sh",
     "puppet.sh",
     "chef.sh",
-    "cleanup-virtualbox.sh",
     "cleanup.sh",
     "zerodisk.sh"
   ],

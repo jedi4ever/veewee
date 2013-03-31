@@ -21,5 +21,3 @@ echo 'Welcome to your Vagrant-built virtual machine.' > /var/run/motd
 
 # Install NFS client
 apt-get -y install nfs-common
-
-
