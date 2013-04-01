@@ -26,7 +26,7 @@ module Veewee
         box(box_name).validate_vmfusion(options)
       end
 
-      desc "export [BOX_NAME]", "Exports the basebox to the ova format"
+      desc "export [BOX_NAME]", "Exports the basebox to the vagrant format"
       method_option :force,:type => :boolean , :default => false, :aliases => "-f", :desc => "overwrite existing file"
       method_option :export_type, :type => :string, :default => "vagrant", :desc => "export into vmware ova or vagrant box format"
       def export(box_name)
