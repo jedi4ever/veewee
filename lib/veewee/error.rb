@@ -1,6 +1,6 @@
 module Veewee
   class Error < StandardError
-    attr_reader :orginal
+    attr_reader :original
 
     def initialize(msg, original = $!)
       super(msg)
