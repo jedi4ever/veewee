@@ -12,11 +12,15 @@ group :kvm do
   gem "ruby-libvirt"
 end
 
+group :windows do
+  gem "em-winrm", :git => 'http://github.com/hh/em-winrm.git', :ref => '31745601d3'
+end
+
 group :test do
   gem "rake"
-  gem "em-winrm", :git => 'http://github.com/hh/em-winrm.git', :ref => '31745601d3'
-  gem "vagrant"
+  #gem "vagrant" , "1.0.7"
   #gem "chef"
   #gem "knife-windows"
 end
+
 gemspec
