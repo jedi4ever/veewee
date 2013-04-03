@@ -23,6 +23,7 @@ Gem::Specification.new do |s|
   s.add_dependency "popen4", "~> 0.1.2"
   s.add_dependency "thor", "~> 0.15"
   s.add_dependency "highline"
+  s.add_dependency "json"
   s.add_dependency "progressbar"
   s.add_dependency "i18n"
   #s.add_dependency "cucumber", ">=1.0.0"
