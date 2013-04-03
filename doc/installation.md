@@ -42,3 +42,11 @@ This will change the file `.bundle/config`, which is ignored by Git per default 
 
 As this is a remembered option, you don't have to specify it every time.
 If you want to switch to the default behavior run `bundle install --without kvm` to enable restrictions.
+
+### Running from source git repo and using ruby 1.8.7
+
+By default the :windows gem group is *enabled* . This loads the em-winrm gem which is incompatible with ruby-1.8.7 as it depends on the gss-api gem. To run from source you can do a `bundle install --without windows`
+
+This will change the file `.bundle/config`, which is ignored by Git per default and must not be included in any commits.
+If you want to switch to the default behavior run `bundle install --without restrictions` to include it
+
