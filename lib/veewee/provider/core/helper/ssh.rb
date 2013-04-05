@@ -110,7 +110,7 @@ module Veewee
                   ch.on_data do |c, data|
                     stdout+=data
 
-                    ui.info data unless options[:mute]
+                    ui.info(data, :new_line => false) unless options[:mute]
 
                   end
 
@@ -119,7 +119,7 @@ module Veewee
                   ch.on_extended_data do |c, type, data|
                     stderr+=data
 
-                    ui.info data unless options[:mute]
+                    ui.info(data, :new_line => false) unless options[:mute]
 
                   end
 
