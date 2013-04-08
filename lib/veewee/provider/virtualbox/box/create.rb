@@ -47,7 +47,7 @@ module Veewee
           end
           self.attach_isofile(isofile_ide_device_number)
           self.attach_guest_additions
-          self.attach_windows_drivers if self.is_windows?
+          self.attach_windows_drivers if self.windows_guest?
 
           self.create_floppy("virtualfloppy.vfd")
 
