@@ -13,6 +13,12 @@ In order to build native rubygems you may need these packages:
     libxml2-dev
     zlib1g-dev
 
+On windows, you will need to install:
+
+- Ruby devkit
+- msysgit
+- And you may need to add VirtualBox to your `PATH`, usually installed to `C:\Program Files\Oracle\VirtualBox`.
+
 
 ## Ruby Environment
 
