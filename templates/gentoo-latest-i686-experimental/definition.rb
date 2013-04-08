@@ -7,6 +7,12 @@ template_build = /^(([^#].*)\/(.*))/.match(template_build)
 Veewee::Definition.declare({
   :cpu_count   => 2,
   :memory_size => '1024',
+
+  # set these if you would like the exported box
+  # to be different from the settings during build
+  :export_cpu_count   => 1,
+  :export_memory_size => '384',
+
   :disk_size   => '20280',
   :disk_format => 'VDI',
   :hostiocache => 'off',

@@ -109,6 +109,20 @@ module Veewee
               end
             end
 
+            if definition.export_cpu_count && definition.export_cpu_count != definition.cpu_count
+              ui.info "Changing CPU count before exporting the box"
+              command = "#{@vboxcmd} modifyvm #{name} --cpus #{definition.export_cpu_count}"
+              env.logger.debug("Command: #{command}")
+              shell_exec(command, {:mute => false})
+            end
+
+            if definition.export_memory_size && definition.export_memory_size != definition.memory_size
+              ui.info "Changing memory size before exporting the box"
+              command = "#{@vboxcmd} modifyvm #{name} --memory #{definition.export_memory_size}"
+              env.logger.debug("Command: #{command}")
+              shell_exec(command, {:mute => false})
+            end
+
             ui.info "Exporting the box"
             command = "#{@vboxcmd} export #{name} --output #{File.join(tmp_dir,'box.ovf')}"
             env.logger.debug("Command: #{command}")
