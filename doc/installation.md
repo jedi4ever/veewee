@@ -32,6 +32,16 @@ This will then create a [gemset](https://rvm.io/gemsets/basics/) for veewee.
 
 Now start [building baseboxes](running.md) or learn more about [veewee's internals](definition.md)!
 
+__from source on windows__
+
+1. Run `bundle install`
+
+2. To run `veewee`, use `bundle exec veewee` or make a powershell alias to remember for you:
+
+    function Run-Veewee { bundle exec veewee }
+    Set-Alias veewee Run-Veewee
+
+
 ### Important Note on testing `kvm` while running from source git repo_
 
 By default the `:kvm` gem group is *disabled* to prevent the installation of `ruby-libvirt` on systems
