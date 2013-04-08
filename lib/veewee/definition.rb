@@ -25,6 +25,7 @@ module Veewee
     attr_accessor :ssh_login_timeout, :ssh_user, :ssh_password, :ssh_key, :ssh_host_port, :ssh_guest_port
 
     attr_accessor :winrm_login_timeout, :winrm_user, :winrm_password, :winrm_host_port, :winrm_guest_port
+    attr_accessor :windows_drivers_version
 
     attr_accessor :sudo_cmd
     attr_accessor :shutdown_cmd
@@ -99,6 +100,7 @@ module Veewee
       #        :kickstart_file => nil,
       @winrm_host_port = "5985" ; @winrm_guest_port = "5985"
       @winrm_login_timeout = "10000"
+      @windows_drivers_version = "0.1-52"
       @boot_cmd_sequence = [] # Empty list by default
 
       @virtualbox = { :vm_options => {} }

@@ -133,6 +133,12 @@ module Veewee
           shell_exec("#{command}")
         end
 
+        def attach_windows_drivers
+          full_iso_file=File.join(env.config.veewee.iso_dir,"#{self.windows_drivers_isoname}")
+          ui.info "Mounting virtualbox drivers: #{full_iso_file}"
+          command ="#{@vboxcmd} storageattach \"#{name}\" --storagectl \"IDE Controller\" --type dvddrive --port 1 --device 1 --medium \"#{full_iso_file}\""
+          shell_exec("#{command}")
+        end
 
         def add_floppy_controller
           # Create floppy controller

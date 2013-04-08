@@ -66,15 +66,20 @@ module Veewee
           return available
         end
 
+        def windows_guest?
+            return @definition.os_type_id.start_with?('Windows')
+        end
+
+        def windows_host?
+          return (RbConfig::CONFIG['host_os'] =~ /mswin|mingw|cygwin/)
+        end
+
         def set_definition(definition_name)
           @definition=env.definitions[definition_name]
 
           unless @definition.nil?
             # We check for windows as em-winrm is not available on ruby1.9
-            is_windows =  @definition.os_type_id.start_with?('Windows')
-
-            # On windows systems
-            if is_windows
+            if self.windows_guest?
               # Check if winrm is available
               if gem_available?('em-winrm')
                 require 'veewee/provider/core/box/winrm'

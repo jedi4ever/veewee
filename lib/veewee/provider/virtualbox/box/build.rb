@@ -6,6 +6,7 @@ module Veewee
         def build(options={})
 
           download_vbox_guest_additions_iso(options)
+          download_windows_drivers_iso(options) if self.windows_guest?
 
           super(options)
 
