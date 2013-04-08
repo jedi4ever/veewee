@@ -5,9 +5,9 @@ template_build = Net::HTTP.get_response(URI.parse(template_uri)).body
 template_build = /^(([^#].*)\/(.*))/.match(template_build)
 
 Veewee::Definition.declare({
-  :cpu_count   => 1,
-  :memory_size => '360',
-  :disk_size   => '40140',
+  :cpu_count   => 2,
+  :memory_size => '1024',
+  :disk_size   => '20280',
   :disk_format => 'VDI',
   :hostiocache => 'off',
   :os_type_id  => 'Gentoo',
@@ -18,9 +18,9 @@ Veewee::Definition.declare({
   :boot_cmd_sequence => [
     '<Wait>' * 2,
     'gentoo-nofb<Enter>',
-    '<Wait>' * 10,
+    '<Wait>' * 30,
     '<Enter>',
-    '<Wait>' * 12,
+    '<Wait>' * 20,
     '<Wait><Wait>ifconfig -a<Enter>',
     'passwd<Enter><Wait><Wait>',
     'vagrant<Enter><Wait>',
@@ -37,7 +37,7 @@ Veewee::Definition.declare({
   :ssh_host_port     => '7222',
   :ssh_guest_port    => '22',
   :sudo_cmd          => "cat '%f'|su -",
-  :shutdown_cmd      => 'shutdown -h now',
+  :shutdown_cmd      => 'shutdown -hP now',
   :postinstall_files => [
     'settings.sh',
     'base.sh',
@@ -45,8 +45,8 @@ Veewee::Definition.declare({
     'virtualbox.sh',
     'vagrant.sh',
     #Choose your ruby way : source or portage?
-    #'ruby_portage.sh',
-    'ruby_source.sh',
+    'ruby_portage.sh',
+    #'ruby_source.sh',
     'chef.sh',
     'puppet.sh',
     'cron.sh',
