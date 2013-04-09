@@ -119,11 +119,22 @@ module Veewee
             command_box_path = box_path
             is_windows = (RbConfig::CONFIG['host_os'] =~ /mswin|mingw|cygwin/)
             if is_windows
-              command_box_path = command_box_path.gsub(/^([A-Z])\:\/(.*)$/, '/\1/\2')
+              # Windows tar binaries can't reliably handle huge vmdk files
+              if gem_available?('archive-tar-minitar')
+                require 'archive/tar/minitar'
+
+                env.logger.debug("Using minitar to create #{command_box_path}")
+                File.open(command_box_path, 'wb') do |tar|
+                  Archive::Tar::Minitar.pack('.', tar) 
+                end
+              else
+                raise Veewee::Error, "Exporting .box files on windows requires the archive-tar-minitar gem"
+              end
+            else
+              command = "tar -cvf '#{command_box_path}' ."
+              env.logger.debug(command)
+              shell_exec (command)
             end
-            command = "tar -cvf '#{command_box_path}' ."
-            env.logger.debug(command)
-            shell_exec (command)
 
           rescue Errno::ENOENT => ex
             raise Veewee::Error, "#{ex}"
@@ -134,7 +145,7 @@ module Veewee
             ui.info "Cleaning up temporary directory"
             env.logger.debug("Removing temporary dir #{tmp_dir}")
             FileUtils.rm_rf(tmp_dir)
-
+            
             FileUtils.cd(current_dir)
           end
           ui.info ""
