@@ -65,3 +65,7 @@ if you are already working with vagrant.
 ### Typical Vagrant Usage
 
 See "[Use it in vagrant](vagrant.md)" for more details.
+
+## Debugging
+
+Set the VEEWEE_LOG environment variable to "debug" to get full debug logging.
