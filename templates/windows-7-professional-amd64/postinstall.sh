@@ -54,7 +54,7 @@ alias ruby="ruby.exe"
 alias puppet="puppet.bat"
 alias ohai="ohai.bat"
 alias irb="irb.bat"
-alias facter="facter.bat" 
+alias facter="facter.bat"
 EOF
 
 
@@ -70,5 +70,5 @@ net.exe use  '\\vboxsvr\veewee-validation'
 
 # Reboot
 # http://www.techrepublic.com/blog/datacenter/restart-windows-server-2003-from-the-command-line/245
-shutdown.exe /s /t 0 /d p:2:4 /c "Vagrant initial reboot"
+shutdown.exe /r /t 0 /d p:2:4 /c "Vagrant initial reboot"
 
