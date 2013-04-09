@@ -34,7 +34,7 @@ module Veewee
           begin
             self.when_winrm_login_works(self.ip_address,winrm_options.merge(options)) do
               env.ui.info "Going to try and copy #{localfile} to #{remotefile.inspect}"
-              self.exec("cmd.exe /C cscript %TEMP%\\wget.vbs /url:http://#{host_ip_as_seen_by_guest}:#{definition.kickstart_port}#{localfile} /path:#{remotefile}")
+              self.exec("cmd.exe /C cscript %TEMP%\\wget.vbs /url:http://#{host_ip_as_seen_by_guest}:#{definition.kickstart_port}/ /path:#{remotefile}")
               # while true do
               #   sleep 0.1 # used to debug
               # end
