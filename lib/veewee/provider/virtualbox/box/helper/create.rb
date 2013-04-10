@@ -1,3 +1,5 @@
+require 'veewee/platform'
+
 module Veewee
   module Provider
     module Virtualbox
@@ -53,7 +55,8 @@ module Veewee
         end
 
         def add_shared_folder
-          command="#{@vboxcmd} sharedfolder add  \"#{name}\" --name \"veewee-validation\" --hostpath \"#{File.expand_path(env.validation_dir)}\" --automount"
+          host_path=Platform.host.to_native_path(File.expand_path(env.validation_dir))
+          command="#{@vboxcmd} sharedfolder add  \"#{name}\" --name \"veewee-validation\" --hostpath \"#{host_path}\" --automount"
           shell_exec("#{command}")
         end
 
@@ -89,8 +92,9 @@ module Veewee
         def create_disk
             place=get_vbox_home
             1.upto(definition.disk_count.to_i) do |f|
+              location =Platform.host.to_native_path(File.join(place,name,name+"#{f}."+definition.disk_format.downcase))
               ui.info "Creating new harddrive of size #{definition.disk_size.to_i}, format #{definition.disk_format}, variant #{definition.disk_variant} "
-              command ="#{@vboxcmd} createhd --filename \"#{File.join(place,name,name+"#{f}."+definition.disk_format.downcase)}\" --size \"#{definition.disk_size.to_i}\" --format #{definition.disk_format.downcase} --variant #{definition.disk_variant.downcase}"
+              command ="#{@vboxcmd} createhd --filename \"#{location}\" --size \"#{definition.disk_size.to_i}\" --format #{definition.disk_format.downcase} --variant #{definition.disk_variant.downcase}"
               shell_exec("#{command}")
             end
         end
@@ -100,8 +104,8 @@ module Veewee
           
           1.upto(definition.disk_count.to_i) do |f|
             location=name+"#{f}."+definition.disk_format.downcase
-  
-            location="#{File.join(place,name,location)}"
+
+            location=Platform.host.to_native_path(File.join(place,name,location))
             ui.info "Attaching disk: #{location}"
   
             #command => "${vboxcmd} storageattach \"${vname}\" --storagectl \"SATA Controller\" --port 0 --device 0 --type hdd --medium \"${vname}.vdi\"",
@@ -120,14 +124,14 @@ module Veewee
 
 
         def attach_isofile(device_number=0)
-          full_iso_file=File.join(env.config.veewee.iso_dir,definition.iso_file)
+          full_iso_file=Platform.host.to_native_path(File.join(env.config.veewee.iso_dir,definition.iso_file))
           ui.info "Mounting cdrom: #{full_iso_file}"
           command ="#{@vboxcmd} storageattach \"#{name}\" --storagectl \"IDE Controller\" --type dvddrive --port 0 --device #{device_number} --medium \"#{full_iso_file}\""
           shell_exec("#{command}")
         end
 
         def attach_guest_additions
-          full_iso_file=File.join(env.config.veewee.iso_dir,"VBoxGuestAdditions_#{self.vboxga_version}.iso")
+          full_iso_file=Platform.host.to_native_path(File.join(env.config.veewee.iso_dir,"VBoxGuestAdditions_#{self.vboxga_version}.iso"))
           ui.info "Mounting guest additions: #{full_iso_file}"
           command ="#{@vboxcmd} storageattach \"#{name}\" --storagectl \"IDE Controller\" --type dvddrive --port 1 --device 0 --medium \"#{full_iso_file}\""
           shell_exec("#{command}")
@@ -148,7 +152,7 @@ module Veewee
           unless definition.floppy_files.nil?
 
             # Attach floppy to machine (the vfd extension is crucial to detect msdos type floppy)
-            floppy_file=File.join(definition.path,"virtualfloppy.vfd")
+            floppy_file=Platform.host.to_native_path(File.join(definition.path,"virtualfloppy.vfd"))
             command="#{@vboxcmd} storageattach \"#{name}\" --storagectl \"Floppy Controller\" --port 0 --device 0 --type fdd --medium \"#{floppy_file}\""
             shell_exec("#{command}")
           end
