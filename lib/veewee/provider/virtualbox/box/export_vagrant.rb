@@ -110,7 +110,8 @@ module Veewee
             end
 
             ui.info "Exporting the box"
-            command = "#{@vboxcmd} export #{name} --output #{File.join(tmp_dir,'box.ovf')}"
+            platform = Platform.host
+            command = "#{@vboxcmd} export #{name} --output \"#{platform.to_native_path(File.join(tmp_dir,'box.ovf'))}\""
             env.logger.debug("Command: #{command}")
             shell_exec(command, {:mute => false})
 
@@ -118,7 +119,7 @@ module Veewee
             FileUtils.cd(tmp_dir)
             command_box_path = box_path
             is_windows = (RbConfig::CONFIG['host_os'] =~ /mswin|mingw|cygwin/)
-            if is_windows
+            if is_windows && !platform.cygwin?
               command_box_path = command_box_path.gsub(/^([A-Z])\:\/(.*)$/, '/\1/\2')
             end
             command = "tar -cvf '#{command_box_path}' ."
