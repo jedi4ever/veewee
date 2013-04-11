@@ -41,7 +41,7 @@ module Veewee
 
             return box
           rescue Error => ex
-            ui.error "Could not instante the box #{name} with provider #{type} ,#{ex}"
+            ui.error "Could not instantiate the box #{name} with provider #{type} ,#{ex}"
             raise
           end
         end
