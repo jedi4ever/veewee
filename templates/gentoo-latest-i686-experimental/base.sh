@@ -80,4 +80,5 @@ env-update && source /etc/profile
 DATAEOF
 
 # update portage tree to most current state
-chroot "$chroot" emerge --sync
+# emerge-webrsync is recommended by Gentoo for first sync
+chroot "$chroot" emerge-webrsync

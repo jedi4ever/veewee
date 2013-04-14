@@ -221,7 +221,7 @@ module Veewee
           # Prepare a pre_poinstall file if needed (not nil , or not empty)
           unless definition.pre_postinstall_file.to_s.empty?
             pre_filename=File.join(definition.path, definition.pre_postinstall_file)
-            self.copy_to_box(filename,File.basename(pre_filename))
+            self.copy_to_box(pre_filename,File.basename(pre_filename))
             if (definition.winrm_user && definition.winrm_password)
               # not implemented on windows yet
             else

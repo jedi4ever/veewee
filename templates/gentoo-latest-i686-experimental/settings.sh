@@ -2,15 +2,19 @@
 
 cat <<DATAEOF > "/etc/profile.d/veewee.sh"
 # stage 3 filename and full url
-export stage3file="stage3-i686-20121213.tar.bz2"
-export stage3url="http://distfiles.gentoo.org/releases/x86/current-stage3/\$stage3file"
+# retrieve from Gentoo current autobuild txt - these change regularly
+build_arch="x86"
+build_proc="i686"
+stage3current=\`curl -s http://distfiles.gentoo.org/releases/\${build_arch}/autobuilds/latest-stage3-\${build_proc}.txt|grep -v "^#"\`
+export stage3url="http://distfiles.gentoo.org/releases/\${build_arch}/autobuilds/\${stage3current}"
+export stage3file=\${stage3current##*/}
 
 # these two (configuring the compiler) and the stage3 url can be changed to build a 32 bit system
 export accept_keywords="x86"
 export chost="i686-pc-linux-gnu"
 
 # kernel version to use
-export kernel_version="3.5.7"
+export kernel_version="3.7.10"
 
 # timezone (as a subdirectory of /usr/share/zoneinfo)
 export timezone="UTC"

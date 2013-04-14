@@ -54,8 +54,12 @@
             </ImageInstall>
             <UserData>
                 <AcceptEula>true</AcceptEula>
-                <FullName>Vagrant</FullName>
-                <Organization>vagrant</Organization>
+                <FullName>Vagrant Fullname</FullName>
+                <Organization>Vagrant Inc</Organization>
+                <!-- Product Key from http://technet.microsoft.com/en-us/library/ff793406.aspx -->
+                <ProductKey>
+                    <WillShowUI>Always</WillShowUI>
+                </ProductKey>
             </UserData>
         </component>
     </settings>

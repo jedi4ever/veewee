@@ -82,13 +82,13 @@
                 <WillShowUI>OnError</WillShowUI>
             </DiskConfiguration>
             <UserData>
-              <!-- Product Key from http://technet.microsoft.com/en-us/library/ff793406.aspx -->
-                <ProductKey>
-                    <WillShowUI>Never</WillShowUI>
-                </ProductKey>
                 <AcceptEula>true</AcceptEula>
                 <FullName>Vagrant User</FullName>
                 <Organization>Vagrant Inc.</Organization>
+                <!-- Product Key from http://technet.microsoft.com/en-us/library/ff793406.aspx -->
+                <ProductKey>
+                    <WillShowUI>Never</WillShowUI>
+                </ProductKey>
             </UserData>
             <ImageInstall>
                 <OSImage>
