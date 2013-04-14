@@ -1,37 +1,51 @@
-# Contribute or Improving a Veewee Templates
+# Contribute to Veewee
 
-If you have a setup working, share your 'definition' with me. That would be fun!
+If you are looking to improve Veewee in some manner, you've come to the right place.
 
-## How to add a new OS/installation
 
-I suggest the easiest way is to get an account on [Github](https://github.com).
+## TODOs
 
-I assume that you have a working ruby environment as described in `installation.md`.
+A running [TODO](doc/TODO.md) list is available for ideas on future improvements.
 
-Then fork [the veewee repository](https://github.com/jedi4ever/veewee) to your account and clone it to your computer:
 
-    $ git clone https://github.com/*your account*/veewee.git
+## Steps to Contribute
+
+### Getting started
+
+In order to contribute anything, you'll want to follow these steps first:
+
+* Get an account on [Github](https://github.com)
+* Then fork the [veewee repository](https://github.com/jedi4ever/veewee) to your own Github account
+* If you haven't already, familiarize yourself with the [Requirements](doc/requirements.md) and [Installation](doc/installation.md) docs
+* Clone the veewee **fork** to your machine:
+
+    ~~~ sh
+    $ cd <path_to_workspace>
+    $ git clone https://github.com/<your github account>/veewee.git
     $ cd veewee
-    $ gem install bundler
-    $ bundle install
+    ~~~
 
-If you don't use [rvm](https://rvm.io/), be sure to execute veewee through `bundle exec`:
+* Check out a new branch to make your changes on: `git checkout --branch <your_new_patch>`
 
-    $ alias veewee="bundle exec veewee"
 
-Start your new definition on base of an existing one by executing:
+### For adding a new Template
 
-    $ veewee vbox define 'mynewos' '<your_os_of_choice>'
+If you have a new and amazing Veewee definition, share your 'template'. That would be fun!
 
-Now follow these best practices:
+* Before saving changes to a 'template', first try your changes in `definitions/mynewos/`
+* Build the box and run the **validation** tests
+* When the box builds OK and all tests are green, move `definition/mynewos/` to a sensible directory under the `templates/` directory. **Hint:** Follow the same naming schema of existing boxes (explained in the [Veewee Basics](doc/basics.md) doc)
 
-- Apply your changes in `./definitions/mynewos`
-- Build it with `veewee vbox build 'mynewos'`
-- Validate with `veewee vbox validate 'mynewos'`
-- When it builds OK and all tests are green, move `definition/mynewos` to a sensible directory under templates<br>
-  Hint: Follow the naming schema of existing boxes
-- Commit the changes: `git commit -a`
-- Push the changes to github: `git push`
-- Go to github and issue a pull request: `https://github.com/*your account*/veewee/pull/new/master`
 
-TODO ct 2013-02-4 Bonuspoints for feature-branches and adding tests to verify new post installs?
+### For adding new Features
+
+* Run any existing tests that are related to your patch
+* For bonus points add tests to validate your changes
+
+
+### To submit your Contribution
+
+* Please commit with descriptive messages
+* Submit a pull request on Github from the __your_new_patch__ branch on __your fork__ to the __master__ branch on __jedi4ever/veewee__
+* One of the editors will review the change, and either merge it or provide some feedback. Community review is also encouraged.
+
