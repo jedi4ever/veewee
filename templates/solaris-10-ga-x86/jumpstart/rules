@@ -1,0 +1,96 @@
+#
+# ident "@(#)rules  1.13  10/05/26 SMI"
+#
+# The rules file is a text file used to create the rules.ok file for
+# a custom JumpStart installation. The rules file is a lookup table
+# consisting of one or more rules that define matches between system
+# attributes and profiles.
+# 
+# This example rules file contains:
+#   o syntax of a rule used in the rules file
+#   o rule_keyword and rule_value descriptions
+#   o rule examples
+#
+# See the installation manual for a complete description of the rules file.
+#
+#
+#############################################################################
+#
+# RULE SYNTAX:
+#
+# [!]rule_keyword rule_value [&& [!]rule_keyword rule_value]... begin profile finish
+#
+#    "[ ]"  indicates an optional expression or field
+#    "..."  indicates the preceding expression may be repeated
+#     "&&"  used to "logically AND" rule_keyword and rule_value pairs together
+#      "!"  indicates negation of the following rule_keyword 
+#
+#  rule_keyword   a predefined keyword that describes a general system
+#                 attribute. It is used with the rule_value to match a
+#                 system with the same attribute to a profile.
+#
+#  rule_value     a value that provides the specific system attribute
+#                 for the corresponding rule_keyword. A rule_value can
+#                 be text or a range of values (NN-MM).
+#                 To match a range of values, a system's value must be
+#                 greater than or equal to NN and less than or equal to MM.
+#
+#  begin          a file name of an optional Bourne shell script
+#                 that will be executed before the installation begins.
+#                 If no begin script exists, you must enter a minus sign (-)
+#                 in this field.
+#
+#  profile        a file name of a text file used as a template by the
+#                 custom JumpStart installation software that defines how 
+#                 to install Solaris on a system. 
+#
+#  finish         a file name of an optional Bourne shell script
+#                 that will be executed after the installation completes.
+#                 If no finish script exists, you must enter a minus sign (-)
+#                 in this field.
+#
+# Notes:
+# 1. You can add comments after the pound sign (#) anywhere on a line. 
+# 2. Rules are matched in descending order: first rule through the last rule.
+# 3. Rules can be continued to a new line by using the backslash (\) before
+#    the carriage return. 
+# 4. Don't use the "*" character or other shell wildcards, because the rules
+#    file is interpreted by a Bourne shell script.
+#
+#
+#############################################################################
+#
+# RULE_KEYWORD AND RULE_VALUE DESCRIPTIONS
+#
+#
+# rule_keyword    rule_value Type       rule_value Description
+# ------------    ---------------       ----------------------
+#  any            minus sign (-)        always matches
+#  arch           text                  system's architecture type
+#  domainname     text                  system's domain name 
+#  disksize       text range            system's disk size 
+#                                          disk device name (text)
+#                                          disk size (MBytes range) 
+#  hostname       text                  system's host name
+#  installed      text text             system's installed version of Solaris
+#                                          disk device name (text)
+#                                          OS release (text)
+#  karch          text                  system's kernel architecture
+#  memsize        range                 system's memory size (MBytes range)
+#  model          'text'                system's model number
+#  network        text                  system's IP address
+#  totaldisk      range                 system's total disk size (MBytes range)
+#
+#
+############################################################################
+#
+# RULE EXAMPLES
+#
+# The following rule matches all systems:
+
+any -   begin   profile   finish
+
+# To generate rules.ok
+# 1. start Solaris from the ISO and run interactive setup
+# 2. cd /tmp/install_config
+# 3. /cdrom/Solaris_10/Misc/jumpstart_sample/check -r rules
