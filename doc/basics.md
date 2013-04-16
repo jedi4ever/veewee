@@ -27,7 +27,7 @@ A common workflow to build a new base box with Veewee is:
 
 1. List all templates to find a single template to use
 2. Define a new box definition from a selected template
-3. [Customize](customize.md) the definintion (optional)
+3. [Customize](customize.md) the definition (optional)
 4. Build a VM using standard ISOs, your own definition settings, and some postinstall scripts
 5. Validate the new VM
 6. Manually alter the VM by logging in with ssh (optional; but not recommended)
