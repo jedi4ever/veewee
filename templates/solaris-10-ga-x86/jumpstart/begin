@@ -1,0 +1,28 @@
+#!/bin/sh
+#
+# Sample Begin Script for profiled install on x86
+#
+# "@(#)x86-begin 1.5 93/10/13"
+#
+
+#PATH=$PATH:/sbin:/usr/sbin
+#export PATH
+#
+#INSTALL_LOG=/tmp/install_log
+#ROOT_DEV=c0t0d0p0
+#
+#echo 'Executing profile begin script...' >> $INSTALL_LOG 2>&1
+#
+##
+## Copy all conf files from the directory with the same name as the begin
+## script (+ .conf) into the tempfs which will be copied onto the installed 
+## disk.
+##
+## SI_BEGIN and SI_CONFIG_DIR come from the caller's environment
+##
+#mkdir -p /tmp/root/kernel/drv >> $INSTALL_LOG 2>&1
+#cp -r ${SI_CONFIG_DIR}/${SI_BEGIN}.conf/*.conf /tmp/root/kernel/drv >> $INSTALL_LOG 2>&1
+#
+#echo 'Completed profile begin script.' >> $INSTALL_LOG 2>&1
+#
+#exit 0

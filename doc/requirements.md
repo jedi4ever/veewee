@@ -1,42 +1,69 @@
 # Requirements
 
-Veewee is written in Ruby. In order to use it you need Ruby installed and some header files
-in order to compile native extensions that come as dependencies with veewee.
+Veewee has a few requirements that must be met before you're able to use Veewee.
 
-If you already have experiences with Ruby this should be very straightforward.
+
+## Virtualization Providers
+
+You'll need to install at least one of the supported VM providers (see [Providers](providers.md) doc for details). If you're not sure which provider to use, a common choice is [VirtualBox](http://www.virtualbox.org/) since it's free, portable, and supported by Vagrant.
+
 
 ## Development Libraries
 
-In order to build native rubygems you may need these packages:
+Veewee is written in Ruby. In order to use Veewee you need Ruby installed as well as some header files
+in order to compile native extensions that come as dependencies. If you already have experiences with Ruby this should be very straightforward. 
+
+
+### For Linux
+
+On Linux, you may need these packages in order to build native rubygems:
 
     libxslt1-dev
     libxml2-dev
-    zlib1g-dev
+    zlib1g-dev # or build-essential
 
-On windows, you will need to install:
 
-- Ruby devkit
-- msysgit
-- And you may need to add VirtualBox to your `PATH`, usually installed to `C:\Program Files\Oracle\VirtualBox`.
+### For Mac OS X
+
+On Macs, either install `Xcode` or use [homebrew](http://mxcl.github.io/homebrew/) to install `apple-gcc42` or `build-essential`.
+
+
+### For Windows
+
+On Windows, you will need to install:
+
+* Ruby devkit
+* msysgit
+* And you may need to add VirtualBox to your `PATH`, usually installed to `C:\Program Files\Oracle\VirtualBox`.
 
 
 ## Ruby Environment
 
-First, if you are not using [RVM](https://rvm.io/), it's recommended that you do so
-as veewee will install in it's own [gemset](https://rvm.io/gemsets/basics/) which keeps veewee and it's dependancies
-completely separate from your other Rubygems.
+It is highly recommended that you use either `rvm` or `rbenv` to manage your ruby versions.
 
-See https://rvm.io/gemsets/basics/ for details if you are new to the concept of 'gemsets'.
 
-TODO ct 2013-02-4 Check if gemset is needed when using bundler
+### Option 1: RVM
 
-You can install RVM as follows:
+[RVM](https://rvm.io/) is Veewee's prefered ruby version manager. 
 
-    $ bash -s stable < <(curl -s https://raw.github.com/wayneeseguin/rvm/master/binscripts/rvm-installer)
-    $ source ~/.bash_profile
+RVM will allow Veewee to install it's own [gemset](https://rvm.io/gemsets/basics/) and configure it's own ruby version - which keeps Veewee and it's dependancies completely separate from your other projects. Please see https://rvm.io/gemsets/basics/ for details if you are new to the concept of 'gemsets'.
 
-Now, install Ruby 1.9.2 using RVM:
 
-    $ rvm install 1.9.2
+##### Installing RVM
 
-Ok, now that we have RVM installed, you can move on with [installing Veewee](installation.md).
+Please see the [RVM install documentation](https://rvm.io/rvm/install) for up-to-date installation instructions.
+
+
+### Option 2: rbenv
+
+[rbenv](https://github.com/sstephenson/rbenv) is another popular ruby version manager that you can use as an alternative to RVM.
+
+
+##### Installing rbenv
+
+Please see the [rbenv README]( https://github.com/sstephenson/rbenv/#installation) for up-to-date installation instructions.
+
+
+## Up Next
+
+Ok, now that we have cover all the requirements, you can move on with [installing Veewee](installation.md).
