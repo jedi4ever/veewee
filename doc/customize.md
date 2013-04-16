@@ -1,6 +1,8 @@
-# Customize Veewee Definitions
+# Customizing Definitions
 
-Definitions are stored under a directory 'definitions' relative to the current directory.
+## Definition overview
+
+Definitions are stored under the `definitions/` directory relative to the current directory.
 
     .
     ├── definitions
@@ -17,52 +19,56 @@ Definitions are stored under a directory 'definitions' relative to the current d
 
 The file `definition.rb` contains all the parameters to define the machine to be build (see below):
 
-  - memorysize
-  - number of cpus
-  - user account and password
-  - sudo command
-  - shutdown command
-  - URL and checksum to download the ISO
+* memory size
+* number of CPUs
+* user account and password
+* sudo command
+* shutdown command
+* URL and checksum to download the ISO
 
-When a new machine boots, it will typically fetch its initial configuration file over http from a _kickstart_ file
-defined in `kickstart_file`. These files are usually named `preseed.cfg` or `ks.cfg`.
+When a new machine boots, it will typically fetch its initial configuration file over http from a _kickstart_ file defined in `kickstart_file`. These files are usually named `preseed.cfg` or `ks.cfg`.
 
-You can define multiple files by providing an array of filenames:
+
+## Postinstall scripts
+
+You can define multiple postinstall files by providing an array of filenames within `definition.rb`, like so:
 
     :postinstall_files => [ "postinstall.sh",  "postinstall_2.sh" ],
 
-Once the initial installation is done, veewee will execute each `.sh` file on the machine.
+Once the initial installation is done, Veewee will execute each postinstall `.sh` file on the machine in chronologic order (order found in :postinstall_files array).
 
-INFO: The main reason for splitting up the `postinstall.sh` we used to have, is to make the steps more reusable
-for different virtualization systems. For example there is no need to install the Virtualbox Guest Additions
-on kvm or VMware Fusion.
+The main reason for splitting up the original `postinstall.sh` script into multiple files is to make the post-install steps as reusable and portable as possible for different virtualization systems and/or operating systems. For example, there is no need to install the Virtualbox Guest Additions on KVM or VMware Fusion.
 
 
-### Using ERB in files
+## Postinstall barebones
 
-Add `.erb` to your files in a definition and they will get rendered.
+A definition usually consists of at least these postinstall files:
+
+Filename        | Description
+----------------|-------------
+preseed.cfg     | Default options for the installer. See https://help.ubuntu.com/12.04/installation-guide/i386/preseed-using.html
+definition.rb   | Core definition of a box; like CPU, RAM, and the commands for the initial boot sequence
+postinstall.sh  | Steps that run _after_ installing the OS
+
+Newer definitions contain of even more files (they have broken `postinstall.sh` into multiple files) to get a finer separation of concerns for the installation.
+
+
+## Using ERB in files
+
+Add `.erb` to your files in a definition and they will get parsed accordingly.
 
 This is useful for generating kickstart, post-install at runtime.
 
-Thanks @mconigilaro for the contribution!
-
-A definition usually consists of these files:
-
-    definition.rb   - Core definition of a box like CPU, RAM and the commands for the initial boot sequence
-    postinstall.sh  - Steps that run 'after' installing the OS
-    preseed.cfg     - Default options for the installer. See https://help.ubuntu.com/12.04/installation-guide/i386/preseed-using.html
-
-Newer definitions contain of even more files to get a finer separation of concerns for the installation.
+Thanks to __@mconigilaro__ for the contribution!
 
 
-## definition.rb
+## Configuring definition.rb
 
-The core definition of a box. All crucial properties are defined here.
+The `definition.rb` file is the core definition file of each box. All crucial properties and postinstall scripts are defined here.
 
-The `boot_cmd_sequence` is probably the most interesting because it allows you to override the initial commands
-(like keyboard layout) that are fired up in the first boot sequence.
+The `boot_cmd_sequence` parameter allows you to override the initial commands (like keyboard layout) that are fired up in the first boot sequence.
 
-All other settings are used internally by veewee, the virtualization tool or simply for choosing the right ISO:
+All other settings are used internally by Veewee, the virtualization provider, or simply for choosing the proper ISO:
 
     Veewee::Definition.declare( {
         :cpu_count => '1',
@@ -99,15 +105,14 @@ All other settings are used internally by veewee, the virtualization tool or sim
         :postinstall_timeout => "10000"
     })
 
-IMPORTANT: If you need to change values in the templates, be sure to run `veewee vbox undefine` to remove the old definition and then `veewee vbox define` again to copy the updated template files into the definition.
+**IMPORTANT:** If you change values directly in a template, be sure to run `bundle exec veewee <provider> undefine` to remove the old definition and then `bundle exec veewee <provider> define` again to copy the updated template files into the definition.
 
-PRO Tip: If you change template settings please let us know why. We are very interested in improving the templates.
+If you are an experienced devops veterean and have enhanced template settings, please let us know why. We are very interested in improving Veewee's templates.
 
 
 ## Provider `vm_options`
 
-Each provider _can_ take options that are specific to them; more details will
-be available in each provider documentation but let's have a quick overview:
+Each provider _can_ take options that are specific the provider; more details will be available in each [provider](provider.md) doc but let's have a quick overview here:
 
     Veewee::Definition.declare({
         :cpu_count => '1',
@@ -132,21 +137,9 @@ be available in each provider documentation but let's have a quick overview:
         }
     })
 
-This box will have `pae` and `ioapic` enabled on Virtualbox, and will use
-the `brlxc0` bridge on with kvm (on libvirt).
+This box will have `pae` and `ioapic` enabled with VirtualBox, and will use the `brlxc0` bridge with KVM (on libvirt).
 
 
-## Changes between v0.2 -> v0.3
+## Up Next
 
-1. The `Veewee::Session.declare` is now _deprecated_ and you should use `Veewee::Definition.declare`.
-   'Postinstall_files' prefixed with an _underscore_ are not executed by default:
-       .
-       ├── definitions
-       │   └── myubuntubox
-       │       ├── _postinstall.sh    # NOT executed
-       │       ├── postinstall_2.sh   # GETS executed
-   You can enforce including or excluding files with the `--include` and `--exclude` flag when using the `<build>` command.
-   This allows you to use different scripts for installing ruby or to disable the installation of puppet or chef.
-2. The default user of definitions is now 'veewee' and not 'vagrant'.
-   This is because on other virtualizations like fusion and `kvm`, there is not relationship with the 'vagrant'.
-   The User 'vagrant' is created by the `vagrant.sh` script and not by the preseed or kickstart file.
+[Veeweefile](veeweefile.md) can be used to define your own paths.
