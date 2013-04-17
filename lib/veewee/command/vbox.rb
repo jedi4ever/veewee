@@ -22,6 +22,7 @@ module Veewee
       desc "export [BOX_NAME]", "Exports the basebox to the vagrant format"
       method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging"
       method_option :force,:type => :boolean , :default => false, :aliases => "-f", :desc => "overwrite existing file"
+      method_option :vagrantfile,:type => :string , :default => "", :desc => "specify Vagrantfile"
       def export(box_name)
        box(box_name).export_vagrant(options)
       end
