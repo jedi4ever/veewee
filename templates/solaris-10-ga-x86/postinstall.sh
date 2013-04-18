@@ -69,11 +69,11 @@ export PATH
 
 
 
-## Fix the shells to include the /opt/csw directories
-/opt/csw/bin/gsed -i -e 's#^\#PATH=.*$#PATH=/opt/csw/bin:/usr/ucb:/usr/sbin:/usr/bin#g' \
-    -e 's#^\#SUPATH=.*$#SUPATH=/opt/csw/bin:/usr/ucb:/usr/sbin:/usr/bin#g' /etc/default/login
-/opt/csw/bin/gsed -i -e 's#^\#PATH=.*$#PATH=/opt/csw/bin:/usr/ucb:/usr/sbin:/usr/bin#g' \
-    -e 's#^\#SUPATH=.*$#SUPATH=/opt/csw/bin:/usr/ucb:/usr/sbin:/usr/bin#g' /etc/default/su
+## Fix the shells to include the /opt/csw and /usr/ucb directories
+/opt/csw/bin/gsed -i -e 's#^\#PATH=.*$#PATH=/opt/csw/bin:/usr/sbin:/usr/bin:/usr/ucb#g' \
+    -e 's#^\#SUPATH=.*$#SUPATH=/opt/csw/bin:/usr/sbin:/usr/bin:/usr/ucb#g' /etc/default/login
+/opt/csw/bin/gsed -i -e 's#^\#PATH=.*$#PATH=/opt/csw/bin:/usr/sbin:/usr/bin:/usr/ucb#g' \
+    -e 's#^\#SUPATH=.*$#SUPATH=/opt/csw/bin:/usr/sbin:/usr/bin:/usr/ucb#g' /etc/default/su
 
 
 
