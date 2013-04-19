@@ -13,13 +13,15 @@ filesys       c2t0d0s1 1024 swap
 filesys       c2t0d0s7 free /export/home
 cluster		    SUNWCreq
 
-# Additional packages to allow vagrant installation (SSH) or convenient (bash)
+# Additional packages to allow vagrant installation (SSH) or convenient (bash, man)
 package      SUNWsshcu add
 package      SUNWsshdr add
 package      SUNWsshdu add
 package      SUNWsshr add
 package      SUNWsshu add
 package      SUNWbash add
+package      SUNWman add
+package      SUNWdoc add
 
 # For GCC (partially from https://wiki.chipp.ch/twiki/bin/view/CmsTier3/InstallationSolaris)
 package      SUNWarc add
