@@ -19,7 +19,7 @@ cat /tmp/passwd.$$ > /a/etc/default/passwd
 
 # 'vagrant:vagrant' creation
 chroot /a /usr/sbin/groupadd ${VAGRANTUSER}
-chroot /a /usr/sbin/useradd -m -d /export/home/${VAGRANTUSER} -g ${VAGRANTUSER} ${VAGRANTUSER}
+chroot /a /usr/sbin/useradd -m -d /export/home/${VAGRANTUSER} -s /usr/bin/bash -g ${VAGRANTUSER} ${VAGRANTUSER}
 
 PASSWD=`perl -e 'print crypt($ARGV[0], substr(rand(data),2));' vagrant`
 cat /a/etc/shadow | sed -e 's#^'${VAGRANTUSER}':UP:#'${VAGRANTUSER}':'${PASSWD}'#g'  > /tmp/shadow.$$
