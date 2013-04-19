@@ -57,6 +57,10 @@ echo "LookupClientHostnames=no" >> /etc/ssh/sshd_config
 /opt/csw/bin/pkgutil -y -i CSWgmake
 /opt/csw/bin/pkgutil -y -i CSWgcc4g++ CSWgcc4core
 
+# Puppet needs these
+/opt/csw/bin/pkgutil -y -i CSWaugeas
+/opt/csw/bin/pkgutil -y -i CSWrubyaugeas
+
 
 # These are needed to get a compiler working
 # Mainly because chef depends on compiling some native gems
