@@ -105,7 +105,7 @@ module Veewee
           },
           { :description => 'Checking passwordless sudo',
             :tags => [ 'virtualbox','kvm', 'parallels'],
-            :command => 'sudo -n echo -n 2>&1; echo $?',
+            :command => 'nopass=0; nopass=`echo '' | sudo -S -l 2> /dev/null | grep -c NOPASSWD`; [ $nopass -gt 0 ] && echo 0 || echo 1',
             :expected_string => '0',
             :sudo => false
           },
