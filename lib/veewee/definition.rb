@@ -68,8 +68,8 @@ module Veewee
         @path = path
       end
 
-      # Default is 1 CPU + 256 Mem of memory + 8 Mem of video memory
-      @cpu_count = '1' ; @memory_size = '256'; @video_memory_size = '8'
+      # Default is 1 CPU + 256 MB of memory + 10 MB of video memory
+      @cpu_count = '1' ; @memory_size = '256'; @video_memory_size = '10'
 
       # Default there is no ISO file mounted
       @iso_file = nil, @iso_src = nil ; @iso_md5 = nil ; @iso_sha1;  @iso_download_timeout = 1000 ; @iso_download_instructions = nil
