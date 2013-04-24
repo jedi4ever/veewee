@@ -65,16 +65,15 @@ module Veewee
 
         def ensure_vm_stopped(options={})
           # Need to check binary first
-          if self.running?
+          if self.running?.data
             # Wait for the shutdown to complete
             begin
-              Timeout::timeout(20) do
+              Timeout::timeout(60) do
                 self.halt(options)
-                status=self.running?
-                unless status
-                  return
+                loop do
+                  sleep 4
+                  break unless self.running?.data
                 end
-                sleep 4
               end
             rescue TimeoutError => ex
               raise Veewee::Error,ex
