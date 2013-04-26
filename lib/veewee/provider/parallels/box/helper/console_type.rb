@@ -47,9 +47,10 @@ module Veewee
         def shift(sequence)
           seq=Array.new
           seq << press_key('SHIFT_LEFT')
-          sequence.each_char do |s|
-            seq << s
-          end
+
+          # We never apply SHIFT_LEFT to more than one logical character at a
+          # time
+          seq << sequence
           return seq
         end
 
