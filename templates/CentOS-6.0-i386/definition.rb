@@ -6,7 +6,7 @@ Veewee::Session.declare({
   :hostiocache => 'off',
   :os_type_id => 'RedHat_64',
   :iso_file => "CentOS-6.0-i386-bin-DVD.iso", 
-  :iso_src => "http://vault.centos.org/6.0/isos/i386/CentOS-6.0-i386-bin-DVD.iso", 
+  :iso_src => "http://mirror.symnds.com/distributions/CentOS-vault/6.0/isos/i386/CentOS-6.0-i386-bin-DVD.iso", 
   :iso_md5 => "d7e57d6edaca1556d5bad2fa88602309",
   :iso_download_timeout => 1000,
   :boot_wait => "10",
