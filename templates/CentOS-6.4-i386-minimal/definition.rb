@@ -29,6 +29,7 @@ Veewee::Session.declare({
     "chef.sh",
     "puppet.sh",
     "vagrant.sh",
+    #"vmfusion.sh",
     "virtualbox.sh",
     "cleanup.sh",
     "zerodisk.sh"
