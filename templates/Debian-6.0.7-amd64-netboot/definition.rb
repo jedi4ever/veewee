@@ -38,6 +38,7 @@ Veewee::Definition.declare({
     "base.sh",
     "vagrant.sh",
     "virtualbox.sh",
+    #"vmfusion.sh",
     "ruby.sh",
     "puppet.sh",
     "chef.sh",
