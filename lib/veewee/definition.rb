@@ -12,6 +12,7 @@ module Veewee
     attr_accessor :params
 
     attr_writer   :cpu_count, :memory_size
+    attr_writer :export_cpu_count, :export_memory_size
 
     attr_accessor :video_memory_size, :iso_file
     attr_accessor :disk_size, :disk_format, :disk_variant, :disk_count
@@ -211,11 +212,27 @@ module Veewee
       end
     end
 
+    def export_memory_size
+      if ENV['VEEWEE_EXPORT_MEMORY_SIZE'].nil?
+        return @export_memory_size
+      else
+        return ENV['VEEWEE_EXPORT_MEMORY_SIZE'].to_i
+      end
+    end
+
     def cpu_count
       if ENV['VEEWEE_CPU_COUNT'].nil?
         return @cpu_count
       else
         return ENV['VEEWEE_CPU_COUNT'].to_i
+      end
+    end
+
+    def export_cpu_count
+      if ENV['VEEWEE_EXPORT_CPU_COUNT'].nil?
+        return @export_cpu_count
+      else
+        return ENV['VEEWEE_EXPORT_CPU_COUNT'].to_i
       end
     end
 
