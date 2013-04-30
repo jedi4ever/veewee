@@ -6,6 +6,11 @@ cat <<DATAEOF >> "$chroot/etc/portage/package.keywords"
 app-emulation/virtualbox-guest-additions ~amd64
 DATAEOF
 
+# unmask
+cat <<DATAEOF >> "$chroot/etc/portage/package.unmask"
+>=app-emulation/virtualbox-guest-additions-4.2.0
+DATAEOF
+
 # install the virtualbox guest additions, add vagrant and root to group vboxguest
 # PREREQUISITE: kernel - we install a module, so we use the kernel sources
 chroot "$chroot" /bin/bash <<DATAEOF

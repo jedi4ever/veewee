@@ -32,6 +32,11 @@ cp /etc/resolv.conf "$chroot/etc/"
 date -u > "$chroot/etc/vagrant_box_build_time"
 chroot "$chroot" env-update
 
+# disable systemd device naming
+chroot "$chroot" /bin/bash <<DATAEOF
+ln -s /dev/null /etc/udev/rules.d/80-net-name-slot.rules
+DATAEOF
+
 # bring up eth0 and sshd on boot
 chroot "$chroot" /bin/bash <<DATAEOF
 cd /etc/conf.d
