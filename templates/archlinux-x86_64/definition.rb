@@ -2,9 +2,9 @@ Veewee::Definition.declare({
   :cpu_count => '1', :memory_size=> '256',
   :disk_size => '10140', :disk_format => 'VDI',:hostiocache => 'off',
   :os_type_id => 'ArchLinux_64',
-  :iso_file => "archlinux-2013.01.04-dual.iso",
-  :iso_src => "http://archlinux.mirror.kangaroot.net/iso/2013.01.04/archlinux-2013.01.04-dual.iso",
-  :iso_md5 => "9e9057702af5826a3b924233bf44fe66",
+  :iso_file => "archlinux-2013.04.01-dual.iso",
+  :iso_src => "http://archlinux.mirror.kangaroot.net/iso/2013.04.01/archlinux-2013.04.01-dual.iso",
+  :iso_md5 => "0758f72d88a088cc4f6174f50ff354fd",
   :iso_download_timeout => "1000",
   :boot_wait => "5", :boot_cmd_sequence => [
     '<Enter>',
