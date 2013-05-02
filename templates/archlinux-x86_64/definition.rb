@@ -40,6 +40,7 @@ Veewee::Definition.declare({
     'aur.sh',
     'virtualbox.sh',
     'ruby.sh',
+    'chef.sh',
     'puppet.sh',
     'vagrant.sh',
     'cleanup.sh',
