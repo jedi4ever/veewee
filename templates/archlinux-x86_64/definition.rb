@@ -30,8 +30,17 @@ Veewee::Definition.declare({
   :sudo_cmd          => "sh '%f'",
   :shutdown_cmd      => 'shutdown -h now',
   :postinstall_files => [
-    'postinstall.sh',
-    'postinstall2.sh',
+    'base.sh',
+    'bootloader.sh',
+    'ssh.sh',
+    'reboot.sh',
+    'basedevel.sh',
+    'sudo.sh',
+    'user.sh',
+    'virtualbox.sh',
+    'vagrant.sh',
+    'cleanup.sh',
+    'zerodisk.sh',
   ],
   :postinstall_timeout => '10000'
 })
