@@ -3,6 +3,7 @@
 # Requires
 #   virtualbox.sh
 #   sudo.sh
+#   puppet.sh
 
 date > /etc/vagrant_box_build_time
 
