@@ -16,6 +16,3 @@ pacman -Scc<<EOF
 y
 y
 EOF
-
-# Clean out the SystemD service that may have been created for the reboot
-rm -f /etc/systemd/system/systemd-user-sessions.service

@@ -44,6 +44,7 @@ Veewee::Definition.declare({
     'chef.sh',
     'puppet.sh',
     'vagrant.sh',
+    'reboot.sh',
     'cleanup.sh',
     'zerodisk.sh',
   ],

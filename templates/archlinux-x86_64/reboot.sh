@@ -11,8 +11,12 @@
 cp /usr/lib/systemd/system/systemd-user-sessions.service /etc/systemd/system
 sed -i 's/\(After=remote-fs.target\)/\1 network.target/' /etc/systemd/system/systemd-user-sessions.service
 systemctl daemon-reload
+rm -f /etc/systemd/system/systemd-user-sessions.service
 
-# Copy over scripts so they're available post-reboot
-cp -r /root/{*,.v*} /mnt/root
+if [ -d /mnt/root ]; then
+  # Since /mnt/root exists, we must be inside a chroot. Copy over scripts so
+  # they're available post-reboot.
+  cp -r /root/{*,.v*} /mnt/root
+fi
 
 reboot
