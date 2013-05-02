@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Requires
-#   base.sh
+#   pacman.sh
 
 # Chroot into the new system and set up SSH access
 arch-chroot /mnt <<ENDCHROOT

@@ -31,6 +31,7 @@ Veewee::Definition.declare({
   :shutdown_cmd      => 'shutdown -h now',
   :postinstall_files => [
     'base.sh',
+    'pacman.sh',
     'bootloader.sh',
     'ssh.sh',
     'reboot.sh',
