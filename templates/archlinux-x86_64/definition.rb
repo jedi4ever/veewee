@@ -38,6 +38,7 @@ Veewee::Definition.declare({
     'sudo.sh',
     'user.sh',
     'virtualbox.sh',
+    'ruby.sh',
     'vagrant.sh',
     'cleanup.sh',
     'zerodisk.sh',
