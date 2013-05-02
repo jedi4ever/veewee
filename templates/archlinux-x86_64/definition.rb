@@ -47,5 +47,8 @@ Veewee::Definition.declare({
     'cleanup.sh',
     'zerodisk.sh',
   ],
-  :postinstall_timeout => '10000'
+  :postinstall_timeout => '10000',
+  :params => {
+    #:PACMAN_REFLECTOR_ARGS => '--verbose -l 5 --sort rate --save /etc/pacman.d/mirrorlist',
+  }
 })
