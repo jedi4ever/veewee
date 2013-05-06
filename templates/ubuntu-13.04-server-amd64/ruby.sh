@@ -21,3 +21,5 @@ cd rubygems-$RUBYGEMS_VERSION
 cd ..
 rm -rf rubygems-$RUBYGEMS_VERSION
 rm rubygems-$RUBYGEMS_VERSION.tgz
+
+echo 'PATH=$PATH:/opt/ruby/bin/' > /etc/profile.d/vagrantruby.sh
