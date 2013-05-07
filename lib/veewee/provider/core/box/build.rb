@@ -39,6 +39,12 @@ module Veewee
             raise Veewee::Error, "The box should have been deleted by now. Something went terribly wrong. Sorry"
           end
 
+          # run the after postinstall hook
+          if definition.respond_to?(:before_boot)
+            ui.info "Running before_boot hook"
+            definition.before_boot
+          end
+
           self.create(options)
 
           # Check the GUI mode required
@@ -91,6 +97,12 @@ module Veewee
           definition.postinstall_files=filter_postinstall_files(options)
 
           self.handle_postinstall(options)
+
+          # run the after postinstall hook
+          if definition.respond_to?(:after_postinstall)
+            ui.info "Running after_postinstall hook"
+            definition.after_postinstall
+          end
 
           ui.success "The box #{name} was built successfully!"
           ui.info "You can now login to the box with:"
@@ -208,7 +220,6 @@ module Veewee
         # It requires a box(to login to) and a definition(listing the postinstall files)
         def handle_postinstall(options)
 
-          # Transfer all postinstall files
           definition.postinstall_files.each do |postinstall_file|
             # Filenames of postinstall_files are relative to their definition
             filename=File.join(definition.path,postinstall_file)
