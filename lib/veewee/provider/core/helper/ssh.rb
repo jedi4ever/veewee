@@ -33,7 +33,7 @@ module Veewee
             ui.info  "Waiting for ssh login on #{ip} with user #{options[:user]} to sshd on port => #{options[:port]} to work, timeout=#{timeout} sec"
             end
 
-            run_hook(:wait_ssh_enabled)
+            run_hook(:before_ssh)
 
             begin
               Timeout::timeout(timeout) do
