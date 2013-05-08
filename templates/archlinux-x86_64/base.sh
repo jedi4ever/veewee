@@ -22,8 +22,21 @@ genfstab -U /mnt >> /mnt/etc/fstab
 
 # Chroot into the new system
 arch-chroot /mnt <<ENDCHROOT
-# Make sure to have dhcpcd at startup
-systemctl enable dhcpcd.service
+# Previously dhcpcd.service was enabled. However, in my testing it repeatedly
+# failed to connect to the network on reboot. Enable dhcpcd@.service has worked
+# in my case. My guess is that this is due to the line
+# After=sys-subsystem-net-devices-%i.device
+# in the service file.
+# Restarting dhcpcd.service after boot or using Network Manager instead of
+# dhcpcd also works
+# Maybe a related bug report?
+# https://bugs.freedesktop.org/show_bug.cgi?id=59964
+# Replace this with a better fix, when available.
+
+systemctl enable dhcpcd\@eth0.service
+
+# Disable systemd's Predictable Network Interface Names
+ln -s /dev/null /etc/udev/rules.d/80-net-name-slot.rules
 
 # Set root password
 passwd<<EOF
