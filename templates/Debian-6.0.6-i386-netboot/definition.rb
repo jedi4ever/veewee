@@ -13,7 +13,9 @@ Veewee::Definition.declare({
                                   ]
                           },
   :iso_file => "debian-6.0.6-i386-netinst.iso",
-  :iso_src => "http://cdimage.debian.org/debian-cd/6.0.6/i386/iso-cd/debian-6.0.6-i386-netinst.iso",
+  :iso_src => "",
+  :iso_download_instructions => "- You need to download this manually as the ISO is no more directly downloadable\n"+
+  "Visit http://cdimage.debian.org/cdimage/archive/6.0.6/i386/ and download it via torrent or jigdo",
   :iso_md5 => "a5fdc1b74cd573d505a084baf7cc1462",
   :iso_download_timeout => "1000",
   :boot_wait => "10", :boot_cmd_sequence => [
