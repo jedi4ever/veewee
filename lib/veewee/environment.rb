@@ -52,6 +52,8 @@ module Veewee
     # Path to the config file
     attr_reader :config_filepath
 
+    attr_accessor :current_provider
+
     def initialize(options = {})
       # symbolify commandline options
       options = options.inject({}) {|result,(key,value)| result.update({key.to_sym => value})}
@@ -208,5 +210,13 @@ module Veewee
       @logger
     end
 
+    # Get box from current provider
+    def get_box(name)
+      if current_provider.nil?
+        raise "Provider is unset in the environment."
+      else
+        providers[current_provider].get_box(name)
+      end
+    end
   end #Class
 end #Module

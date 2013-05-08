@@ -19,14 +19,14 @@ module Veewee
       method_option :pool_name, :type => :string, :default => nil, :desc => "Name of the libvirt storage pool to be used"
       method_option :network_name, :type => :string, :default => "default", :desc => "Name of the libvirt network to be used"
       def build(box_name)
-        box(box_name).build(options)
+        env.get_box(box_name).build(options)
       end
 
 
       desc "validate [BOX_NAME]", "Validates a box against kvm compliancy rules"
       method_option :tags,:type => :array , :default => %w{kvm puppet chef}, :aliases => "-t", :desc => "tags to validate"
       def validate(box_name)
-        box(box_name).validate_kvm(options)
+        env.get_box(box_name).validate_kvm(options)
       end
 
     end
