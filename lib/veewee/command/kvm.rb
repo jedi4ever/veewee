@@ -1,6 +1,6 @@
 module Veewee
   module Command
-    class Kvm< Veewee::Command::GroupBase
+    class Kvm < Veewee::Command::GroupBase
 
       register :command => "kvm",
                :description => "Subcommand for KVM",

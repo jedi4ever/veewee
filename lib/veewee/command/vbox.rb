@@ -1,6 +1,6 @@
 module Veewee
   module Command
-    class Vbox< Veewee::Command::GroupBase
+    class Vbox < Veewee::Command::GroupBase
 
       register :command => "vbox",
                :description => "Subcommand for VirtualBox",

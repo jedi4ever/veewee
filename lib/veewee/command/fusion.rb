@@ -2,7 +2,7 @@
 
 module Veewee
   module Command
-    class Fusion< Veewee::Command::GroupBase
+    class Fusion < Veewee::Command::GroupBase
 
       register :command => "fusion",
         :description => "Subcommand for Vmware fusion",

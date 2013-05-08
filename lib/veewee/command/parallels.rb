@@ -1,6 +1,6 @@
 module Veewee
   module Command
-    class Parallels< Veewee::Command::GroupBase
+    class Parallels < Veewee::Command::GroupBase
 
       register :command => "parallels",
                :description => "Subcommand for Parallels",
