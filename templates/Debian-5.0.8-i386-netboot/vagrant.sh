@@ -1,3 +1,7 @@
+# Set up Vagrant.
+
+date > /etc/vagrant_box_build_time
+
 #Setting up sudo
 cp /etc/sudoers /etc/sudoers.orig
 sed -i -e 's/vagrant ALL=(ALL) ALL/vagrant ALL=NOPASSWD:ALL/g' /etc/sudoers
