@@ -1,3 +1,11 @@
+require 'net/http'
+
+iso_mirror = 'http://mirror.brainfork.me/archlinux/iso/latest'
+uri = "#{iso_mirror}/md5sums.txt"
+response = Net::HTTP.get_response(URI.parse(uri)).body.split
+iso = response[1]
+iso_md5 = response[0]
+
 root_password = 'veewee'
 
 Veewee::Definition.declare({
@@ -7,9 +15,9 @@ Veewee::Definition.declare({
   :disk_format => 'VDI',
   :hostiocache => 'off',
   :os_type_id  => 'ArchLinux_64',
-  :iso_file    => 'archlinux-2013.04.01-dual.iso',
-  :iso_src     => 'http://archlinux.mirror.kangaroot.net/iso/2013.04.01/archlinux-2013.04.01-dual.iso',
-  :iso_md5     => '0758f72d88a088cc4f6174f50ff354fd',
+  :iso_file    => iso,
+  :iso_src     => "#{iso_mirror}/#{iso}",
+  :iso_md5     => iso_md5,
   :iso_download_timeout => '1000',
   :boot_wait   => '5',
   :boot_cmd_sequence => [
