@@ -55,7 +55,7 @@ Veewee::Session.declare({
    'cd<Enter>',
 # Available cd-roms : cd0
    '<Enter>',
-# Pathneame to sets ? [5.2/i386]
+# Pathname to sets ? [5.2/i386]
    '<Enter>',
 # Remove games and X
    '-game52.tgz<Enter>',
