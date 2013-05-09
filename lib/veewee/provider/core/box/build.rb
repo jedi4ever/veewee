@@ -3,6 +3,20 @@ module Veewee
     module Core
       module BoxCommand
 
+        def run_hook(name)
+          hooks = definition.instance_variable_get(:@hooks)
+          if ! hooks.nil?
+            hook = hooks[name]
+            if hook.nil?
+              ui.info "Hook ##{name} is not defined"
+            else
+              raise Veewee::Error, "Hook is not callable" if ! hook.respond_to?(:call)
+              ui.info "Running ##{name} hook"
+              hook.call
+            end
+          end
+        end
+
         def build(options={})
 
           if definition.nil?
@@ -39,11 +53,17 @@ module Veewee
             raise Veewee::Error, "The box should have been deleted by now. Something went terribly wrong. Sorry"
           end
 
+          run_hook(:before_create)
+
           self.create(options)
+
+          run_hook(:after_create)
 
           # Check the GUI mode required
           env.logger.info "Provider asks the box to start: GUI enabled? #{!options['nogui']}"
           self.up(options)
+
+          run_hook(:after_up)
 
           # Waiting for it to boot
           ui.info "Waiting #{definition.boot_wait.to_i} seconds for the machine to boot"
@@ -66,7 +86,10 @@ module Veewee
           })
 
           # Type the boot sequence
-          Thread.new { self.console_type(boot_sequence) }
+          Thread.new do
+            self.console_type(boot_sequence)
+            run_hook(:after_boot_sequence)
+          end
 
           self.handle_kickstart(options)
 
@@ -77,7 +100,6 @@ module Veewee
             env.logger.info "wait for Ip address"
             sleep 2
           end
-
 
           if ! definition.skip_iso_transfer then
             self.transfer_buildinfo(options)
@@ -91,6 +113,8 @@ module Veewee
           definition.postinstall_files=filter_postinstall_files(options)
 
           self.handle_postinstall(options)
+
+          run_hook(:after_postinstall)
 
           ui.success "The box #{name} was built successfully!"
           ui.info "You can now login to the box with:"
@@ -208,7 +232,6 @@ module Veewee
         # It requires a box(to login to) and a definition(listing the postinstall files)
         def handle_postinstall(options)
 
-          # Transfer all postinstall files
           definition.postinstall_files.each do |postinstall_file|
             # Filenames of postinstall_files are relative to their definition
             filename=File.join(definition.path,postinstall_file)

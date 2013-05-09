@@ -13,6 +13,7 @@ module Veewee
                 begin
                   s = TCPSocket.new(ip, port)
                   s.close
+                  env.logger.debug("TCP port #{ip}:#{port} is used.")
                   return true
                 rescue Errno::ECONNREFUSED, Errno::EHOSTUNREACH,Errno::ENETDOWN
                   return false
