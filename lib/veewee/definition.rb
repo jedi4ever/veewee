@@ -219,6 +219,10 @@ module Veewee
       end
     end
 
+    def box
+      env.get_box(name)
+    end
+
     private
 
     def ostype_valid?
