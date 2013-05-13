@@ -1,0 +1,1 @@
+../../templates/.gentoo/gentoo_definition.rb

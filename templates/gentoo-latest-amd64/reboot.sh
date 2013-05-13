@@ -1,4 +1,1 @@
-#!/bin/bash
-source /etc/profile
-
-reboot
+../../templates/.gentoo/reboot.sh

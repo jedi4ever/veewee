@@ -1,0 +1,1 @@
+ARCHITECTURE = "x86"
