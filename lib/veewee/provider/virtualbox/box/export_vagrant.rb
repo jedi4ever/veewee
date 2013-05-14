@@ -134,6 +134,7 @@ module Veewee
               command = "tar -cvf '#{command_box_path}' ."
               env.logger.debug(command)
               shell_exec (command)
+              command_box_path = command_box_path.gsub(/^([A-Z])\:\/(.*)$/i, '/\1/\2')
             end
 
           rescue Errno::ENOENT => ex

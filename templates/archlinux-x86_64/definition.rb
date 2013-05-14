@@ -1,25 +1,63 @@
+require 'net/http'
+
+iso_mirror = 'http://mirror.brainfork.me/archlinux/iso/latest'
+uri = "#{iso_mirror}/md5sums.txt"
+response = Net::HTTP.get_response(URI.parse(uri)).body.split
+iso = response[1]
+iso_md5 = response[0]
+
+root_password = 'veewee'
+
 Veewee::Definition.declare({
-  :cpu_count => '1', :memory_size=> '256',
-  :disk_size => '10140', :disk_format => 'VDI',:hostiocache => 'off',
-  :os_type_id => 'ArchLinux_64',
-  :iso_file => "archlinux-2013.01.04-dual.iso",
-  :iso_src => "http://archlinux.mirror.kangaroot.net/iso/2013.01.04/archlinux-2013.01.04-dual.iso",
-  :iso_md5 => "9e9057702af5826a3b924233bf44fe66",
-  :iso_download_timeout => "1000",
-  :boot_wait => "5", :boot_cmd_sequence => [
+  :cpu_count   => '1',
+  :memory_size => '256',
+  :disk_size   => '10140',
+  :disk_format => 'VDI',
+  :hostiocache => 'off',
+  :os_type_id  => 'ArchLinux_64',
+  :iso_file    => iso,
+  :iso_src     => "#{iso_mirror}/#{iso}",
+  :iso_md5     => iso_md5,
+  :iso_download_timeout => '1000',
+  :boot_wait   => '5',
+  :boot_cmd_sequence => [
     '<Enter>',
-    '<Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait>',
-    '<Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait>',
-    '<Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait>',
+    '<Wait>' * 30,
     'echo "sshd: ALL" > /etc/hosts.allow<Enter>',
     'passwd<Enter>',
-    'vagrant<Enter>',
-    'vagrant<Enter>',
+    "#{root_password}<Enter>",
+    "#{root_password}<Enter>",
     'systemctl start sshd.service<Enter><Wait>',
   ],
-  :ssh_login_timeout => "10000", :ssh_user => "root", :ssh_password => "vagrant", :ssh_key => "",
-  :ssh_host_port => "7222", :ssh_guest_port => "22",
-  :sudo_cmd => "sh '%f'",
-  :shutdown_cmd => "shutdown -h now",
-  :postinstall_files => [ "postinstall.sh", "postinstall2.sh"], :postinstall_timeout => "10000"
+  :ssh_login_timeout => '10000',
+  :ssh_user          => 'root',
+  :ssh_password      => "#{root_password}",
+  :ssh_key           => '',
+  :ssh_host_port     => '7222',
+  :ssh_guest_port    => '22',
+  :sudo_cmd          => "sh '%f'",
+  :shutdown_cmd      => 'shutdown -h now',
+  :postinstall_files => [
+    'base.sh',
+    'pacman.sh',
+    'bootloader.sh',
+    'ssh.sh',
+    'reboot.sh',
+    'basedevel.sh',
+    'sudo.sh',
+    'user.sh',
+    'aur.sh',
+    'virtualbox.sh',
+    'ruby.sh',
+    'chef.sh',
+    'puppet.sh',
+    'vagrant.sh',
+    'reboot.sh',
+    'cleanup.sh',
+    'zerodisk.sh',
+  ],
+  :postinstall_timeout => '10000',
+  :params => {
+    #:PACMAN_REFLECTOR_ARGS => '--verbose -l 5 --sort rate --save /etc/pacman.d/mirrorlist',
+  }
 })

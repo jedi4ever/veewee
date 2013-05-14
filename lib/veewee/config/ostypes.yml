@@ -110,7 +110,7 @@ FreeBSD:
   :vbox: FreeBSD
   :parallels: freebsd
 FreeBSD_64:
-  :fusion: FreeBSD_64
+  :fusion: freebsd-64
   :kvm:
   :vbox: FreeBSD_64
   :parallels: freebsd

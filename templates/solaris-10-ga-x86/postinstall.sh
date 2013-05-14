@@ -53,27 +53,12 @@ echo "LookupClientHostnames=no" >> /etc/ssh/sshd_config
 #/opt/csw/sbin/alternatives --display rbconfig18
 #/opt/csw/sbin/alternatives --set rbconfig18 /opt/csw/lib/ruby/1.8/i386-solaris2.9/rbconfig.rb.gcc4
 
-# Chef needs these
-/opt/csw/bin/pkgutil -y -i CSWgmake
-/opt/csw/bin/pkgutil -y -i CSWgcc4g++ CSWgcc4core
 
-
-# These are needed to get a compiler working
-# Mainly because chef depends on compiling some native gems
-PATH=/opt/csw/bin:/opt/csw/gnu/:/opt/csw/gcc4/bin:$PATH
-export PATH
-
-## Let's get Puppet and Chef
-/opt/csw/bin/gem install puppet  --no-ri --no-rdoc
-/opt/csw/bin/gem install chef  --no-ri --no-rdoc
-
-
-
-## Fix the shells to include the /opt/csw directories
-/opt/csw/bin/gsed -i -e 's#^\#PATH=.*$#PATH=/opt/csw/bin:/usr/ucb:/usr/sbin:/usr/bin#g' \
-    -e 's#^\#SUPATH=.*$#SUPATH=/opt/csw/bin:/usr/ucb:/usr/sbin:/usr/bin#g' /etc/default/login
-/opt/csw/bin/gsed -i -e 's#^\#PATH=.*$#PATH=/opt/csw/bin:/usr/ucb:/usr/sbin:/usr/bin#g' \
-    -e 's#^\#SUPATH=.*$#SUPATH=/opt/csw/bin:/usr/ucb:/usr/sbin:/usr/bin#g' /etc/default/su
+## Fix the shells to include the /opt/csw and /usr/ucb directories
+/opt/csw/bin/gsed -i -e 's#^\#PATH=.*$#PATH=/opt/csw/bin:/usr/sbin:/usr/bin:/usr/ucb#g' \
+    -e 's#^\#SUPATH=.*$#SUPATH=/opt/csw/bin:/usr/sbin:/usr/bin:/usr/ucb#g' /etc/default/login
+/opt/csw/bin/gsed -i -e 's#^\#PATH=.*$#PATH=/opt/csw/bin:/usr/sbin:/usr/bin:/usr/ucb#g' \
+    -e 's#^\#SUPATH=.*$#SUPATH=/opt/csw/bin:/usr/sbin:/usr/bin:/usr/ucb#g' /etc/default/su
 
 
 

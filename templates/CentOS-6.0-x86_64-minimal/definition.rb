@@ -6,7 +6,7 @@ Veewee::Session.declare({
   :hostiocache => 'off',
   :os_type_id => 'RedHat_64',
   :iso_file => "CentOS-6.0-x86_64-minimal.iso",
-  :iso_src => "http://vault.centos.org/6.0/isos/x86_64/CentOS-6.0-x86_64-minimal.iso",
+  :iso_src => "http://mirror.symnds.com/distributions/CentOS-vault/6.0/isos/x86_64/CentOS-6.0-x86_64-minimal.iso",
   :iso_md5 => "b9fff4dad7aad0edaa564d7a251cb971",
   :iso_download_timeout => 1000,
   :boot_wait => "10",

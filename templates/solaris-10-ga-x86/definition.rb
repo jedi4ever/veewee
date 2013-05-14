@@ -28,5 +28,11 @@ Veewee::Definition.declare({
   :ssh_host_port => "7222", :ssh_guest_port => "22",
   :sudo_cmd => "pfexec bash -l %f",
   :shutdown_cmd => "/usr/sbin/poweroff",
-  :postinstall_files => [ "postinstall.sh" , "cleanup.sh" ], :postinstall_timeout => 10000
+  :postinstall_files => [
+    "postinstall.sh",
+    "puppet.sh",
+    "chef.sh",
+    "cleanup.sh"
+  ],
+  :postinstall_timeout => 10000
 })

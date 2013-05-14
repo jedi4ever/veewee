@@ -4,7 +4,7 @@ Veewee::Definition.declare({
   :disk_size => '10140', :disk_format => 'VDI', :hostiocache => 'off',
   :os_type_id => 'Debian_64',
   :iso_file => "debian-6.0.7-amd64-netinst.iso",
-  :iso_src => "http://cdimage.debian.org/debian-cd/6.0.7/amd64/iso-cd/debian-6.0.7-amd64-netinst.iso",
+  :iso_src => "http://cdimage.debian.org/cdimage/archive/6.0.7/amd64/iso-cd/debian-6.0.7-amd64-netinst.iso",
   :iso_md5 => "cc509122349a27bf1958e1ea0ce4065d",
   :iso_download_timeout => "1000",
   :boot_wait => "10", :boot_cmd_sequence => [
@@ -38,6 +38,7 @@ Veewee::Definition.declare({
     "base.sh",
     "vagrant.sh",
     "virtualbox.sh",
+    #"vmfusion.sh",
     "ruby.sh",
     "puppet.sh",
     "chef.sh",

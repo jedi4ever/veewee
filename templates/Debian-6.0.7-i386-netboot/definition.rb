@@ -13,7 +13,7 @@ Veewee::Definition.declare({
                                   ]
                           },
   :iso_file => "debian-6.0.7-i386-netinst.iso",
-  :iso_src => "http://cdimage.debian.org/debian-cd/6.0.7/i386/iso-cd/debian-6.0.7-i386-netinst.iso",
+  :iso_src => "http://cdimage.debian.org/cdimage/archive/6.0.7/i386/iso-cd/debian-6.0.7-i386-netinst.iso",
   :iso_md5 => "6ebdb31269a3eaaf72fca0ed2f6ba29b",
   :iso_download_timeout => "1000",
   :boot_wait => "10", :boot_cmd_sequence => [
@@ -47,6 +47,7 @@ Veewee::Definition.declare({
     "base.sh",
     "vagrant.sh",
     "virtualbox.sh",
+    #"vmfusion.sh",
     "ruby.sh",
     "puppet.sh",
     "chef.sh",
