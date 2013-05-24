@@ -1,18 +1,18 @@
 Veewee::Session.declare({
   :cpu_count => '1', :memory_size=> '256',
   :disk_size => '40960', :disk_format => 'VDI', :hostiocache => 'off',
-  :os_type_id => 'OpenBSD',
-  :iso_file => "openbsd52snap_32.iso",
-  :iso_src => "http://ftp3.usa.openbsd.org/pub/OpenBSD/snapshots/i386/install52.iso",
-  :iso_md5 => "a10f51d910052b477147e198c08089f8",
+  :os_type_id => 'OpenBSD_64',
+  :iso_file => "openbsd53_64.iso",
+  :iso_src => "http://ftp3.usa.openbsd.org/pub/OpenBSD/5.3/amd64/install53.iso",
+  :iso_md5 => "3bf682c701ef4c89e9b9f676bbe8883f",
   :iso_download_timeout => "1000",
-  :boot_wait => "80", :boot_cmd_sequence => [
+  :boot_wait => "40", :boot_cmd_sequence => [
 # I - install
    'I<Enter>',
 # set the keyboard
    'us<Enter>',
 # set the hostname
-   'OpenBSD52snap-x32<Enter>',
+   'OpenBSD53-x64<Enter>',
 # Which nic to config ? [em0]
    '<Enter>',
 # do you want dhcp ? [dhcp]
@@ -55,19 +55,22 @@ Veewee::Session.declare({
    'cd<Enter>',
 # Available cd-roms : cd0
    '<Enter>',
-# Pathname to sets ? [5.2/i386]
+# Pathname to sets ? [5.3/amd64]
    '<Enter>',
 # Remove games and X
-   '-game52.tgz<Enter>',
-   '-xbase52.tgz<Enter>',
-   '-xetc52.tgz<Enter>',
-   '-xshare52.tgz<Enter>',
-   '-xfont52.tgz<Enter>',
-   '-xserv52.tgz<Enter>',
+   '-game53.tgz<Enter>',
+   '-xbase53.tgz<Enter>',
+   '-xetc53.tgz<Enter>',
+   '-xshare53.tgz<Enter>',
+   '-xfont53.tgz<Enter>',
+   '-xserv53.tgz<Enter>',
    'done<Enter>',
    '<Wait>'*90,
 # Done installing ?
    'done<Enter>',
+   '<Wait>'*6,
+# Time appears wrong. Set to ...? [yes]
+   'yes<Enter><Wait>',
    '<Wait>'*6,
    'reboot<Enter>',
    '<Wait>'*6
@@ -77,5 +80,12 @@ Veewee::Session.declare({
   :ssh_host_port => "7222", :ssh_guest_port => "22",
   :sudo_cmd => "sh '%f'",
   :shutdown_cmd => "/sbin/halt -p",
-  :postinstall_files => [ "postinstall.sh"], :postinstall_timeout => "10000"
+  :postinstall_files => [
+    "base.sh",
+    "vagrant.sh",
+    "ruby.sh",
+    "puppet.sh",
+    "chef.sh"
+  ],
+  :postinstall_timeout => "10000"
 })
