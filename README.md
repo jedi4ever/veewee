@@ -1,5 +1,7 @@
 # Veewee
 
+[![Build Status](https://travis-ci.org/jedi4ever/veewee.png)](https://travis-ci.org/jedi4ever/veewee)
+
 Veewee is a tool for easily (and repeatedly) building custom [Vagrant](https://github.com/mitchellh/vagrant) base boxes, KVMs, and virtual machine images.
 
 
