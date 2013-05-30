@@ -32,6 +32,12 @@ task :iso, [:template_name] do |t, args|
   #end
   Dir.glob("templates/*").each do |name|
     definition_name = File.basename(name)
+
+    # If pattern was given, only take the ones that match the pattern
+    unless args[:template_name].nil?
+      next unless definition_name == args[:template_name]
+    end
+
     puts name
     definition = Veewee::Environment.new(:cwd => ".", :definition_dir => "templates").definitions[definition_name]
     next if definition.nil? || definition.iso_src.nil? || definition.iso_src == ""
@@ -83,7 +89,7 @@ task :iso, [:template_name] do |t, args|
 end
 
 desc 'Builds a template and runs validation.'
-task :autotest, [:name] do |t, args|
+task :autotest, [:template_name] do |t, args|
 
   # Disable color if the proper argument was passed
   shell = ARGV.include?("--no-color") ? Thor::Shell::Basic.new : Thor::Base.shell.new
@@ -95,15 +101,21 @@ task :autotest, [:name] do |t, args|
   ve.ui = ::Veewee::UI::Shell.new(ve, shell)
   ve.templates.each do |name, template|
 
+    definition_name = File.basename(name)
     # If pattern was given, only take the ones that match the pattern
-    unless args[:name].nil?
-      next unless name == args[:name]
+    unless args[:template_name].nil?
+      next unless definition_name == args[:template_name]
     end
 
     begin
+      puts "Using template name - #{name}"
       ve.definitions.define("auto", name, { 'force' => true })
       vd = ve.definitions["auto"]
       box = ve.providers["virtualbox"].get_box("auto")
+      if box.running?
+        puts "AUTO: Invalid state - box '#{box.definition.iso_file}' running from previous invocation. Manually destroy box to continue with tests."
+        exit -1
+      end
       puts "AUTO: Building #{name}"
       box.build({ "auto" => true, "force" => true, 'nogui' => true })
       puts "AUTO: Validating #{name}"
