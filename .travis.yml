@@ -3,5 +3,6 @@ rvm:
   - 1.9.2
   - 1.9.2-p320
   - 1.9.3
+  - 2.0
 notifications:
   irc: "chat.freenode.net#veewee"
