@@ -9,6 +9,9 @@ fail()
   exit 1
 }
 
+# Make ssh faster by not waiting on DNS
+echo "UseDNS no" >> /etc/ssh/sshd_config
+
 #kernel source is needed for vbox additions
 yum -y install gcc bzip2 make 
 # kernel-devel-`uname -r` is now installed in the KS to ensure we get matching kernel & kernel-devel on the first boot

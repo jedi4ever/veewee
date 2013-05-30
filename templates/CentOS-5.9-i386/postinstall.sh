@@ -7,6 +7,9 @@ yum -y install gcc bzip2 make kernel-devel-`uname -r`
 #yum -y update
 #yum -y upgrade
 
+# Make ssh faster by not waiting on DNS
+echo "UseDNS no" >> /etc/ssh/sshd_config
+
 yum -y install gcc-c++ zlib-devel openssl-devel readline-devel sqlite3-devel
 yum -y erase wireless-tools gtk2 libX11 hicolor-icon-theme avahi freetype bitstream-vera-fonts
 yum -y clean all

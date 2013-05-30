@@ -21,6 +21,9 @@ _this_script=$( readlink -e $0 )
 # clean up after kickstart
 rm -f /tmp/ks-script*
 
+# Make ssh faster by not waiting on DNS
+echo "UseDNS no" >> /etc/ssh/sshd_config
+
 echo "installing puppetlabs repo"
 rpm -i http://yum.puppetlabs.com/el/5/products/i386/puppetlabs-release-5-6.noarch.rpm
 
