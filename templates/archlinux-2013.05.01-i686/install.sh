@@ -1,6 +1,3 @@
-export http_proxy=http://10.0.2.2:6666
-export https_proxy=$http_proxy
-
 pacstrap /mnt base base-devel openssh syslinux virtualbox-guest-utils netctl #  
 
 genfstab /mnt >> /mnt/etc/fstab # generate fstab
