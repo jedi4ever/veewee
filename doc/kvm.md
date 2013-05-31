@@ -55,7 +55,7 @@ networks with:
     $ virsh net-list
 
 If there is no network, consult the documentation of your operating
-system to find out how to creat it. More information can also be found in the
+system to find out how to create it. More information can also be found in the
 [libvirt documentation](http://libvirt.org/formatdomain.html#elementsNICS).
 
 If you are using libvirt with a URI different than the default `qemu:///system`,
