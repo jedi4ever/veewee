@@ -4,7 +4,7 @@ Veewee::Session.declare({
   :disk_size => '10140',
   :disk_format => 'VDI',
   :hostiocache => 'off',
-  :os_type_id => 'RedHat_64',
+  :os_type_id => 'RedHat6_64',
   :iso_file => "CentOS-6.3-x86_64-minimal.iso",
   :iso_src => "http://www.mirrorservice.org/sites/mirror.centos.org/6.3/isos/x86_64/CentOS-6.3-x86_64-minimal.iso",
   :iso_md5 => "087713752fa88c03a5e8471c661ad1a2",
