@@ -41,7 +41,7 @@ module Veewee
               end
             rescue Net::SSH::AuthenticationFailed => ex # may want to catch winrm auth fails as well
               env.ui.error "Authentication failure"
-              raise Veewee::SshError, "Authentication failure\n"+ex
+              raise Veewee::SshError, "Authentication failure\n"+ex.inspect
             end
           end
 
