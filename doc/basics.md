@@ -106,7 +106,7 @@ If an expected ISO is not found in the `iso/` directory, Veewee will ask you to 
 
 In order to build the defined box, execute this subcommand:
 
-    $ bundle exect veewee <provider> build 'myubuntubox'
+    $ bundle exec veewee <provider> build 'myubuntubox'
 
 The `build` subcommand can take the following optional flags:
 
