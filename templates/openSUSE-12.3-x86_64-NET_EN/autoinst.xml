@@ -1,0 +1,211 @@
+<?xml version="1.0"?>
+<!DOCTYPE profile>
+
+<!-- http://doc.opensuse.org/projects/autoyast/configuration.html -->
+
+<profile xmlns="http://www.suse.com/1.0/yast2ns" xmlns:config="http://www.suse.com/1.0/configns">
+  <general>
+    <mode>
+      <confirm config:type="boolean">false</confirm>
+      <forceboot config:type="boolean">true</forceboot>
+      <final_reboot config:type="boolean">true</final_reboot>
+    </mode>
+  </general>
+  <report>
+    <messages>
+      <show config:type="boolean">false</show>
+      <timeout config:type="integer">10</timeout>
+      <log config:type="boolean">true</log>
+    </messages>
+    <warnings>
+      <show config:type="boolean">false</show>
+      <timeout config:type="integer">10</timeout>
+      <log config:type="boolean">true</log>
+    </warnings>
+    <errors>
+      <show config:type="boolean">false</show>
+      <timeout config:type="integer">10</timeout>
+      <log config:type="boolean">true</log>
+    </errors>
+  </report>
+
+  <keyboard>
+    <keymap>english-us</keymap>
+  </keyboard>
+  <language>
+    <language>en_US</language>
+    <languages>en_US</languages>
+  </language>
+  <timezone>
+    <hwclock>UTC</hwclock>
+    <timezone>Europe/Berlin</timezone>
+  </timezone>
+
+  <partitioning config:type="list">
+    <drive>
+      <initialize config:type="boolean">true</initialize>
+      <use>all</use>
+    </drive>
+  </partitioning>
+  <bootloader>
+    <loader_type>grub2</loader_type>
+  </bootloader>
+
+  <networking>
+    <dhcp_options>
+      <dhclient_client_id/>
+      <dhclient_hostname_option>AUTO</dhclient_hostname_option>
+    </dhcp_options>
+    <dns>
+      <dhcp_hostname config:type="boolean">false</dhcp_hostname>
+      <domain>site</domain>
+      <hostname>linux-opensuse-123-64</hostname>
+      <resolv_conf_policy>auto</resolv_conf_policy>
+      <write_hostname config:type="boolean">true</write_hostname>
+    </dns>
+    <interfaces config:type="list">
+      <interface>
+        <bootproto>dhcp</bootproto>
+        <device>eth0</device>
+        <name>82540EM Gigabit Ethernet Controller</name>
+        <startmode>auto</startmode>
+      </interface>
+      <interface>
+        <broadcast>127.255.255.255</broadcast>
+        <device>lo</device>
+        <firewall>no</firewall>
+        <ipaddr>127.0.0.1</ipaddr>
+        <netmask>255.0.0.0</netmask>
+        <network>127.0.0.0</network>
+        <prefixlen>8</prefixlen>
+        <startmode>auto</startmode>
+        <usercontrol>no</usercontrol>
+      </interface>
+    </interfaces>
+    <ipv6 config:type="boolean">false</ipv6>
+    <keep_install_network config:type="boolean">false</keep_install_network>
+    <managed config:type="boolean">false</managed>
+    <net-udev config:type="list"/>
+    <routing>
+      <ip_forward config:type="boolean">false</ip_forward>
+    </routing>
+  </networking>
+  <firewall>
+    <enable_firewall config:type="boolean">false</enable_firewall>
+    <start_firewall config:type="boolean">false</start_firewall>
+  </firewall>
+
+  <add-on>
+    <add_on_products config:type="list">
+      <listentry>
+        <media_url><![CDATA[http://download.opensuse.org/update/12.3/]]></media_url>
+        <product>openSUSE-updates</product>
+        <product_dir>/</product_dir>
+      </listentry>
+      <listentry>
+        <media_url><![CDATA[http://download.opensuse.org/distribution/12.3/repo/non-oss/]]></media_url>
+        <product>openSUSE-non-oss</product>
+        <product_dir>/</product_dir>
+      </listentry>
+    </add_on_products>
+  </add-on>
+
+  <software>
+    <image/>
+    <instsource>http://download.opensuse.org/distribution/12.3/repo/oss/</instsource>
+    <kernel>kernel-default</kernel>
+    <packages config:type="list">
+      <package>autoyast2-installation</package>
+      <package>autoyast2</package>
+      <package>bundle-lang-common-en</package>
+      <package>glibc-locale</package>
+      <package>grub2</package>
+      <package>kernel-default</package>
+      <package>kernel-default-devel</package>
+      <package>openssh</package>
+      <package>sudo</package>
+      <package>yast2-installation</package>
+      <package>yast2-network</package>
+      <package>yast2-runlevel</package>
+      <package>yast2-theme-openSUSE</package>
+      <package>yast2-users</package>
+      <package>zypper</package>
+    </packages>
+    <remove-packages config:type="list">
+      <package>bash-doc</package>
+      <package>bundle-lang-gnome-en</package>
+      <package>bundle-lang-gnome-extras-en</package>
+      <package>cracklib-dict-full</package>
+      <package>desktop-translations</package>
+      <package>gnome-icon-theme</package>
+      <package>grub2-branding-openSUSE</package>
+      <package>grub2-x86_64-efi</package>
+      <package>kernel-debug</package>
+      <package>krb5</package>
+      <package>libgphoto2-6</package>
+      <package>libgtk-3-0</package>
+      <package>libX11-data</package>
+      <package>pattern:base</package>
+      <package>pattern:laptop</package>
+      <package>patterns-openSUSE-base</package>
+      <package>patterns-openSUSE-laptop</package>
+      <package>perl-X11-Protocol</package>
+      <package>readline-doc</package>
+      <package>release-notes-openSUSE</package>
+      <package>shared-mime-info</package>
+      <package>shim</package>
+      <package>vim-data</package>
+      <package>wallpaper-branding-openSUSE</package>
+    </remove-packages>
+  </software>
+
+  <runlevel>
+    <default>3</default>
+    <services config:type="list">
+      <service>
+        <service_name>sshd</service_name>
+        <service_start>enable</service_start>
+      </service>
+    </services>
+  </runlevel>
+
+  <groups config:type="list">
+    <group>
+      <gid>1000</gid>
+      <group_password>x</group_password>
+      <groupname>users</groupname>
+      <userlist/>
+    </group>
+  </groups>
+
+  <login_settings/>
+  <user_defaults>
+    <expire/>
+    <group>1000</group>
+    <groups/>
+    <home>/home</home>
+    <inactive>-1</inactive>
+    <no_groups config:type="boolean">true</no_groups>
+    <shell>/bin/bash</shell>
+    <skel>/etc/skel</skel>
+    <umask>022</umask>
+  </user_defaults>
+
+  <users config:type="list">
+    <user>
+      <username>vagrant</username>
+      <user_password>vagrant</user_password>
+      <encrypted config:type="boolean">false</encrypted>
+      <uid>1000</uid>
+      <gid>1000</gid>
+      <home>/home/vagrant</home>
+      <shell>/bin/bash</shell>
+    </user>
+    <user>
+      <username>root</username>
+      <user_password>vagrant</user_password>
+      <encrypted config:type="boolean">false</encrypted>
+      <shell>/bin/bash</shell>
+    </user>
+  </users>
+</profile>
