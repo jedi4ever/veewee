@@ -120,7 +120,7 @@ FreeBSD:
   :vbox: FreeBSD
   :parallels: freebsd
 FreeBSD_64:
-  :fusion: FreeBSD_64
+  :fusion: freebsd-64
   :kvm:
   :vbox: FreeBSD_64
   :parallels: freebsd
@@ -343,3 +343,24 @@ NetBSD_64:
   :kvm:
   :vbox: NetBSD_64
   :parallels: other
+
+ESXi5:
+  :fusion: vmkernel5 
+  :kvm:
+  :vbox: 
+  :parallels: 
+Darwin_10_7:
+  :fusion: darwin11
+  :kvm:
+  :vbox:
+  :parallels:
+Darwin_10_7_64:
+  :fusion: darwin11-64
+  :kvm:
+  :vbox:
+  :parallels:
+Darwin_10_8_64:
+  :fusion: darwin12-64
+  :kvm:
+  :vbox:
+  :parallels:

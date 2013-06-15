@@ -3,6 +3,9 @@
 
 date > /etc/vagrant_box_build_time
 
+# Make ssh faster by not waiting on DNS
+echo "UseDNS no" >> /etc/ssh/sshd_config
+
 yum -y install gcc bzip2 make kernel-devel-`uname -r`
 
 #yum -y update

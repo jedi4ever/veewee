@@ -1,0 +1,25 @@
+#!/bin/sh
+# Override the default behavior of sshd on the target volume to be not disabled
+OVERRIDES_PLIST="$3/private/var/db/launchd.db/com.apple.launchd/overrides.plist"
+/usr/libexec/PlistBuddy -c 'Delete :com.openssh.sshd' "$OVERRIDES_PLIST"
+/usr/libexec/PlistBuddy -c 'Add :com.openssh.sshd:Disabled bool False' "$OVERRIDES_PLIST"
+
+# Add vagrant to sudoers
+cp "$3/etc/sudoers" "$3/etc/sudoers.orig"
+echo 'vagrant ALL=(ALL) NOPASSWD: ALL' >> "$3/etc/sudoers"
+
+# Add vagrant to admin group memberships (even though GID 80 is enough for most things)
+VAGRANT_GUID=$(/usr/libexec/PlistBuddy -c 'Print :generateduid:0' "$3/private/var/db/dslocal/nodes/Default/users/vagrant.plist")
+VAGRANT_UID=$(/usr/libexec/PlistBuddy -c 'Print :uid:0' "$3/private/var/db/dslocal/nodes/Default/users/vagrant.plist")
+/usr/libexec/PlistBuddy -c 'Add :groupmembers: string $VAGRANT_GUID' "$3/private/var/db/dslocal/nodes/Default/groups/admin.plist"
+
+# Pre-create vagrant user folder so veewee will have somewhere to scp configinfo to
+mkdir "$3/Users/vagrant"
+chown $VAGRANT_UID:20 "$3/Users/vagrant"
+
+# Suppress annoying iCloud welcome on a GUI login
+/usr/bin/defaults write "$3/Users/vagrant/Library/Preferences/com.apple.SetupAssitant" DidSeeCloudSetup -bool true
+/usr/bin/defaults write "$3/Users/vagrant/Library/Preferences/com.apple.SetupAssitant" LastSeenCloudProductVersion -string 10.8.2
+
+# Disable the welcome screen
+touch "$3/private/var/db/.AppleSetupDone"

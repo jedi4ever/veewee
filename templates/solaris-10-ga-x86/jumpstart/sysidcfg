@@ -1,0 +1,16 @@
+auto_reg=none
+keyboard=US-English
+terminal=vt100
+system_locale=en_GB.UTF-8
+timezone=Europe/London
+timeserver=localhost
+service_profile=limited_net
+security_policy=NONE
+network_interface=PRIMARY {dhcp protocol_ipv6=no}
+
+name_service=NONE
+nfs4_domain=dynamic
+
+# __unix__ 'root'
+#perl -e 'print crypt($ARGV[0], substr(rand(data),2));' root
+root_password=32ZKvFr6eapoM

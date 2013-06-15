@@ -33,6 +33,7 @@ module Veewee
             ui.info  "Waiting for ssh login on #{ip} with user #{options[:user]} to sshd on port => #{options[:port]} to work, timeout=#{timeout} sec"
             end
 
+            run_hook(:before_ssh)
 
             begin
               Timeout::timeout(timeout) do
@@ -110,7 +111,7 @@ module Veewee
                   ch.on_data do |c, data|
                     stdout+=data
 
-                    ui.info data unless options[:mute]
+                    ui.info(data, :new_line => false) unless options[:mute]
 
                   end
 
@@ -119,7 +120,7 @@ module Veewee
                   ch.on_extended_data do |c, type, data|
                     stderr+=data
 
-                    ui.info data unless options[:mute]
+                    ui.info(data, :new_line => false) unless options[:mute]
 
                   end
 

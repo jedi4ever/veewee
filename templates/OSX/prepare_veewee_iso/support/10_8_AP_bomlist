@@ -1,0 +1,34 @@
+.
+./System
+./System/Library
+./System/Library/CoreServices
+./System/Library/CoreServices/System Image Utility.app
+./System/Library/CoreServices/System Image Utility.app/Contents
+./System/Library/CoreServices/System Image Utility.app/Contents/Library
+./System/Library/CoreServices/System Image Utility.app/Contents/Library/Automator
+./System/Library/CoreServices/System Image Utility.app/Contents/Library/Automator/Create Image.action
+./System/Library/CoreServices/System Image Utility.app/Contents/Library/Automator/Create Image.action/Contents
+./System/Library/CoreServices/System Image Utility.app/Contents/Library/Automator/Create Image.action/Contents/Resources
+./System/Library/CoreServices/System Image Utility.app/Contents/Library/Automator/Create Image.action/Contents/Resources/AutoPartition.app
+./System/Library/CoreServices/System Image Utility.app/Contents/Library/Automator/Create Image.action/Contents/Resources/AutoPartition.app/Contents
+./System/Library/CoreServices/System Image Utility.app/Contents/Library/Automator/Create Image.action/Contents/Resources/AutoPartition.app/Contents/Info.plist
+./System/Library/CoreServices/System Image Utility.app/Contents/Library/Automator/Create Image.action/Contents/Resources/AutoPartition.app/Contents/MacOS
+./System/Library/CoreServices/System Image Utility.app/Contents/Library/Automator/Create Image.action/Contents/Resources/AutoPartition.app/Contents/MacOS/AutoPartition
+./System/Library/CoreServices/System Image Utility.app/Contents/Library/Automator/Create Image.action/Contents/Resources/AutoPartition.app/Contents/PkgInfo
+./System/Library/CoreServices/System Image Utility.app/Contents/Library/Automator/Create Image.action/Contents/Resources/AutoPartition.app/Contents/Resources
+./System/Library/CoreServices/System Image Utility.app/Contents/Library/Automator/Create Image.action/Contents/Resources/AutoPartition.app/Contents/Resources/AutoPartition.icns
+./System/Library/CoreServices/System Image Utility.app/Contents/Library/Automator/Create Image.action/Contents/Resources/AutoPartition.app/Contents/Resources/English.lproj
+./System/Library/CoreServices/System Image Utility.app/Contents/Library/Automator/Create Image.action/Contents/Resources/AutoPartition.app/Contents/Resources/English.lproj/Localizable.strings
+./System/Library/CoreServices/System Image Utility.app/Contents/Library/Automator/Create Image.action/Contents/Resources/AutoPartition.app/Contents/Resources/English.lproj/MainMenu.nib
+./System/Library/CoreServices/System Image Utility.app/Contents/Library/Automator/Create Image.action/Contents/Resources/AutoPartition.app/Contents/Resources/French.lproj
+./System/Library/CoreServices/System Image Utility.app/Contents/Library/Automator/Create Image.action/Contents/Resources/AutoPartition.app/Contents/Resources/French.lproj/Localizable.strings
+./System/Library/CoreServices/System Image Utility.app/Contents/Library/Automator/Create Image.action/Contents/Resources/AutoPartition.app/Contents/Resources/French.lproj/MainMenu.nib
+./System/Library/CoreServices/System Image Utility.app/Contents/Library/Automator/Create Image.action/Contents/Resources/AutoPartition.app/Contents/Resources/German.lproj
+./System/Library/CoreServices/System Image Utility.app/Contents/Library/Automator/Create Image.action/Contents/Resources/AutoPartition.app/Contents/Resources/German.lproj/Localizable.strings
+./System/Library/CoreServices/System Image Utility.app/Contents/Library/Automator/Create Image.action/Contents/Resources/AutoPartition.app/Contents/Resources/German.lproj/MainMenu.nib
+./System/Library/CoreServices/System Image Utility.app/Contents/Library/Automator/Create Image.action/Contents/Resources/AutoPartition.app/Contents/Resources/Japanese.lproj
+./System/Library/CoreServices/System Image Utility.app/Contents/Library/Automator/Create Image.action/Contents/Resources/AutoPartition.app/Contents/Resources/Japanese.lproj/Localizable.strings
+./System/Library/CoreServices/System Image Utility.app/Contents/Library/Automator/Create Image.action/Contents/Resources/AutoPartition.app/Contents/Resources/Japanese.lproj/MainMenu.nib
+./System/Library/CoreServices/System Image Utility.app/Contents/Library/Automator/Create Image.action/Contents/Resources/AutoPartition.app/Contents/_CodeSignature
+./System/Library/CoreServices/System Image Utility.app/Contents/Library/Automator/Create Image.action/Contents/Resources/AutoPartition.app/Contents/_CodeSignature/CodeResources
+./System/Library/CoreServices/System Image Utility.app/Contents/Library/Automator/Create Image.action/Contents/Resources/AutoPartition.app/Contents/version.plist

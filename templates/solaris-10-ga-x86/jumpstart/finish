@@ -1,0 +1,35 @@
+#!/bin/sh
+#
+# Sample Finish Script to enable vagrant post install
+
+VAGRANTUSER='vagrant'
+
+# Selecting host name
+echo "vagrant-solaris10.dev" > /a/etc/nodename
+
+# Allowing root SSH
+cat /a/etc/ssh/sshd_config | sed -e 's/PermitRootLogin\ .*$/PermitRootLogin yes/g' > /tmp/sshd_config.$$
+cat /tmp/sshd_config.$$ > /a/etc/ssh/sshd_config
+
+## Create 'vagrant:vagrant'
+# Simple passwords
+cat /a/etc/default/passwd | sed -e 's/^#NAMECHECK=.*$/NAMECHECK=NO/g' \
+    -e 's/^#MINNONALPHA=.*$/MINNONALPHA=0/g' > /tmp/passwd.$$
+cat /tmp/passwd.$$ > /a/etc/default/passwd
+
+# 'vagrant:vagrant' creation
+chroot /a /usr/sbin/groupadd ${VAGRANTUSER}
+chroot /a /usr/sbin/useradd -m -d /export/home/${VAGRANTUSER} -s /usr/bin/bash -g ${VAGRANTUSER} ${VAGRANTUSER}
+
+PASSWD=`perl -e 'print crypt($ARGV[0], substr(rand(data),2));' vagrant`
+cat /a/etc/shadow | sed -e 's#^'${VAGRANTUSER}':UP:#'${VAGRANTUSER}':'${PASSWD}'#g'  > /tmp/shadow.$$
+cat /tmp/shadow.$$ > /a/etc/shadow
+
+
+# Install 'Primary Administrator' profile
+cat /cdrom/Solaris_10/Product/SUNWwbcor/reloc/etc/security/auth_attr >> /a/etc/security/auth_attr
+cat /cdrom/Solaris_10/Product/SUNWwbcor/reloc/etc/security/exec_attr >> /a/etc/security/exec_attr
+cat /cdrom/Solaris_10/Product/SUNWwbcor/reloc/etc/security/prof_attr >> /a/etc/security/prof_attr
+
+# Assign it to 'vagrant'
+chroot /a /usr/sbin/usermod -P'Primary Administrator' ${VAGRANTUSER}

@@ -19,7 +19,7 @@ class TestVeeweeBuild < Test::Unit::TestCase
   # - postinstall execution
   def test_box_1_build
     assert_nothing_raised {
-      @box.build({'auto' => true,'force' => true, 'nogui' => true })
+      @box.build({'auto' => true,'force' => true, 'nogui' => true , 'disk_count' => 2})
       #@box.build({"auto" => true,"force" => true })
     }
   end
@@ -40,16 +40,25 @@ class TestVeeweeBuild < Test::Unit::TestCase
       assert_match(/bla/,result.stdout)
     }
   end
+  
+  # Are there as many disks as in disk_count?
+  def test_box_4_check_disk_count
+    assert_nothing_raised { 
+      result=@box.exec("lsblk -lo MODEL|grep -i harddisk|wc -l")
+      assert_match(/#{@box.definition.disk_count}/,result.stdout)
+    }
+  end
+  
 
   # Try shutdown
-  def test_box_4_shutdown
+  def test_box_5_shutdown
     assert_nothing_raised {
       @box.halt
     }
   end
 
   # Now try build again (with no force flag)
-  def test_box_5_build
+  def test_box_6_build
     #assert_raise(Veewee::Error) {
     assert_nothing_raised {
       #@box.build({"auto" => true})
@@ -57,7 +66,7 @@ class TestVeeweeBuild < Test::Unit::TestCase
     }
   end
 
-  def test_box_6_destroy
+  def test_box_7_destroy
     assert_nothing_raised {
       @box.destroy
     }

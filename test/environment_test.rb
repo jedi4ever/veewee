@@ -4,7 +4,8 @@ require 'tempfile'
 
 class TestVeeweeEnvironment < Test::Unit::TestCase
   def test_environment_default_to_currentdir
-
+    # unset the VEEWEE_DIR environment which overwrites cwd
+    ENV['VEEWEE_DIR'] = nil
     tempdir = Dir.mktmpdir
     Dir.chdir(tempdir)
     tempdir=Dir.pwd

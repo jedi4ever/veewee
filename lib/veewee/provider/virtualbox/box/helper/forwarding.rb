@@ -29,7 +29,7 @@ module Veewee
         def delete_forwarding(name)
           forward=self.forwarding(name)
           if self.running?
-            command="#{@vboxcmd} controlvm \"#{self.name}\" natpf#{self.natinterface} delete \"#{name}\""         
+            command="#{@vboxcmd} controlvm \"#{self.name}\" natpf#{self.natinterface} delete \"#{name}\""
           else
             command="#{@vboxcmd} modifyvm \"#{self.name}\" --natpf#{self.natinterface} delete \"#{name}\""
           end

@@ -22,6 +22,8 @@ require 'veewee/provider/virtualbox/box/helper/buildinfo'
 require 'veewee/provider/virtualbox/box/helper/console_type'
 require 'veewee/provider/virtualbox/box/up'
 
+require 'whichr'
+
 module Veewee
   module Provider
     module Virtualbox
@@ -30,15 +32,27 @@ module Veewee
         include ::Veewee::Provider::Virtualbox::BoxCommand
 
         def initialize(name,env)
-
-          #require 'virtualbox'
-          @vboxcmd=determine_vboxcmd
-          super(name,env)
-
+          @vboxcmd = self.class.determine_vboxcmd
+          super(name, env)
         end
 
-        def determine_vboxcmd
-          return "VBoxManage"
+        def self.windows_vboxcmd
+          # based on Vagrant/plugins/providers/virtualbox/driver/base.rb
+          if OS.windows? && ENV.has_key?("VBOX_INSTALL_PATH")
+            ENV["VBOX_INSTALL_PATH"].split(File::PATH_SEPARATOR).each do |path|
+              vboxmanage = File.join(path,"VBoxManage.exe")
+              return "\"#{vboxmanage}\"" if File.file?(vboxmanage)
+            end
+          end
+          nil
+        end
+
+        def self.default_vboxcmd
+          "VBoxManage"
+        end
+
+        def self.determine_vboxcmd
+          @command ||= windows_vboxcmd || default_vboxcmd
         end
 
 

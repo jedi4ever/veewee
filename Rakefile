@@ -8,7 +8,6 @@ desc 'Default: run tests'
 task :default => :test
 
 require 'rake/testtask'
-Bundler::GemHelper.install_tasks
 
 desc 'Tests not requiring an real box'
 Rake::TestTask.new do |t|

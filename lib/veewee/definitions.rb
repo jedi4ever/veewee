@@ -29,16 +29,20 @@ module Veewee
 
     def initialize(env)
       @env = env
+      @definitions = {}
       return self
     end
 
+
     def [](name)
-      begin
-        definition = Veewee::Definition.load(name, env)
-        return definition
-      rescue Veewee::DefinitionNotExist
-        return nil
+      if @definitions[name].nil?
+        begin
+          @definitions[name] = Veewee::Definition.load(name, env)
+        rescue Veewee::DefinitionNotExist
+          return nil
+        end
       end
+      @definitions[name]
     end
 
     # Fetch all definitions

@@ -6,8 +6,12 @@ apt-get -y install curl unzip
 apt-get clean
 
 # Set up sudo
-cp /etc/sudoers /etc/sudoers.orig
-sed -i -e 's/%sudo ALL=(ALL) ALL/%sudo ALL=NOPASSWD:ALL/g' /etc/sudoers
+( cat <<'EOP'
+%vagrant ALL=NOPASSWD:ALL
+EOP
+) > /tmp/vagrant
+chmod 0440 /tmp/vagrant
+mv /tmp/vagrant /etc/sudoers.d/
 
 # Tweak sshd to prevent DNS resolution (speed up logins)
 echo 'UseDNS no' >> /etc/ssh/sshd_config

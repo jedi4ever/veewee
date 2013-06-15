@@ -1,0 +1,40 @@
+#
+# Sample profile for an x86 machine. Installation will
+# provide default partitioning on a standalone system
+# with the end-user cluster.
+#
+#	"@(#)x86-class 1.2 94/01/25"
+#
+install_type	initial_install
+system_type	  standalone
+partitioning	explicit
+filesys       c2t0d0s0 4000 /
+filesys       c2t0d0s1 1024 swap
+filesys       c2t0d0s7 free /export/home
+cluster		    SUNWCreq
+
+# Additional packages to allow vagrant installation (SSH) or convenient (bash, man)
+package      SUNWsshcu add
+package      SUNWsshdr add
+package      SUNWsshdu add
+package      SUNWsshr add
+package      SUNWsshu add
+package      SUNWbash add
+package      SUNWman add
+package      SUNWdoc add
+
+# For GCC (partially from https://wiki.chipp.ch/twiki/bin/view/CmsTier3/InstallationSolaris)
+package      SUNWarc add
+package      SUNWsfwhea add
+package      SUNWhea add
+package      SUNWtoo add
+package      SUNWlibm add
+
+# BSD compatibility
+package      SUNWscpu add
+
+# Centinel (adds /usr/xpg4/bin/id)
+package      SUNWxcu4 add
+
+# "Iconv modules for UTF-8 Locale" (required for Guest additions)
+package      SUNWuiu8 add

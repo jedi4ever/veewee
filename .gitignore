@@ -18,3 +18,5 @@ pkg/*
 .vagrant
 virtualfloppy.vfd
 *.swp
+AutoPartition.app
+.rbenv-gemsets

@@ -7,7 +7,7 @@ module Veewee
         def wincp(localfile,remotefile,options={})
           raise Veewee::Error,"Box is not running" unless self.running?
 
-          if self.exec("cmd.exe /C dir #{wget_vbs_file} > %TEMP%\\null",{:exitcode=>"*"}).status != 0
+          if self.exec("cmd.exe /C dir #{wget_vbs_file} > NUL",{:exitcode=>"*"}).status != 0
             env.ui.warn "Creating wget.vbs"
             create_wget_vbs_command do |command_chunk, chunk_num|
               self.exec("cmd.exe /C echo \"Rendering '#{wget_vbs_file}' chunk #{chunk_num}\" && #{command_chunk}")

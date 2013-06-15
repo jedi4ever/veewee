@@ -11,6 +11,9 @@ yum -y install gcc-c++ zlib-devel openssl-devel readline-devel sqlite3-devel
 yum -y erase wireless-tools gtk2 libX11 hicolor-icon-theme avahi freetype bitstream-vera-fonts
 yum -y clean all
 
+# Make ssh faster by not waiting on DNS
+echo "UseDNS no" >> /etc/ssh/sshd_config
+
 #Installing ruby
 cd /tmp
 wget http://ftp.ruby-lang.org/pub/ruby/1.9/ruby-1.9.2-p180.tar.gz || fail "Could not download Ruby source"

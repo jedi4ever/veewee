@@ -22,7 +22,7 @@ cmd /c %SystemDrive%\cygwin\bin\bash -c 'PATH=/usr/local/bin:/usr/bin:/bin:/usr/
 
 %SystemDrive%\cygwin\usr\bin\sleep 1
 
-%SystemDrive%\cygwin\bin\bash -c 'PATH=/usr/local/bin:/usr/bin:/bin:/usr/X11R6/bin /usr/bin/ssh-host-config -y -c "ntsecbinmode tty" -w "abc&&123!!" '
+%SystemDrive%\cygwin\bin\bash -c 'PATH=/usr/local/bin:/usr/bin:/bin:/usr/X11R6/bin /usr/bin/ssh-host-config -y -c "ntsecbinmode" -w "abc&&123!!" '
 
 %SystemDrive%\cygwin\usr\bin\sleep 2 
 

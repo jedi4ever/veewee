@@ -1,44 +1,105 @@
-# Overview
+# Veewee Installation
 
-Veewee is a tool to help you building a Virtual Machine from an ISO-file.
+Before installing Veewee, please see the [Requirements](requirements.md) doc.
 
+## Install as a gem
 
-## Requirements
-
-Please see [requirements.md](requirements.md) for detailed instructions.
-
-
-## Install
-
-These instructions need to be bulked out more, but for now, here is a basic guide to installing Veewee.
-
-The Veewee project is moving quickly and the Rubygem might be outdated. We recommend installing Veewee from source.
-
-__as a gem__
+The Veewee project is moving quickly and the Rubygem might be outdated. Therefore it may be wise to install Veewee from source.
 
     $ gem install veewee
 
-__from source__
+Projects that include the `veewee` gem can also benefit from utilizing Ruby version management (see below).
 
-When you cd into the veewee directory, rvm should automatically read the `.rvmrc` file
-and prompt you to verify it - you can do so by pressing `Y`.
 
-This will then create a [gemset](https://rvm.io/gemsets/basics/) for veewee.
+## Install from source
 
+#### Installing Veewee without a Ruby version manager
+
+Installing Veewee without a Ruby version manager is **NOT** recommended:
+
+    $ cd <path_to_workspace>
     $ git clone https://github.com/jedi4ever/veewee.git
     $ cd veewee
     $ gem install bundler
     $ bundle install
 
-Now start [building baseboxes](running.md) or learn more about [veewee's internals](definition.md)!
 
-### Important Note on testing `kvm` while running from source git repo_
+#### Installing Veewee with RVM
+
+With RVM already installed (see [Requirements](requirements.md)), ensure a ruby version that's supported by Veewee is available on your machine:
+
+    $ rvm install 1.9.2
+
+Clone the veewee project from source:
+
+    $ cd <path_to_workspace>
+    $ git clone https://github.com/jedi4ever/veewee.git
+    $ cd veewee
+
+Set the local gemset and ruby version within the current directory:
+
+    $ rvm use 1.9.2@veewee --create
+
+Run `bundle install` to install Gemfile dependencies for our local gemset:
+
+    $ gem install bundler
+    $ bundle install
+
+
+#### Installing Veewee with rbenv
+
+With rbenv already installed (see [Requirements](requirements.md)), ensure a ruby version that's supported by Veewee is available on your machine:
+
+    $ rbenv install 1.9.2-p320
+    $ rbenv rehash
+
+Clone the veewee project from source:
+
+    $ cd <path_to_workspace>
+    $ git clone https://github.com/jedi4ever/veewee.git
+    $ cd veewee
+
+Set the local ruby version within the current directory:
+
+    $ rbenv local 1.9.2-p320
+    $ rbenv rehash
+
+Run `bundle install` to install Gemfile dependencies for our selected ruby version:
+
+    $ gem install bundler
+    $ rbenv rehash
+    $ bundle install
+    $ rbenv rehash
+
+
+#### Install from source on Windows
+
+First, run `bundle install`.
+
+Then to run `veewee`, use `bundle exec veewee` or make a powershell alias to remember for you:
+
+    function Run-Veewee { bundle exec veewee }
+    Set-Alias veewee Run-Veewee
+
+
+#### Testing `kvm` while running from source
 
 By default the `:kvm` gem group is *disabled* to prevent the installation of `ruby-libvirt` on systems
 that don't need it. This is done by the file `.bundle/config`.
 
 If you do need it, run `bundle install --without restrictions` (restrictions is a dummy name).
-This will change the file `.bundle/config`, which is ignored by Git per default and must not be included in any commits.
-
-As this is a remembered option, you don't have to specify it every time.
+This will change the file `.bundle/config`, which is ignored by Git by default and must not be included in any commits. As this is a remembered option, you don't have to specify it every time.
 If you want to switch to the default behavior run `bundle install --without kvm` to enable restrictions.
+
+
+#### Running from source and using Ruby v1.8.7
+
+By default the :windows gem group is *enabled* . This loads the `em-winrm` gem - which is incompatible with 
+ruby-1.8.7 because it depends on the `gss-api` gem. To run from source you can execut `bundle install --without windows`
+
+This will change the file `.bundle/config`, which is ignored by Git per default and must not be included in any commits. If you want to switch to the default behavior run `bundle install --without restrictions` to include it
+
+
+## Up Next
+
+[Veewee Command Options](commands.md) highlights various approaches for executing Veewee on the command line.

@@ -5,72 +5,84 @@ module Veewee
     module Vmfusion
       module BoxCommand
         # This function 'exports' the box based on the definition
-        def export_ova(options)
-          debug="--X:logToConsole=true --X:logLevel=\"verbose\""
-          debug=""
-          flags="--compress=9"
+        def export_vmfusion(options)
+          case options["export_type"]
+          when "ova"
+            debug="--X:logToConsole=true --X:logLevel=\"verbose\""
+            debug=""
+            flags="--compress=9"
 
-          if File.exists?("#{name}.ova")
-            if options["force"]
-              env.logger.debug("#{name}.ova exists, but --force was provided")
-              env.logger.debug("removing #{name}.ova first")
-              FileUtils.rm("#{name}.ova")
-              env.logger.debug("#{name}.ova removed")
-            else
-              raise Veewee::Error, "export file #{name}.ova already exists. Use --force option to overwrite."
+            if File.exists?("#{name}.ova")
+              if options["force"]
+                env.logger.debug("#{name}.ova exists, but --force was provided")
+                env.logger.debug("removing #{name}.ova first")
+                FileUtils.rm("#{name}.ova")
+                env.logger.debug("#{name}.ova removed")
+              else
+                raise Veewee::Error, "export file #{name}.ova already exists. Use --force option to overwrite."
+              end
+            end
+
+            # before exporting the system needs to be shut down
+            ensure_vm_stopped(options)
+
+            # otherwise the debug log will show - The specified virtual disk needs repair
+            env.ui.info "Exporting VM to #{options["export_type"]}"
+            shell_exec("#{File.dirname(vmrun_cmd).shellescape}#{"/VMware OVF Tool/ovftool".shellescape} #{debug} #{flags} #{vmx_file_path.shellescape} #{name}.ova")
+          when "vagrant"
+            debug=""
+            flags="-tt=OVF"
+
+            ensure_vm_stopped(options)
+
+            optimize_disk
+
+            # get a temp dir
+            Dir.mktmpdir do |tmpdir|
+              env.ui.info "Exporting VM to #{options["export_type"]} box"
+              FileUtils.cp_r(Dir["#{vm_path}/*"],tmpdir)
+
+              # Inject a Vagrantfile unless one is provided
+              if options['vagrantfile']
+                FileUtils.cp(options['vagrantfile'], File.join(tmpdir, 'Vagrantfile'))
+              else
+                File.open(File.join(tmpdir, 'Vagrantfile'), 'w') {|f| f.write(template_vagrantfile()) }
+              end
+              #Inject a metadata.json file
+              File.open(File.join(tmpdir, 'metadata.json'), 'w') {|f| f.write(template_metadatafile()) }
+
+              # Tar it up into the destination
+              pwd = Dir.pwd
+              shell_exec("cd #{tmpdir} && tar -czf #{File.join(pwd, name)}.box *")
             end
           end
 
-          # before exporting the system needs to be shut down
-          ensure_vm_stopped(options)
 
-          # otherwise the debug log will show - The specified virtual disk needs repair
-          shell_exec("#{File.dirname(vmrun_cmd).shellescape}#{"/VMware OVF Tool/ovftool".shellescape} #{debug} #{flags} #{vmx_file_path.shellescape} #{name}.ova")
-        end
 
-        def export_vagrant(options={})
-          debug=""
-          flags="-tt=OVF"
-
-          ensure_vm_stopped(options)
-
-          # get a temp dir
-          Dir.mktmpdir do |tmpdir|
-            # export to box.ovf
-            shell_exec("#{File.dirname(vmrun_cmd).shellescape}#{"/VMware OVF Tool/ovftool".shellescape} #{debug} #{flags} #{vmx_file_path.shellescape} #{File.join(tmpdir, 'box.ovf')}")
-
-            # Inject a Vagrantfile unless one is provided
-            if options['vagrantfile']
-              FileUtils.cp(options['vagrantfile'], File.join(tmpdir, 'Vagrantfile'))
-            else
-              File.open(File.join(tmpdir, 'Vagrantfile'), 'w') {|f| f.write(template_vagrantfile()) }
-            end
-
-            # Tar it up into the destination
-            pwd = Dir.pwd
-            shell_exec("cd #{tmpdir} && tar -cf #{File.join(pwd, name)}.box *")
-          end
         end
 
         protected
 
         def ensure_vm_stopped(options={})
           # Need to check binary first
-          if self.running?
+          if self.running?.data
             # Wait for the shutdown to complete
             begin
-              Timeout::timeout(20) do
+              Timeout::timeout(60) do
                 self.halt(options)
-                status=self.running?
-                unless status
-                  return
+                loop do
+                  sleep 4
+                  break unless self.running?.data
                 end
-                sleep 4
               end
             rescue TimeoutError => ex
               raise Veewee::Error,ex
             end
           end
+        end
+        
+        def template_metadatafile
+          %Q({"provider": "vmware_fusion"}\n)
         end
 
         def template_vagrantfile
@@ -87,6 +99,24 @@ end
 include_vagrantfile = File.expand_path("../include/_Vagrantfile", __FILE__)
 load include_vagrantfile if File.exist?(include_vagrantfile)
 EOF
+        end
+
+        def optimize_disk
+          current_dir=Dir.pwd
+          FileUtils.chdir(vm_path)
+          env.ui.info "Optimizing Disk"
+          shell_exec("#{File.dirname(vmrun_cmd).shellescape}#{"/vmware-vdiskmanager".shellescape} -d #{name}.vmdk")
+          shell_exec("#{File.dirname(vmrun_cmd).shellescape}#{"/vmware-vdiskmanager".shellescape} -k #{name}.vmdk")
+
+          [name,
+           "#{name}.plist",
+           "quicklook-cache.png"
+          ].each do |file|
+            File.delete(file) if File.exist?(file)
+          end
+
+          Dir.glob("*.log").map { |f| File.delete(f) }
+          FileUtils.chdir(current_dir)
         end
 
       end

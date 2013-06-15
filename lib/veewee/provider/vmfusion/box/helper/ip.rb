@@ -23,7 +23,12 @@ module Veewee
           # Does not work for now as the vmx path is not escape correctly by fission 0.4.0
           #return raw.network_info.data.first['ip_address']
           raise ::Fission::Error,"VM #{name} does not exist" unless self.exists?
-
+          
+          # Use alternate method to retrieve the IP address using vmrun readVariable
+          
+          ip_address = shell_exec("#{vmrun_cmd.shellescape} readVariable \"#{vmx_file_path}\" guestVar ip", { :mute => true}).stdout.strip
+          return ip_address unless ip_address.empty?
+        
           unless mac_address.nil?
             lease = Fission::Lease.find_by_mac_address(mac_address).data
             return lease.ip_address unless lease.nil?

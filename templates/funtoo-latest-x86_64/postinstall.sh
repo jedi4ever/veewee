@@ -49,6 +49,10 @@ swapon /dev/sda3
 mkfs.ext2 /dev/sda1
 mkfs.ext4 /dev/sda4
 
+# verify to be sure that partitions are okay
+sgdisk -v /dev/sda
+sgdisk -p /dev/sda
+
 # this is our chroot directory for the installation
 chroot=/mnt/gentoo
 
@@ -358,7 +362,19 @@ source /etc/profile && \
 env-update && \
 grub-install --no-floppy /dev/sda && \
 boot-update
+# Patching the boot configuration as we have no initramfs
+cd /boot/grub
+mv grub.cfg grub.bkp
+awk '{sub(/real_root/,"root")};1' grub.bkp > grub.cfg
+cat grub.cfg
 DATAEOF
+
+### patch to make lib/vagrant/guest/gentoo.rb happy
+chroot "$chroot" /bin/bash <<DATAEOF
+cd /etc/init.d
+ln -s net.lo netif.lo
+DATAEOF
+
 
 ### CLEANUP TO SHRINK THE BOX ###
 

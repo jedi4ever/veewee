@@ -13,6 +13,7 @@ module Veewee
                 begin
                   s = TCPSocket.new(ip, port)
                   s.close
+                  env.logger.debug("TCP port #{ip}:#{port} is used.")
                   return true
                 rescue Errno::ECONNREFUSED, Errno::EHOSTUNREACH,Errno::ENETDOWN
                   return false
@@ -26,15 +27,11 @@ module Veewee
 
           # This tries to guess a local free tcp port 
           def guess_free_port(min_port,max_port)
-            ui.info "Received port hint - #{min_port}"
-
-            if definition.force_ssh_port
-              return min_port
-            end
+            ui.info "Finding unused TCP port in range: #{min_port} - #{max_port}"
 
             guessed_port=nil
 
-            for port in (min_port..max_port)
+            (min_port..max_port).each do |port|
               unless is_tcp_port_open?(get_local_ip, port)
                 guessed_port=port
                 break
@@ -42,13 +39,25 @@ module Veewee
             end
 
             if guessed_port.nil?
-              ui.error "No free port available: tried #{min_port}..#{max_port}"
-              raise Veewee::Error, "No free port available: tried #{min_port}..#{max_port}"
-            else
-              ui.info "Found port #{guessed_port} available"
+              message = "No free TCP port available in range: #{min_port} - #{max_port}"
+              ui.error message
+              raise Veewee::Error, message
             end
 
+            ui.info "Selected TCP port #{guessed_port}"
             return guessed_port
+          end
+
+          def guess_free_ssh_port(min_port, max_port)
+            if definition.force_ssh_port
+              ui.warn "SSH port auto-configuration is disabled in the definition (force_ssh_port=true)."
+              if is_tcp_port_open?(get_local_ip, min_port)
+                ui.warn "TCP port #{min_port} is in use. You may execute the postinstall scripts on a different machine than intended!"
+              end
+              return min_port
+            else
+              return guess_free_port(min_port, max_port)
+            end
           end
 
           def execute_when_tcp_available(ip="127.0.0.1", options = { } , &block)

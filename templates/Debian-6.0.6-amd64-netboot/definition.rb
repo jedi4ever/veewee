@@ -1,10 +1,12 @@
 Veewee::Definition.declare({
   :cpu_count => '1',
-  :memory_size=> '256',
+  :memory_size=> '512',
   :disk_size => '10140', :disk_format => 'VDI', :hostiocache => 'off',
   :os_type_id => 'Debian_64',
   :iso_file => "debian-6.0.6-amd64-netinst.iso",
-  :iso_src => "http://cdimage.debian.org/debian-cd/6.0.6/amd64/iso-cd/debian-6.0.6-amd64-netinst.iso",
+  :iso_src => "",
+  :iso_download_instructions => "- You need to download this manually as the ISO is no more directly downloadable\n"+
+  "Visit http://cdimage.debian.org/cdimage/archive/6.0.6/amd64/ and download it via torrent or jigdo",
   :iso_md5 => "00585d63f8a560a73540bd718263319a",
   :iso_download_timeout => "1000",
   :boot_wait => "10", :boot_cmd_sequence => [
@@ -37,11 +39,11 @@ Veewee::Definition.declare({
   :postinstall_files => [
     "base.sh",
     "vagrant.sh",
+    "vmfusion.sh",
     "virtualbox.sh",
     "ruby.sh",
     "puppet.sh",
     "chef.sh",
-    "cleanup-virtualbox.sh",
     "cleanup.sh",
     "zerodisk.sh"
   ],
