@@ -8,6 +8,7 @@ require 'veewee/provider/kvm/box/up'
 require 'veewee/provider/kvm/box/halt'
 require 'veewee/provider/kvm/box/poweroff'
 require 'veewee/provider/kvm/box/destroy'
+require 'veewee/provider/kvm/box/export_vagrant'
 
 require 'veewee/provider/kvm/box/helper/ip'
 require 'veewee/provider/kvm/box/helper/ssh_options'
