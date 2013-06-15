@@ -35,8 +35,9 @@ Gem::Specification.new do |s|
   s.add_dependency "fission", "0.4.0"
   s.add_dependency "whichr"
 
-  # Grit is not a hard requirment any more
+  # Grit is not a hard requirment any more but it is the preferred provider
   #s.add_dependency "grit"
+  s.add_dependency "git"
 
   # Modified dependency version, as libxml-ruby dependency has been removed in version 2.1.1
   # See : https://github.com/ckruse/CFPropertyList/issues/14

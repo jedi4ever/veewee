@@ -16,11 +16,16 @@ module Veewee
 
   dirname = File.dirname(__FILE__)
   begin
-    require dirname + '/gritGitProvider.rb'
-    Veewee.git_interface = Veewee::GritGitProvider
+    begin
+      require dirname + '/gritGitProvider.rb'
+      Veewee.git_interface = Veewee::GritGitProvider
+    rescue LoadError, NameError
+      require dirname + '/rubyGitGitProvider.rb'
+      Veewee.git_interface = Veewee::RubyGitGitProvider
+    end
   rescue LoadError, NameError
-    require dirname + '/rubyGitGitProvider.rb'
-    Veewee.git_interface = Veewee::RubyGitGitProvider
+    env.logger.fatal("No git provider installed. Please install provider with: gem install grit or gem install git")
+    raise Veewee::Error, "No git provider installed. Please install provider with: gem install grit or gem install git"
   end
 
   class Definitions
