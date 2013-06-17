@@ -1,0 +1,45 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+
+  # Example configuration of new VM..
+  # 
+  #config.vm.define :test_vm do |test_vm|
+    # Box name
+    #test_vm.vm.box = "centos64"
+
+    # Interfaces for VM
+    # 
+    # Hostonly network is not supported in this version of provider. Bridged
+    # interface with network id specified can be created.
+    #test_vm.vm.network :bridged, :bridge => "default", :adapter => 1
+  #end
+
+  # Options for libvirt vagrant provider.
+  config.vm.provider :libvirt do |libvirt|
+
+    # A hypervisor name to access. Different drivers can be specified, but
+    # this version of provider creates KVM machines only. Some examples of
+    # drivers are qemu (KVM/qemu), xen (Xen hypervisor), lxc (Linux Containers),
+    # esx (VMware ESX), vmwarews (VMware Workstation) and more. Refer to
+    # documentation for available drivers (http://libvirt.org/drivers.html).
+    #libvirt.driver = "qemu"
+
+    # The name of the server, where libvirtd is running.
+    #libvirt.host = "localhost"
+
+    # If use ssh tunnel to connect to Libvirt.
+    #libvirt.connect_via_ssh = false
+
+    # The username and password to access Libvirt. Password is not used when
+    # connecting via ssh.
+    #libvirt.username = "root"
+    #libvirt.password = "secret"
+
+    # Libvirt storage pool name, where box image and instance snapshots will
+    # be stored.
+    #libvirt.storage_pool_name = "default"
+  end
+end
+
