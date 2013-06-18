@@ -93,6 +93,7 @@ DEFINITION_DIR="$(cd $SCRIPT_DIR/..; pwd)"
 
 if [ "$2" == "" ]; then
 	DEFAULT_ISO_DIR=1
+	OLDPWD=$(pwd)
 	cd "$SCRIPT_DIR"
 	# default to the veewee/iso directory
 	if [ ! -d "../../../iso" ]; then
@@ -100,6 +101,7 @@ if [ "$2" == "" ]; then
 		chown $VEEWEE_UID:$VEEWEE_GID "../../../iso"
 	fi
 	OUT_DIR="$(cd $SCRIPT_DIR; cd ../../../iso; pwd)"
+	cd "$OLDPWD" # Rest of script depends on being in the working directory if we were passed relative paths
 else
 	OUT_DIR="$2"
 fi
@@ -116,7 +118,12 @@ fi
 
 MNT_ESD=`/usr/bin/mktemp -d /tmp/veewee-osx-esd.XXXX`
 msg_status "Attaching input OS X installer image with shadow file.."
-hdiutil attach "$ESD" -mountpoint "$MNT_ESD" -shadow -nobrowse -owners on
+hdiutil attach "$ESD" -mountpoint "$MNT_ESD" -shadow -nobrowse -owners on 
+if [ $? -ne 0 ]; then
+	[ ! -e "$ESD" ] && msg_error "Could not find $ESD in $(pwd)"
+	msg_error "Could not mount $ESD on $MNT_ESD"
+	exit 1
+fi
 DMG_OS_VERS=$(/usr/libexec/PlistBuddy -c 'Print :ProductVersion' "$MNT_ESD/System/Library/CoreServices/SystemVersion.plist")
 DMG_OS_VERS_MAJOR=$(echo $DMG_OS_VERS | awk -F "." '{print $2}')
 DMG_OS_BUILD=$(/usr/libexec/PlistBuddy -c 'Print :ProductBuildVersion' "$MNT_ESD/System/Library/CoreServices/SystemVersion.plist")
@@ -267,9 +274,8 @@ if [ -n "$DEFAULT_ISO_DIR" ]; then
 	DEFINITION_FILE="$DEFINITION_DIR/definition.rb"
 	msg_status "Setting ISO file in definition "$DEFINITION_FILE".."
 	ISO_FILE=$(basename "$OUTPUT_DMG")
-	# painful thanks to BSD sed on OS X, can't double-quote sed command
-	eval "cat \"$DEFINITION_FILE\" | sed -i .bak 's/%OSX_ISO%/$ISO_FILE/g' \"$DEFINITION_FILE\""
-	rm "$DEFINITION_FILE.bak"
+	# Explicitly use -e in order to use double quotes around sed command
+	sed -i -e "s/%OSX_ISO%/${ISO_FILE}/" "$DEFINITION_FILE"
 fi
 
 msg_status "Done."
