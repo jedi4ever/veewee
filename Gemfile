@@ -3,7 +3,7 @@
     #Encoding.default_internal = Encoding::UTF_8
 #end
 
-source "http://rubygems.org"
+source "https://rubygems.org"
 
 #gem "veewee", :path => "."
 #gem "fission", :path => '/Users/patrick/dev/fission'
