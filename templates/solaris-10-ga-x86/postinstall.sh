@@ -17,7 +17,7 @@ yes|/usr/sbin/pkgadd -d http://mirror.opencsw.org/opencsw/pkgutil-`uname -p`.pkg
 chgrp 0 /etc/opt/csw/sudoers
 ln -s /etc/opt/csw/sudoers /etc/sudoers
 # get 'wget', 'GNU tar' and 'GNU sed' (also needed for Ruby)
-/opt/csw/bin/pkgutil -y -i CSWwget CSWgtar CSWgsed
+/opt/csw/bin/pkgutil -y -i CSWwget CSWgtar CSWgsed CSWvim
 
 # Add 'vagrant' to sudoers as well
 test -f /etc/sudoers && grep -v "vagrant" "/etc/sudoers" 1>/dev/null 2>&1 && echo "vagrant ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
