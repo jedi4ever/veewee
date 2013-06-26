@@ -78,7 +78,7 @@ First, run `bundle install`.
 
 Then to run `veewee`, use `bundle exec veewee` or make a powershell alias to remember for you:
 
-    function Run-Veewee { bundle exec veewee }
+    function Run-Veewee { bundle exec veewee $args }
     Set-Alias veewee Run-Veewee
 
 

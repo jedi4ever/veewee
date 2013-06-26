@@ -67,7 +67,7 @@ module Veewee
             )
             mount_filename = filename.start_with?('/') ? filename : "/#{filename}"
             env.logger.debug("mounting file #{mount_filename}")
-            s.mount("#{mount_filename}", Veewee::Provider::Core::Helper::Servlet::FileServlet,File.join(web_dir,filename),ui,options[:threaded])
+            s.mount("/", Veewee::Provider::Core::Helper::Servlet::FileServlet, filename, ui, options[:threaded])
             trap("INT"){
               s.shutdown
               ui.info "Stopping webserver"
