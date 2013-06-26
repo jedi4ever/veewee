@@ -15,6 +15,18 @@ module Veewee
           shell_exec("#{command}")
         end
 
+        def add_scsi_controller 
+          #unless => "${vboxcmd} showvminfo \"${vname}\" | grep \"SCSI Controller\" ";
+          command ="#{@vboxcmd} storagectl \"#{name}\" --name \"SCSI Controller\" --add scsi --hostiocache #{definition.hostiocache}"
+          shell_exec("#{command}")
+        end
+
+        def add_sas_controller 
+          #unless => "${vboxcmd} showvminfo \"${vname}\" | grep \"SAS Controller\" ";
+          command ="#{@vboxcmd} storagectl \"#{name}\" --name \"SAS Controller\" --add sas --hostiocache #{definition.hostiocache}"
+          shell_exec("#{command}")
+        end
+
         def attach_serial_console
           command ="#{@vboxcmd} modifyvm \"#{name}\" --uart1 0x3F8 4"
           shell_exec("#{command}")
@@ -105,7 +117,7 @@ module Veewee
             ui.info "Attaching disk: #{location}"
   
             #command => "${vboxcmd} storageattach \"${vname}\" --storagectl \"SATA Controller\" --port 0 --device 0 --type hdd --medium \"${vname}.vdi\"",
-            command ="#{@vboxcmd} storageattach \"#{name}\" --storagectl \"#{storagectl}\" --port #{f-1} --device #{device_number} --type hdd --medium \"#{location}\""
+            command ="#{@vboxcmd} storageattach \"#{name}\" --storagectl \"#{storagectl}\" --port #{f-1} --device #{device_number} --type hdd --medium \"#{location}\" --nonrotational \"#{definition.nonrotational}\""
             shell_exec("#{command}")
           end
         end
@@ -118,6 +130,13 @@ module Veewee
           self.attach_disk_common("SATA Controller", device_number)
         end
 
+        def attach_disk_scsi(device_number=0)
+          self.attach_disk_common("SCSI Controller", device_number)
+        end
+
+        def attach_disk_sas(device_number=0)
+          self.attach_disk_common("SAS Controller", device_number)
+        end
 
         def attach_isofile(device_number=0)
           full_iso_file=File.join(env.config.veewee.iso_dir,definition.iso_file)
