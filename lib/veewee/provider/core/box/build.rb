@@ -79,7 +79,7 @@ module Veewee
           end
 
           # Only process the boot_cmd_sequence if it's not empty
-          unless boot_cmd_sequence.empty?
+          unless definition.boot_cmd_sequence.empty?
             # Let fill's in the variable we need
             boot_sequence=fill_sequence(definition.boot_cmd_sequence,{
               :ip =>host_ip_as_seen_by_guest,
@@ -120,14 +120,20 @@ module Veewee
             self.handle_postinstall(options)
           end
           run_hook(:after_postinstall)
-
-          ui.success "The box #{name} was built successfully!"
-          ui.info "You can now login to the box with:"
+          
           if (definition.winrm_user && definition.winrm_password)
-            env.ui.info winrm_command_string
+            self.when_winrm_login_works(self.ip_address, winrm_options.merge(options)) do
+              env.ui.info "You can now login to the box with:"
+              env.ui.info winrm_command_string
+            end
           else
-            env.ui.info ssh_command_string
+            self.when_ssh_login_works(self.ip_address, winrm_options.merge(options)) do
+              env.ui.info "You can now login to the box with:"
+              env.ui.info ssh_command_string
+            end
           end
+          
+          env.ui.success "The box #{name} was built successfully!"
 
           return self
         end
