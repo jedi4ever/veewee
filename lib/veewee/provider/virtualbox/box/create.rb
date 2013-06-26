@@ -16,7 +16,7 @@ module Veewee
           self.suppress_messages
 
           self.create_vm
-
+          
           # Attach ttyS0 to the VM for console output
           redirect_console=options[:redirectconsole]
           if redirect_console
@@ -29,19 +29,27 @@ module Veewee
           #Create a disk with the same name as the box_name
           self.create_disk
 
-          use_sata = definition.use_sata
-          if use_sata
+          controller_type = definition.controller_type
+          case controller_type
+          when 'sata', 'scsi', 'sas'
             disk_device_number = 0
             isofile_ide_device_number = 0
           else
             disk_device_number = 0
             isofile_ide_device_number = 1
           end
-
           self.add_ide_controller
-          if use_sata
+          
+          case controller_type
+          when 'sata'
             self.add_sata_controller
             self.attach_disk_sata(disk_device_number)
+          when 'scsi'
+            self.add_scsi_controller
+            self.attach_disk_scsi(disk_device_number)
+          when 'sas'
+            self.add_sas_controller
+            self.attach_disk_sas(disk_device_number)
           else
             self.attach_disk_ide(disk_device_number)
           end
