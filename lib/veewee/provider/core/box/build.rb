@@ -86,10 +86,12 @@ module Veewee
           })
 
           # Type the boot sequence
-          Thread.new do
-            self.console_type(boot_sequence)
-            run_hook(:after_boot_sequence)
+          unless boot_sequence.empty?
+            Thread.new do
+              self.console_type(boot_sequence)
+            end
           end
+          run_hook(:after_boot_sequence)
 
           self.handle_kickstart(options)
 
@@ -100,20 +102,22 @@ module Veewee
             env.logger.info "wait for Ip address"
             sleep 2
           end
-
-          if ! definition.skip_iso_transfer then
+          
+          if !definition.skip_iso_transfer then
             self.transfer_buildinfo(options)
           end
 
           # Transfer the VEEWEE_<params> environment variables + definition.params
           # into .veewee_params
-          self.transfer_params(options)
+          unless definition.params.empty?
+            self.transfer_params(options)
+          end
 
           # Filtering post install files based upon --postinstall-include and --postinstall--exclude
-          definition.postinstall_files=filter_postinstall_files(options)
-
-          self.handle_postinstall(options)
-
+          unless definition.postinstall_files.empty?
+            definition.postinstall_files=filter_postinstall_files(options)
+            self.handle_postinstall(options)
+          end
           run_hook(:after_postinstall)
 
           ui.success "The box #{name} was built successfully!"
@@ -205,6 +209,7 @@ module Veewee
 
           if kickstartfiles.nil? || kickstartfiles.length == 0
             env.ui.info "Skipping webserver as no kickstartfile was specified"
+            return
           else
             env.ui.info "Starting a webserver #{definition.kickstart_ip}:#{definition.kickstart_port}\n"
           end
