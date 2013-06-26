@@ -78,7 +78,7 @@ module Veewee
             end
           end
 
-          # Type the boot sequence
+          # Only process the boot_cmd_sequence if it's not empty
           unless boot_cmd_sequence.empty?
             # Let fill's in the variable we need
             boot_sequence=fill_sequence(definition.boot_cmd_sequence,{
@@ -86,7 +86,8 @@ module Veewee
               :port => definition.kickstart_port.to_s,
               :name => name
             })
-            
+
+            # Type the boot sequence
             Thread.new do
               self.console_type(boot_sequence)
             end
