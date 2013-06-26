@@ -17,13 +17,13 @@ module Veewee
 
         def add_scsi_controller 
           #unless => "${vboxcmd} showvminfo \"${vname}\" | grep \"SCSI Controller\" ";
-          command ="#{@vboxcmd} storagectl \"#{name}\" --name \"SCSI Controller\" --add scsi --hostiocache #{definition.hostiocache}"
+          command ="#{@vboxcmd} storagectl \"#{name}\" --name \"SCSI Controller\" --add scsi --hostiocache #{definition.hostiocache} --bootable on"
           shell_exec("#{command}")
         end
 
         def add_sas_controller 
           #unless => "${vboxcmd} showvminfo \"${vname}\" | grep \"SAS Controller\" ";
-          command ="#{@vboxcmd} storagectl \"#{name}\" --name \"SAS Controller\" --add sas --hostiocache #{definition.hostiocache}"
+          command ="#{@vboxcmd} storagectl \"#{name}\" --name \"SAS Controller\" --add sas --hostiocache #{definition.hostiocache} --bootable on"
           shell_exec("#{command}")
         end
 
