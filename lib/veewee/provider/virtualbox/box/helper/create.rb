@@ -52,7 +52,7 @@ module Veewee
         def add_winrm_nat_mapping
 
           unless definition.nil?
-            #Map SSH Ports
+            #Map WinRM Ports
             unless definition.skip_nat_mapping == true
               if self.running?
                 command="#{@vboxcmd} controlvm \"#{name}\" natpf#{self.natinterface} \"guestwinrm,tcp,,#{definition.winrm_host_port},,#{definition.winrm_guest_port}\""
