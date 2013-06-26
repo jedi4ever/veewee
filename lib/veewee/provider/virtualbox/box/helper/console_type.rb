@@ -7,9 +7,7 @@ module Veewee
     module Virtualbox
       module BoxCommand
         def console_type(sequence)
-          unless sequence.empty?
-            send_virtualbox_sequence(sequence)
-          end
+          send_virtualbox_sequence(sequence)
         end
 
         def send_virtualbox_sequence(sequence)
