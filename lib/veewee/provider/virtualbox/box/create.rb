@@ -61,23 +61,19 @@ module Veewee
           self.add_floppy_controller
           self.attach_floppy
 
-          if definition.winrm_user && definition.winrm_password # prefer winrm
+          if definition.winrm_user && definition.winrm_password # prefer winrm 
             env.ui.warn "Using winrm because winrm_user and winrm_password are both set"
-            if is_tcp_port_open?(self.ip_address, definition.winrm_host_port.to_i)
-              guessed_port=guess_free_port(definition.winrm_host_port.to_i,definition.winrm_host_port.to_i+40).to_s
-              if guessed_port.to_s!=definition.winrm_host_port
-                env.ui.warn "Changing winrm port from #{definition.winrm_host_port} to #{guessed_port}"
-                definition.winrm_host_port=guessed_port.to_s
-              end
+            guessed_port=guess_free_port(definition.winrm_host_port.to_i,definition.winrm_host_port.to_i+40).to_s
+            if guessed_port.to_s!=definition.winrm_host_port
+              env.ui.warn "Changing winrm port from #{definition.winrm_host_port} to #{guessed_port}"
+              definition.winrm_host_port=guessed_port.to_s
             end
             self.add_winrm_nat_mapping
           else
-            if is_tcp_port_open?(self.ip_address, definition.ssh_host_port.to_i)
-              guessed_port=guess_free_ssh_port(definition.ssh_host_port.to_i,definition.ssh_host_port.to_i+40).to_s
-              if guessed_port.to_s!=definition.ssh_host_port
-                env.ui.warn "Changing ssh port from #{definition.ssh_host_port} to #{guessed_port}"
-                definition.ssh_host_port=guessed_port.to_s
-              end
+            guessed_port=guess_free_ssh_port(definition.ssh_host_port.to_i,definition.ssh_host_port.to_i+40).to_s
+            if guessed_port.to_s!=definition.ssh_host_port
+              env.ui.warn "Changing ssh port from #{definition.ssh_host_port} to #{guessed_port}"
+              definition.ssh_host_port=guessed_port.to_s
             end
             self.add_ssh_nat_mapping
           end
