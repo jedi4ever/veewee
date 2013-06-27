@@ -141,7 +141,7 @@ module Veewee
             { :description => 'Checking user',
               :tags => [ 'virtualbox','kvm','vmfusion'],
               :command => 'whoami',
-              :expected_string => definition.ssh_user,
+              :expected_string => definition.winrm_user,
               :sudo => false
           },
           { :description => 'Checking ruby',
