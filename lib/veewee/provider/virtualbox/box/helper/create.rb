@@ -150,6 +150,8 @@ module Veewee
           ui.info "Mounting guest additions: #{full_iso_file}"
           command ="#{@vboxcmd} storageattach \"#{name}\" --storagectl \"IDE Controller\" --type dvddrive --port 1 --device 0 --medium \"#{full_iso_file}\""
           shell_exec("#{command}")
+          # Do not upload the Guest Additions ISO to the Guest
+          definition.skip_iso_transfer = 'true'
         end
 
 
