@@ -8,6 +8,7 @@ require 'veewee/provider/kvm/box/up'
 require 'veewee/provider/kvm/box/halt'
 require 'veewee/provider/kvm/box/poweroff'
 require 'veewee/provider/kvm/box/destroy'
+require 'veewee/provider/kvm/box/export_vagrant'
 
 require 'veewee/provider/kvm/box/helper/ip'
 require 'veewee/provider/kvm/box/helper/ssh_options'
@@ -34,9 +35,9 @@ module Veewee
           @connection=::Fog::Compute[:libvirt]
 
           # Many of the existing templates have disk_format set to "VDI"
-          # Use "raw" instead as a Libvirt-compatible default
+          # Use "qcow2" instead as a vagrant-libvirt-compatible default
           definition.disk_format.downcase!
-          definition.disk_format = "raw" if definition.disk_format == "vdi"
+          definition.disk_format = "qcow2" if definition.disk_format == "vdi"
           @volume_name = "#{name}.#{definition.disk_format}"
 
         end

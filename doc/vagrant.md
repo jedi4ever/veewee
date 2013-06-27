@@ -5,7 +5,7 @@ If you don't find what you're looking for here, please see the official [Vagrant
 
 ## Typical workflow to build a Vagrant VM image
 
-A simple workflow to build a VM for Vagrant would be:
+A simple workflow to build a VirtualBox VM for Vagrant would be:
 
     $ bundle exec veewee vbox templates | grep -i ubuntu
     $ bundle exec veewee vbox define 'mybuntubox' 'ubuntu-12.10-server-amd64'
@@ -13,6 +13,7 @@ A simple workflow to build a VM for Vagrant would be:
 
 For additional box building instructions, see the [Veewee Basics](basics.md) and [Definition Customization](customize.md) docs.
 
+To build a VM for another provider, such as VMware Fusion, you'd use "fusion" instead of "vbox" in the above.
 
 ## Export the VM image to a .box file
 
