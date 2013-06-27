@@ -36,7 +36,5 @@ Veewee::Session.declare({
     :winrm_login_timeout => '10000',
     :winrm_host_port => '15985',
     
-    :skip_iso_transfer => 'true',
-
     :shutdown_cmd => 'cmd.exe /c shutdown /s /t 60 /d p:4:2 /c \"Veewee Installation Shutdown\"'
 })
