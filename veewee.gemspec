@@ -32,7 +32,7 @@ Gem::Specification.new do |s|
   s.add_dependency "ruby-vnc", "~> 1.0.0"
   s.add_dependency "fog", "~> 1.8"
   s.add_dependency "childprocess"
-  s.add_dependency "fission", "0.4.0"
+  s.add_dependency "fission", ">= 0.5.0"
   s.add_dependency "whichr"
 
   # Grit is not a hard requirment any more but it is the preferred provider
