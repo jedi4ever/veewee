@@ -17,11 +17,13 @@ module Veewee
 
         module Winrm
 
+          require "em/pure_ruby"
+          
           require 'timeout'
           require 'log4r'
           require 'em-winrm'
           require 'highline'
-
+          
           def winrm_up?(ip,options)
             begin
               if not @winrm_up
@@ -45,10 +47,11 @@ module Veewee
             @login_works ||= {}
             begin
               Timeout::timeout(options[:timeout]) do
-                if @login_works[ip]
+                if @login_works[ip] && @winrm_up
                   block.call(ip);
                 else
-                  env.ui.info  "Waiting for winrm login on #{ip} with user #{options[:user]} to windows on port => #{options[:port]} to work, timeout=#{options[:timeout]} sec"
+                  @connected = @winrm_up
+                  env.ui.info  "Waiting for winrm login on #{ip}:#{options[:port]} with user #{options[:user]} to work, timeout=#{options[:timeout]} sec"
                   until @connected do
                     begin
                       sleep 1

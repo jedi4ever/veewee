@@ -113,15 +113,16 @@ module Veewee
           unless definition.params.empty?
             self.transfer_params(options)
           end
-
-          # Filtering post install files based upon --postinstall-include and --postinstall--exclude
-          unless definition.postinstall_files.empty?
-            definition.postinstall_files=filter_postinstall_files(options)
-            self.handle_postinstall(options)
-          end
-          run_hook(:after_postinstall)
           
           if (definition.winrm_user && definition.winrm_password)
+            self.when_winrm_login_works(self.ip_address, winrm_options.merge(options)) do
+              env.ui.info "WinRM is up on #{self.ip_address}:#{definition.winrm_host_port}, rebooting Guest to enable Guest Additions"
+              sleep 20
+              self.exec("powershell \"Restart-Computer -Force\"", winrm_options.merge(options))
+              # Give the Guest OS a chance to shutdown before we continue
+              @winrm_up = false
+              sleep 10
+            end
             self.when_winrm_login_works(self.ip_address, winrm_options.merge(options)) do
               env.ui.info "You can now login to the box with:"
               env.ui.info winrm_command_string
@@ -132,6 +133,13 @@ module Veewee
               env.ui.info ssh_command_string
             end
           end
+
+          # Filtering post install files based upon --postinstall-include and --postinstall--exclude
+          unless definition.postinstall_files.empty?
+            definition.postinstall_files=filter_postinstall_files(options)
+            self.handle_postinstall(options)
+          end
+          run_hook(:after_postinstall)
           
           env.ui.success "The box #{name} was built successfully!"
 
