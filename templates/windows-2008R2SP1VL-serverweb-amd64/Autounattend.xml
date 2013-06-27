@@ -179,59 +179,53 @@
                 <SynchronousCommand wcm:action="add">
                     <CommandLine>cmd.exe /c netsh advfirewall firewall set rule group="remote administration" new enable=yes </CommandLine>
                     <Description>Win RM adv firewall enable</Description>
-                    <Order>9</Order>
+                    <Order>17</Order>
                     <RequiresUserInput>true</RequiresUserInput>
                 </SynchronousCommand>
                 <SynchronousCommand wcm:action="add">
                     <CommandLine>cmd.exe /c net stop winrm </CommandLine>
                     <Description>Stop Win RM Service </Description>
-                    <Order>10</Order>
-                    <RequiresUserInput>true</RequiresUserInput>
-                </SynchronousCommand>
-                <SynchronousCommand wcm:action="add">
-                    <CommandLine>cmd.exe /c sc config winrm start=auto</CommandLine>
-                    <Description>Win RM Autostart</Description>
-                    <Order>11</Order>
+                    <Order>9</Order>
                     <RequiresUserInput>true</RequiresUserInput>
                 </SynchronousCommand>
                 <SynchronousCommand wcm:action="add">
                     <CommandLine>cmd.exe /c net start winrm </CommandLine>
                     <Description>Start Win RM Service</Description>
-                    <Order>12</Order>
+                    <Order>18</Order>
                     <RequiresUserInput>true</RequiresUserInput>
                 </SynchronousCommand>
                 <SynchronousCommand wcm:action="add">
                     <CommandLine>powershell -Command &quot;Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Force&quot;</CommandLine>
                     <Description>Set PowerShell ExecutionPolicy</Description>
-                    <Order>13</Order>
+                    <Order>10</Order>
                     <RequiresUserInput>true</RequiresUserInput>
                 </SynchronousCommand>
                 <SynchronousCommand wcm:action="add">
-                    <Order>15</Order>
+                    <Order>13</Order>
                     <CommandLine>cmd.exe /c certutil -addstore -f &quot;TrustedPublisher&quot; a:\oracle-cert.cer</CommandLine>
                     <Description>Install Oracle TrustedPublisher certificate</Description>
                     <RequiresUserInput>true</RequiresUserInput>
                 </SynchronousCommand>
                 <SynchronousCommand wcm:action="add">
-                    <Order>16</Order>
+                    <Order>14</Order>
                     <CommandLine>e:\VBoxWindowsAdditions-amd64.exe /S</CommandLine>
                     <Description>Install Oracle VirtualBox Guest Tools</Description>
                     <RequiresUserInput>true</RequiresUserInput>
                 </SynchronousCommand>
                 <SynchronousCommand wcm:action="add">
-                    <Order>17</Order>
+                    <Order>15</Order>
                     <RequiresUserInput>true</RequiresUserInput>
                     <Description>Modify Local Security Settings</Description>
                     <CommandLine>cmd.exe /c secedit /configure /db %TEMP%\secedit2.sdb /cfg a:\Vagrant.inf /overwrite /areas SECURITYPOLICY REGKEYS /quiet</CommandLine>
                 </SynchronousCommand>
                 <SynchronousCommand wcm:action="add">
-                    <Order>14</Order>
+                    <Order>11</Order>
                     <RequiresUserInput>true</RequiresUserInput>
                     <CommandLine>powershell -Command &quot;Enable-PSRemoting -Force&quot;</CommandLine>
                     <Description>Enable PowerShell Remoting</Description>
                 </SynchronousCommand>
                 <SynchronousCommand wcm:action="add">
-                    <Order>18</Order>
+                    <Order>16</Order>
                     <CommandLine>cmd.exe /c regedit /s a:\Vagrant.reg</CommandLine>
                     <Description>Modify registry to disable server config pop-ups.</Description>
                     <RequiresUserInput>true</RequiresUserInput>
