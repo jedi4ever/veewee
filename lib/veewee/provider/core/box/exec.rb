@@ -1,3 +1,4 @@
+require 'veewee/provider/core/helper/ssh'
 module Veewee
   module Provider
     module  Core
