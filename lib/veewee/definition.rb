@@ -14,7 +14,7 @@ module Veewee
     attr_writer   :cpu_count, :memory_size
 
     attr_accessor :video_memory_size, :iso_file
-    attr_accessor :disk_size, :disk_format, :disk_variant, :disk_count, :nonrotational
+    attr_accessor :disk_size, :disk_format, :disk_variant, :disk_count, :controller_kind, :nonrotational
 
     attr_accessor :os_type_id
 
@@ -27,6 +27,7 @@ module Veewee
     attr_accessor :winrm_login_timeout, :winrm_user, :winrm_password, :winrm_host_port, :winrm_guest_port
 
     attr_accessor :sudo_cmd
+    attr_accessor :reboot_cmd
     attr_accessor :shutdown_cmd
 
     attr_accessor :pre_postinstall_file
@@ -35,7 +36,7 @@ module Veewee
 
     attr_accessor :floppy_files
 
-    attr_accessor :use_hw_virt_ext, :use_pae, :hostiocache, :controller_type
+    attr_accessor :use_hw_virt_ext, :use_pae, :hostiocache
 
     attr_accessor :iso_dowload_timeout, :iso_src, :iso_md5, :iso_sha1, :iso_download_instructions
 
@@ -84,21 +85,21 @@ module Veewee
       @pre_postinstall_file = nil
       @postinstall_files = [] ; @postinstall_timeout = 10000 ;
 
-      @iso_file = ""
+      @iso_file = ''
       @disk_size = '10240' ; @disk_format = 'VDI' ; @disk_variant = 'Standard' ; @disk_count = 1; @nonrotational = 'off'
-      @controller_type = ""
+      @controller_kind = 'ide'
 
       #        :hostiocache => 'off' ,
       #        :os_type_id => 'Ubuntu',
       #        :boot_wait => "10", :boot_cmd_sequence => [ "boot"],
       #        :kickstart_port => "7122", :kickstart_ip => "127.0.0.1", :kickstart_timeout => 10000,#
       #        :ssh_login_timeout => "10000", :ssh_user => "vagrant", :ssh_password => "vagrant",:ssh_key => "",
-      @ssh_host_port = "2222" ; @ssh_guest_port = "22"
+      @ssh_host_port = '2222' ; @ssh_guest_port = '22'
       #        :ssh_host_port => "2222", :ssh_guest_port => "22", :sudo_cmd => "echo '%p'|sudo -S sh '%f'",
       #       :shutdown_cmd => "shutdown -h now",
       #        :kickstart_file => nil,
-      @winrm_host_port = "5985" ; @winrm_guest_port = "5985"
-      @winrm_login_timeout = "10000"
+      @winrm_host_port = '5985' ; @winrm_guest_port = '5985'
+      @winrm_login_timeout = '10000'
       @boot_cmd_sequence = [] # Empty list by default
 
       @virtualbox = { :vm_options => {} }

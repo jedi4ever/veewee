@@ -2,31 +2,7 @@ module Veewee
   module Provider
     module Virtualbox
       module BoxCommand
-
-        def add_ide_controller
-          #unless => "${vboxcmd} showvminfo \"${vname}\" | grep \"IDE Controller\" "
-          command ="#{@vboxcmd} storagectl \"#{name}\" --name \"IDE Controller\" --add ide"
-          shell_exec("#{command}")
-        end
-
-        def add_sata_controller 
-          #unless => "${vboxcmd} showvminfo \"${vname}\" | grep \"SATA Controller\" ";
-          command ="#{@vboxcmd} storagectl \"#{name}\" --name \"SATA Controller\" --add sata --hostiocache #{definition.hostiocache} --sataportcount #{definition.disk_count}"
-          shell_exec("#{command}")
-        end
-
-        def add_scsi_controller 
-          #unless => "${vboxcmd} showvminfo \"${vname}\" | grep \"SCSI Controller\" ";
-          command ="#{@vboxcmd} storagectl \"#{name}\" --name \"SCSI Controller\" --add scsi --hostiocache #{definition.hostiocache} --bootable on"
-          shell_exec("#{command}")
-        end
-
-        def add_sas_controller 
-          #unless => "${vboxcmd} showvminfo \"${vname}\" | grep \"SAS Controller\" ";
-          command ="#{@vboxcmd} storagectl \"#{name}\" --name \"SAS Controller\" --add sas --hostiocache #{definition.hostiocache} --bootable on"
-          shell_exec("#{command}")
-        end
-
+        
         def attach_serial_console
           command ="#{@vboxcmd} modifyvm \"#{name}\" --uart1 0x3F8 4"
           shell_exec("#{command}")
@@ -35,7 +11,6 @@ module Veewee
         end
 
         def add_ssh_nat_mapping
-
           unless definition.nil?
             unless definition.skip_nat_mapping == true
               #Map SSH Ports
@@ -50,7 +25,6 @@ module Veewee
         end
 
         def add_winrm_nat_mapping
-
           unless definition.nil?
             #Map WinRM Ports
             unless definition.skip_nat_mapping == true
@@ -79,7 +53,6 @@ module Veewee
           return location
         end
 
-
         def suppress_messages
           day=24*60*60
           update_date=Time.now+365*day
@@ -94,9 +67,12 @@ module Veewee
             command="#{@vboxcmd} setextradata global \"#{data[0]}\" \"#{data[1]}\""
             shell_results=shell_exec("#{command}")
           end
-
         end
 
+        def add_controller (controller_kind = 'ide')
+          command ="#{@vboxcmd} storagectl \"#{name}\" --name \"#{controller_kind.upcase} Controller\" --add #{controller_kind}"
+          shell_exec("#{command}")
+        end
 
         def create_disk
             place=get_vbox_home
@@ -107,7 +83,7 @@ module Veewee
             end
         end
 
-        def attach_disk_common(storagectl, device_number)
+        def attach_disk(controller_kind, device_number)
           place=get_vbox_home
           
           1.upto(definition.disk_count.to_i) do |f|
@@ -117,60 +93,56 @@ module Veewee
             ui.info "Attaching disk: #{location}"
   
             #command => "${vboxcmd} storageattach \"${vname}\" --storagectl \"SATA Controller\" --port 0 --device 0 --type hdd --medium \"${vname}.vdi\"",
-            command ="#{@vboxcmd} storageattach \"#{name}\" --storagectl \"#{storagectl}\" --port #{f-1} --device #{device_number} --type hdd --medium \"#{location}\" --nonrotational \"#{definition.nonrotational}\""
+            command ="#{@vboxcmd} storageattach \"#{name}\" --storagectl \"#{controller_kind.upcase} Controller\" --port #{f-1} --device #{device_number} --type hdd --medium \"#{location}\" --nonrotational \"#{definition.nonrotational}\""
             shell_exec("#{command}")
           end
         end
 
-        def attach_disk_ide(device_number=0)
-          self.attach_disk_common("IDE Controller", device_number)
-        end
-
-        def attach_disk_sata(device_number=0)
-          self.attach_disk_common("SATA Controller", device_number)
-        end
-
-        def attach_disk_scsi(device_number=0)
-          self.attach_disk_common("SCSI Controller", device_number)
-        end
-
-        def attach_disk_sas(device_number=0)
-          self.attach_disk_common("SAS Controller", device_number)
-        end
-
-        def attach_isofile(device_number=0)
-          full_iso_file=File.join(env.config.veewee.iso_dir,definition.iso_file)
+        def attach_isofile(device_number = 0, port = 0, iso_file = definition.iso_file)
+          full_iso_file=File.join(env.config.veewee.iso_dir, iso_file)
           ui.info "Mounting cdrom: #{full_iso_file}"
-          command ="#{@vboxcmd} storageattach \"#{name}\" --storagectl \"IDE Controller\" --type dvddrive --port 0 --device #{device_number} --medium \"#{full_iso_file}\""
+          command ="#{@vboxcmd} storageattach \"#{name}\" --storagectl \"IDE Controller\" --type dvddrive --port #{port} --device #{device_number} --medium \"#{full_iso_file}\""
           shell_exec("#{command}")
         end
 
-        def attach_guest_additions
+        def detach_isofile(device_number = 0, port = 0)
+          full_iso_file=File.join(env.config.veewee.iso_dir, definition.iso_file)
+          ui.info "Un-Mounting cdrom: #{full_iso_file}"
+          command ="#{@vboxcmd} storageattach \"#{name}\" --storagectl \"IDE Controller\" --type dvddrive --port #{port} --device #{device_number} --medium emptydrive"
+          shell_exec("#{command}")
+        end
+        
+        def detach_guest_additions(device_number = 0, port = 1)
           full_iso_file=File.join(env.config.veewee.iso_dir,"VBoxGuestAdditions_#{self.vboxga_version}.iso")
-          ui.info "Mounting guest additions: #{full_iso_file}"
-          command ="#{@vboxcmd} storageattach \"#{name}\" --storagectl \"IDE Controller\" --type dvddrive --port 1 --device 0 --medium \"#{full_iso_file}\""
+          ui.info "Un-Mounting guest additions: #{full_iso_file}"
+          command ="#{@vboxcmd} storageattach \"#{name}\" --storagectl \"IDE Controller\" --type dvddrive --port #{port} --device #{device_number} --medium emptydrive"
           shell_exec("#{command}")
-          # Do not upload the Guest Additions ISO to the Guest
-          definition.skip_iso_transfer = 'true'
         end
-
 
         def add_floppy_controller
           # Create floppy controller
           unless definition.floppy_files.nil?
-
             command="#{@vboxcmd} storagectl \"#{name}\" --name \"Floppy Controller\" --add floppy"
             shell_exec("#{command}")
           end
         end
 
-
         def attach_floppy
+          # Attach floppy to machine (the vfd extension is crucial to detect msdos type floppy)
           unless definition.floppy_files.nil?
-
-            # Attach floppy to machine (the vfd extension is crucial to detect msdos type floppy)
             floppy_file=File.join(definition.path,"virtualfloppy.vfd")
+            ui.info "Mounting floppy: #{floppy_file}"
             command="#{@vboxcmd} storageattach \"#{name}\" --storagectl \"Floppy Controller\" --port 0 --device 0 --type fdd --medium \"#{floppy_file}\""
+            shell_exec("#{command}")
+          end
+        end
+
+        def detach_floppy
+          # Attach floppy to machine (the vfd extension is crucial to detect msdos type floppy)
+          unless definition.floppy_files.nil?
+            floppy_file=File.join(definition.path,"virtualfloppy.vfd")
+            ui.info "Un-Mounting floppy: #{floppy_file}"
+            command="#{@vboxcmd} storageattach \"#{name}\" --storagectl \"Floppy Controller\" --port 0 --device 0 --type fdd --medium emptydrive"
             shell_exec("#{command}")
           end
         end

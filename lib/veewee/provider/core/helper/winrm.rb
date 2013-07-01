@@ -23,7 +23,7 @@ module Veewee
           require 'log4r'
           require 'em-winrm'
           require 'highline'
-          
+
           def winrm_up?(ip,options)
             begin
               if not @winrm_up
@@ -50,7 +50,6 @@ module Veewee
                 if @login_works[ip] && @winrm_up
                   block.call(ip);
                 else
-                  @connected = @winrm_up
                   env.ui.info  "Waiting for winrm login on #{ip}:#{options[:port]} with user #{options[:user]} to work, timeout=#{options[:timeout]} sec"
                   until @connected do
                     begin
@@ -63,7 +62,6 @@ module Veewee
                       block.call(ip);
                       env.ui.info ""
                       sleep 1
-                      @connected = true
                       return true
                     rescue Exception => e
                       @winrm_up = false

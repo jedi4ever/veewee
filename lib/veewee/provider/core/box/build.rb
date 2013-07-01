@@ -104,7 +104,7 @@ module Veewee
             sleep 2
           end
           
-          if !definition.skip_iso_transfer then
+          if !definition.skip_iso_transfer
             self.transfer_buildinfo(options)
           end
 
@@ -116,14 +116,21 @@ module Veewee
           
           if (definition.winrm_user && definition.winrm_password)
             self.when_winrm_login_works(self.ip_address, winrm_options.merge(options)) do
-              env.ui.info "WinRM is up on #{self.ip_address}:#{definition.winrm_host_port}, rebooting Guest to enable Guest Additions"
+              env.ui.info "WinRM is up on #{self.ip_address}:#{definition.winrm_host_port}"
+              env.ui.info "Cleaning up Guest OS of installation ISO & floppy drive content"
+              self.cleanup
+              # Give the Guest OS a chance to finish the initial desktop configuration
               sleep 20
-              self.exec("powershell \"Restart-Computer -Force\"", winrm_options.merge(options))
-              # Give the Guest OS a chance to shutdown before we continue
+              env.ui.info "Rebooting Guest to enable Guest Additions"
+              self.exec(definition.reboot_cmd, winrm_options.merge(options))
+              # Give the Guest OS a chance to shutdown before we continue, we also mark winrm as being down such that we can re-use
+              # the when_winrm_login_works method to check that the Guest OS rebooted
               @winrm_up = false
+              @connected = false
               sleep 10
             end
             self.when_winrm_login_works(self.ip_address, winrm_options.merge(options)) do
+              env.ui.info "WinRM is up on #{self.ip_address}:#{definition.winrm_host_port}"
               env.ui.info "You can now login to the box with:"
               env.ui.info winrm_command_string
             end
@@ -143,6 +150,12 @@ module Veewee
           
           env.ui.success "The box #{name} was built successfully!"
 
+          if (definition.winrm_user && definition.winrm_password)
+            self.when_winrm_login_works(self.ip_address, winrm_options.merge(options)) do
+              self.exec(definition.shutdown_cmd, winrm_options.merge(options))
+            end
+          end
+            
           return self
         end
 
@@ -224,7 +237,6 @@ module Veewee
 
           if kickstartfiles.nil? || kickstartfiles.length == 0
             env.ui.info "Skipping webserver as no kickstartfile was specified"
-            return
           else
             env.ui.info "Starting a webserver #{definition.kickstart_ip}:#{definition.kickstart_port}\n"
           end

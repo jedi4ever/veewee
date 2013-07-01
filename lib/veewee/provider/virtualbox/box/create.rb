@@ -16,7 +16,7 @@ module Veewee
           self.suppress_messages
 
           self.create_vm
-          
+
           # Attach ttyS0 to the VM for console output
           redirect_console=options[:redirectconsole]
           if redirect_console
@@ -29,35 +29,23 @@ module Veewee
           #Create a disk with the same name as the box_name
           self.create_disk
 
-          controller_type = definition.controller_type
-          case controller_type
+          case definition.controller_kind.downcase
           when 'sata', 'scsi', 'sas'
             disk_device_number = 0
             isofile_ide_device_number = 0
+            self.add_controller(definition.controller_kind)
           else
             disk_device_number = 0
             isofile_ide_device_number = 1
           end
-          self.add_ide_controller
+          self.add_controller('ide')
           
-          case controller_type
-          when 'sata'
-            self.add_sata_controller
-            self.attach_disk_sata(disk_device_number)
-          when 'scsi'
-            self.add_scsi_controller
-            self.attach_disk_scsi(disk_device_number)
-          when 'sas'
-            self.add_sas_controller
-            self.attach_disk_sas(disk_device_number)
-          else
-            self.attach_disk_ide(disk_device_number)
-          end
-          self.attach_isofile(isofile_ide_device_number)
-          self.attach_guest_additions
+          self.attach_disk(definition.controller_kind, disk_device_number)
+          self.attach_isofile(isofile_ide_device_number, 0, definition.iso_file)
+          definition.skip_iso_transfer = 'true'
+          self.attach_isofile(isofile_ide_device_number, 1, "VBoxGuestAdditions_#{self.vboxga_version}.iso")
 
           self.create_floppy("virtualfloppy.vfd")
-
           self.add_floppy_controller
           self.attach_floppy
 
@@ -78,6 +66,12 @@ module Veewee
             self.add_ssh_nat_mapping
           end
 
+        end
+        
+        def cleanup(options={})
+          self.detach_isofile
+          self.detach_guest_additions
+          self.detach_floppy
         end
 
       end
