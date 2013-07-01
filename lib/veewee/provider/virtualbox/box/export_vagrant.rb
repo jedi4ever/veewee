@@ -116,12 +116,13 @@ module Veewee
 
             ui.info "Packaging the box"
             FileUtils.cd(tmp_dir)
-            command_box_path = box_path
             is_windows = (RbConfig::CONFIG['host_os'] =~ /mswin|mingw|cygwin/)
             if is_windows
-              command_box_path = command_box_path.gsub(/^([A-Z])\:\/(.*)$/i, '/\1/\2')
+              box_path = box_path.gsub(/[\/]/, '\\')
+              command = "powershell \"dir . | Write-Tar -output #{box_path}\""
+            else
+              command = "tar -cvf '#{box_path}' ."
             end
-            command = "tar -cvf '#{command_box_path}' ."
             env.logger.debug(command)
             shell_exec (command)
 
