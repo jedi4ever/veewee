@@ -125,9 +125,9 @@ module Veewee
               self.exec(definition.reboot_cmd, winrm_options.merge(options))
               # Give the Guest OS a chance to shutdown before we continue, we also mark winrm as being down such that we can re-use
               # the when_winrm_login_works method to check that the Guest OS rebooted
+              sleep 10
               @winrm_up = false
               @connected = false
-              sleep 10
             end
             self.when_winrm_login_works(self.ip_address, winrm_options.merge(options)) do
               env.ui.info "WinRM is up on #{self.ip_address}:#{definition.winrm_host_port}"
@@ -135,7 +135,7 @@ module Veewee
               env.ui.info winrm_command_string
             end
           else
-            self.when_ssh_login_works(self.ip_address, winrm_options.merge(options)) do
+            self.when_ssh_login_works(self.ip_address, ssh_options.merge(options)) do
               env.ui.info "You can now login to the box with:"
               env.ui.info ssh_command_string
             end
