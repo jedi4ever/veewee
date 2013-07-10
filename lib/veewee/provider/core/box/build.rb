@@ -103,7 +103,8 @@ module Veewee
             env.logger.info "wait for Ip address"
             sleep 2
           end
-          
+
+          # If the Guest OS Additions are mounted then we do not need to transfer them.
           if !definition.skip_iso_transfer
             self.transfer_buildinfo(options)
           end
@@ -113,13 +114,11 @@ module Veewee
           unless definition.params.empty?
             self.transfer_params(options)
           end
-          
+
+          # We need to do reboot a Windows Guest OS to enable the Additions
           if (definition.winrm_user && definition.winrm_password)
             self.when_winrm_login_works(self.ip_address, winrm_options.merge(options)) do
               env.ui.info "WinRM is up on #{self.ip_address}:#{definition.winrm_host_port}"
-              env.ui.info "Cleaning up Guest OS of installation ISO & floppy drive content"
-              self.cleanup
-              # Give the Guest OS a chance to finish the initial desktop configuration
               sleep 20
               env.ui.info "Rebooting Guest to enable Guest Additions"
               self.exec(definition.reboot_cmd, winrm_options.merge(options))
@@ -129,16 +128,7 @@ module Veewee
               @winrm_up = false
               @connected = false
             end
-            self.when_winrm_login_works(self.ip_address, winrm_options.merge(options)) do
-              env.ui.info "WinRM is up on #{self.ip_address}:#{definition.winrm_host_port}"
-              env.ui.info "You can now login to the box with:"
-              env.ui.info winrm_command_string
-            end
-          else
-            self.when_ssh_login_works(self.ip_address, ssh_options.merge(options)) do
-              env.ui.info "You can now login to the box with:"
-              env.ui.info ssh_command_string
-            end
+            self.when_winrm_login_works(self.ip_address, winrm_options.merge(options))
           end
 
           # Filtering post install files based upon --postinstall-include and --postinstall--exclude
@@ -152,10 +142,23 @@ module Veewee
 
           if (definition.winrm_user && definition.winrm_password)
             self.when_winrm_login_works(self.ip_address, winrm_options.merge(options)) do
+              env.ui.info "Cleaning up Guest OS of installation ISO & floppy drive content"
+              self.cleanup
+              sleep 5
+              env.ui.info "You can now login to the box with:"
+              env.ui.info winrm_command_string
               self.exec(definition.shutdown_cmd, winrm_options.merge(options))
             end
+          else
+            self.when_ssh_login_works(self.ip_address, ssh_options.merge(options)) do
+              self.cleanup
+              sleep 5
+              env.ui.info "You can now login to the box with:"
+              env.ui.info ssh_command_string
+              self.exec(definition.shutdown_cmd, ssh_options.merge(options))
+            end
           end
-            
+
           return self
         end
 
