@@ -42,8 +42,13 @@ module Veewee
           
           self.attach_disk(definition.controller_kind, disk_device_number)
           self.attach_isofile(isofile_ide_device_number, 0, definition.iso_file)
-          definition.skip_iso_transfer = 'true'
-          self.attach_isofile(isofile_ide_device_number, 1, "VBoxGuestAdditions_#{self.vboxga_version}.iso")
+
+          # On Windows we mount the Guest OS Additions, on all others we transfer the additions iso file to the guest
+          # and mount it there.
+          if definition.winrm_user && definition.winrm_password
+            definition.skip_iso_transfer = 'true'
+            self.attach_isofile(isofile_ide_device_number, 1, "VBoxGuestAdditions_#{self.vboxga_version}.iso")
+          end
 
           self.create_floppy("virtualfloppy.vfd")
           self.add_floppy_controller
