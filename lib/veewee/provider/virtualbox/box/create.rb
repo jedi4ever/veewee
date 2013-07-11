@@ -75,8 +75,8 @@ module Veewee
         
         def cleanup(options={})
           self.detach_isofile
-          self.detach_guest_additions
-          self.detach_floppy
+          self.detach_guest_additions if definition.skip_iso_transfer
+          self.detach_floppy unless definition.floppy_files.nil?
         end
 
       end
