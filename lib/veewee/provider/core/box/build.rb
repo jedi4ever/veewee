@@ -122,13 +122,12 @@ module Veewee
               sleep 20
               env.ui.info "Rebooting Guest to enable Guest Additions"
               self.exec(definition.reboot_cmd, winrm_options.merge(options))
-              # Give the Guest OS a chance to shutdown before we continue, we also mark winrm as being down such that we can re-use
-              # the when_winrm_login_works method to check that the Guest OS rebooted
+              # Give the Guest OS a chance to shutdown before we continue, we also mark winrm as being down such that we
+              # can re-use the when_winrm_login_works method to check that the Guest OS rebooted
               sleep 10
               @winrm_up = false
               @connected = false
             end
-            self.when_winrm_login_works(self.ip_address, winrm_options.merge(options))
           end
 
           # Filtering post install files based upon --postinstall-include and --postinstall--exclude
@@ -138,8 +137,6 @@ module Veewee
           end
           run_hook(:after_postinstall)
           
-          env.ui.success "The box #{name} was built successfully!"
-
           if (definition.winrm_user && definition.winrm_password)
             self.when_winrm_login_works(self.ip_address, winrm_options.merge(options)) do
               env.ui.info "Cleaning up Guest OS of installation ISO & floppy drive content"
@@ -158,6 +155,8 @@ module Veewee
               self.exec(definition.shutdown_cmd, ssh_options.merge(options))
             end
           end
+
+          env.ui.success "The box #{name} was built successfully!"
 
           return self
         end
