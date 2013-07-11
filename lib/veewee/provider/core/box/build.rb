@@ -121,12 +121,18 @@ module Veewee
               env.ui.info "WinRM is up on #{self.ip_address}:#{definition.winrm_host_port}"
               sleep 20
               env.ui.info "Rebooting Guest to enable Guest Additions"
-              self.exec(definition.reboot_cmd, winrm_options.merge(options))
               # Give the Guest OS a chance to shutdown before we continue, we also mark winrm as being down such that we
               # can re-use the when_winrm_login_works method to check that the Guest OS rebooted
-              sleep 10
+              self.halt
+              #Wait for state poweroff
+              while (self.running?) do
+                ui.info ".",{:new_line => false}
+                sleep 1
+              end
+              ui.info ""
               @winrm_up = false
               @connected = false
+              self.up
             end
           end
 
@@ -144,7 +150,6 @@ module Veewee
               sleep 5
               env.ui.info "You can now login to the box with:"
               env.ui.info winrm_command_string
-              self.exec(definition.shutdown_cmd, winrm_options.merge(options))
             end
           else
             self.when_ssh_login_works(self.ip_address, ssh_options.merge(options)) do
@@ -152,11 +157,16 @@ module Veewee
               sleep 5
               env.ui.info "You can now login to the box with:"
               env.ui.info ssh_command_string
-              self.exec(definition.shutdown_cmd, ssh_options.merge(options))
             end
           end
 
           env.ui.success "The box #{name} was built successfully!"
+          self.halt
+          while (self.running?) do
+            ui.info ".",{:new_line => false}
+            sleep 1
+          end
+          ui.info ""
 
           return self
         end
