@@ -71,7 +71,7 @@ file with:
 For more information have a look at the
 [libvirt documentation](http://libvirt.org/drvqemu.html#uris).
 
-## Using `veevee kvm` Subcommand
+## Using `veewee kvm` Subcommand
 
 You can always get help by using the the built-in help with every command:
 
