@@ -1,6 +1,6 @@
 module Veewee
   module Provider
-    module HyperV
+    module Hyperv
       module BoxCommand
 
         def attach_serial_console

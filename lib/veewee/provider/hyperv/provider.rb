@@ -3,7 +3,7 @@ require 'veewee/provider/hyperv/box'
 
 module Veewee
   module Provider
-    module HyperV
+    module Hyperv
       class Provider < Veewee::Provider::Core::Provider
 
         def check_requirements

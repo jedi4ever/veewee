@@ -1,6 +1,6 @@
 module Veewee
   module Command
-    class Vbox < Veewee::Command::GroupBase
+    class Hyperv < Veewee::Command::GroupBase
 
       register :command => "hyperv",
                :description => "Subcommand for HyperV",
@@ -12,7 +12,7 @@ module Veewee
       method_option :nogui,:type => :boolean , :default => false, :aliases => "-n", :desc => "no gui"
       method_option :auto,:type => :boolean , :default => false, :aliases => "-a", :desc => "auto answers"
       method_option :checksum , :type => :boolean , :default => false, :desc => "verify checksum"
-      method_option :redirectconsole,:type => :boolean , :default => false, :aliases => "-r", :desc => "redirects console output"
+      method_option :redirectconsole, :type => :boolean , :default => false, :aliases => "-r", :desc => "redirects console output"
       method_option :postinstall_include, :type => :array, :default => [], :aliases => "-i", :desc => "ruby regexp of postinstall filenames to additionally include"
       method_option :postinstall_exclude, :type => :array, :default => [], :aliases => "-e", :desc => "ruby regexp of postinstall filenames to exclude"
       def build(box_name)
@@ -22,7 +22,7 @@ module Veewee
       desc "export [BOX_NAME]", "Exports the basebox to the vagrant format"
       method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging"
       method_option :force,:type => :boolean , :default => false, :aliases => "-f", :desc => "overwrite existing file"
-      method_option :vagrantfile,:type => :string , :default => "", :desc => "specify Vagrantfile"
+      method_option :vagrantfile, :type => :string , :default => "", :desc => "specify Vagrantfile"
       def export(box_name)
         env.get_box(box_name).export_vagrant(options)
       end

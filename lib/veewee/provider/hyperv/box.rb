@@ -9,7 +9,7 @@ require 'veewee/provider/hyperv/box/create'
 #require 'veewee/provider/virtualbox/box/ssh'
 #require 'veewee/provider/virtualbox/box/validate_vagrant'
 #require 'veewee/provider/virtualbox/box/export_vagrant'
-#require 'veewee/provider/virtualbox/box/helper/create'
+require 'veewee/provider/virtualbox/box/helper/create'
 #require 'veewee/provider/virtualbox/box/helper/ip'
 #require 'veewee/provider/virtualbox/box/helper/forwarding'
 #require 'veewee/provider/virtualbox/box/helper/natinterface'
@@ -26,10 +26,10 @@ require 'whichr'
 
 module Veewee
   module Provider
-    module HyperV
+    module Hyperv
       class Box < Veewee::Provider::Core::Box
 
-        include ::Veewee::Provider::HyperV::BoxCommand
+        include ::Veewee::Provider::Hyperv::BoxCommand
 
         def initialize(name,env)
           super(name, env)
