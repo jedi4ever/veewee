@@ -29,27 +29,28 @@ module Veewee
           #Create a disk with the same name as the box_name
           self.create_disk
 
-          use_sata = definition.use_sata
-          if use_sata
+          case definition.controller_kind.downcase
+          when 'sata', 'scsi', 'sas'
             disk_device_number = 0
             isofile_ide_device_number = 0
+            self.add_controller(definition.controller_kind)
           else
             disk_device_number = 0
             isofile_ide_device_number = 1
           end
+          self.add_controller('ide')
+          
+          self.attach_disk(definition.controller_kind, disk_device_number)
+          self.attach_isofile(isofile_ide_device_number, 0, definition.iso_file)
 
-          self.add_ide_controller
-          if use_sata
-            self.add_sata_controller
-            self.attach_disk_sata(disk_device_number)
-          else
-            self.attach_disk_ide(disk_device_number)
+          # On Windows we mount the Guest OS Additions, on all others we transfer the additions iso file to the guest
+          # and mount it there.
+          if definition.winrm_user && definition.winrm_password
+            definition.skip_iso_transfer = 'true'
+            self.attach_isofile(isofile_ide_device_number, 1, "VBoxGuestAdditions_#{self.vboxga_version}.iso")
           end
-          self.attach_isofile(isofile_ide_device_number)
-          self.attach_guest_additions
 
           self.create_floppy("virtualfloppy.vfd")
-
           self.add_floppy_controller
           self.attach_floppy
 
@@ -70,6 +71,12 @@ module Veewee
             self.add_ssh_nat_mapping
           end
 
+        end
+        
+        def cleanup(options={})
+          self.detach_isofile
+          self.detach_guest_additions if definition.skip_iso_transfer
+          self.detach_floppy unless definition.floppy_files.nil?
         end
 
       end

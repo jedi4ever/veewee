@@ -109,6 +109,18 @@ module Veewee
               end
             end
 
+            if definition.disk_format.downcase == "vdi"
+              place=get_vbox_home
+              1.upto(definition.disk_count.to_i) do |f|
+                filepath = "#{File.join(place,name,name+"#{f}."+definition.disk_format.downcase)}"
+                filepath = filepath.gsub(/[\/]/, '\\')
+                env.ui.info "Compacting harddrive #{filepath}"
+                command = "#{@vboxcmd} modifyhd \"#{filepath}\" --compact"
+                env.logger.debug("Command: #{command}")
+                shell_exec("#{command}")
+              end
+            end
+
             ui.info "Exporting the box"
             command = "#{@vboxcmd} export #{name} --output #{File.join(tmp_dir,'box.ovf')}"
             env.logger.debug("Command: #{command}")
@@ -116,12 +128,13 @@ module Veewee
 
             ui.info "Packaging the box"
             FileUtils.cd(tmp_dir)
-            command_box_path = box_path
             is_windows = (RbConfig::CONFIG['host_os'] =~ /mswin|mingw|cygwin/)
             if is_windows
-              command_box_path = command_box_path.gsub(/^([A-Z])\:\/(.*)$/i, '/\1/\2')
+              box_path = box_path.gsub(/[\/]/, '\\')
+              command = "powershell \"dir . | Write-Tar -output #{box_path}\""
+            else
+              command = "tar -cvf '#{box_path}' ."
             end
-            command = "tar -cvf '#{command_box_path}' ."
             env.logger.debug(command)
             shell_exec (command)
 

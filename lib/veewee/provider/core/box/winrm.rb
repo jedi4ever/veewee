@@ -8,7 +8,7 @@ module Veewee
         def winrm(command=nil,options={})
 
           raise Veewee::Error,"Box is not running" unless self.running?
-          winrm_options={:user => definition.winrm_user,:password => definition.winrm_password, :port => definition.winrm_host_port, :exitcode => '*'}
+          options={:exitcode => '*'}
 
           if (command.nil?)
             env.ui.info "This is a simple interactive shell"

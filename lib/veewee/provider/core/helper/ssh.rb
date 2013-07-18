@@ -27,10 +27,10 @@ module Veewee
             options=defaults.merge(options)
 
             timeout = options[:timeout]
-            timeout=ENV['VEEWEE_TIMEOUT'].to_i unless ENV['VEEWEE_TIMEOUT'].nil?
 
             unless options[:mute]
-            ui.info  "Waiting for ssh login on #{ip} with user #{options[:user]} to sshd on port => #{options[:port]} to work, timeout=#{timeout} sec"
+            env.ui.info  "Waiting for ssh login on #{ip}:#{options[:port]} with user #{options[:user]} to work, timeout=#{timeout} sec"
+
             end
 
             run_hook(:before_ssh)

@@ -3,7 +3,7 @@
     #Encoding.default_internal = Encoding::UTF_8
 #end
 
-source "http://rubygems.org"
+source "https://rubygems.org"
 
 #gem "veewee", :path => "."
 #gem "fission", :path => '/Users/patrick/dev/fission'
@@ -13,7 +13,7 @@ group :kvm do
 end
 
 group :windows do
-  gem "em-winrm", :git => 'http://github.com/hh/em-winrm.git', :ref => '31745601d3'
+  gem "em-winrm", :git => 'http://github.com/hh/em-winrm.git', :ref => 'c17f795b5b'
   gem "log4r"
 end
 

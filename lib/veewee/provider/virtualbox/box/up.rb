@@ -17,12 +17,12 @@ module Veewee
             # Before we start,correct the ssh/winrm port if needed
             forward=self.forwarding("guestwinrm")
             guessed_port=guess_free_port(definition.winrm_host_port.to_i,definition.winrm_host_port.to_i+40).to_s
-            definition.winrm_host_port=guessed_port.to_s
             
             unless forward.nil?
               if guessed_port!=forward[:host_port]
                 # Remove the existing one
                 self.delete_forwarding("guestwinrm")
+                definition.winrm_host_port=guessed_port.to_s
                 env.ui.warn "Changing winrm port on UP from #{forward[:host_port]} to #{guessed_port}"
               self.add_winrm_nat_mapping
               end

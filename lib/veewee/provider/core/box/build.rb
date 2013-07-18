@@ -78,18 +78,21 @@ module Veewee
             end
           end
 
-          # Let fill's in the variable we need
-          boot_sequence=fill_sequence(definition.boot_cmd_sequence,{
-            :ip =>host_ip_as_seen_by_guest,
-            :port => definition.kickstart_port.to_s,
-            :name => name
-          })
+          # Only process the boot_cmd_sequence if it's not empty
+          unless definition.boot_cmd_sequence.empty?
+            # Let fill's in the variable we need
+            boot_sequence=fill_sequence(definition.boot_cmd_sequence,{
+              :ip =>host_ip_as_seen_by_guest,
+              :port => definition.kickstart_port.to_s,
+              :name => name
+            })
 
-          # Type the boot sequence
-          Thread.new do
-            self.console_type(boot_sequence)
-            run_hook(:after_boot_sequence)
+            # Type the boot sequence
+            Thread.new do
+              self.console_type(boot_sequence)
+            end
           end
+          run_hook(:after_boot_sequence)
 
           self.handle_kickstart(options)
 
@@ -101,28 +104,69 @@ module Veewee
             sleep 2
           end
 
-          if ! definition.skip_iso_transfer then
+          # If the Guest OS Additions are mounted then we do not need to transfer them.
+          if !definition.skip_iso_transfer
             self.transfer_buildinfo(options)
           end
 
           # Transfer the VEEWEE_<params> environment variables + definition.params
           # into .veewee_params
-          self.transfer_params(options)
+          unless definition.params.empty?
+            self.transfer_params(options)
+          end
+
+          # We need to do reboot a Windows Guest OS to enable the Additions
+          if (definition.winrm_user && definition.winrm_password)
+            self.when_winrm_login_works(self.ip_address, winrm_options.merge(options)) do
+              env.ui.info "WinRM is up on #{self.ip_address}:#{definition.winrm_host_port}"
+              sleep 20
+              env.ui.info "Rebooting Guest to enable Guest Additions"
+              # Give the Guest OS a chance to shutdown before we continue, we also mark winrm as being down such that we
+              # can re-use the when_winrm_login_works method to check that the Guest OS rebooted
+              self.halt
+              #Wait for state poweroff
+              while (self.running?) do
+                ui.info ".",{:new_line => false}
+                sleep 1
+              end
+              ui.info ""
+              @winrm_up = false
+              @connected = false
+              self.up
+            end
+          end
 
           # Filtering post install files based upon --postinstall-include and --postinstall--exclude
-          definition.postinstall_files=filter_postinstall_files(options)
-
-          self.handle_postinstall(options)
-
-          run_hook(:after_postinstall)
-
-          ui.success "The box #{name} was built successfully!"
-          ui.info "You can now login to the box with:"
-          if (definition.winrm_user && definition.winrm_password)
-            env.ui.info winrm_command_string
-          else
-            env.ui.info ssh_command_string
+          unless definition.postinstall_files.empty?
+            definition.postinstall_files=filter_postinstall_files(options)
+            self.handle_postinstall(options)
           end
+          run_hook(:after_postinstall)
+          
+          if (definition.winrm_user && definition.winrm_password)
+            self.when_winrm_login_works(self.ip_address, winrm_options.merge(options)) do
+              env.ui.info "Cleaning up Guest OS of installation ISO & floppy drive content"
+              self.cleanup
+              sleep 5
+              env.ui.info "You can now login to the box with:"
+              env.ui.info winrm_command_string
+            end
+          else
+            self.when_ssh_login_works(self.ip_address, ssh_options.merge(options)) do
+              self.cleanup
+              sleep 5
+              env.ui.info "You can now login to the box with:"
+              env.ui.info ssh_command_string
+            end
+          end
+
+          env.ui.success "The box #{name} was built successfully!"
+          self.halt
+          while (self.running?) do
+            ui.info ".",{:new_line => false}
+            sleep 1
+          end
+          ui.info ""
 
           return self
         end

@@ -17,6 +17,8 @@ module Veewee
 
         module Winrm
 
+          require "em/pure_ruby"
+          
           require 'timeout'
           require 'log4r'
           require 'em-winrm'
@@ -45,10 +47,10 @@ module Veewee
             @login_works ||= {}
             begin
               Timeout::timeout(options[:timeout]) do
-                if @login_works[ip]
+                if @login_works[ip] && @winrm_up
                   block.call(ip);
                 else
-                  env.ui.info  "Waiting for winrm login on #{ip} with user #{options[:user]} to windows on port => #{options[:port]} to work, timeout=#{options[:timeout]} sec"
+                  env.ui.info  "Waiting for winrm login on #{ip}:#{options[:port]} with user #{options[:user]} to work, timeout=#{options[:timeout]} sec"
                   until @connected do
                     begin
                       sleep 1
@@ -60,7 +62,6 @@ module Veewee
                       block.call(ip);
                       env.ui.info ""
                       sleep 1
-                      @connected = true
                       return true
                     rescue Exception => e
                       @winrm_up = false
