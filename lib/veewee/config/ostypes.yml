@@ -34,6 +34,7 @@ Windows2008_64:
   :kvm:
   :vbox: Windows2008_64
   :parallels: win-2008
+  :hyperv: Windows2008_64
 WindowsVista_64:
   :fusion: winvista-64
   :kvm:
@@ -209,16 +210,19 @@ RedHat6_64:
   :kvm:
   :vbox: RedHat_64
   :parallels: redhat
+  :hyperv: RedHat_64
 Centos:
   :fusion: centos
   :kvm:
   :vbox: RedHat
   :parallels: centos
+  :hyperv: RedHat
 Centos_64:
   :fusion: centos-64
   :kvm:
   :vbox: RedHat_64
   :parallels: centos
+  :hyperv: RedHat_64
 ArchLinux:
   :fusion: other26xlinux
   :kvm:
