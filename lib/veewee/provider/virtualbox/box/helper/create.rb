@@ -138,7 +138,7 @@ module Veewee
         end
 
         def detach_floppy
-          # Attach floppy to machine (the vfd extension is crucial to detect msdos type floppy)
+          # Detach floppy from machine (the vfd extension is crucial to detect msdos type floppy)
           unless definition.floppy_files.nil?
             floppy_file=File.join(definition.path,"virtualfloppy.vfd")
             ui.info "Un-Mounting floppy: #{floppy_file}"
