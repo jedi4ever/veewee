@@ -20,6 +20,7 @@ Veewee isn't only for Vagrant.  It currently supports exporting VM images for th
 * [VMware (Fusion)](http://www.vmware.com/products/fusion/) - exports to `OVA` filetype
 * [KVM](http://www.linux-kvm.org/) - exports to `IMG` filetype
 * [Parallels](http://www.parallels.com/)
+* [HyperV] (http://www.microsoft.com/en-us/server-cloud/hyper-v-server/default.aspx)
 
 
 ## Getting Started
@@ -43,6 +44,7 @@ Then depending on how you want to use Veewee, we suggest to read through one of 
 * [Guide for VMware Fusion](doc/fusion.md)
 * [Guide for KVM](doc/kvm.md)
 * [Guide for Parallels](doc/parallels.md)
+* [Guide for HyperV] (doc/hyperv.md)
 
 Major noteworthy changes between versions can be found here:
 
@@ -64,6 +66,7 @@ Below is an overview of the `veewee` command options:
     #   veewee kvm             # Subcommand for KVM
     #   veewee parallels       # Subcommand for Parallels
     #   veewee vbox            # Subcommand for VirtualBox
+    #   veewee hyperv          # Subcommand for HyperV
     #   veewee version         # Prints the Veewee version information
 
 Learn how to avoid typing `bundle exec` by visiting the [Commands](doc/commands.md) doc.

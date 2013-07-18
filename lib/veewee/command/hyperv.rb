@@ -2,9 +2,9 @@ module Veewee
   module Command
     class Vbox < Veewee::Command::GroupBase
 
-      register :command => "vbox",
-               :description => "Subcommand for VirtualBox",
-               :provider => "virtualbox"
+      register :command => "hyperv",
+               :description => "Subcommand for HyperV",
+               :provider => "hyperv"
 
       desc "build [BOX_NAME]", "Build box"
       # TODO move common build options into array

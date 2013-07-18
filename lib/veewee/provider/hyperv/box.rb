@@ -26,33 +26,17 @@ require 'whichr'
 
 module Veewee
   module Provider
-    module Virtualbox
+    module HyperV
       class Box < Veewee::Provider::Core::Box
 
-        include ::Veewee::Provider::Virtualbox::BoxCommand
+        include ::Veewee::Provider::HyperV::BoxCommand
 
         def initialize(name,env)
-          @vboxcmd = self.class.determine_vboxcmd
           super(name, env)
         end
 
-        def self.windows_vboxcmd
-          # based on Vagrant/plugins/providers/virtualbox/driver/base.rb
-          if OS.windows? && ENV.has_key?("VBOX_INSTALL_PATH")
-            ENV["VBOX_INSTALL_PATH"].split(File::PATH_SEPARATOR).each do |path|
-              vboxmanage = File.join(path,"VBoxManage.exe")
-              return "\"#{vboxmanage}\"" if File.file?(vboxmanage)
-            end
-          end
-          nil
-        end
-
-        def self.default_vboxcmd
-          "VBoxManage"
-        end
-
-        def self.determine_vboxcmd
-          @command ||= windows_vboxcmd || default_vboxcmd
+        def self.environment
+          @command = "powershell -Command \"Get-Module HyperV\""
         end
 
 
