@@ -1,5 +1,11 @@
 # Major Changes
 
+## Changes between v0.3.0 -> v0.4.0
+
+1. Migrate Windows Guest OS creation to use winrm and no longer support ssh, this may be need to be fixed for unix host builds.
+
+2. Added HyperV as a provider.
+
 ## Changes between v0.2 -> v0.3
 
 1. The `Veewee::Session.declare` is now _deprecated_ and you should use `Veewee::Definition.declare`.
