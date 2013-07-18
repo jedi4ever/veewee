@@ -1,5 +1,3 @@
-
-
 module Veewee
   module Command
     class Fusion < Veewee::Command::GroupBase
