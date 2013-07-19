@@ -18,8 +18,9 @@ module Veewee
 
           command = self.pscmd ("Get-VM -Name #{name}")
           shell_results = shell_exec("#{command}", {:mute => true, :status => 1})
-          env.logger.info("Vm #{type}? #{shell_results}")
-          return shell_results
+          status = (shell_results.stdout.include? "unable to find") ? false : true
+          env.logger.info("Vm #{type}? #{status}")
+          return status
         end
 
         #COMMANDS = { :running => "%s list runningvms", :exists => "%s list vms" }
