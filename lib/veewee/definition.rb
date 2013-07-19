@@ -25,7 +25,7 @@ module Veewee
     attr_accessor :ssh_login_timeout, :ssh_user, :ssh_password, :ssh_key, :ssh_host_port, :ssh_guest_port
 
     attr_accessor :winrm_login_timeout, :winrm_user, :winrm_password, :winrm_host_port, :winrm_guest_port
-    attr_accessor :hyperv_host, :hyperv_cmd_timeout
+    attr_accessor :hyperv_server, :hyperv_cmd_timeout
 
     attr_accessor :sudo_cmd
     attr_accessor :reboot_cmd
@@ -102,7 +102,7 @@ module Veewee
       @winrm_host_port = '5985' ; @winrm_guest_port = '5985'
       @winrm_login_timeout = '10000'
 
-      @hyperv_host = nil;
+      @hyperv_server = nil;
       @hyperv_cmd_timeout = '10000'
 
       @boot_cmd_sequence = [] # Empty list by default

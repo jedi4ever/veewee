@@ -124,7 +124,7 @@ module Veewee
           unless definition.floppy_files.nil?
             floppy_file=File.join(definition.path,"virtualfloppy.vfd")
             ui.info "Mounting floppy: #{floppy_file}"
-            command="#{@hypervcmd} (Add-VMFloppyDisk -Server #{definition.hyperv_host} -VM #{name} -Path #{floppy_file})"
+            command = "powershell -Command Invoke-Command -Computername #{definition.hyperv_server} -ScriptBlock {Set-VMFloppyDiskDrive -VMAnme #{name} -Path #{floppy_file} }"
             shell_exec("#{command}")
           end
         end

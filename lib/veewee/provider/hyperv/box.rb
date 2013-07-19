@@ -16,7 +16,7 @@ require 'veewee/provider/virtualbox/box/helper/create'
 #require 'veewee/provider/virtualbox/box/helper/ssh_options'
 #require 'veewee/provider/virtualbox/box/helper/winrm_options'
 #require 'veewee/provider/virtualbox/box/helper/guest_additions'
-#require 'veewee/provider/virtualbox/box/helper/status'
+require 'veewee/provider/virtualbox/box/helper/status'
 #require 'veewee/provider/virtualbox/box/helper/version'
 #require 'veewee/provider/virtualbox/box/helper/buildinfo'
 #require 'veewee/provider/virtualbox/box/helper/console_type'
@@ -32,7 +32,6 @@ module Veewee
         include ::Veewee::Provider::Hyperv::BoxCommand
 
         def initialize(name,env)
-          @hypervcmd = "powershell -Command"
           super(name, env)
         end
 

@@ -5,12 +5,11 @@ module Veewee
 
         def create(options={})
 
-          #TODO: Check that the VM doesn't already exist on the HyperV host
-          # First check if the directory where we create the VM is empty
-          # Sometimes there are leftovers from badly terminated vms
-          #command="#{@hypervcmd} Get-VM -Server #{definition.hyperv_host}-VM #{name}"
-          #shell_exec("#{command}")
+          # First check if the VM doesn't already exist on the HyperV server
+          command="#{@pscmd_prefix} Get-VM #{name} #{@pscmd_postfix}"
+          results = shell_exec("#{command}")
 
+          env.ui.info "#{results}"
           if File.exists?(box_directory)
             raise Veewee::Error,"To create the vm '#{name}' the directory '#{box_directory}' needs to be empty. \nThis could be caused by an badly closed vm.\nRemove it manually before you proceed."
           end

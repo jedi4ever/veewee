@@ -5,11 +5,13 @@ module Veewee
 
         def build(options={})
 
-          if !definition.hyperv_host
+          if !definition.hyperv_server
             #TODO: Get-VMHost to list possible HyperV hosts if non defined
-            raise Veewee::Error, "You must specify a hyperv_host in your definition file"
+            raise Veewee::Error, "You must specify a hyperv_server in your definition file"
           end
 
+          @pscmd_prefix = "powershell -Command Invoke-Command -Computername #{definition.hyperv_server} -ScriptBlock {"
+          @pscmd_postfix = "}"
           super(options)
 
           if definition.floppy_files
