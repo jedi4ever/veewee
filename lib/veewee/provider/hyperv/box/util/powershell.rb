@@ -7,7 +7,7 @@ module Veewee
           unless scriptblock
             raise Veewee::Error, "Empty scriptblock passed to pscmd"
           end
-          return "powershell -Command Invoke-Command -Computername #{definition.hyperv_server} -ScriptBlock {#{scriptblock}"
+          return "powershell -Command Invoke-Command -Computername #{definition.hyperv_server} -ScriptBlock {#{scriptblock}}"
         end
 
       end
