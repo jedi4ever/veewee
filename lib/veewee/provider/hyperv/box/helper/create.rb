@@ -169,7 +169,7 @@ module Veewee
           command pscmd ("Set-VMBios -VMName #{name} -StartupOrder @(\"CD\", \"IDE\”)")
           shell_exec("#{command}")
 
-          #TODO: # Modify the vm to enable or disable hw virtualization extensions
+          #TODO: # Modify the vm to enable or disable extensions
 =begin
           vm_flags=%w{pagefusion acpi ioapic pae hpet hwvirtex hwvirtexcl nestedpaging largepages vtxvpid synthxcpu rtcuseutc}
 
