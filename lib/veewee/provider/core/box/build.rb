@@ -45,13 +45,13 @@ module Veewee
               ui.error("you need to provide --force because the box #{name} already exists",:prefix => false)
               raise Veewee::Error,"you need to provide --force because the box #{name} already exists"
             end
+            # By now the box should have been gone, just checking again
+            if self.exists?
+              ui.error("The box should have been deleted by now. Something went terribly wrong. Sorry",:prefix => false)
+              raise Veewee::Error, "The box should have been deleted by now. Something went terribly wrong. Sorry"
+            end
           end
 
-          # By now the box should have been gone, just checking again
-          if self.exists?
-            ui.error("The box should have been deleted by now. Something went terribly wrong. Sorry",:prefix => false)
-            raise Veewee::Error, "The box should have been deleted by now. Something went terribly wrong. Sorry"
-          end
 
           run_hook(:before_create)
 
