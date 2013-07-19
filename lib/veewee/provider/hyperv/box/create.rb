@@ -5,9 +5,12 @@ module Veewee
 
         def create(options={})
 
+          #TODO: Check that the VM doesn't already exist on the HyperV host
           # First check if the directory where we create the VM is empty
           # Sometimes there are leftovers from badly terminated vms
-          box_directory=File.join(self.get_vbox_home,name)
+          #command="#{@hypervcmd} Get-VM -Server #{definition.hyperv_host}-VM #{name}"
+          #shell_exec("#{command}")
+
           if File.exists?(box_directory)
             raise Veewee::Error,"To create the vm '#{name}' the directory '#{box_directory}' needs to be empty. \nThis could be caused by an badly closed vm.\nRemove it manually before you proceed."
           end

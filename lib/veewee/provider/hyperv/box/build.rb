@@ -5,13 +5,16 @@ module Veewee
 
         def build(options={})
 
-          download_vbox_guest_additions_iso(options)
+          if !definition.hyperv_host
+            #TODO: Get-VMHost to list possible HyperV hosts if non defined
+            raise Veewee::Error, "You must specify a hyperv_host in your definition file"
+          end
 
           super(options)
 
-          unless definition.floppy_files.nil?
+          if definition.floppy_files
             unless self.shell_exec("java -version").status == 0
-              raise Veewee::Error,"This box contains floppyfiles, to create it you require to have java installed or have it in your path"
+              raise Veewee::Error, "This box contains floppyfiles, to create it you require to have java installed or have it in your path"
             end
           end
 

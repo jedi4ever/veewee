@@ -32,13 +32,9 @@ module Veewee
         include ::Veewee::Provider::Hyperv::BoxCommand
 
         def initialize(name,env)
+          @hypervcmd = "powershell -Command"
           super(name, env)
         end
-
-        def self.environment
-          @command = "powershell -Command \"Get-Module HyperV\""
-        end
-
 
       end # End Class
     end # End Module

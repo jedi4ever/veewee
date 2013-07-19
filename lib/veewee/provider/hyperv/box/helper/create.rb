@@ -3,26 +3,26 @@ module Veewee
     module Hyperv
       module BoxCommand
 
-        def attach_serial_console
-          command ="#{@vboxcmd} modifyvm \"#{name}\" --uart1 0x3F8 4"
-          shell_exec("#{command}")
-          command ="#{@vboxcmd} modifyvm \"#{name}\" --uartmode1 file \"#{File.join(FileUtils.pwd,name+"-serial-console"+".log")}\""
-          shell_exec("#{command}")
-        end
+        #TODO: def attach_serial_console
+          #command ="#{@vboxcmd} modifyvm \"#{name}\" --uart1 0x3F8 4"
+          #shell_exec("#{command}")
+          #command ="#{@vboxcmd} modifyvm \"#{name}\" --uartmode1 file \"#{File.join(FileUtils.pwd,name+"-serial-console"+".log")}\""
+          #shell_exec("#{command}")
+        #end
 
-        def add_ssh_nat_mapping
-          unless definition.nil?
-            unless definition.skip_nat_mapping == true
-              #Map SSH Ports
-              if self.running?
-                command="#{@vboxcmd} controlvm \"#{name}\" natpf#{self.natinterface} \"guestssh,tcp,,#{definition.ssh_host_port},,#{definition.ssh_guest_port}\""
-              else
-                command="#{@vboxcmd} modifyvm \"#{name}\" --natpf#{self.natinterface} \"guestssh,tcp,,#{definition.ssh_host_port},,#{definition.ssh_guest_port}\""
-              end
-              shell_exec("#{command}")
-            end
-          end
-        end
+        #TODO: def add_ssh_nat_mapping
+          #unless definition.nil?
+          #  unless definition.skip_nat_mapping == true
+          #    #Map SSH Ports
+          #    if self.running?
+          #      command="#{@vboxcmd} controlvm \"#{name}\" natpf#{self.natinterface} \"guestssh,tcp,,#{definition.ssh_host_port},,#{definition.ssh_guest_port}\""
+          #    else
+          #      command="#{@vboxcmd} modifyvm \"#{name}\" --natpf#{self.natinterface} \"guestssh,tcp,,#{definition.ssh_host_port},,#{definition.ssh_guest_port}\""
+          #    end
+          #    shell_exec("#{command}")
+          #  end
+          #end
+        #end
 
         def add_winrm_nat_mapping
           unless definition.nil?
@@ -38,10 +38,10 @@ module Veewee
           end
         end
 
-        def add_shared_folder
-          command="#{@vboxcmd} sharedfolder add  \"#{name}\" --name \"veewee-validation\" --hostpath \"#{File.expand_path(env.validation_dir)}\" --automount"
-          shell_exec("#{command}")
-        end
+        #TODO: def add_shared_folder
+        #  command="#{@vboxcmd} sharedfolder add  \"#{name}\" --name \"veewee-validation\" --hostpath \"#{File.expand_path(env.validation_dir)}\" --automount"
+        #  shell_exec("#{command}")
+        #end
 
         def get_vbox_home
           command="#{@vboxcmd}  list  systemproperties"
@@ -119,65 +119,57 @@ module Veewee
           shell_exec("#{command}")
         end
 
-        def add_floppy_controller
-          # Create floppy controller
-          unless definition.floppy_files.nil?
-            command="#{@vboxcmd} storagectl \"#{name}\" --name \"Floppy Controller\" --add floppy"
-            shell_exec("#{command}")
-          end
-        end
-
         def attach_floppy
           # Attach floppy to machine (the vfd extension is crucial to detect msdos type floppy)
           unless definition.floppy_files.nil?
             floppy_file=File.join(definition.path,"virtualfloppy.vfd")
             ui.info "Mounting floppy: #{floppy_file}"
-            command="#{@vboxcmd} storageattach \"#{name}\" --storagectl \"Floppy Controller\" --port 0 --device 0 --type fdd --medium \"#{floppy_file}\""
+            command="#{@hypervcmd} (Add-VMFloppyDisk -Server #{definition.hyperv_host} -VM #{name} -Path #{floppy_file})"
             shell_exec("#{command}")
           end
         end
 
         def detach_floppy
-          # Attach floppy to machine (the vfd extension is crucial to detect msdos type floppy)
+          # Detach floppy to machine (the vfd extension is crucial to detect msdos type floppy)
           unless definition.floppy_files.nil?
             floppy_file=File.join(definition.path,"virtualfloppy.vfd")
             ui.info "Un-Mounting floppy: #{floppy_file}"
-            command="#{@vboxcmd} storageattach \"#{name}\" --storagectl \"Floppy Controller\" --port 0 --device 0 --type fdd --medium emptydrive"
+            command="#{@hypervcmd} (Remove-VMFloppyDisk -Server #{definition.hyperv_host} -VM #{name} )"
             shell_exec("#{command}")
           end
         end
 
-        def vbox_os_type_id(veewee_type_id)
-          type=env.ostypes[veewee_type_id][:vbox]
-          env.logger.info("Using VBOX os_type_id #{type}")
+        def hyperv_os_type_id(veewee_type_id)
+          type=env.ostypes[veewee_type_id][:hyperv]
+          env.logger.info("Using HyperV os_type_id #{type}")
           return type
         end
 
         def create_vm
-          command="#{@vboxcmd} createvm --name \"#{name}\" --ostype \"#{vbox_os_type_id(definition.os_type_id)}\" --register"
+          ui.info "Creating vm #{name} : #{definition.memory_size}M - #{definition.cpu_count} CPU - #{hyperv_os_type_id(definition.os_type_id)}"
 
-          #Exec and system stop the execution here
+          # Create a new named VM instance on the HyperV server
+          command="#{@hypervcmd} New-VM -Server #{definition.hyperv_host} -Name #{name}"
           shell_exec("#{command}")
 
-          ui.info "Creating vm #{name} : #{definition.memory_size}M - #{definition.cpu_count} CPU - #{vbox_os_type_id(definition.os_type_id)}"
-
           #setting cpu's
-          command="#{@vboxcmd} modifyvm \"#{name}\" --cpus #{definition.cpu_count}"
+          command="#{@hypervcmd} Set-VMCPUCount -Server #{definition.hyperv_host} -Name #{name} -CPUCount #{definition.cpu_count}"
           shell_exec("#{command}")
 
           #setting memory size
-          command="#{@vboxcmd} modifyvm \"#{name}\" --memory #{definition.memory_size}"
+          command="#{@hypervcmd} Set-VMMemory -Server #{definition.hyperv_host} -Name #{name} -Memory #{definition.memory_size}"
           shell_exec("#{command}")
 
-          #setting video memory size
-          command="#{@vboxcmd} modifyvm \"#{name}\" --vram #{definition.video_memory_size}"
-          shell_exec("#{command}")
+          #TODO: #setting video memory size
+          #command="#{@vboxcmd} modifyvm \"#{name}\" --vram #{definition.video_memory_size}"
+          #shell_exec("#{command}")
 
           #setting bootorder
-          command="#{@vboxcmd} modifyvm \"#{name}\" --boot1 disk --boot2 dvd --boot3 none --boot4 none"
+          command="#{@hypervcmd} Set-VM -Server #{definition.hyperv_host} -Name #{name} -BootOrder CD, IDE"
           shell_exec("#{command}")
 
-          # Modify the vm to enable or disable hw virtualization extensions
+          #TODO: # Modify the vm to enable or disable hw virtualization extensions
+=begin
           vm_flags=%w{pagefusion acpi ioapic pae hpet hwvirtex hwvirtexcl nestedpaging largepages vtxvpid synthxcpu rtcuseutc}
 
           vm_flags.each do |vm_flag|
@@ -197,7 +189,7 @@ module Veewee
               shell_exec("#{command}")
             end
           end
-
+=end
         end
       end
     end
