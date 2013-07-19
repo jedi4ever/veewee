@@ -166,7 +166,7 @@ module Veewee
           #shell_exec("#{command}")
 
           #setting bootorder
-          command pscmd ("Set-VMBios -VMName #{name} -StartupOrder @(\"CD\", \"IDE\”)")
+          command pscmd ("Set-VMBios -VMName #{name} -StartupOrder @(\"CD\", \"IDE\")")
           shell_exec("#{command}")
 
           #TODO: # Modify the vm to enable or disable extensions
