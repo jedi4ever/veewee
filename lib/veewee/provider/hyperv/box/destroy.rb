@@ -3,8 +3,12 @@ module Veewee
     module Hyperv
       module BoxCommand
 
-        command = self.pscmd ("Remove-VM -Name #{name} -Force")
-        shell_exec("#{command}", {:mute => true})
+        def destroy(option={})
+
+          command = self.pscmd ("Remove-VM -Name #{name} -Force")
+          shell_exec("#{command}", {:mute => true})
+
+        end
 
       end
     end
