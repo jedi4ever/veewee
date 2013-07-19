@@ -133,7 +133,7 @@ module Veewee
           ui.info "Creating vm #{name} : #{definition.memory_size}M - #{definition.cpu_count} CPU - #{hyperv_os_type_id(definition.os_type_id)}"
 
           # Create a new named VM instance on the HyperV server
-          command = pscmd ("New-VM -Server #{definition.hyperv_host} -Name #{name}")
+          command = pscmd ("New-VM -Name #{name}")
           shell_exec("#{command}")
 
           command = pscmd ("Set-VM -Name #{name} -ComputerName #{name} -DynamicMemory #{definition.hyperv_dynamic_memory} -MemoryStartupBytes #{definition.memory_size} -ProcessorCount #{definition.cpu_count}")
