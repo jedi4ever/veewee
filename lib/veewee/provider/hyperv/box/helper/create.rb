@@ -134,12 +134,12 @@ module Veewee
 
           # Create a new named VM instance on the HyperV server
           command = pscmd ("New-VM -Name #{name}")
-          shell_exec("#{command}")
+          shell_exec("#{command}", {:mute => true})
 
-          command = pscmd ("Set-VM -Name #{name} -ComputerName #{name} -DynamicMemory #{definition.hyperv_dynamic_memory} -MemoryStartupBytes #{definition.memory_size} -ProcessorCount #{definition.cpu_count}")
+          command = pscmd ("Set-VM -Name #{name} -DynamicMemory #{definition.hyperv_dynamic_memory} -MemoryStartupBytes #{definition.memory_size} -ProcessorCount #{definition.cpu_count}")
           #setting cpu's
           #command = pscmd ("Set-VMProcessor -VMName #{name} -Count #{definition.cpu_count}")
-          shell_exec("#{command}")
+          shell_exec("#{command}", {:mute => true})
 
           #setting memory size
           #command = pscmd ("Set-VMMemory -VMName #{name} -DynamicMemoryEnabled #{definition.hyperv_dynamic_memory} -StartupBytes #{definition.memory_size}")
@@ -151,7 +151,7 @@ module Veewee
 
           #setting bootorder
           command pscmd ("Set-VMBios -VMName #{name} -StartupOrder @(\"CD\", \"IDE\")")
-          shell_exec("#{command}")
+          shell_exec("#{command}", {:mute => true})
 
           #TODO: # Modify the vm to enable or disable extensions
 =begin
