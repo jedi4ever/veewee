@@ -4,7 +4,7 @@ module Veewee
       module BoxCommand
 
         def pscmd (scriptblock)
-          unless scriptblocl
+          unless scriptblock
             raise Veewee::Error, "Empty scriptblock passed to pscmd"
           end
           return "powershell -Command Invoke-Command -Computername #{definition.hyperv_server} -ScriptBlock {#{scriptblock}"
