@@ -53,22 +53,6 @@ module Veewee
           return location
         end
 
-        def suppress_messages
-          day=24*60*60
-          update_date=Time.now+365*day
-
-          extraData = [
-              ["GUI/RegistrationData","triesLeft=0"],
-              ["GUI/SuppressMessages","confirmInputCapture,remindAboutAutoCapture,remindAboutMouseIntegrationOff,remindAboutMouseIntegrationOn,remindAboutWrongColorDepth"],
-              ["GUI/UpdateDate", "1 d, #{update_date.year}-#{update_date.month.to_s.rjust(2,'0')}-#{update_date.day.to_s.rjust(2,'0')}, stable"],
-              ["GUI/UpdateCheckCount","60"]
-          ]
-          extraData.each do |data|
-            command="#{@vboxcmd} setextradata global \"#{data[0]}\" \"#{data[1]}\""
-            shell_results=shell_exec("#{command}")
-          end
-        end
-
         def add_controller (controller_kind = 'ide')
           command ="#{@vboxcmd} storagectl \"#{name}\" --name \"#{controller_kind.upcase} Controller\" --add #{controller_kind}"
           shell_exec("#{command}")

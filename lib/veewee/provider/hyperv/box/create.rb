@@ -5,9 +5,6 @@ module Veewee
 
         def create(options={})
 
-          # Suppress those annoying virtualbox messages
-          self.suppress_messages
-
           self.create_vm
 
           # Attach ttyS0 to the VM for console output
