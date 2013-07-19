@@ -1,5 +1,7 @@
 require 'veewee/provider/core/box'
 
+require 'veewee/provider/hyperv/box/util/powershell'
+#require 'veewee/provider/hyperv/box/util/vm'
 require 'veewee/provider/hyperv/box/build'
 require 'veewee/provider/hyperv/box/create'
 #require 'veewee/provider/virtualbox/box/halt'

@@ -16,15 +16,15 @@ module Veewee
         def check? type
           #command=
 
-          command = COMMANDS[type] % "#{@pscmd_prefix} Get-VM #{name} #{@pscmd_postfix}"
-          shell_results=shell_exec("#{command}",{:mute => true})
-          status=shell_results.stdout.split(/\n/).grep(/\"#{Regexp.escape(name)}\"/).size!=0
+          command = self.pscmd ("Get-VM #{name}")
+          shell_results = shell_exec("#{command}", {:mute => true})
+          status = shell_results.stdout.split(/\n/).grep(/\"#{Regexp.escape(name)}\"/).size != 0
 
           env.logger.info("Vm #{type}? #{status}")
           return status
         end
 
-        COMMANDS = { :running => "%s list runningvms", :exists => "%s list vms" }
+        #COMMANDS = { :running => "%s list runningvms", :exists => "%s list vms" }
       end
     end
   end

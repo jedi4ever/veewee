@@ -124,7 +124,7 @@ module Veewee
           unless definition.floppy_files.nil?
             floppy_file=File.join(definition.path,"virtualfloppy.vfd")
             ui.info "Mounting floppy: #{floppy_file}"
-            command = "powershell -Command Invoke-Command -Computername #{definition.hyperv_server} -ScriptBlock {Set-VMFloppyDiskDrive -VMAnme #{name} -Path #{floppy_file} }"
+            command = pscmd ("Set-VMFloppyDiskDrive -VMName #{name} -Path #{floppy_file}")
             shell_exec("#{command}")
           end
         end
@@ -134,7 +134,7 @@ module Veewee
           unless definition.floppy_files.nil?
             floppy_file=File.join(definition.path,"virtualfloppy.vfd")
             ui.info "Un-Mounting floppy: #{floppy_file}"
-            command="#{@hypervcmd} (Remove-VMFloppyDisk -Server #{definition.hyperv_host} -VM #{name} )"
+            command = pscmd ("Set-VMFloppyDiskDrive -VMName #{name} -Path ")
             shell_exec("#{command}")
           end
         end
@@ -149,23 +149,24 @@ module Veewee
           ui.info "Creating vm #{name} : #{definition.memory_size}M - #{definition.cpu_count} CPU - #{hyperv_os_type_id(definition.os_type_id)}"
 
           # Create a new named VM instance on the HyperV server
-          command="#{@hypervcmd} New-VM -Server #{definition.hyperv_host} -Name #{name}"
+          command = pscmd ("New-VM -Server #{definition.hyperv_host} -Name #{name}")
           shell_exec("#{command}")
 
+          command = pscmd ("Set-VM -Name #{name} -ComputerName #{name} -DynamicMemory #{definition.hyperv_dynamic_memory} -MemoryStartupBytes #{definition.memory_size} -ProcessorCount #{definition.cpu_count}")
           #setting cpu's
-          command="#{@hypervcmd} Set-VMCPUCount -Server #{definition.hyperv_host} -Name #{name} -CPUCount #{definition.cpu_count}"
+          #command = pscmd ("Set-VMProcessor -VMName #{name} -Count #{definition.cpu_count}")
           shell_exec("#{command}")
 
           #setting memory size
-          command="#{@hypervcmd} Set-VMMemory -Server #{definition.hyperv_host} -Name #{name} -Memory #{definition.memory_size}"
-          shell_exec("#{command}")
+          #command = pscmd ("Set-VMMemory -VMName #{name} -DynamicMemoryEnabled #{definition.hyperv_dynamic_memory} -StartupBytes #{definition.memory_size}")
+          #shell_exec("#{command}")
 
           #TODO: #setting video memory size
           #command="#{@vboxcmd} modifyvm \"#{name}\" --vram #{definition.video_memory_size}"
           #shell_exec("#{command}")
 
           #setting bootorder
-          command="#{@hypervcmd} Set-VM -Server #{definition.hyperv_host} -Name #{name} -BootOrder CD, IDE"
+          command pscmd ("Set-VMBios -VMName #{name} -StartupOrder @(\"CD\", \"IDE\”)")
           shell_exec("#{command}")
 
           #TODO: # Modify the vm to enable or disable hw virtualization extensions
