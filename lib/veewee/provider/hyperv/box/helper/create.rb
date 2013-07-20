@@ -130,16 +130,17 @@ module Veewee
         end
 
         def create_vm
+          if (definition.memory_size.to_i < 512)
+            ui.warn "HyperV requires a minimum of 512MB RAM for a Guest OS, changing from #{definition.memory_size}"
+            definition.memory_size = "512"
+          end
+
           ui.info "Creating vm #{name} : #{definition.memory_size}M - #{definition.cpu_count} CPU - #{hyperv_os_type_id(definition.os_type_id)}"
 
           # Create a new named VM instance on the HyperV server
           command = pscmd ("New-VM -Name #{name}")
           shell_exec("#{command}", {:mute => true})
 
-          if (definition.memory_size.to_i < 512)
-            env.ui.warn "HyperV requires a minimum of 512MB RAM for a Guest OS, changing from #{definition.memory_size}"
-            definition.memory_size = "512"
-          end
           dynmem = definition.hyperv_dynamic_memory ? "-DynamicMemory" : ""
           command = pscmd ("Set-VM -Name #{name} #{dynmem} -MemoryStartupBytes #{definition.memory_size}MB -ProcessorCount #{definition.cpu_count}")
           shell_exec("#{command}", {:mute => true})
@@ -149,7 +150,7 @@ module Veewee
           #shell_exec("#{command}")
 
           #setting bootorder
-          command pscmd ("Set-VMBios -VMName #{name} -StartupOrder @(\"CD\", \"IDE\")")
+          command = pscmd ("Set-VMBios -VMName #{name} -StartupOrder @(\"CD\", \"IDE\")")
           shell_exec("#{command}", {:mute => true})
 
           #TODO: # Modify the vm to enable or disable extensions
