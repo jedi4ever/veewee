@@ -136,14 +136,9 @@ module Veewee
           command = pscmd ("New-VM -Name #{name}")
           shell_exec("#{command}", {:mute => true})
 
-          command = pscmd ("Set-VM -Name #{name} -DynamicMemory #{definition.hyperv_dynamic_memory} -MemoryStartupBytes #{definition.memory_size} -ProcessorCount #{definition.cpu_count}")
-          #setting cpu's
-          #command = pscmd ("Set-VMProcessor -VMName #{name} -Count #{definition.cpu_count}")
+          dynmem = definition.hyperv_dynamic_memory ? "-DynamicMemory" : ""
+          command = pscmd ("Set-VM #{dynmem} -MemoryStartupBytes #{definition.memory_size}MB -ProcessorCount #{definition.cpu_count}")
           shell_exec("#{command}", {:mute => true})
-
-          #setting memory size
-          #command = pscmd ("Set-VMMemory -VMName #{name} -DynamicMemoryEnabled #{definition.hyperv_dynamic_memory} -StartupBytes #{definition.memory_size}")
-          #shell_exec("#{command}")
 
           #TODO: #setting video memory size
           #command="#{@vboxcmd} modifyvm \"#{name}\" --vram #{definition.video_memory_size}"
