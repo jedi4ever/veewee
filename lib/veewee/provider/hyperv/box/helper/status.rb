@@ -17,11 +17,10 @@ module Veewee
           #command=
 
           command = self.pscmd ("Get-VM -Name #{name}")
-          shell_results = shell_exec("#{command}", {:mute => true})
-          #status = (shell_results.stdout.include? "unable to find") ? false : true
-          status = shell_results.status ? 0 : 1
-          env.logger.info("Vm #{type}? #{status.zero?}")
-          return status.zero?
+          shell_results = shell_exec("#{command}", {:mute => true, :donoterrorout => true})
+          status = (shell_results.stdout.include? "unable to find") ? false : true
+          env.logger.info("Vm #{type}? #{status}")
+          return status
         end
 
       end
