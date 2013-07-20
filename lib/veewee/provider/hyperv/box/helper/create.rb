@@ -137,7 +137,7 @@ module Veewee
           shell_exec("#{command}", {:mute => true})
 
           dynmem = definition.hyperv_dynamic_memory ? "-DynamicMemory" : ""
-          command = pscmd ("Set-VM #{dynmem} -MemoryStartupBytes #{definition.memory_size}MB -ProcessorCount #{definition.cpu_count}")
+          command = pscmd ("Set-VM -Name #{name} #{dynmem} -MemoryStartupBytes #{definition.memory_size}MB -ProcessorCount #{definition.cpu_count}")
           shell_exec("#{command}", {:mute => true})
 
           #TODO: #setting video memory size
