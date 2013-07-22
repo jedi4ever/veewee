@@ -25,7 +25,8 @@ module Veewee
     attr_accessor :ssh_login_timeout, :ssh_user, :ssh_password, :ssh_key, :ssh_host_port, :ssh_guest_port
 
     attr_accessor :winrm_login_timeout, :winrm_user, :winrm_password, :winrm_host_port, :winrm_guest_port
-    attr_accessor :hyperv_server, :hyperv_dynamic_memory, :hyperv_cmd_timeout
+    attr_accessor :hyperv_server, :hyperv_dynamic_memory, :hyperv_network_name, :hyperv_cmd_timeout, :hyperv_store_path
+    attr_accessor :hyperv_controller_ip_as_seen_by_guest, :hyperv_host_nic
 
     attr_accessor :sudo_cmd
     attr_accessor :reboot_cmd
@@ -102,7 +103,8 @@ module Veewee
       @winrm_host_port = '5985' ; @winrm_guest_port = '5985'
       @winrm_login_timeout = '10000'
 
-      @hyperv_server = nil ; @hyperv_dynamic_memory = true
+      @hyperv_server = nil ; @hyperv_dynamic_memory = true; @hyperv_network_name = nil; @hyperv_store_path = nil
+      @hyperv_controller_ip_as_seen_by_guest = nil; @hyperv_host_nic = 'NIC1'
       @hyperv_cmd_timeout = '10000'
 
       @boot_cmd_sequence = [] # Empty list by default
