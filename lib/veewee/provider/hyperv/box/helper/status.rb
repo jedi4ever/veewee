@@ -17,7 +17,7 @@ module Veewee
           case type
             when :exists
               command = self.pscmd ("Get-VM -Name #{name}")
-              shell_results = shell_exec("#{command}", {:mute => true, :status => 1})
+              shell_results = shell_exec("#{command}", {:status => 1})
               status = (shell_results.stdout.include? "unable to find") ? true : false
               env.logger.info("Vm #{type}? #{status}")
             when :running

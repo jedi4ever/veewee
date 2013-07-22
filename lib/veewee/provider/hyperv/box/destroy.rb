@@ -6,7 +6,7 @@ module Veewee
         def destroy(option={})
 
           command = self.pscmd ("Remove-VM -Name #{name} -Force")
-          shell_exec("#{command}", {:mute => true})
+          shell_exec("#{command}")
 
         end
 
