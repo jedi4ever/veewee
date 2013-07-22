@@ -18,10 +18,10 @@ module Veewee
             when :exists
               command = self.pscmd ("Get-VM -Name #{name}")
               shell_results = shell_exec("#{command}", {:status => 1})
-              status = (shell_results.stdout.include? "unable to find") ? true : false
+              status = (shell_results.stdout.include? "unable to find") ? false : true
               env.logger.info("Vm #{type}? #{status}")
             when :running
-              env.logger.info("NOT YET IMPLEMENTED")
+              env.logger.info("NOT YET IMPLEMENTED #{type} TESTING")
           end
           return status
         end
