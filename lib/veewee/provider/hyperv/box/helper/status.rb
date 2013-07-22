@@ -14,15 +14,17 @@ module Veewee
         private
 
         def check? type
-          #command=
-
-          command = self.pscmd ("Get-VM -Name #{name}")
-          shell_results = shell_exec("#{command}", {:mute => true, :donoterrorout => true})
-          status = (shell_results.stdout.include? "unable to find") ? false : true
-          env.logger.info("Vm #{type}? #{status}")
+          case type
+            when :exists
+              command = self.pscmd ("Get-VM -Name #{name}")
+              shell_results = shell_exec("#{command}", {:mute => true, :status => 1})
+              status = (shell_results.stdout.include? "unable to find") ? true : false
+              env.logger.info("Vm #{type}? #{status}")
+            when :running
+              env.logger.info("NOT YET IMPLEMENTED")
+          end
           return status
         end
-
       end
     end
   end
