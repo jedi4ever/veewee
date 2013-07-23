@@ -28,6 +28,7 @@ module Veewee
               status = false
           end
           env.logger.info("VM #{name} #{type}? #{status}")
+          status
         end
       end
     end

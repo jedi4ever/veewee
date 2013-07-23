@@ -113,6 +113,7 @@ module Veewee
         def hyperv_os_type_id(veewee_type_id)
           type = env.ostypes[veewee_type_id][:hyperv]
           env.logger.info("Using HyperV os_type_id #{type}")
+          type
         end
 
         def create_vm
