@@ -6,7 +6,7 @@ module Veewee
         def up(options={})
 
           unless self.exists?
-            raise Veewee::Error, "Error:: You tried to up a non-existing box '#{name}'. Please run 'veewee vbox build #{name}' first."
+            raise Veewee::Error,"Error:: You tried to up a non-existing box '#{name}'. Please run 'veewee vbox build #{name}' first."
           end
 
           gui_enabled=options['nogui']==true ? false : true
@@ -54,7 +54,7 @@ module Veewee
           # Once assembled we start the machine
           env.logger.info "Started the VM with GUI Enabled? #{gui_enabled}"
 
-          results = powershell_exec ("Start-VM -Name #{name}")
+          results = self.powershell_exec("Start-VM -Name #{name}")
         end
 
       end

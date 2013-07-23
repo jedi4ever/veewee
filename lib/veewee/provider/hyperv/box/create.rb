@@ -9,7 +9,7 @@ module Veewee
             # Create a virtual network switch
             self.add_network_switch
           else
-            raise Veewee::Error, "No network hyperv_network_name specified"
+            raise Veewee::Error,"No network hyperv_network_name specified"
           end
 
           # Attach ttyS0 to the VM for console output
@@ -31,16 +31,16 @@ module Veewee
           end
 
           if (definition.disk_count.to_i > 2) then
-            self.attach_disk(definition.controller_kind, disk_device_number)
+            self.attach_disk(definition.controller_kind,disk_device_number)
           end
 
-          self.attach_isofile(isofile_ide_device_number, 0, definition.iso_file)
+          self.attach_isofile(isofile_ide_device_number,0,definition.iso_file)
 
           # On Windows we mount the Guest OS Additions, on all others we transfer the additions iso file to the guest
           # and mount it there.
           if definition.winrm_user && definition.winrm_password
             definition.skip_iso_transfer = 'true'
-            self.attach_isofile(isofile_ide_device_number, 1, "VBoxGuestAdditions_#{self.vboxga_version}.iso")
+            self.attach_isofile(isofile_ide_device_number,1,"VBoxGuestAdditions_#{self.vboxga_version}.iso")
           end
 
           self.create_floppy("virtualfloppy.vfd")

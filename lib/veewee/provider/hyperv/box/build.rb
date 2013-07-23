@@ -9,7 +9,7 @@ module Veewee
 
           if definition.floppy_files
             unless self.shell_exec("java -version").status == 0
-              raise Veewee::Error, "This box contains floppyfiles, to create it you require to have java installed or have it in your path"
+              raise Veewee::Error,"This box contains floppyfiles, to create it you require to have java installed or have it in your path"
             end
           end
 

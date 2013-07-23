@@ -4,11 +4,11 @@ module Veewee
       module BoxCommand
 
         def add_network_switch
-          powershell_exec ("New-VMSwitch -Name #{definition.hyperv_network_name} -NetAdapterName #{definition.hyperv_host_nic}")
+          powershell_exec("New-VMSwitch -Name #{definition.hyperv_network_name} -NetAdapterName #{definition.hyperv_host_nic}")
         end
 
         def add_network_card
-          powershell_exec ("Add-VMNetworkAdapter -VMName #{name} -Name #{definition.hyperv_network_name} -DynamicMacAddress")
+          powershell_exec("Add-VMNetworkAdapter -VMName #{name} -Name #{definition.hyperv_network_name} -DynamicMacAddress")
         end
 
         #TODO: def add_ssh_nat_mapping
@@ -44,10 +44,10 @@ module Veewee
         #  shell_exec("#{command}")
         #end
 
-        def add_controller (controller_kind = 'scsi')
+        def add_controller(controller_kind = 'scsi')
           case controller_kind
             when 'scsi'
-              powershell_exec ("Add-VMScsiController -VMName #{name}")
+              powershell_exec("Add-VMScsiController -VMName #{name}")
             else
               env.logger.warn("Hyper-V currently only supports (up to 12) additional SCSI controllers on top of the 2 default IDE controllers")
           end
@@ -61,29 +61,29 @@ module Veewee
           end
         end
 
-        def attach_disk(controller_kind, device_number)
+        def attach_disk(controller_kind,device_number)
           1.upto(definition.disk_count.to_i) do |f|
-            powershell_exec ("Add-VMHardDiskDrive -VMName #{name} -ControllerNumber #{device_number} -ControllerLocation #{f-1} ")
+            powershell_exec("Add-VMHardDiskDrive -VMName #{name} -ControllerNumber #{device_number} -ControllerLocation #{f-1} ")
           end
         end
 
-        def attach_isofile(device_number = 0, port = 0, iso_file = definition.iso_file)
-          local_iso_file = File.join(env.config.veewee.iso_dir, iso_file)
-          remote_iso_file = File.join("\\\\", definition.hyperv_host, "veewee", iso_file )
-          powershell_exec ("Copy-Item -Path '#{local_iso_file}' -Destination '#{remote_iso_file}'", {:remote => false})
+        def attach_isofile(device_number = 0,port = 0,iso_file = definition.iso_file)
+          local_iso_file = File.join(env.config.veewee.iso_dir,iso_file)
+          remote_iso_file = File.join("\\\\",definition.hyperv_host,"veewee",iso_file )
+          powershell_exec("Copy-Item -Path '#{local_iso_file}' -Destination '#{remote_iso_file}'",{:remote => false})
           ui.info "Mounting cdrom: #{remote_iso_file}"
           #command ="#{@vboxcmd} storageattach \"#{name}\" --storagectl \"IDE Controller\" --type dvddrive --port #{port} --device #{device_number} --medium \"#{full_iso_file}\""
-          powershell_exec ("Set-VMDvdDrive -VMName #{name} -Path '#{remote_iso_file}'")
+          powershell_exec("Set-VMDvdDrive -VMName #{name} -Path '#{remote_iso_file}'")
         end
 
-        def detach_isofile(device_number = 0, port = 0)
-          full_iso_file=File.join(env.config.veewee.iso_dir, definition.iso_file)
+        def detach_isofile(device_number = 0,port = 0)
+          full_iso_file=File.join(env.config.veewee.iso_dir,definition.iso_file)
           ui.info "Un-Mounting cdrom: #{full_iso_file}"
           command ="#{@vboxcmd} storageattach \"#{name}\" --storagectl \"IDE Controller\" --type dvddrive --port #{port} --device #{device_number} --medium emptydrive"
           shell_exec("#{command}")
         end
 
-        def detach_guest_additions(device_number = 0, port = 1)
+        def detach_guest_additions(device_number = 0,port = 1)
           full_iso_file=File.join(env.config.veewee.iso_dir,"VBoxGuestAdditions_#{self.vboxga_version}.iso")
           ui.info "Un-Mounting guest additions: #{full_iso_file}"
           command ="#{@vboxcmd} storageattach \"#{name}\" --storagectl \"IDE Controller\" --type dvddrive --port #{port} --device #{device_number} --medium emptydrive"
@@ -93,11 +93,11 @@ module Veewee
         def attach_floppy
           # Attach floppy to machine (the vfd extension is crucial to detect msdos type floppy)
           unless definition.floppy_files.nil?
-            local_floppy_file = File.join(definition.path, "virtualfloppy.vfd")
-            remote_floppy_file = File.join("\\\\", definition.hyperv_host, "veewee", "virtualfloppy.vfd")
-            powershell_exec ("Copy-Item -Path '#{local_floppy_file}' -Destination '#{remote_floppy_file}'", {:remote => false})
+            local_floppy_file = File.join(definition.path,"virtualfloppy.vfd")
+            remote_floppy_file = File.join("\\\\",definition.hyperv_host,"veewee","virtualfloppy.vfd")
+            powershell_exec("Copy-Item -Path '#{local_floppy_file}' -Destination '#{remote_floppy_file}'",{:remote => false})
             ui.info "Mounting floppy: #{remote_floppy_file}"
-            powershell_exec ("Set-VMFloppyDiskDrive -VMName #{name} -Path '#{remote_floppy_file}'")
+            powershell_exec("Set-VMFloppyDiskDrive -VMName #{name} -Path '#{remote_floppy_file}'")
           end
         end
 
@@ -106,7 +106,7 @@ module Veewee
           unless definition.floppy_files.nil?
             floppy_file=File.join(definition.path,"virtualfloppy.vfd")
             ui.info "Un-Mounting floppy: #{floppy_file}"
-            powershell_exec ("Set-VMFloppyDiskDrive -VMName #{name} -Path")
+            powershell_exec("Set-VMFloppyDiskDrive -VMName #{name} -Path")
           end
         end
 
@@ -125,11 +125,11 @@ module Veewee
           env.logger.info "Creating VM #{name} : #{definition.memory_size}MB - #{definition.cpu_count} CPU - #{hyperv_os_type_id(definition.os_type_id)}"
 
           # Create a new named VM instance on the HyperV server
-          powershell_exec ("New-VM -Name #{name} -NewVHDSizeBytes #{definition.disk_size}MB -NewVHDPath '#{File.join(definition.hyperv_store_path,name,name)}-0.vhdx' -SwitchName #{definition.hyperv_network_name}")
+          powershell_exec("New-VM -Name #{name} -NewVHDSizeBytes #{definition.disk_size}MB -NewVHDPath '#{File.join(definition.hyperv_store_path,name,name)}-0.vhdx' -SwitchName #{definition.hyperv_network_name}")
 
           if (definition.memory_size.to_i > 512) || (definition.cpu_count.to_i > 2) || (definition.hyperv_dynamic_memory) then
             dynmem = definition.hyperv_dynamic_memory ? "-DynamicMemory" : ""
-            powershell_exec ("Set-VM -Name #{name} #{dynmem} -MemoryStartupBytes #{definition.memory_size}MB -ProcessorCount #{definition.cpu_count}")
+            powershell_exec("Set-VM -Name #{name} #{dynmem} -MemoryStartupBytes #{definition.memory_size}MB -ProcessorCount #{definition.cpu_count}")
           end
 
           #TODO: #setting video memory size
@@ -137,7 +137,7 @@ module Veewee
           #shell_exec("#{command}")
 
           #setting bootorder
-          powershell_exec ("Set-VMBios -VMName #{name} -StartupOrder @('CD', 'IDE', 'Floppy', 'LegacyNetworkAdapter')")
+          powershell_exec("Set-VMBios -VMName #{name} -StartupOrder @('CD', 'IDE', 'Floppy', 'LegacyNetworkAdapter')")
 
           #TODO: # Modify the vm to enable or disable extensions
 =begin

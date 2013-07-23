@@ -34,7 +34,7 @@ module Veewee
         include ::Veewee::Provider::Hyperv::BoxCommand
 
         def initialize(name,env)
-          super(name, env)
+          super(name,env)
         end
 
       end # End Class
