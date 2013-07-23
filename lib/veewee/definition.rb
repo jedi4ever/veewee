@@ -11,8 +11,6 @@ module Veewee
     attr_accessor :path
     attr_accessor :params
 
-    attr_accessor :veewee_ip
-
     attr_writer   :cpu_count, :memory_size
 
     attr_accessor :video_memory_size, :iso_file
@@ -28,7 +26,7 @@ module Veewee
 
     attr_accessor :winrm_login_timeout, :winrm_user, :winrm_password, :winrm_host_port, :winrm_guest_port
     attr_accessor :hyperv_server, :hyperv_dynamic_memory, :hyperv_network_name, :hyperv_cmd_timeout, :hyperv_store_path
-    attr_accessor :hyperv_host_nic
+    attr_accessor :hyperv_controller_ip_as_seen_by_guest, :hyperv_host_nic
 
     attr_accessor :sudo_cmd
     attr_accessor :reboot_cmd
@@ -73,8 +71,6 @@ module Veewee
         @path = path
       end
 
-      @veewee_ip = '127.0.0.1'
-
       # Default is 1 CPU + 256 MB of memory + 10 MB of video memory
       @cpu_count = '1' ; @memory_size = '256'; @video_memory_size = '10'
 
@@ -108,7 +104,7 @@ module Veewee
       @winrm_login_timeout = '10000'
 
       @hyperv_server = nil ; @hyperv_dynamic_memory = true; @hyperv_network_name = nil; @hyperv_store_path = nil
-      @hyperv_host_nic = 'NIC1'
+      @hyperv_controller_ip_as_seen_by_guest = nil; @hyperv_host_nic = 'NIC1'
       @hyperv_cmd_timeout = '10000'
 
       @boot_cmd_sequence = [] # Empty list by default

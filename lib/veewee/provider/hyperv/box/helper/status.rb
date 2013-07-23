@@ -14,12 +14,12 @@ module Veewee
         private
 
         def check? type
-          env.logger.info ("Checking if the VM #{name} #{type} this can take a while because of how remote PowerShell works")
           case type
             when :exists
-              result = powershell_exec ("Get-VM")
-              status = (result.stdout.include? "#{name}") ? true : false
-              env.logger.info("VM #{name} #{type}? #{status}")
+              command = self.pscmd ("Get-VM -Name #{name}")
+              shell_results = shell_exec("#{command}", {:status => 1})
+              status = (shell_results.stdout.include? "unable to find") ? false : true
+              env.logger.info("Vm #{type}? #{status}")
             when :running
               env.logger.info("NOT YET IMPLEMENTED #{type} TESTING")
           end
