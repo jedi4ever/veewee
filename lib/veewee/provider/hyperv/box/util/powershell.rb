@@ -3,11 +3,17 @@ module Veewee
     module Hyperv
       module BoxCommand
 
-        def pscmd (scriptblock)
-          unless scriptblock
-            raise Veewee::Error, "Empty scriptblock passed to pscmd"
+        def powershell_exec (scriptblock, options = {:remote => true})
+          raise Veewee::Error, "Empty scriptblock passed to powershell_exec" unless scriptblock
+
+          defaults = {:mute => true, :status => 0, :stderr => "&1"}
+          options = defaults.merge(options)
+
+          if options[:remote] then
+            return shell_exec("powershell -Command Invoke-Command -Computername #{definition.hyperv_server} -ScriptBlock {#{scriptblock}}", options)
+          else
+            return shell_exec("powershell -Command -ScriptBlock {#{scriptblock}}", options)
           end
-          return "powershell -Command Invoke-Command -Computername #{definition.hyperv_server} -ScriptBlock {#{scriptblock}}"
         end
 
       end

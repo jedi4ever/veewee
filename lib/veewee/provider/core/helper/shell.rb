@@ -20,7 +20,7 @@ module Veewee
           # http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-talk/185404
           # This should work on windows too now
           # This will result in a ShellResult structure with stdout, stderr and status
-          def shell_exec(command,options = {:mute => true, :status => 0, :stderr => "&1", :donoterrorout => false})
+          def shell_exec(command,options = {:mute => true, :status => 0, :stderr => "&1"})
             defaults={:mute => true, :status => 0}
             options=defaults.merge(options)
             result=ShellResult.new("","",-1)
@@ -37,7 +37,7 @@ module Veewee
                 env.logger.debug(l.chomp)
               }
               result.status=Process.waitpid2(p.pid)[1].exitstatus
-              if result.status.to_i!=options[:status] && !:donoterrorout
+              if result.status.to_i!=options[:status]
                 ui.error "Error: We executed a shell command and the exit status was not #{options[:status]}"
                 ui.error "- Command :#{command}."
                 ui.error "- Exitcode :#{result.status}."
