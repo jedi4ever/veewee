@@ -7,9 +7,7 @@ module Veewee
       class Provider < Veewee::Provider::Core::Provider
 
         def check_requirements
-          if !OS.windows?
-            raise Veewee::Error,"HyperV provisioning only works on a Windows host"
-          end
+          raise Veewee::Error,"HyperV provisioning only works on a Windows host" unless OS.windows?
 
           #TODO: Use local HyperV powershell tools see (doc/hyperv.md) for details
           #env.ui.info "Powershell -Command Get-Module HyperV"

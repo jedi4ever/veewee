@@ -9,12 +9,11 @@ module Veewee
 
         # Get the IP address of the box
         def ip_address
-          if (definition.veewee_ip)
-            return definition.veewee_ip
+          if definition.veewee_ip
+            definition.veewee_ip
           else
-            return "127.0.0.1"
+            "127.0.0.1"
           end
-
         end
 
       end

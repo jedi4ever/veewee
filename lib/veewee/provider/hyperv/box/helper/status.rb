@@ -4,11 +4,11 @@ module Veewee
       module BoxCommand
 
         def exists?
-          return check?(:exists)
+          check?(:exists)
         end
 
         def running?
-          return check?(:running)
+          check?(:running)
         end
 
         private
@@ -23,9 +23,11 @@ module Veewee
               result = powershell_exec("Get-VM^|Select -Property VMName, State")
               #TODO: Fine tune the check running method
               status = (result.stdout.include? "#{name}") && (result.stdout.include? "Running") ? true : false
+            else
+              env.logger.info("Unsupported check type #{type} specified")
+              status = false
           end
           env.logger.info("VM #{name} #{type}? #{status}")
-          return status
         end
       end
     end

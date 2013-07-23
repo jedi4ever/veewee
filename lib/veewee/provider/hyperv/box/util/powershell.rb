@@ -10,10 +10,10 @@ module Veewee
           defaults = {:mute => true,:status => 0,:stderr => "&1"}
           options = defaults.merge(options)
 
-          if options[:remote] then
+          if options[:remote]
             return shell_exec("powershell -Command Invoke-Command -Computername #{definition.hyperv_host} -ScriptBlock {#{scriptblock}}",options)
           else
-            return shell_exec("powershell -Command -ScriptBlock {#{scriptblock}}",options)
+            return shell_exec("powershell -Command {#{scriptblock}}",options)
           end
         end
 

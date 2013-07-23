@@ -5,7 +5,7 @@ module Veewee
 
         def create(options={})
 
-          if (definition.hyperv_network_name) then
+          if definition.hyperv_network_name
             # Create a virtual network switch
             self.add_network_switch
           else
@@ -30,7 +30,7 @@ module Veewee
               isofile_ide_device_number = 1
           end
 
-          if (definition.disk_count.to_i > 2) then
+          if definition.disk_count.to_i > 2
             self.attach_disk(definition.controller_kind,disk_device_number)
           end
 

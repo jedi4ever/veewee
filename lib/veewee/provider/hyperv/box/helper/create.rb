@@ -28,7 +28,7 @@ module Veewee
         def add_winrm_nat_mapping
           unless definition.nil?
             #Map WinRM Ports
-            unless definition.skip_nat_mapping == true
+            unless definition.skip_nat_mapping
               if self.running?
                 command="#{@vboxcmd} controlvm \"#{name}\" natpf#{self.natinterface} \"guestwinrm,tcp,,#{definition.winrm_host_port},,#{definition.winrm_guest_port}\""
               else
@@ -77,14 +77,14 @@ module Veewee
         end
 
         def detach_isofile(device_number = 0,port = 0)
-          full_iso_file=File.join(env.config.veewee.iso_dir,definition.iso_file)
+          full_iso_file = File.join(env.config.veewee.iso_dir,definition.iso_file)
           ui.info "Un-Mounting cdrom: #{full_iso_file}"
           command ="#{@vboxcmd} storageattach \"#{name}\" --storagectl \"IDE Controller\" --type dvddrive --port #{port} --device #{device_number} --medium emptydrive"
           shell_exec("#{command}")
         end
 
         def detach_guest_additions(device_number = 0,port = 1)
-          full_iso_file=File.join(env.config.veewee.iso_dir,"VBoxGuestAdditions_#{self.vboxga_version}.iso")
+          full_iso_file = File.join(env.config.veewee.iso_dir,"VBoxGuestAdditions_#{self.vboxga_version}.iso")
           ui.info "Un-Mounting guest additions: #{full_iso_file}"
           command ="#{@vboxcmd} storageattach \"#{name}\" --storagectl \"IDE Controller\" --type dvddrive --port #{port} --device #{device_number} --medium emptydrive"
           shell_exec("#{command}")
@@ -104,20 +104,19 @@ module Veewee
         def detach_floppy
           # Detach floppy to machine (the vfd extension is crucial to detect msdos type floppy)
           unless definition.floppy_files.nil?
-            floppy_file=File.join(definition.path,"virtualfloppy.vfd")
+            floppy_file = File.join(definition.path,"virtualfloppy.vfd")
             ui.info "Un-Mounting floppy: #{floppy_file}"
             powershell_exec("Set-VMFloppyDiskDrive -VMName #{name} -Path")
           end
         end
 
         def hyperv_os_type_id(veewee_type_id)
-          type=env.ostypes[veewee_type_id][:hyperv]
+          type = env.ostypes[veewee_type_id][:hyperv]
           env.logger.info("Using HyperV os_type_id #{type}")
-          return type
         end
 
         def create_vm
-          if (definition.memory_size.to_i < 512)
+          if definition.memory_size.to_i < 512
             ui.warn "HyperV requires a minimum of 512MB RAM for a Guest OS, changing up from #{definition.memory_size}MB"
             definition.memory_size = "512"
           end
@@ -127,7 +126,7 @@ module Veewee
           # Create a new named VM instance on the HyperV server
           powershell_exec("New-VM -Name #{name} -NewVHDSizeBytes #{definition.disk_size}MB -NewVHDPath '#{File.join(definition.hyperv_store_path,name,name)}-0.vhdx' -SwitchName #{definition.hyperv_network_name}")
 
-          if (definition.memory_size.to_i > 512) || (definition.cpu_count.to_i > 2) || (definition.hyperv_dynamic_memory) then
+          if (definition.memory_size.to_i > 512) || (definition.cpu_count.to_i > 2) || (definition.hyperv_dynamic_memory)
             dynmem = definition.hyperv_dynamic_memory ? "-DynamicMemory" : ""
             powershell_exec("Set-VM -Name #{name} #{dynmem} -MemoryStartupBytes #{definition.memory_size}MB -ProcessorCount #{definition.cpu_count}")
           end
