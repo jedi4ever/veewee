@@ -26,3 +26,7 @@ rpm -Uvh epel-release-5-4.noarch.rpm
 echo "UseDNS no" >> /etc/ssh/sshd_config
 
 sed -i "s/^HOSTNAME=.*/HOSTNAME=vagrant.vagrantup.com/" /etc/sysconfig/network
+
+cat > /etc/profile.d/local.sh<<EOF
+export PATH=\$PATH:/usr/local/sbin:/usr/local/bin
+EOF
