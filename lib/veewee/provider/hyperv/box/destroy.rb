@@ -5,7 +5,8 @@ module Veewee
 
         def destroy(option={})
 
-          self.powershell_exec ("Remove-VM -Name #{name} -Force")
+          command = self.pscmd ("Remove-VM -Name #{name} -Force")
+          shell_exec("#{command}")
 
         end
 
