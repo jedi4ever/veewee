@@ -3,12 +3,13 @@ module Veewee
     module Hyperv
       module BoxCommand
 
-        #TODO: def attach_serial_console
-          #command ="#{@vboxcmd} modifyvm \"#{name}\" --uart1 0x3F8 4"
-          #shell_exec("#{command}")
-          #command ="#{@vboxcmd} modifyvm \"#{name}\" --uartmode1 file \"#{File.join(FileUtils.pwd,name+"-serial-console"+".log")}\""
-          #shell_exec("#{command}")
-        #end
+        def add_network_switch
+          powershell_exec ("New-VMSwitch -Name #{definition.hyperv_network_name} -NetAdapterName #{definition.hyperv_host_nic}")
+        end
+
+        def add_network_card
+          powershell_exec ("Add-VMNetworkAdapter -VMName #{name} -Name #{definition.hyperv_network_name} -DynamicMacAddress")
+        end
 
         #TODO: def add_ssh_nat_mapping
           #unless definition.nil?
@@ -43,50 +44,37 @@ module Veewee
         #  shell_exec("#{command}")
         #end
 
-        def get_vbox_home
-          command="#{@vboxcmd}  list  systemproperties"
-          shell_results=shell_exec("#{command}")
-          # On windows Default machine path would include a drive letter, then ':'.
-          # So here we tell to split no more than 2 elements to keep the full path
-          # This should work for all OS as we just need to separate the parameter name with first ':' from the value
-          location=shell_results.stdout.split(/\n/).grep(/Default machine/)[0].split(":", 2)[1].strip
-          return location
-        end
-
-        def add_controller (controller_kind = 'ide')
-          command ="#{@vboxcmd} storagectl \"#{name}\" --name \"#{controller_kind.upcase} Controller\" --add #{controller_kind}"
-          shell_exec("#{command}")
+        def add_controller (controller_kind = 'scsi')
+          case controller_kind
+            when 'scsi'
+              powershell_exec ("Add-VMScsiController -VMName #{name}")
+            else
+              env.logger.warn("Hyper-V currently only supports (up to 12) additional SCSI controllers on top of the 2 default IDE controllers")
+          end
         end
 
         def create_disk
-          place=get_vbox_home
           1.upto(definition.disk_count.to_i) do |f|
-            ui.info "Creating new harddrive of size #{definition.disk_size.to_i}, format #{definition.disk_format}, variant #{definition.disk_variant} "
+            ui.info "Creating new harddrive of size #{definition.disk_size.to_i}MB, format #{definition.disk_format}, variant #{definition.disk_variant} "
             command ="#{@vboxcmd} createhd --filename \"#{File.join(place,name,name+"#{f}."+definition.disk_format.downcase)}\" --size \"#{definition.disk_size.to_i}\" --format #{definition.disk_format.downcase} --variant #{definition.disk_variant.downcase}"
             shell_exec("#{command}")
           end
         end
 
         def attach_disk(controller_kind, device_number)
-          place=get_vbox_home
-
           1.upto(definition.disk_count.to_i) do |f|
-            location=name+"#{f}."+definition.disk_format.downcase
-
-            location="#{File.join(place,name,location)}"
-            ui.info "Attaching disk: #{location}"
-
-            #command => "${vboxcmd} storageattach \"${vname}\" --storagectl \"SATA Controller\" --port 0 --device 0 --type hdd --medium \"${vname}.vdi\"",
-            command ="#{@vboxcmd} storageattach \"#{name}\" --storagectl \"#{controller_kind.upcase} Controller\" --port #{f-1} --device #{device_number} --type hdd --medium \"#{location}\" --nonrotational \"#{definition.nonrotational}\""
-            shell_exec("#{command}")
+            powershell_exec ("Add-VMHardDiskDrive -VMName #{name} -ControllerNumber #{device_number} -ControllerLocation #{f-1} ")
           end
         end
 
         def attach_isofile(device_number = 0, port = 0, iso_file = definition.iso_file)
-          full_iso_file=File.join(env.config.veewee.iso_dir, iso_file)
-          ui.info "Mounting cdrom: #{full_iso_file}"
-          command ="#{@vboxcmd} storageattach \"#{name}\" --storagectl \"IDE Controller\" --type dvddrive --port #{port} --device #{device_number} --medium \"#{full_iso_file}\""
-          shell_exec("#{command}")
+          local_iso_file = File.join(env.config.veewee.iso_dir, iso_file)
+          remote_iso_file = File.join("\\\\", hyperv_server, "veewee", iso_file )
+          #powershell_exec ("Copy-Item -Path '#{local_iso_file}' -Destination '#{remote_iso_file}'", {:remote => false})
+          powershell_exec ("Copy-Item -Path '#{local_iso_file}' -Destination '#{remote_iso_file}'")
+          ui.info "Mounting cdrom: #{remote_iso_file}"
+          #command ="#{@vboxcmd} storageattach \"#{name}\" --storagectl \"IDE Controller\" --type dvddrive --port #{port} --device #{device_number} --medium \"#{full_iso_file}\""
+          powershell_exec ("Set-VMDvdDrive -VMName #{name} -Path '#{remote_iso_file}'")
         end
 
         def detach_isofile(device_number = 0, port = 0)
@@ -106,10 +94,12 @@ module Veewee
         def attach_floppy
           # Attach floppy to machine (the vfd extension is crucial to detect msdos type floppy)
           unless definition.floppy_files.nil?
-            floppy_file=File.join(definition.path,"virtualfloppy.vfd")
-            ui.info "Mounting floppy: #{floppy_file}"
-            command = pscmd ("Set-VMFloppyDiskDrive -VMName #{name} -Path #{floppy_file}")
-            shell_exec("#{command}")
+            local_floppy_file = File.join(definition.path, "virtualfloppy.vfd")
+            remote_floppy_file = File.join("\\\\", hyperv_server, "veewee", "virtualfloppy.vfd")
+            #powershell_exec ("Copy-Item -Path '#{local_floppy_file}' -Destination '#{remote_floppy_file}'", {:remote => false})
+            powershell_exec ("Copy-Item -Path '#{local_floppy_file}' -Destination '#{remote_floppy_file}'")
+            ui.info "Mounting floppy: #{remote_floppy_file}"
+            powershell_exec ("Set-VMFloppyDiskDrive -VMName #{name} -Path '#{remote_floppy_file}'")
           end
         end
 
@@ -118,8 +108,7 @@ module Veewee
           unless definition.floppy_files.nil?
             floppy_file=File.join(definition.path,"virtualfloppy.vfd")
             ui.info "Un-Mounting floppy: #{floppy_file}"
-            command = pscmd ("Set-VMFloppyDiskDrive -VMName #{name} -Path ")
-            shell_exec("#{command}")
+            powershell_exec ("Set-VMFloppyDiskDrive -VMName #{name} -Path")
           end
         end
 
@@ -131,27 +120,26 @@ module Veewee
 
         def create_vm
           if (definition.memory_size.to_i < 512)
-            ui.warn "HyperV requires a minimum of 512MB RAM for a Guest OS, changing from #{definition.memory_size}"
+            ui.warn "HyperV requires a minimum of 512MB RAM for a Guest OS, changing up from #{definition.memory_size}MB"
             definition.memory_size = "512"
           end
 
-          ui.info "Creating vm #{name} : #{definition.memory_size}M - #{definition.cpu_count} CPU - #{hyperv_os_type_id(definition.os_type_id)}"
+          env.logger.info "Creating VM #{name} : #{definition.memory_size}MB - #{definition.cpu_count} CPU - #{hyperv_os_type_id(definition.os_type_id)}"
 
           # Create a new named VM instance on the HyperV server
-          command = pscmd ("New-VM -Name #{name}")
-          shell_exec("#{command}", {:mute => true})
+          powershell_exec ("New-VM -Name #{name} -NewVHDSizeBytes #{definition.disk_size}MB -NewVHDPath '#{File.join(definition.hyperv_store_path,name,name)}-0.vhdx' -SwitchName #{definition.hyperv_network_name}")
 
-          dynmem = definition.hyperv_dynamic_memory ? "-DynamicMemory" : ""
-          command = pscmd ("Set-VM -Name #{name} #{dynmem} -MemoryStartupBytes #{definition.memory_size}MB -ProcessorCount #{definition.cpu_count}")
-          shell_exec("#{command}", {:mute => true})
+          if (definition.memory_size.to_i > 512) || (definition.cpu_count.to_i > 2) || (definition.hyperv_dynamic_memory) then
+            dynmem = definition.hyperv_dynamic_memory ? "-DynamicMemory" : ""
+            powershell_exec ("Set-VM -Name #{name} #{dynmem} -MemoryStartupBytes #{definition.memory_size}MB -ProcessorCount #{definition.cpu_count}")
+          end
 
           #TODO: #setting video memory size
           #command="#{@vboxcmd} modifyvm \"#{name}\" --vram #{definition.video_memory_size}"
           #shell_exec("#{command}")
 
           #setting bootorder
-          command = pscmd ("Set-VMBios -VMName #{name} -StartupOrder @(\"CD\", \"IDE\")")
-          shell_exec("#{command}", {:mute => true})
+          powershell_exec ("Set-VMBios -VMName #{name} -StartupOrder @('CD', 'IDE', 'Floppy', 'LegacyNetworkAdapter')")
 
           #TODO: # Modify the vm to enable or disable extensions
 =begin

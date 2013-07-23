@@ -5,22 +5,23 @@ module Veewee
 
         def create(options={})
 
-          self.create_vm
+          if (definition.hyperv_network_name) then
+            # Create a virtual network switch
+            self.add_network_switch
+          else
+            raise Veewee::Error, "No network hyperv_network_name specified"
+          end
 
           # Attach ttyS0 to the VM for console output
           redirect_console=options[:redirectconsole]
           if redirect_console
-            self.attach_serial_console
+            ui.warn "Hyper-V does not support console redirection"
           end
 
-          # Adds a folder to the vm for testing purposes
-          self.add_shared_folder
-
-          #Create a disk with the same name as the box_name
-          self.create_disk
+          self.create_vm
 
           case definition.controller_kind.downcase
-            when 'sata', 'scsi', 'sas'
+            when 'scsi'
               disk_device_number = 0
               isofile_ide_device_number = 0
               self.add_controller(definition.controller_kind)
@@ -28,9 +29,11 @@ module Veewee
               disk_device_number = 0
               isofile_ide_device_number = 1
           end
-          self.add_controller('ide')
 
-          self.attach_disk(definition.controller_kind, disk_device_number)
+          if (definition.disk_count.to_i > 2) then
+            self.attach_disk(definition.controller_kind, disk_device_number)
+          end
+
           self.attach_isofile(isofile_ide_device_number, 0, definition.iso_file)
 
           # On Windows we mount the Guest OS Additions, on all others we transfer the additions iso file to the guest
@@ -41,7 +44,6 @@ module Veewee
           end
 
           self.create_floppy("virtualfloppy.vfd")
-          self.add_floppy_controller
           self.attach_floppy
 
           if definition.winrm_user && definition.winrm_password # prefer winrm
@@ -51,14 +53,14 @@ module Veewee
               env.ui.warn "Changing winrm port from #{definition.winrm_host_port} to #{guessed_port}"
               definition.winrm_host_port=guessed_port.to_s
             end
-            self.add_winrm_nat_mapping
+            #self.add_winrm_nat_mapping
           else
             guessed_port=guess_free_ssh_port(definition.ssh_host_port.to_i,definition.ssh_host_port.to_i+40).to_s
             if guessed_port.to_s!=definition.ssh_host_port
               env.ui.warn "Changing ssh port from #{definition.ssh_host_port} to #{guessed_port}"
               definition.ssh_host_port=guessed_port.to_s
             end
-            self.add_ssh_nat_mapping
+            #self.add_ssh_nat_mapping
           end
 
         end
