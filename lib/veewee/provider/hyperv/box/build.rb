@@ -5,11 +5,6 @@ module Veewee
 
         def build(options={})
 
-          if !definition.hyperv_server
-            #TODO: Get-VMHost to list possible HyperV hosts if non defined
-            raise Veewee::Error, "You must specify a hyperv_server in your definition file"
-          end
-
           super(options)
 
           if definition.floppy_files
