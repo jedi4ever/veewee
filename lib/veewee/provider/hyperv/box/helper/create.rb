@@ -18,7 +18,7 @@ module Veewee
           env.logger.info "Creating VM #{name} : #{definition.memory_size}MB - #{definition.cpu_count} CPU - #{hyperv_os_type_id(definition.os_type_id)}"
 
           # Create a new named VM instance on the HyperV server
-          powershell_exec("New-VM -Name #{name} -NewVHDSizeBytes #{definition.disk_size}MB -NewVHDPath '#{File.join(definition.hyperv_store_path,name,name)}-0.vhdx' -SwitchName #{definition.hyperv_network_name}")
+          powershell_exec("New-VM -Name #{name} -NewVHDSizeBytes #{definition.disk_size}MB -NewVHDPath '#{File.join(definition.hyperv_store_path,name,name).gsub('/', '\\')}-0.vhdx' -SwitchName #{definition.hyperv_network_name}")
 
           if (definition.memory_size.to_i > 512) || (definition.cpu_count.to_i > 2) || (definition.hyperv_dynamic_memory)
             dynmem = definition.hyperv_dynamic_memory ? "-DynamicMemory" : ""
