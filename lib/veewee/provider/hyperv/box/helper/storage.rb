@@ -34,7 +34,7 @@ module Veewee
         def attach_isofile(device_number = 0,port = 0,iso_file = definition.iso_file)
           local_iso_file = File.join(env.config.veewee.iso_dir,iso_file)
           remote_iso_file = File.join("\\\\",definition.hyperv_host,"veewee",iso_file )
-          powershell_exec("Copy-Item -Path '#{local_iso_file}' -Destination '#{remote_iso_file}'",{:remote => false})
+          powershell_exec("Test-Item -Path '#{remote_iso_file}'^| ? Break : Copy-Item -Path '#{local_iso_file}' -Destination '#{remote_iso_file}'",{:remote => false})
           ui.info "Mounting cdrom: #{remote_iso_file}"
           #command ="#{@vboxcmd} storageattach \"#{name}\" --storagectl \"IDE Controller\" --type dvddrive --port #{port} --device #{device_number} --medium \"#{full_iso_file}\""
           powershell_exec("Set-VMDvdDrive -VMName #{name} -Path '#{remote_iso_file}'")
