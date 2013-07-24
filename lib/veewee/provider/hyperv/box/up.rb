@@ -54,7 +54,7 @@ module Veewee
           # Once assembled we start the machine
           env.logger.info "Started the VM with GUI Enabled? #{gui_enabled}"
 
-          results = self.powershell_exec("Start-VM -Name #{name}")
+          self.powershell_exec("Start-VM -Name #{name}")
         end
 
       end
