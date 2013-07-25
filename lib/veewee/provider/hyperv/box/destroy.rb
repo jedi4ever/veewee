@@ -4,10 +4,8 @@ module Veewee
       module BoxCommand
 
         def destroy(option={})
-
-          self.powershell_exec("Remove-VM -Name #{name} -Force")
-          #self.powershell_exec("Get-VM #{name} | %{ Stop-VM -VM $_ -Force; Remove-VM -vm $_ -Force ; Remove-Item -Path $_.Path -Recurse -Force}")
-
+          env.logger.info "Destroying VM [#{name}] and removing all drives"
+          self.powershell_exec "Get-VM #{name} ^| ^%{Stop-VM -VM $_ -Force ; Remove-VM -VM $_ -Force ; $p = $_.Path ; $v = $_.VMName ; Remove-Item -Recurse -Path $p\\$v}"#-Recurse -Force
         end
 
       end
