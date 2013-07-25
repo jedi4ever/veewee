@@ -14,12 +14,11 @@ module Veewee
         private
 
         def check? type
-          env.logger.info("Checking if the VM #{name} #{type} this can take a while because of how remote PowerShell works")
+          env.logger.info("Checking if the VM [#{name}] #{type}")
           case type
             when :exists
               result = powershell_exec("$obj = Get-VM ^| Select -Property VMName ; Foreach ($o in $obj) {if ($o.VMName -eq '#{name}') {'true' ; exit}} 'false'")
-              ui.info "[#{result.stdout}]"
-              status = (result.stdout.include? 'true') ? true: false
+              status = (result.stdout.chomp == 'true') ? true: false
             when :running
               result = powershell_exec "Get-VM ^| Select -Property VMName, State"
               #TODO: Fine tune the check running method
