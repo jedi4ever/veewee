@@ -33,11 +33,12 @@ module Veewee
 
         def attach_isofile(device_number = 0,port = 0,iso_file = definition.iso_file)
           local_file = File.join(env.config.veewee.iso_dir,iso_file).gsub('/', '\\')
-          remote_file = File.join("\\\\",definition.hyperv_host,"veewee",iso_file ).gsub('/', '\\')
+          remote_file = File.join("\\\\",definition.hyperv_host,'veewee',iso_file ).gsub('/', '\\')
           env.logger.info "Copying ISO file [#{local_file}] to HyperV Host"
           result = powershell_exec "if (Test-Path -Path '#{remote_file}') {'true' ; exit} else {Copy-Item -Path '#{local_file}' -Destination '#{remote_file}'}",{:remote => false}
           status = (result.stdout.chomp == 'true') ? true : false
           env.logger.info "Remote file [#{remote_file}] already exists on HyperV Host and will be re-used" if status
+          remote_file = File.join("e:\\",'veewee',iso_file ).gsub('/', '\\')
           env.logger.info "Mounting ISO: #{remote_file}"
           powershell_exec "Set-VMDvdDrive -VMName #{name} -Path '#{remote_file}'"
         end
@@ -60,11 +61,12 @@ module Veewee
           # Attach floppy to machine (the vfd extension is crucial to detect msdos type floppy)
           unless definition.floppy_files.nil?
             local_file = File.join(definition.path,"virtualfloppy.vfd").gsub('/', '\\')
-            remote_file = File.join("\\\\",definition.hyperv_host,"veewee","virtualfloppy.vfd").gsub('/', '\\')
+            remote_file = File.join("\\\\",definition.hyperv_host,'veewee','virtualfloppy.vfd').gsub('/', '\\')
             env.logger.info "Copying VirtualFloppy file [#{local_file}] to HyperV Host"
             result = powershell_exec "if (Test-Path -Path '#{remote_file}') {'true' ; exit} else {Copy-Item -Path '#{local_file}' -Destination '#{remote_file}'}",{:remote => false}
             status = (result.stdout.chomp == 'true') ? true : false
             env.logger.info "Remote file [#{remote_file}] already exists on HyperV Host and will be re-used" if status
+            remote_file = File.join("e:\\",'veewee','virtualfloppy.vfd').gsub('/', '\\')
             env.logger.info "Mounting VirutalFloppy: #{remote_file}"
             powershell_exec("Set-VMFloppyDiskDrive -VMName #{name} -Path '#{remote_file}'")
           end
