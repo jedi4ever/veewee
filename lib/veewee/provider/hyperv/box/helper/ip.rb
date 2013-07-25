@@ -10,10 +10,11 @@ module Veewee
         # Get the IP address of the box
         def ip_address
           if definition.veewee_ip
-            definition.veewee_ip
+            ip_address = definition.veewee_ip
           else
-            "127.0.0.1"
+            ip_address = '127.0.0.1'
           end
+          ip_address
         end
 
       end
