@@ -44,6 +44,7 @@ module Veewee
 
     attr_accessor :iso_dowload_timeout, :iso_src, :iso_md5, :iso_sha1, :iso_download_instructions
 
+    attr_accessor :hyperv
     attr_accessor :virtualbox
     attr_accessor :vmfusion
     attr_accessor :kvm

@@ -5,55 +5,58 @@ module Veewee
 
         def hyperv_os_type_id(veewee_type_id)
           type = env.ostypes[veewee_type_id][:hyperv]
-          env.logger.info("Using HyperV os_type_id #{type}")
+          env.logger.info "Using HyperV os_type_id [#{type}]"
           type
         end
 
         def create_vm
+
           if definition.memory_size.to_i < 512
-            ui.warn "HyperV requires a minimum of 512MB RAM for a Guest OS, changing up from #{definition.memory_size}MB"
+            env.logger.warn "HyperV requires a minimum of 512MB RAM for a Guest OS, changing up from [#{definition.memory_size}MB]"
             definition.memory_size = "512"
           end
 
-          env.logger.info "Creating VM #{name} : #{definition.memory_size}MB - #{definition.cpu_count} CPU - #{hyperv_os_type_id(definition.os_type_id)}"
+          unless definition.disk_format.downcase == 'vhdx'
+            env.logger.warn "HyperV only support the VHDX virtual hard drive format, changing from [#{definition.disk_format}]"
+            definition.disk_format = 'vhdx'
+          end
+
+          vm_path = File.join(definition.hyperv_store_path,name).gsub('/', '\\').downcase
+          vhd_path = File.join(vm_path,"#{name}-0.#{definition.disk_format}").gsub('/', '\\').downcase
 
           # Create a new named VM instance on the HyperV server
-          powershell_exec("New-VM -Name #{name} -NewVHDSizeBytes #{definition.disk_size}MB -NewVHDPath '#{File.join(definition.hyperv_store_path,name,name).gsub('/', '\\')}-0.vhdx' -SwitchName #{definition.hyperv_network_name}")
-
-          if (definition.memory_size.to_i > 512) || (definition.cpu_count.to_i > 2) || (definition.hyperv_dynamic_memory)
-            dynmem = definition.hyperv_dynamic_memory ? "-DynamicMemory" : ""
-            powershell_exec("Set-VM -Name #{name} #{dynmem} -MemoryStartupBytes #{definition.memory_size}MB -ProcessorCount #{definition.cpu_count}")
-          end
+          env.logger.info "Creating VM [#{name}] #{definition.memory_size}MB - #{definition.cpu_count}CPU - #{hyperv_os_type_id(definition.os_type_id)}"
+          powershell_exec "New-VM -Name #{name} -MemoryStartupBytes #{definition.memory_size}MB -NewVHDSizeBytes #{definition.disk_size}MB -NewVHDPath '#{vhd_path}' -SwitchName #{definition.hyperv_network_name}"
 
           #TODO: #setting video memory size
           #command="#{@vboxcmd} modifyvm \"#{name}\" --vram #{definition.video_memory_size}"
           #shell_exec("#{command}")
 
-          #setting bootorder
-          powershell_exec("Set-VMBios -VMName #{name} -StartupOrder @('CD', 'IDE', 'Floppy', 'LegacyNetworkAdapter')")
+          # Setting bootorder
+          env.logger.info "Setting VMBios boot order 'CD', 'IDE', 'Floppy', 'LegacyNetworkAdapter'"
+          powershell_exec "Set-VMBios -VMName #{name} -StartupOrder @('CD', 'IDE', 'Floppy', 'LegacyNetworkAdapter')"
 
-          #TODO: # Modify the vm to enable or disable extensions
-=begin
-          vm_flags=%w{pagefusion acpi ioapic pae hpet hwvirtex hwvirtexcl nestedpaging largepages vtxvpid synthxcpu rtcuseutc}
+          dynamic_memory = nil
+          smart_paging = nil
 
-          vm_flags.each do |vm_flag|
-            if definition.instance_variable_defined?("@#{vm_flag}")
-              vm_flag_value=definition.instance_variable_get("@#{vm_flag}")
-              ui.info "Setting VM Flag #{vm_flag} to #{vm_flag_value}"
-              ui.warn "Used of #{vm_flag} is deprecated - specify your options in the definition file as \n :virtualbox => { :vm_options => [\"#{vm_flag}\" => \"#{vm_flag_value}\"]}"
-              command="#{@vboxcmd} modifyvm #{name} --#{vm_flag.to_s} #{vm_flag_value}"
-              shell_exec("#{command}")
+          unless definition.hyperv[:vm_options][0].nil?
+            definition.hyperv[:vm_options][0].each do |vm_flag,vm_flag_value|
+              env.logger.info "Setting VM Flag [#{vm_flag}] to [#{vm_flag_value}]"
+              case vm_flag.downcase
+                when dynamic_memory
+                  dynamic_memory = vm_flag_value ? '-DynamicMemory' : nil
+                when smart_paging
+                  swp_path = File.join(vm_path,name,'.swp').gsub('/', '\\').downcase
+                  smart_paging = vm_flag_value ? "-SmartPagingFilePath '#{sqp_path}'" : nil
+                else
+                  env.logger.warn "Ignoring unsupported vm_flag [#{vm_flag}] with value [#{vm_flag_value}]"
+              end
             end
           end
 
-          unless definition.virtualbox[:vm_options][0].nil?
-            definition.virtualbox[:vm_options][0].each do |vm_flag,vm_flag_value|
-              ui.info "Setting VM Flag #{vm_flag} to #{vm_flag_value}"
-              command="#{@vboxcmd} modifyvm #{name} --#{vm_flag.to_s} #{vm_flag_value}"
-              shell_exec("#{command}")
-            end
-          end
-=end
+          env.logger.info "Updating VM options"
+          powershell_exec "Set-VM -Name #{name} #{dynamic_memory} #{smart_paging} -SnapshotFileLocation '#{vm_path}\\snapshot\\'"
+
         end
       end
     end
