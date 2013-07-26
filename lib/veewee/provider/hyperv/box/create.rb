@@ -40,6 +40,7 @@ module Veewee
           # and mount it there.
           if definition.winrm_user && definition.winrm_password
             definition.skip_iso_transfer = 'true'
+            self.attach_isofile(isofile_ide_device_number, 1, "vmguest.iso")
           end
 
           self.create_floppy("virtualfloppy.vfd")

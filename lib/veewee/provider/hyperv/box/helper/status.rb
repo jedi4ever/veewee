@@ -14,7 +14,7 @@ module Veewee
         private
 
         def check? type
-          env.logger.info("Checking if the VM [#{name}] #{type}")
+          env.ui.info("Checking if the VM [#{name}] #{type}")
           case type
             when :exists
               result = powershell_exec "$obj = Get-VM ^| Select -Property VMName ; Foreach ($o in $obj) {if ($o.VMName -eq '#{name}') {'true' ; exit}} 'false'"
@@ -24,10 +24,10 @@ module Veewee
               #TODO: Fine tune the check running method
               status = result.stdout.chomp
             else
-              env.logger.info "Unsupported check type #{type} specified"
+              env.ui.info "Unsupported check type #{type} specified"
               status = false
           end
-          env.logger.info("VM #{name} #{type}? #{status}")
+          env.ui.info("VM #{name} #{type}? #{status}")
           status
         end
       end

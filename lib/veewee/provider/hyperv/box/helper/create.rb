@@ -5,19 +5,19 @@ module Veewee
 
         def hyperv_os_type_id(veewee_type_id)
           type = env.ostypes[veewee_type_id][:hyperv]
-          env.logger.info "Using HyperV os_type_id [#{type}]"
+          env.ui.info "Using HyperV os_type_id [#{type}]"
           type
         end
 
         def create_vm
 
           if definition.memory_size.to_i < 512
-            env.logger.warn "HyperV requires a minimum of 512MB RAM for a Guest OS, changing up from [#{definition.memory_size}MB]"
+            env.ui.warn "HyperV requires a minimum of 512MB RAM for a Guest OS, changing up from [#{definition.memory_size}MB]"
             definition.memory_size = "512"
           end
 
           unless definition.disk_format.downcase == 'vhdx'
-            env.logger.warn "HyperV only support the VHDX virtual hard drive format, changing from [#{definition.disk_format}]"
+            env.ui.warn "HyperV only support the VHDX virtual hard drive format, changing from [#{definition.disk_format}]"
             definition.disk_format = 'vhdx'
           end
 
@@ -25,7 +25,7 @@ module Veewee
           vhd_path = File.join(vm_path,"#{name}-0.#{definition.disk_format}").gsub('/', '\\').downcase
 
           # Create a new named VM instance on the HyperV server
-          env.logger.info "Creating VM [#{name}] #{definition.memory_size}MB - #{definition.cpu_count}CPU - #{hyperv_os_type_id(definition.os_type_id)}"
+          env.ui.info "Creating VM [#{name}] #{definition.memory_size}MB - #{definition.cpu_count}CPU - #{hyperv_os_type_id(definition.os_type_id)}"
           powershell_exec "New-VM -Name #{name} -MemoryStartupBytes #{definition.memory_size}MB -NewVHDSizeBytes #{definition.disk_size}MB -NewVHDPath '#{vhd_path}' -SwitchName #{definition.hyperv_network_name}"
 
           #TODO: #setting video memory size
@@ -33,7 +33,7 @@ module Veewee
           #shell_exec("#{command}")
 
           # Setting bootorder
-          env.logger.info "Setting VMBios boot order 'CD', 'IDE', 'Floppy', 'LegacyNetworkAdapter'"
+          env.ui.info "Setting VMBios boot order 'CD', 'IDE', 'Floppy', 'LegacyNetworkAdapter'"
           powershell_exec "Set-VMBios -VMName #{name} -StartupOrder @('CD', 'IDE', 'Floppy', 'LegacyNetworkAdapter')"
 
           dynamic_memory = nil
@@ -41,7 +41,7 @@ module Veewee
 
           unless definition.hyperv[:vm_options][0].nil?
             definition.hyperv[:vm_options][0].each do |vm_flag,vm_flag_value|
-              env.logger.info "Setting VM Flag [#{vm_flag}] to [#{vm_flag_value}]"
+              env.ui.info "Setting VM Flag [#{vm_flag}] to [#{vm_flag_value}]"
               case vm_flag.to_s.downcase
                 when 'dynamic_memory'
                   dynamic_memory = vm_flag_value ? '-DynamicMemory' : nil
@@ -49,12 +49,12 @@ module Veewee
                   swp_path = File.join(vm_path,name,'.swp').gsub('/', '\\').downcase
                   smart_paging = vm_flag_value ? "-SmartPagingFilePath '#{sqp_path}'" : nil
                 else
-                  env.logger.warn "Ignoring unsupported vm_flag [#{vm_flag}] with value [#{vm_flag_value}]"
+                  env.ui.warn "Ignoring unsupported vm_flag [#{vm_flag}] with value [#{vm_flag_value}]"
               end
             end
           end
 
-          env.logger.info "Updating VM options and setting SnapshotFileLocation"
+          env.ui.info "Updating VM options and setting SnapshotFileLocation"
           powershell_exec "Set-VM -Name #{name} #{dynamic_memory} #{smart_paging} -SnapshotFileLocation '#{vm_path}\\snapshot\\'"
 
         end
