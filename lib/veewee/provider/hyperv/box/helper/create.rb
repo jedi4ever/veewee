@@ -42,10 +42,10 @@ module Veewee
           unless definition.hyperv[:vm_options][0].nil?
             definition.hyperv[:vm_options][0].each do |vm_flag,vm_flag_value|
               env.logger.info "Setting VM Flag [#{vm_flag}] to [#{vm_flag_value}]"
-              case vm_flag.downcase
-                when dynamic_memory
+              case vm_flag.to_s.downcase
+                when 'dynamic_memory'
                   dynamic_memory = vm_flag_value ? '-DynamicMemory' : nil
-                when smart_paging
+                when 'smart_paging'
                   swp_path = File.join(vm_path,name,'.swp').gsub('/', '\\').downcase
                   smart_paging = vm_flag_value ? "-SmartPagingFilePath '#{sqp_path}'" : nil
                 else
@@ -54,7 +54,7 @@ module Veewee
             end
           end
 
-          env.logger.info "Updating VM options"
+          env.logger.info "Updating VM options and setting SnapshotFileLocation"
           powershell_exec "Set-VM -Name #{name} #{dynamic_memory} #{smart_paging} -SnapshotFileLocation '#{vm_path}\\snapshot\\'"
 
         end
