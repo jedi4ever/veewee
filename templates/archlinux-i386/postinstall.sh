@@ -75,6 +75,7 @@ git clone https://github.com/puppetlabs/puppet.git
 cd puppet
 ruby install.rb --bindir=/usr/bin --sbindir=/sbin
 
+if test -f /root/.vbox_version ; then
 # install virtualbox guest additions
 cd /tmp
 wget http://download.virtualbox.org/virtualbox/"$VBOX_VERSION"/VBoxGuestAdditions_"$VBOX_VERSION".iso
@@ -82,6 +83,7 @@ mount -o loop VBoxGuestAdditions_"$VBOX_VERSION".iso /mnt
 sh /mnt/VBoxLinuxAdditions.run
 umount /mnt
 rm VBoxGuestAdditions_"$VBOX_VERSION".iso
+fi
 
 # host-only networking
 cat <<EOF
