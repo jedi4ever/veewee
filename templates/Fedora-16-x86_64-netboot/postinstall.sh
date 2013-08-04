@@ -14,10 +14,12 @@ yum -y install \
 
 yum clean all
 
+if test -f /home/vagrant/.vbox_version ; then
 mount /dev/cdrom1 /mnt
 sh /mnt/VBoxLinuxAdditions.run
 umount /mnt
 restorecon -R /opt/VBoxGuestAdditions-${VBOX_VERSION}
+fi
 
 gem install chef puppet --no-rdoc --no-ri
 
