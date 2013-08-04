@@ -52,6 +52,7 @@ yum -y install \
 echo "installing chef"
 gem install chef --no-ri --no-rdoc
 
+if test -f ~vagrant/.vbox_version ; then
 #Installing the virtualbox guest additions
 VBOX_VERSION=$( cat ~vagrant/.vbox_version )
 cd /tmp
@@ -60,6 +61,7 @@ sh /mnt/VBoxLinuxAdditions.run --nox11
 umount /mnt
 
 rm ~vagrant/VBoxGuestAdditions_${VBOX_VERSION}.iso
+fi
 
 # Installing vagrant keys
 mkdir ~vagrant/.ssh
