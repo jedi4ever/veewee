@@ -1,6 +1,7 @@
 #!/bin/bash
 source /etc/profile
 
+if test -f $chroot/home/vagrant/.vbox_version ; then
 # add package keywords
 cat <<DATAEOF >> "$chroot/etc/portage/package.keywords"
 app-emulation/virtualbox-guest-additions ~amd64
@@ -21,3 +22,4 @@ mkdir /media && chgrp vboxsf /media
 rc-update add dbus default # required by virtualbox-guest-additions service
 rc-update add virtualbox-guest-additions default
 DATAEOF
+fi
