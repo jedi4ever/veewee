@@ -1,3 +1,4 @@
+if test -f /home/vagrant/.vbox_version ; then
 # Installing the virtualbox guest additions
 VBOX_VERSION=$(cat /home/vagrant/.vbox_version)
 cd /tmp
@@ -6,3 +7,4 @@ mount -o loop VBoxGuestAdditions_$VBOX_VERSION.iso /mnt
 sh /mnt/VBoxLinuxAdditions.run
 umount /mnt
 rm -rf VBoxGuestAdditions_$VBOX_VERSION.iso
+fi
