@@ -1,3 +1,4 @@
+if test -f /home/vagrant/.vbox_version ; then
 # Without libdbus virtualbox would not start automatically after compile
 apt-get -y install --no-install-recommends libdbus-1-3
 
@@ -16,3 +17,4 @@ umount /mnt
 
 #Cleanup VirtualBox
 rm $VBOX_ISO
+fi
