@@ -7,6 +7,7 @@ rmmod vboxguest
 aptitude -y purge virtualbox-ose-guest-x11 virtualbox-ose-guest-dkms virtualbox-ose-guest-utils
 aptitude -y install dkms
 
+if test -f /home/vagrant/.vbox_version ; then
 # Install the VirtualBox guest additions
 VBOX_VERSION=$(cat /home/vagrant/.vbox_version)
 VBOX_ISO=VBoxGuestAdditions_$VBOX_VERSION.iso
@@ -16,3 +17,4 @@ umount /mnt
 
 #Cleanup VirtualBox
 rm $VBOX_ISO
+fi

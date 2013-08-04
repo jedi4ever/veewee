@@ -19,6 +19,7 @@ export DEBIAN_FRONTEND=noninteractive
 export VEEWEE_USER="vagrant"
 export VBOX_VERSION=$(cat /home/${VEEWEE_USER}/.vbox_version)
 
+if test -f /home/${VEEWEE_USER}/.vbox_version ; then
 ### Install Virtualbox guest additions
 #
 apt-get -y install dkms
@@ -29,6 +30,7 @@ sh /mnt/VBoxLinuxAdditions.run
 umount /mnt
 
 rm VBoxGuestAdditions_$VBOX_VERSION.iso
+fi
 
 ### Install packages
 #
