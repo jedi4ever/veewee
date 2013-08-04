@@ -112,7 +112,7 @@ If you are an experienced devops veterean and have enhanced template settings, p
 
 ## Provider `vm_options`
 
-Each provider _can_ take options that are specific the provider; more details will be available in each [provider](provider.md) doc but let's have a quick overview here:
+Each provider _can_ take options that are specific the provider; more details will be available in each [provider](providers.md) doc but let's have a quick overview here:
 
     Veewee::Definition.declare({
         :cpu_count => '1',
