@@ -3,6 +3,7 @@ then
   . .veewee_params
 fi
 
+if test -f /home/vagrant/.vbox_version ; then
 # Installing the virtualbox guest additions
 apt-get -y install dkms
 VBOX_VERSION=$(cat /home/vagrant/.vbox_version)
@@ -13,3 +14,4 @@ umount /mnt
 rm VBoxGuestAdditions_$VBOX_VERSION.iso
 
 cd /tmp
+fi

@@ -17,9 +17,11 @@ rc-update add vixie-cron default
 #Kernel headers
 emerge -u --oneshot sys-kernel/linux-headers
 
+if test -f /home/vagrant/.vbox_version ; then
 #Installing the virtualbox guest additions
 emerge app-emulation/virtualbox-guest-additions
 rc-update add virtualbox-guest-additions default
+fi
 
 # Get ruby and rvm all setup...
 emerge -u --oneshot git curl gcc automake autoconf m4

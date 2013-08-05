@@ -17,6 +17,7 @@ wget http://apt-cyg.googlecode.com/svn/trunk/apt-cyg
 chmod +x apt-cyg
 mv apt-cyg /usr/local/bin/
 
+if test -f /home/vagrant/.vbox_version ; then
 # Download Daemontools Lite
 # This needs some fixing as the url seems to change every X time ...
 #wget http://www.daemon-tools.cc/eng/downloads/dtproAdv
@@ -56,6 +57,7 @@ cd /cygdrive/e
 # Unmount ISO file
 cd "/cygdrive/c/Program Files (x86)/DAEMON Tools Lite"
 ./DTLite.exe -unmount 0
+fi
 
 # Next step is get ruby working
 # But thanks to opscode's work , that should not be an issue

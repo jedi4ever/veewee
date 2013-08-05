@@ -11,6 +11,7 @@ apt-get -y install zlib1g-dev libssl-dev libreadline-gplv2-dev
 apt-get -y install vim
 apt-get clean
 
+if test -f /home/vagrant/.vbox_version ; then
 # Installing the virtualbox guest additions
 apt-get -y install dkms
 VBOX_VERSION=$(cat /home/vagrant/.vbox_version)
@@ -21,6 +22,7 @@ sh /mnt/VBoxLinuxAdditions.run
 umount /mnt
 
 rm VBoxGuestAdditions_$VBOX_VERSION.iso
+fi
 
 # Setup sudo to allow no-password sudo for "admin"
 groupadd -r admin

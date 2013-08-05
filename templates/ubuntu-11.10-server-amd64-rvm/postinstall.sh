@@ -21,6 +21,7 @@ wget --no-check-certificate 'http://github.com/mitchellh/vagrant/raw/master/keys
 chmod 600 /home/vagrant/.ssh/authorized_keys
 chown -R vagrant /home/vagrant/.ssh
 
+if test -f /home/vagrant/.vbox_version ; then
 # Installing the virtualbox guest additions
 VBOX_VERSION=$(cat /home/vagrant/.vbox_version)
 cd /tmp
@@ -30,6 +31,7 @@ sh /mnt/VBoxLinuxAdditions.run
 umount /mnt
 
 rm VBoxGuestAdditions_$VBOX_VERSION.iso
+fi
 
 # Install Ruby Version Manager
 curl -s https://raw.github.com/wayneeseguin/rvm/master/binscripts/rvm-installer -o /tmp/rvm-installer

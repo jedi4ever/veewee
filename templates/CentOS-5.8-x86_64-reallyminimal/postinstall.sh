@@ -66,6 +66,7 @@ echo 'Welcome to your Vagrant-built virtual machine.' > /etc/motd
 sed -i "s/^.*requiretty/#Defaults requiretty/" /etc/sudoers
 sed -i "s/^\(.*env_keep = \"\)/\1PATH SSH_AUTH_SOCK /" /etc/sudoers
 
+if test -f /home/vagrant/.vbox_version ; then
 #Installing the virtualbox guest additions
 VBOX_VERSION=$(cat /home/vagrant/.vbox_version)
 cd /tmp
@@ -74,6 +75,7 @@ sh /mnt/VBoxLinuxAdditions.run --nox11
 umount /mnt
 
 rm /home/vagrant/VBoxGuestAdditions_${VBOX_VERSION}.iso
+fi
 
 ## almost there.  remove stuff we don't need
 rpm -qa | grep -- -devel | xargs yum -y erase

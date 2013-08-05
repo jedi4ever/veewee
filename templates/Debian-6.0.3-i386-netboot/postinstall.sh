@@ -41,6 +41,7 @@ echo 'UseDNS no' >> /etc/ssh/sshd_config
 # Customize the message of the day
 echo 'Welcome to your Vagrant-built virtual machine.' > /var/run/motd
 
+if test -f /home/vagrant/.vbox_version ; then
 # The netboot installs the VirtualBox support (old) so we have to remove it
 /etc/init.d/virtualbox-ose-guest-utils stop
 rmmod vboxguest
@@ -53,12 +54,12 @@ curl -Lo /tmp/VBoxGuestAdditions_$VBOX_VERSION.iso \
 mount -o loop /tmp/VBoxGuestAdditions_$VBOX_VERSION.iso /mnt
 yes|sh /mnt/VBoxLinuxAdditions.run
 umount /mnt
+rm /tmp/VBoxGuestAdditions_$VBOX_VERSION.iso
+fi
 
 # Clean up
 apt-get -y remove linux-headers-$(uname -r) build-essential
 apt-get -y autoremove
-
-rm /tmp/VBoxGuestAdditions_$VBOX_VERSION.iso 
 
 # Zero out the free space to save space in the final image:
 dd if=/dev/zero of=/EMPTY bs=1M

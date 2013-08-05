@@ -30,6 +30,7 @@ echo -e "\ninstall chef and puppet ..."
 gem install chef --no-ri --no-rdoc
 gem install puppet --no-ri --no-rdoc
 
+if test -f /home/vagrant/.vbox_version ; then
 # install the virtualbox guest additions
 echo -e "\ninstall the virtualbox guest additions ..."
 zypper --non-interactive remove `rpm -qa virtualbox-guest-*` >/dev/null 2>&1
@@ -41,6 +42,7 @@ mount -o loop VBoxGuestAdditions_$VBOX_VERSION.iso /mnt
 sh /mnt/VBoxLinuxAdditions.run
 umount /mnt
 rm -f VBoxGuestAdditions_$VBOX_VERSION.iso
+fi
 
 echo -e "\nall done.\n"
 exit

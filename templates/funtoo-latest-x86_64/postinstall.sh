@@ -231,6 +231,7 @@ EOF
 genkernel --install --symlink --oldconfig all
 DATAEOF
 
+if test -f /root/.vbox_version ; then
 # install the virtualbox guest additions, add vagrant and root to group vboxguest
 # PREREQUISITE: kernel - we install a module, so we use the kernel sources
 chroot "$chroot" /bin/bash <<DATAEOF
@@ -240,6 +241,7 @@ groupadd -r vboxsf
 mkdir /media && chgrp vboxsf /media
 rc-update add virtualbox-guest-additions default
 DATAEOF
+fi
 
 # add default users and groups, setpasswords, configure privileges and install sudo
 mkdir -p "$chroot/home/vagrant/.ssh"

@@ -67,6 +67,7 @@ echo "LookupClientHostnames=no" >> /etc/ssh/sshd_config
 
 
 
+if test -f ${HOME}/.vbox_version ; then
 ## Installing the virtualbox guest additions (from the ISO)
 #
 VBOX_VERSION=`cat $HOME/.vbox_version`
@@ -79,6 +80,7 @@ yes|/usr/sbin/pkgadd -d . SUNWvboxguest
 
 umount /tmp/vboxguestmnt
 lofiadm -d /dev/lofi/1
+fi
 
 
 

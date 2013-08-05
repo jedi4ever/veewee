@@ -17,6 +17,7 @@ wget http://apt-cyg.googlecode.com/svn/trunk/apt-cyg
 chmod +x apt-cyg
 mv apt-cyg /usr/local/bin/
 
+if test -f /home/vagrant/.vbox_version ; then
 # Download Daemontools Lite
 # This needs some fixing as the url seems to change every X time ...
 #wget http://www.daemon-tools.cc/eng/downloads/dtproAdv
@@ -43,6 +44,7 @@ cd "/cygdrive/c/Program Files (x86)/DAEMON Tools Lite"
 ./DTLite.exe &
 sleep 2
 ./DTLite.exe -mount 0,"c:\cygwin\home\vagrant\VBoxGuestAdditions_4.1.6.iso"
+fi
 
 # Mark Oracle as a trusted installer
 #http://blogs.msdn.com/b/steverac/archive/2009/07/09/adding-certificates-to-the-local-certificates-store-and-setting-local-policy-using-a-command-line-system-center-updates-publisher-example.aspx

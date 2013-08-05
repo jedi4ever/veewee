@@ -58,6 +58,7 @@ cd /export/home/vagrant/.ssh
 /usr/bin/wget --no-check-certificate 'https://raw.github.com/mitchellh/vagrant/master/keys/vagrant.pub' -O authorized_keys
 chown -R vagrant /export/home/vagrant/.ssh
 
+if test -f /export/home/vagrant/.vbox_version ; then
 #Installing the virtualbox guest additions
 VBOX_VERSION=$(cat /export/home/vagrant/.vbox_version)
 cd /tmp
@@ -65,6 +66,7 @@ cd /tmp
 /usr/gnu/bin/tar -xzvf VirtualBox-4.0.6-71344-SunOS.tar.gz
 /usr/bin/pkgtrans VirtualBox-4.0.6-SunOS-r71344.pkg . all
 yes|/usr/sbin/pkgadd -d . SUNWvbox
+fi
 
 # Fix the shells to include the /opt/csw directories
 

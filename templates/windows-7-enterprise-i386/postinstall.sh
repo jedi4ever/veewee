@@ -19,6 +19,7 @@ wget http://apt-cyg.googlecode.com/svn/trunk/apt-cyg
 chmod +x apt-cyg
 mv apt-cyg /usr/local/bin/
 
+if test -f /home/vagrant/.vbox_version ; then
 # 7zip will allow us to extract a file from an ISO
 wget http://downloads.sourceforge.net/sevenzip/7z922.msi
 msiexec /qb /i 7z922.msi
@@ -37,6 +38,7 @@ certutil -addstore -f "TrustedPublisher" a:oracle-cert.cer
 
 # Install the Virtualbox Additions
 ./VBoxWindowsAdditions-x86.exe /S
+fi
 
 
 #Rather than do the manual install of ruby and chef, just use the opscode msi

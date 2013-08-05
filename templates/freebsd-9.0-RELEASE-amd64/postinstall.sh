@@ -86,13 +86,9 @@ cat >> /etc/make.conf << EOT
 WITHOUT_X11="YES"
 EOT
 
+if test -f /home/vagrant/.vbox_version ; then
 cd /usr/ports/emulators/virtualbox-ose-additions
 make -DBATCH package clean
-
-# undo our customizations
-sed -i '' -e '/^REFUSE /d' /etc/portsnap.conf
-sed -i '' -e '/^WITHOUT_X11/d' /etc/make.conf
-
 
 echo 'vboxdrv_load="YES"' >> /boot/loader.conf
 echo 'vboxnet_enable="YES"' >> /etc/rc.conf
@@ -101,6 +97,11 @@ echo 'vboxservice_enable="YES"' >> /etc/rc.conf
 
 pw groupadd vboxusers
 pw groupmod vboxusers -m vagrant
+fi
+
+# undo our customizations
+sed -i '' -e '/^REFUSE /d' /etc/portsnap.conf
+sed -i '' -e '/^WITHOUT_X11/d' /etc/make.conf
 
 #Bash needs to be the shell for tests to validate
 pw usermod vagrant -s /usr/local/bin/bash

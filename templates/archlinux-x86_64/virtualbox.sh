@@ -6,6 +6,7 @@
 
 # Adapted from https://wiki.archlinux.org/index.php/VirtualBox
 
+if test -f /root/.vbox_version ; then
 # Install and set up VirtualBox Guest Additions
 pacman -S --noconfirm virtualbox-guest-utils
 
@@ -21,3 +22,4 @@ gpasswd -a veewee vboxsf
 
 # To synchronise guest date with host and for auto-mounting of shared folders
 systemctl enable vboxservice.service
+fi
