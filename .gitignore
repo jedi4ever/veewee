@@ -21,3 +21,4 @@ virtualfloppy.vfd
 *.swp
 AutoPartition.app
 .rbenv-gemsets
+.project
