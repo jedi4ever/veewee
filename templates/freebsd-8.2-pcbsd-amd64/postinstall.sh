@@ -65,6 +65,7 @@ cd /usr/ports/devel/libtool
 make clean
 make install -DBATCH
 
+if test -f /home/vagrant/.vbox_version ; then
 cd /usr/ports/emulators/virtualbox-ose-kmod
 make clean
 make install -DBATCH
@@ -79,6 +80,7 @@ echo 'vboxguest_enable="YES"' >> /etc/rc.conf
 echo 'vboxservice_enable="YES"' >> /etc/rc.conf
 
 pw groupmod vboxusers -m vagrant
+fi
 
 #Bash needs to be the shell for tests to validate
 pw usermod vagrant -s /usr/local/bin/bash
