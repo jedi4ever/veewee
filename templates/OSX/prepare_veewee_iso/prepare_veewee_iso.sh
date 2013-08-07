@@ -149,6 +149,12 @@ if [ ! -e "$MNT_ESD/System/Library/CoreServices/SystemVersion.plist" ]; then
 		else
 			msg_error "Can't locate an InstallESD.dmg in this source location $install_app!"
 		fi
+	else
+		msg_error "Can't determine OSX version.  File not found: $MNT_ESD/System/Library/CoreServices/SystemVersion.plist"
+		hdiutil detach "$MNT_ESD"
+		rm "$ESD.shadow"
+		rm -rf "$MNT_ESD"
+		exit 1
 	fi
 fi
 DMG_OS_VERS=$(/usr/libexec/PlistBuddy -c 'Print :ProductVersion' "$MNT_ESD/System/Library/CoreServices/SystemVersion.plist")
@@ -160,6 +166,12 @@ if [ -e "$OUTPUT_DMG" ]; then
 	hdiutil detach "$MNT_ESD"
 	if [ -n "$TOPLVL_MNT_ESD" ]; then
 		hdiutil detach "$TOPLVL_MNT_ESD"
+		rm "$TOPLVL_ESD.shadow"
+		rm -rf "$TOPLVL_MNT_ESD"
+		rm -rf "$MNT_ESD"
+	else
+		rm "$ESD.shadow"
+		rm -rf "$MNT_ESD"
 	fi
 	exit 1
 fi
