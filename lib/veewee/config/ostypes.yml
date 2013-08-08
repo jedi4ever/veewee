@@ -341,7 +341,7 @@ ESXi5:
 Darwin_10_7:
   :fusion: darwin11
   :kvm:
-  :vbox:
+  :vbox: MacOS
   :parallels:
 Darwin_10_7_64:
   :fusion: darwin11-64
