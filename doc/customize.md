@@ -107,7 +107,7 @@ All other settings are used internally by Veewee, the virtualization provider, o
 
 **IMPORTANT:** If you change values directly in a template, be sure to run `bundle exec veewee <provider> undefine` to remove the old definition and then `bundle exec veewee <provider> define` again to copy the updated template files into the definition.
 
-If you are an experienced devops veterean and have enhanced template settings, please let us know why. We are very interested in improving Veewee's templates.
+If you are an experienced devops veteran and have enhanced template settings, please let us know why. We are very interested in improving Veewee's templates.
 
 
 ## Provider `vm_options`
