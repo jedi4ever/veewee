@@ -9,13 +9,13 @@ module Veewee
             # Create a virtual network switch
             self.add_network_switch
           else
-            raise Veewee::Error,"No network hyperv_network_name specified"
+            raise Veewee::Error,'No network hyperv_network_name specified'
           end
 
           # Attach ttyS0 to the VM for console output
           redirect_console=options[:redirectconsole]
           if redirect_console
-            ui.warn "Hyper-V does not support console redirection"
+            ui.warn 'Hyper-V does not support console redirection'
           end
 
           self.create_vm
@@ -40,14 +40,14 @@ module Veewee
           # and mount it there.
           if definition.winrm_user && definition.winrm_password
             definition.skip_iso_transfer = 'true'
-            self.attach_isofile(isofile_ide_device_number, 1, "vmguest.iso")
+            self.attach_isofile(isofile_ide_device_number,1,'vmguest.iso')
           end
 
           self.create_floppy("virtualfloppy.vfd")
           self.attach_floppy
 
           if definition.winrm_user && definition.winrm_password # prefer winrm
-            env.ui.warn "Using winrm because winrm_user and winrm_password are both set"
+            env.ui.warn 'Using winrm because winrm_user and winrm_password are both set'
             guessed_port=guess_free_port(definition.winrm_host_port.to_i,definition.winrm_host_port.to_i+40).to_s
             if guessed_port.to_s!=definition.winrm_host_port
               env.ui.warn "Changing winrm port from #{definition.winrm_host_port} to #{guessed_port}"
@@ -66,8 +66,8 @@ module Veewee
         end
 
         def cleanup(options={})
-          self.detach_isofile
-          self.detach_guest_additions if definition.skip_iso_transfer
+          self.detach_isofile(0,0)
+          self.detach_isofile(0,1) if definition.skip_iso_transfer
           self.detach_floppy unless definition.floppy_files.nil?
         end
 
