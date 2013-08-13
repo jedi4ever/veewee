@@ -109,7 +109,7 @@ module Veewee
       @winrm_login_timeout = '10000'
 
       @hyperv_host = '127.0.0.1' ; @hyperv_dynamic_memory = true; @hyperv_network_name = 'veewee'; @hyperv_store_path = nil
-      @hyperv_host_nic = 'NIC1'
+      @hyperv_host_nic = nil
       @hyperv_cmd_timeout = '10000'
 
       @boot_cmd_sequence = [] # Empty list by default
