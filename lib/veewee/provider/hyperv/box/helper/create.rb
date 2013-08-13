@@ -46,15 +46,15 @@ module Veewee
                 when 'dynamic_memory'
                   dynamic_memory = vm_flag_value ? '-DynamicMemory' : nil
                 when 'smart_paging'
-                  swp_path = File.join(vm_path,name,'.swp').gsub('/', '\\').downcase
-                  smart_paging = vm_flag_value ? "-SmartPagingFilePath '#{sqp_path}'" : nil
+                  swp_path = File.join(vm_path,"#{name}.swp").gsub('/', '\\').downcase
+                  smart_paging = vm_flag_value ? "-SmartPagingFilePath '#{swp_path}'" : nil
                 else
                   env.ui.warn "Ignoring unsupported vm_flag [#{vm_flag}] with value [#{vm_flag_value}]"
               end
             end
           end
 
-          env.ui.info "Updating VM options and setting SnapshotFileLocation"
+          env.ui.info "Setting VM SnapshotFileLocation and other vm options"
           powershell_exec "Set-VM -Name #{name} #{dynamic_memory} #{smart_paging} -SnapshotFileLocation '#{vm_path}\\snapshot\\'"
 
         end
