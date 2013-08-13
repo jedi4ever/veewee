@@ -4,10 +4,10 @@ module Veewee
       module BoxCommand
 
         def add_network_switch
-          env.logger.info "Creating or reusing pre-existing VMSwitch [#{definition.hyperv_network_name}]"
-          result = powershell_exec "$obj = Get-VMSwitch ^| Select -Property Name ; Foreach ($o in $obj) {if ($o.Name -eq '#{definition.hyperv_network_name}') {'reuse' ; exit}} ; New-VMSwitch -Name #{definition.hyperv_network_name} -NetAdapterName #{definition.hyperv_host_nic}"
+          env.ui.info "Creating or reusing pre-existing VMSwitch [#{definition.hyperv_network_name}]"
+          result = powershell_exec "$obj = Get-VMSwitch ^| Select -Property Name ; Foreach ($o in $obj) {if ($o.Name -eq '#{definition.hyperv_network_name}') {'reuse' ; exit}} ; New-VMSwitch -Name #{definition.hyperv_network_name} -NetAdapterName #{definition.hyperv_host_nic} -EnableIov 1"
           status = (result.stdout.chomp 'reuse') ? true : false
-          env.logger.info "VMSwitch [#{definition.hyperv_network_name}] already exists, re-using!" if status
+          env.ui.info "VMSwitch [#{definition.hyperv_network_name}] already exists, re-using!" if status
 #          powershell_exec "New-VMSwitch -Name #{definition.hyperv_network_name} -NetAdapterName #{definition.hyperv_host_nic}" unless result.stdout.include? "#{definition.hyperv_network_name}" unless status
         end
 
