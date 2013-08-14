@@ -11,8 +11,8 @@ module Veewee
     attr_accessor :path
     attr_accessor :params
 
-    attr_accessor :veewee_ip
-    attr_accessor :host_ip_as_seen_by_guest
+    attr_accessor :box_ip
+    attr_accessor :host_ip_as_seen_by_box
 
     attr_writer   :cpu_count, :memory_size
 
@@ -75,8 +75,8 @@ module Veewee
         @path = path
       end
 
-      @veewee_ip = '127.0.0.1'
-      @host_ip_as_seen_by_guest = nil
+      @box_ip = '127.0.0.1'
+      @host_ip_as_seen_by_box = nil
 
       # Default is 1 CPU + 256 MB of memory + 10 MB of video memory
       @cpu_count = '1' ; @memory_size = '256'; @video_memory_size = '10'
