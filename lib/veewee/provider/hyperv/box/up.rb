@@ -9,9 +9,7 @@ module Veewee
             raise Veewee::Error,"Error:: You tried to up a non-existing box '#{name}'. Please run 'veewee vbox build #{name}' first."
           end
 
-          gui_enabled=options['nogui']==true ? false : true
-
-          #raise Veewee::Error,"Box is already running" if self.running?
+          raise Veewee::Error,"Box is already running" if self.running?
 =begin
           if definition.winrm_user && definition.winrm_password # prefer winrm
                                                                 # Before we start,correct the ssh/winrm port if needed
@@ -52,7 +50,6 @@ module Veewee
 =end
 
           # Once assembled we start the machine
-          env.ui.info "Started the VM with GUI Enabled? #{gui_enabled}"
           self.powershell_exec("Start-VM -Name #{name}")
         end
 
