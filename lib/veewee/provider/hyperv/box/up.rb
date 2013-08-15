@@ -50,6 +50,7 @@ module Veewee
 =end
 
           # Once assembled we start the machine
+          env.ui.info "Started the VM #{name}"
           self.powershell_exec("Start-VM -Name #{name}")
         end
 
