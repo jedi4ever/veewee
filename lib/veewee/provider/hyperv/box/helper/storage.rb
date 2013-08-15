@@ -40,15 +40,7 @@ module Veewee
 
         def detach_isofile(device_number = 0,port = 0)
           env.ui.info "Un-Mounting cdrom on controller #{device_number} and port #{port}"
-          powershell_exec "Set-VMDvdDrive -VMName #{name} -Path Null -ControllerNumber #{device_number} -ControllerLocation #{port}" if port == 0
-          powershell_exec "Remove-VMDvdDrive -VMName #{name} -ControllerNumber #{device_number} -ControllerLocation #{port}" if port == 1
-        end
-
-        def detach_guest_additions(device_number = 0,port = 1)
-          full_iso_file = "C:\\windows\\system32\\vmguest.iso"
-          env.ui.info "Un-Mounting guest additions: #{full_iso_file}"
-          command ="#{@vboxcmd} storageattach \"#{name}\" --storagectl \"IDE Controller\" --type dvddrive --port #{port} --device #{device_number} --medium emptydrive"
-          shell_exec("#{command}")
+          powershell_exec "Set-VMDvdDrive -VMName #{name} -ControllerNumber #{device_number} -ControllerLocation #{port} -Path $null"
         end
 
         def attach_floppy
@@ -68,11 +60,9 @@ module Veewee
 
         def detach_floppy
           # Detach floppy to machine (the vfd extension is crucial to detect msdos type floppy)
-          unless definition.floppy_files.nil?
-            floppy_file = File.join(definition.path,"virtualfloppy.vfd").gsub('/', '\\')
-            env.ui.info "Un-Mounting floppy: #{floppy_file}"
-            powershell_exec("Set-VMFloppyDiskDrive -VMName #{name} -Path")
-          end
+          floppy_file = File.join(definition.path,"virtualfloppy.vfd").gsub('/', '\\')
+          env.ui.info "Un-Mounting floppy: #{floppy_file}"
+          powershell_exec("Set-VMFloppyDiskDrive -VMName #{name} -Path $null")
         end
 
       end
