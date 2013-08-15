@@ -66,8 +66,9 @@ module Veewee
                     rescue Exception => e
                       @winrm_up = false
                       next if e.message =~ /401/ # 2012 gives 401 errors
-                      puts e.inspect
+                      next if e.message =~ /A connection attempt failed because the connected party did not properly respond after a period of time/ # 2012 HyperV winrm connection error
                       puts e.message
+                      puts e.inspect
                       puts e.backtrace.inspect
                       sleep 5
                     end
