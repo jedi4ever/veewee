@@ -5,8 +5,7 @@ module Veewee
 
         def host_ip_as_seen_by_guest
           return defition.host_ip_as_seen_by_box if defition.host_ip_as_seen_by_box
-        else
-          self.get_local_ip
+          return self.get_local_ip
         end
 
         # Get the IP address of the box
