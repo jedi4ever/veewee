@@ -45,23 +45,19 @@ module Veewee
 
         def attach_floppy
           # Attach floppy to machine (the vfd extension is crucial to detect msdos type floppy)
-          unless definition.floppy_files.nil?
-            local_file = File.join(definition.path,"virtualfloppy.vfd").gsub('/', '\\')
-            remote_file = File.join("\\\\",definition.hyperv_host,'veewee','virtualfloppy.vfd').gsub('/', '\\')
-            env.ui.info "Copying VirtualFloppy file [#{local_file}] to HyperV Host"
-            result = powershell_exec "if (Test-Path -Path '#{remote_file}') {'true' ; exit} else {Copy-Item -Path '#{local_file}' -Destination '#{remote_file}'}",{:remote => false}
-            status = (result.stdout.chomp == 'true') ? true : false
-            env.ui.info "Remote file [#{remote_file}] already exists on HyperV Host and will be re-used" if status
-            remote_file = File.join("e:\\",'veewee','virtualfloppy.vfd').gsub('/', '\\')
-            env.ui.info "Mounting VirutalFloppy: #{remote_file}"
-            powershell_exec("Set-VMFloppyDiskDrive -VMName #{name} -Path '#{remote_file}'")
-          end
+          local_file = File.join(definition.path,"virtualfloppy.vfd").gsub('/', '\\')
+          remote_file = File.join("\\\\",definition.hyperv_host,'veewee','virtualfloppy.vfd').gsub('/', '\\')
+          env.ui.info "Copying VirtualFloppy file [#{local_file}] to HyperV Host"
+          result = powershell_exec "if (Test-Path -Path '#{remote_file}') {'true' ; exit} else {Copy-Item -Path '#{local_file}' -Destination '#{remote_file}'}",{:remote => false}
+          status = (result.stdout.chomp == 'true') ? true : false
+          env.ui.info "Remote file [#{remote_file}] already exists on HyperV Host and will be re-used" if status
+          remote_file = File.join("e:\\",'veewee','virtualfloppy.vfd').gsub('/', '\\')
+          env.ui.info "Mounting VirutalFloppy: #{remote_file}"
+          powershell_exec("Set-VMFloppyDiskDrive -VMName #{name} -Path '#{remote_file}'")
         end
 
         def detach_floppy
-          # Detach floppy to machine (the vfd extension is crucial to detect msdos type floppy)
-          floppy_file = File.join(definition.path,"virtualfloppy.vfd").gsub('/', '\\')
-          env.ui.info "Un-Mounting floppy: #{floppy_file}"
+          env.ui.info "Un-Mounting floppy"
           powershell_exec("Set-VMFloppyDiskDrive -VMName #{name} -Path $null")
         end
 

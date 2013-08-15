@@ -44,8 +44,10 @@ module Veewee
             self.attach_isofile(isofile_ide_device_number,1,'vmguest.iso')
           end
 
-          self.create_floppy("virtualfloppy.vfd")
-          self.attach_floppy
+          unless definition.floppy_files.nil?
+            self.create_floppy("virtualfloppy.vfd")
+            self.attach_floppy
+          end
 
           if definition.winrm_user && definition.winrm_password # prefer winrm
             env.ui.warn 'Using winrm because winrm_user and winrm_password are both set'
