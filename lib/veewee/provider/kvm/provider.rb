@@ -12,7 +12,7 @@ module Veewee
           Fog.credentials[:libvirt_uri] ||= "qemu:///system"
 
           env.logger.info "Setting libvirt IP Command if not already defined in .fog config file"
-          Fog.credentials[:libvirt_ip_command] ||= "arp -an |grep $mac|cut -d '(' -f 2 | cut -d ')' -f 1"
+          Fog.credentials[:libvirt_ip_command] ||= "arp -an |grep -i $mac|cut -d '(' -f 2 | cut -d ')' -f 1"
 
           env.logger.info "Opening a libvirt connection using fog.io"
           begin
