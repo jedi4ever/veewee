@@ -1,3 +1,8 @@
+if [ -f .veewee_params ]
+then
+  . .veewee_params
+fi
+
 curl -L get.rvm.io | bash -s stable
 usermod --append --groups rvm vagrant
 RVM=/usr/local/rvm/bin/rvm

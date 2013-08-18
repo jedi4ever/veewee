@@ -1,3 +1,8 @@
+if [ -f .veewee_params ]
+then
+  . .veewee_params
+fi
+
 # Install Ruby from source in /opt so that users of Vagrant
 # can install their own Rubies using packages or however.
 

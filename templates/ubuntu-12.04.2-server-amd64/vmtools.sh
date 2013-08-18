@@ -1,3 +1,8 @@
+if [ -f .veewee_params ]
+then
+  . .veewee_params
+fi
+
 if test -f .vmfusion_version ; then                                                                                                                                          [15/436]
 
   cd /tmp

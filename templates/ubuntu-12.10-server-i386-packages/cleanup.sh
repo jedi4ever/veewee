@@ -1,3 +1,8 @@
+if [ -f .veewee_params ]
+then
+  . .veewee_params
+fi
+
 # Remove items used for building, since they aren't needed anymore
 echo "removing unnessary packages"
 apt-get -y remove linux-headers-$(uname -r) build-essential

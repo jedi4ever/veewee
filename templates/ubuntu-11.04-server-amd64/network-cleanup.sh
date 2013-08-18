@@ -1,3 +1,8 @@
+if [ -f .veewee_params ]
+then
+  . .veewee_params
+fi
+
 # Removing leftover leases and persistent rules
 echo "cleaning up dhcp leases"
 rm /var/lib/dhcp3/*

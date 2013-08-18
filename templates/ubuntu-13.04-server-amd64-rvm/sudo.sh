@@ -1,3 +1,8 @@
+if [ -f .veewee_params ]
+then
+  . .veewee_params
+fi
+
 groupadd -r admin
 usermod -a -G admin vagrant
 cp /etc/sudoers /etc/sudoers.orig

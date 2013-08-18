@@ -1,3 +1,8 @@
+if [ -f .veewee_params ]
+then
+  . .veewee_params
+fi
+
 cd /tmp
 mkdir -p /mnt/cdrom
 mount -o loop /home/vagrant/linux.iso /mnt/cdrom
