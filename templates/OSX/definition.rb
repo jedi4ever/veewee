@@ -17,7 +17,7 @@ Veewee::Definition.declare({
   :ssh_key => "",
   :ssh_host_port => "7222",
   :ssh_guest_port => "22",
-  :sudo_cmd => "echo '%p'|sudo -S sh '%f'",
+  :sudo_cmd => "echo '%p'|sudo -S bash '%f'",
   :shutdown_cmd => "shutdown -h now",
   :postinstall_files => [
     "postinstall.sh",           # Base configuration (vagrant user, keys, guest OS tools, etc.)
