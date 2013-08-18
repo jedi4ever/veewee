@@ -1,3 +1,8 @@
+if [ -f .veewee_params ]
+then
+  . .veewee_params
+fi
+
 # etc., and remove optional things to trim down the machine.
 apt-get -y update
 apt-get -y upgrade

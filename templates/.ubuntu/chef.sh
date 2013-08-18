@@ -3,6 +3,11 @@ then
   . .veewee_params
 fi
 
+if [ -f .veewee_params ]
+then
+  . .veewee_params
+fi
+
 # Default to Gem install
 if [ -z "$CHEF_INSTALLMETHOD" ]; then
   export CHEF_INSTALLMETHOD="gems"

@@ -1,3 +1,8 @@
+if [ -f .veewee_params ]
+then
+  . .veewee_params
+fi
+
 apt-get -y install libyaml-0-2
 RUBY_VERSION=1.9.3-p392
 
