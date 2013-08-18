@@ -1,3 +1,10 @@
+#!/bin/bash
+
+if [ -f .veewee_params ]
+then
+  . .veewee_params
+fi
+
 # postinstall.sh created from Mitchell's official lucid32/64 baseboxes
 
 date > /etc/vagrant_box_build_time

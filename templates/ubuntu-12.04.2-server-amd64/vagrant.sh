@@ -1,3 +1,10 @@
+#!/bin/bash
+
+if [ -f .veewee_params ]
+then
+  . .veewee_params
+fi
+
 date > /etc/vagrant_box_build_time
 
 # Setup sudo to allow no-password sudo for "sudo"

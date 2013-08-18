@@ -1,3 +1,10 @@
+#!/bin/bash
+
+if [ -f .veewee_params ]
+then
+  . .veewee_params
+fi
+
 #http://adrianbravo.tumblr.com/post/644860401
 
 date > /etc/vagrant_box_build_time

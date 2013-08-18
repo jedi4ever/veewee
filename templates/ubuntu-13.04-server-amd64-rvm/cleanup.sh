@@ -1,3 +1,10 @@
+#!/bin/bash
+
+if [ -f .veewee_params ]
+then
+  . .veewee_params
+fi
+
 apt-get -y autoremove
 
 dd if=/dev/zero of=/EMPTY bs=1M
