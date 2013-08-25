@@ -1,4 +1,6 @@
+require 'to_slug'
 require 'veewee/provider/core/helper/winrm'
+
 module Veewee
   module Provider
     module  Core
@@ -14,7 +16,6 @@ module Veewee
             end
           end
 
-          
           # Calculate an available kickstart port which we will use for wincp
           definition.kickstart_port = "7000" if definition.kickstart_port.nil?
           guessed_port=guess_free_port(definition.kickstart_port.to_i,7199).to_s
@@ -23,18 +24,23 @@ module Veewee
             definition.kickstart_port=guessed_port.to_s
           end
 
-          env.ui.warn "Spinning up a wait_for_http_request on http://#{host_ip_as_seen_by_guest}:#{definition.kickstart_port}#{localfile}"
-          webthread=allow_for_http_request(localfile,{
-              :port => definition.kickstart_port,
-              :host => definition.kickstart_ip,
-              :timeout => definition.kickstart_timeout,
-              :web_dir => '/'
-            })
+          urlpath = localfile.to_slug
+          urlpath = urlpath.start_with?('/') ? urlpath : '/' + urlpath
+          env.ui.warn "Spinning up an allow_for_http_request on http://#{host_ip_as_seen_by_guest}:#{definition.kickstart_port}#{localfile} at URL #{urlpath}"
+          allow_for_http_request(
+              localfile,
+              urlpath,
+              {
+                :port => definition.kickstart_port,
+                :host => definition.kickstart_ip,
+                :timeout => definition.kickstart_timeout,
+              }
+          )
           
           begin
             self.when_winrm_login_works(self.ip_address,winrm_options.merge(options)) do
               env.ui.info "Going to try and copy #{localfile} to #{remotefile.inspect}"
-              self.exec("cmd.exe /C cscript %TEMP%\\wget.vbs /url:http://#{host_ip_as_seen_by_guest}:#{definition.kickstart_port}#{localfile} /path:#{remotefile}")
+              self.exec("cmd.exe /C cscript %TEMP%\\wget.vbs /url:http://#{host_ip_as_seen_by_guest}:#{definition.kickstart_port}#{urlpath} /path:#{remotefile}")
               # while true do
               #   sleep 0.1 # used to debug
               # end
