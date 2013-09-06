@@ -7,7 +7,8 @@ RUBY_SOURCE="http://ftp.ruby-lang.org/pub/ruby/1.9/${RUBY_VERSION}.tar.gz"
 LIBYAML_VERSION="yaml-0.1.4"
 LIBYAML_SOURCE="http://pyyaml.org/download/libyaml/${LIBYAML_VERSION}.tar.gz"
 
-yum install -y readline-devel ncurses-devel gdbm-devel tcl-devel openssl-devel db4-devel byacc libyaml-devel libffi-devel make
+yum install -y readline-devel ncurses-devel gdbm-devel tcl-devel \
+  openssl-devel db4-devel byacc libyaml-devel libffi-devel make
 
 # Install libyaml from source
 cd /tmp
