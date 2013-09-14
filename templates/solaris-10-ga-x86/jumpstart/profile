@@ -29,6 +29,7 @@ package      SUNWsfwhea add
 package      SUNWhea add
 package      SUNWtoo add
 package      SUNWlibm add
+package      SUNWgccruntime add
 
 # BSD compatibility
 package      SUNWscpu add
