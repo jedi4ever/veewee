@@ -14,6 +14,7 @@ module Veewee
         def export_vagrant(options)
           # For now, we just assume prlctl is in the path. If not...it'll fail.
           @prlcmd = "prlctl"
+          @prldisktool = "prl_disk_tool"
 
           # Check if box already exists
           unless self.exists?
@@ -64,6 +65,9 @@ module Veewee
             raise Veewee::Error, "box #{name}.box already exists"
           end
 
+          # VMWare Fusion does this to the real machine, so we will too.
+          optimize_disk
+
           # Create temp directory
           current_dir = FileUtils.pwd
           ui.info "Creating a temporary directory for export"
@@ -106,11 +110,19 @@ module Veewee
             File.open(File.join(tmp_dir, 'metadata.json'), 'w') {|f| f.write(template_metadatafile()) }
 
             ui.info "Exporting the box"
-            # TODO: Copy directory from path to the tmp dir
-            vm_path = get_vm_path
             tmp_dest = File.join(tmp_dir, "box.pvm")
-            FileUtils.cp_r(vm_path, tmp_dest)
-            env.logger.debug("Copy #{vm_path} to #{tmp_dest}")
+
+            clone_command = "#{@prlcmd} clone #{name} --name #{name}-veewee --template --location #{tmp_dir}"
+            shell_exec clone_command
+            env.logger.debug("Clone #{name} to #{name}-veewee, location #{tmp_dir}")
+
+            # Previous command causes the VM to get registered, so unregister it to keep user's VM list clean
+            unregister_command = "#{@prlcmd} unregister #{name}-veewee"
+            shell_exec unregister_command
+            env.logger.debug "Unregister #{name}-veewee after clone"
+
+            FileUtils.move File.join(tmp_dir, "#{name}-veewee.pvm"), tmp_dest
+            env.logger.debug("Rename Parallels Desktop-created file to what we expect")
 
             ui.info "Packaging the box"
             FileUtils.cd(tmp_dir)
@@ -143,33 +155,29 @@ module Veewee
           ui.info "vagrant ssh"
         end
 
-        def get_mac_address
+        # Inspired by vagrant-parallels
+        def read_settings
           command = "#{@prlcmd} list --info --json \"#{self.name}\""
-          shell_results = shell_exec("#{command}")
-          # Parsing trick borrowed from vagrant-parallels, lib/vagrant-parallels/driver/
-          json = JSON.parse(shell_results.stdout.gsub("/\s+/", "").gsub(/^(INFO)?\[/, '').gsub(/\]$/, ''))
-          # TODO: Not sure if all Parallels guests use net0, but it seems good enough for now.
-          mac = json.fetch("Hardware").fetch("net0").fetch("mac")
-          env.logger.debug("mac address: #{mac}")
-          return mac
+          r = shell_exec(command).stdout
+          JSON.parse (r.gsub("/\s+/", "").gsub(/^(INFO)?\[/, '').gsub(/\]$/, ''))
         end
 
-        def get_vm_path
-          # TODO: Remove this duplication. Maybe make a function higher up somewhere.
-          command = "#{@prlcmd} list --info --json \"#{self.name}\""
-          shell_results = shell_exec("#{command}")
-          # Parsing trick borrowed from vagrant-parallels, lib/vagrant-parallels/driver/
-          json = JSON.parse(shell_results.stdout.gsub("/\s+/", "").gsub(/^(INFO)?\[/, '').gsub(/\]$/, ''))
-          # TODO: Do we need to catch errors here? I mean if they got this far it should exist...
-          vm_path = File.realpath(json.fetch("Home"))
-          env.logger.debug("path to VM: #{vm_path}")
-          return vm_path
+        def get_mac_address
+          mac = read_settings.fetch("Hardware").fetch("net0").fetch("mac")
+          env.logger.debug("mac address: #{mac}")
+          return mac
         end
 
         def template_metadatafile
           %Q({"provider": "parallels"}\n)
         end
 
+        def optimize_disk
+          env.ui.info "Optimizing Disk"
+          path_to_hdd = File.join read_settings.fetch("Home"), "harddisk.hdd"
+          optimize_command = "#{@prldisktool} compact --buildmap --hdd #{path_to_hdd}"
+          shell_exec optimize_command
+        end
       end #Module
     end #Module
   end #Module
