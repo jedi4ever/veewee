@@ -298,6 +298,10 @@ Solaris_64:
   :kvm:
   :vbox: Solaris_64
   :parallels: solaris-10
+Solaris11_64:
+  :fusion: solaris10-64
+  :kvm:
+  :vbox: Solaris11_64
 Solaris9:
   :fusion: solaris
   :kvm:
