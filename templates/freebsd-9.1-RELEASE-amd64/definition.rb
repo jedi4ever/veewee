@@ -26,7 +26,7 @@ Veewee::Definition.declare({
   :ssh_login_timeout => "10000", :ssh_user => "vagrant", :ssh_password => "vagrant", :ssh_key => "",
   :ssh_host_port => "7222", :ssh_guest_port => "22",
   :sudo_cmd => "cat '%f' | su -",
-  :shutdown_cmd => "shutdown -h now",
-  :postinstall_files => [ "postinstall.sh"], :postinstall_timeout => "10000"
+  :shutdown_cmd => "shutdown -p now",
+  :postinstall_files => [ "postinstall.csh"], :postinstall_timeout => "10000"
 })
-#'setkmap=us dodhcp=eth0 dhcphostname=%NAME% ar_source=http://%IP%:%PORT%/ autoruns=0 rootpass=vagrant',
+#'setkmap=us dodhcp=em0 dhcphostname=%NAME% ar_source=http://%IP%:%PORT%/ autoruns=0 rootpass=vagrant',

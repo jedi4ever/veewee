@@ -1,4 +1,7 @@
-#!/usr/local/bin/bash -ux
+#!/bin/csh -x
+# NB: at the point when this script is run, vagrant's shell is csh
+
+set echo
 
 #Set the time correctly
 ntpdate -v -b in.pool.ntp.org
@@ -10,8 +13,8 @@ sed 's/\[ ! -t 0 \]/false/' /usr/sbin/freebsd-update > /tmp/freebsd-update
 chmod +x /tmp/freebsd-update
 
 # update FreeBSD
-PAGER=/bin/cat /tmp/freebsd-update fetch
-PAGER=/bin/cat /tmp/freebsd-update install
+env PAGER=/bin/cat /tmp/freebsd-update fetch
+env PAGER=/bin/cat /tmp/freebsd-update install
 
 # allow portsnap to run fetch without stdin attached to a terminal
 sed 's/\[ ! -t 0 \]/false/' /usr/sbin/portsnap > /tmp/portsnap
@@ -54,7 +57,7 @@ make install -DBATCH
 mkdir /home/vagrant/.ssh
 chmod 700 /home/vagrant/.ssh
 cd /home/vagrant/.ssh
-fetch -am 'https://raw.github.com/mitchellh/vagrant/master/keys/vagrant.pub' -O authorized_keys
+fetch -am -o authorized_keys 'https://raw.github.com/mitchellh/vagrant/master/keys/vagrant.pub'
 chown -R vagrant /home/vagrant/.ssh
 chmod -R go-rwsx /home/vagrant/.ssh
 
@@ -89,15 +92,31 @@ EOT
 cd /usr/ports/emulators/virtualbox-ose-additions
 make -DBATCH package clean
 
+cd /usr/ports/emulators/virtio-kmod
+make -DBATCH install
+
 # undo our customizations
 sed -i '' -e '/^REFUSE /d' /etc/portsnap.conf
-sed -i '' -e '/^WITHOUT_X11/d' /etc/make.conf
-
+# sed -i '' -e '/^WITHOUT_X11/d' /etc/make.conf
 
 echo 'vboxdrv_load="YES"' >> /boot/loader.conf
 echo 'vboxnet_enable="YES"' >> /etc/rc.conf
 echo 'vboxguest_enable="YES"' >> /etc/rc.conf
 echo 'vboxservice_enable="YES"' >> /etc/rc.conf
+
+cat >> /boot/loader.conf << EOT
+virtio_load="YES"
+virtio_pci_load="YES"
+virtio_blk_load="YES"
+if_vtnet_load="YES"
+virtio_balloon_load="YES"
+EOT
+
+# sed -i.bak -Ee 's|/dev/ada?|/dev/vtbd|' /etc/fstab
+echo 'ifconfig_vtnet0_name="em0"' >> /etc/rc.conf
+echo 'ifconfig_vtnet1_name="em1"' >> /etc/rc.conf
+echo 'ifconfig_vtnet2_name="em2"' >> /etc/rc.conf
+echo 'ifconfig_vtnet3_name="em3"' >> /etc/rc.conf
 
 pw groupadd vboxusers
 pw groupmod vboxusers -m vagrant
