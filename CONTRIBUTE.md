@@ -25,7 +25,7 @@ In order to contribute anything, you'll want to follow these steps first:
     $ cd veewee
     ~~~
 
-* Check out a new branch to make your changes on: `git checkout --branch <your_new_patch>`
+* Check out a new branch to make your changes on: `git checkout -b <your_new_patch>`
 
 
 ### For adding a new Template
