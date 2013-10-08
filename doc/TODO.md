@@ -8,11 +8,11 @@
 
 ## Requirements
 
-    virtualbox -> 
+    virtualbox ->
 
     kvm -> ruby-libvirt gem
     v0.8.3 or higher
-    require libvirt 0.8+ version 
+    require libvirt 0.8+ version
     have a default dir pool installed
     permissions to write create new volumes
 
@@ -28,7 +28,7 @@ Now you can pass all options you have to virtualbox
 
 ## Use as a library
 
-    ostype_id (not everytime exists on all providers)
+    ostype_id (not used for all providers)
 
     Rakefile contains check iso
     Rakefile contains test
@@ -37,10 +37,9 @@ Now you can pass all options you have to virtualbox
 
 ## Templates
 
-    idea is to split postinstall.sh to multiple pieces
     check for .veewee_version or .vmfusion_version to see for which provider we are building this
     include/exclude can do this
-    default user becomes veewee, vagrant.sh will create the vagrant user if used under vagrant 
+    default user becomes veewee, vagrant.sh will create the vagrant user if used under vagrant
     uploading vmware.iso
     uploading virtualbox.iso
 
@@ -73,5 +72,5 @@ Now you can pass all options you have to virtualbox
     windows test
     validation of checks (also - include/exclude)
     check execs with exit code
-    multinetwork card 
+    multinetwork card
     dkms for kernel installs
