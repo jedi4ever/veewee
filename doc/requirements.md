@@ -34,6 +34,8 @@ On Windows, you will need to install:
 
 * Ruby devkit
 * msysgit
+* PowerShell (if on XP or Vista)
+* PowerShell Community Extensions
 * And you may need to add VirtualBox to your `PATH`, usually installed to `C:\Program Files\Oracle\VirtualBox`.
 
 
