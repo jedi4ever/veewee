@@ -3,7 +3,7 @@ REM http://webcache.googleusercontent.com/search?q=cache:SjoPPpuQxuoJ:www.tcm.ph
 REM create the cygwin directory
 cmd /c mkdir %SystemDrive%\cygwin
 
-cmd /c bitsadmin /transfer CygwinSetupExe /download /priority normal http://www.cygwin.com/setup.exe %SystemDrive%\cygwin\cygwin-setup.exe
+cmd /c bitsadmin /transfer CygwinSetupExe /download /priority normal http://www.cygwin.com/setup-x86.exe %SystemDrive%\cygwin\cygwin-setup.exe
 
 REM goto a temp directory
 cd %SystemDrive%\windows\temp
