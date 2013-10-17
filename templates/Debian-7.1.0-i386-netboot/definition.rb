@@ -4,7 +4,7 @@ Veewee::Definition.declare({
   :disk_size => '10140', :disk_format => 'VDI', :hostiocache => 'off',
   :os_type_id => 'Debian',
   :iso_file => "debian-7.1.0-i386-netinst.iso",
-  :iso_src => "http://cdimage.debian.org/cdimage/release/7.1.0/i386/iso-cd/debian-7.1.0-i386-netinst.iso",
+  :iso_src => "http://cdimage.debian.org/mirror/cdimage/archive/7.1.0/i386/iso-cd/debian-7.1.0-i386-netinst.iso",
   :iso_md5 => "a70efb67ca061175eabe7c5dc04ab323",
   :iso_download_timeout => "1000",
   :boot_wait => "10", :boot_cmd_sequence => [
