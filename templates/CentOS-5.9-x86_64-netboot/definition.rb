@@ -10,7 +10,7 @@ Veewee::Session.declare({
       "ioapic" => "on",
     ],
   },
-  :os_type_id => 'RedHat',
+  :os_type_id => 'RedHat_64',
   :iso_file => "CentOS-5.9-x86_64-netinstall.iso",
   :iso_src => "http://mirrors.kernel.org/centos/5.9/isos/x86_64/CentOS-5.9-x86_64-netinstall.iso",
   :iso_md5 => "445cfe6236327450bcbda17319b73559",
