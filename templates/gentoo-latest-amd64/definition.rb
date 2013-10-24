@@ -54,7 +54,6 @@ Veewee::Definition.declare({
     'syslog.sh',
     'nfs.sh',
     'grub.sh',
-    #'wipe_portage.sh',
     'wipe_sources.sh',
     'cleanup.sh',
     'zerodisk.sh',

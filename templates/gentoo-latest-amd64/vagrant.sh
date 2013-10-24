@@ -9,9 +9,7 @@ wget --no-check-certificate "$vagrant_ssh_key_url" -O "$chroot/home/vagrant/.ssh
 chmod 600 "$chroot/home/vagrant/.ssh/authorized_keys"
 cp -f /root/.vbox_version "$chroot/home/vagrant/.vbox_version"
 
-# for passwordless logins
 mkdir -p "$chroot/root/.ssh" 2> /dev/null
-#cat /tmp/ssh-root.pub >> "$chroot/root/.ssh/authorized_keys"
 
 # add vagrant user
 chroot $chroot /bin/bash <<DATAEOF

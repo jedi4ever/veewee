@@ -22,6 +22,3 @@ rc-update add dbus default # required by virtualbox-guest-additions service
 rc-update add virtualbox-guest-additions default
 DATAEOF
 
-# Create a temporary mount point for veewee-validation test
-#chroot "$chroot" mkdir /tmp/veewee-validation
-#chroot "$chroot" mount -t vboxsf veewee-validation /tmp/veewee-validation
