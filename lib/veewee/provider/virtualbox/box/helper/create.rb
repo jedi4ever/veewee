@@ -11,7 +11,7 @@ module Veewee
 
         def add_sata_controller 
           #unless => "${vboxcmd} showvminfo \"${vname}\" | grep \"SATA Controller\" ";
-          command ="#{@vboxcmd} storagectl \"#{name}\" --name \"SATA Controller\" --add sata --hostiocache #{definition.hostiocache} --sataportcount #{definition.disk_count}"
+          command ="#{@vboxcmd} storagectl \"#{name}\" --name \"SATA Controller\" --add sata --hostiocache #{definition.hostiocache} --portcount #{definition.disk_count}"
           shell_exec("#{command}")
         end
 
