@@ -6,8 +6,8 @@ cat <<DATAEOF >> "$chroot/etc/portage/make.conf"
 RUBY_TARGETS="ruby19"
 DATAEOF
 
-cat <<DATAEOF >> "$chroot/etc/portage/package.keywords"
-dev-util/ragel ~x86
+cat <<DATAEOF >> "$chroot/etc/portage/package.accept_keywords/ruby"
+dev-util/ragel ~x86 ~amd64
 DATAEOF
 
 chroot "$chroot" /bin/bash <<DATAEOF
