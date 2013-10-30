@@ -22,8 +22,6 @@ require 'veewee/provider/virtualbox/box/helper/buildinfo'
 require 'veewee/provider/virtualbox/box/helper/console_type'
 require 'veewee/provider/virtualbox/box/up'
 
-require 'whichr'
-
 module Veewee
   module Provider
     module Virtualbox
