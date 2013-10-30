@@ -1,4 +1,5 @@
 #!/bin/bash
 source /etc/profile
 
-reboot
+/sbin/reboot
+ps aux | grep sshd | grep -v grep | awk '{print $2}' | xargs kill

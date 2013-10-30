@@ -7,7 +7,12 @@ mkdir -p "$chroot/home/vagrant/.ssh"
 chmod 700 "$chroot/home/vagrant/.ssh"
 wget --no-check-certificate "$vagrant_ssh_key_url" -O "$chroot/home/vagrant/.ssh/authorized_keys"
 chmod 600 "$chroot/home/vagrant/.ssh/authorized_keys"
+
+# record virtualbox version
 cp -f /root/.vbox_version "$chroot/home/vagrant/.vbox_version"
+vbox_version=$(cat /root/.vbox_version)
+echo "export vbox_version=$vbox_version" >> /etc/profile.d/settings.sh
+cp /etc/profile.d/settings.sh $CHROOT/etc/profile.d/
 
 mkdir -p "$chroot/root/.ssh" 2> /dev/null
 
