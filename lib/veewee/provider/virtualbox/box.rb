@@ -1,5 +1,7 @@
 require 'veewee/provider/core/box'
 
+require 'os'
+
 require 'veewee/provider/virtualbox/box/build'
 require 'veewee/provider/virtualbox/box/create'
 require 'veewee/provider/virtualbox/box/halt'
