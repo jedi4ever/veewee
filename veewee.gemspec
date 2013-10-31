@@ -35,6 +35,8 @@ Gem::Specification.new do |s|
   s.add_dependency "grit"
   s.add_dependency "fission", "0.4.0"
 
+  s.required_ruby_version = '>= 1.9.2'
+
   # Modified dependency version, as libxml-ruby dependency has been removed in version 2.1.1
   # See : https://github.com/ckruse/CFPropertyList/issues/14
   # See : https://github.com/jedi4ever/veewee/issues/6
