@@ -22,3 +22,4 @@ virtualfloppy.vfd
 AutoPartition.app
 .rbenv-gemsets
 .project
+.ruby-version
