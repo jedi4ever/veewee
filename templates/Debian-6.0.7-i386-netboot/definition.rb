@@ -7,7 +7,6 @@ Veewee::Definition.declare({
   :os_type_id => 'Debian',
   :virtualbox => { :vm_options => [
                                    'hwvirtex' => 'off',
-                                   'hwvirtexexcl' => 'off',
                                    'nestedpaging' => 'off',
                                    'natdnshostresolver1' => 'on'
                                   ]

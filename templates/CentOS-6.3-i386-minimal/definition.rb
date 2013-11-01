@@ -7,9 +7,8 @@ Veewee::Session.declare({
   :disk_format => 'VDI',
   :hostiocache => 'on',
   :os_type_id => 'RedHat',
-  :virtualbox => { :vm_options => [ 
+  :virtualbox => { :vm_options => [
                                    'hwvirtex' => 'off',
-                                   'hwvirtexexcl' => 'off',
                                    'nestedpaging' => 'off',
                                    'natdnshostresolver1' => 'on'
                                   ]

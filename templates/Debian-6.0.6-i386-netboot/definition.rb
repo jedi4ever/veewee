@@ -5,9 +5,8 @@ Veewee::Definition.declare({
   :memory_size=> '256',
   :disk_size => '10140', :disk_format => 'VDI', :hostiocache => 'on',
   :os_type_id => 'Debian',
-  :virtualbox => { :vm_options => [ 
+  :virtualbox => { :vm_options => [
                                    'hwvirtex' => 'off',
-                                   'hwvirtexexcl' => 'off', 
                                    'nestedpaging' => 'off',
                                    'natdnshostresolver1' => 'on'
                                   ]
