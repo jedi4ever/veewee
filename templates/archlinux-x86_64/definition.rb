@@ -43,7 +43,6 @@ Veewee::Definition.declare({
     'bootloader.sh',
     'ssh.sh',
     'reboot.sh',
-    'basedevel.sh',
     'sudo.sh',
     'user.sh',
     'aur.sh',

@@ -5,6 +5,7 @@
 #   user.sh
 
 pacman -S --noconfirm wget
+pacman -S --noconfirm base-devel
 
 cd /tmp
 wget 'https://aur.archlinux.org/packages/pa/packer/packer.tar.gz'
