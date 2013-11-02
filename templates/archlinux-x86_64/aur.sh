@@ -4,10 +4,8 @@
 #   basedevel.sh
 #   user.sh
 
-pacman -S --noconfirm wget
-
 cd /tmp
-wget 'https://aur.archlinux.org/packages/pa/packer/packer.tar.gz'
+curl 'https://aur.archlinux.org/packages/pa/packer/packer.tar.gz' -o packer.tar.gz
 tar xzf packer.tar.gz
 
 # makepkg should not be run as root
