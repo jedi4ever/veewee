@@ -4,17 +4,6 @@
 #   ruby.sh
 #   aur.sh
 
-# Don't install ruby-highline from Arch repositories since it was built against
-# Ruby 2.0. Build from source. Remove this section when Chef supports Ruby 2.0.
-mkdir -p /tmp/ruby-highline
-wget 'https://projects.archlinux.org/svntogit/community.git/plain/trunk/PKGBUILD?h=packages/ruby-highline&id=49e00a9ea7ffa267048aa7fc7a82a0427c10958d' \
-  -O /tmp/ruby-highline/PKGBUILD
-chown -R veewee:veewee /tmp/ruby-highline
-cd /tmp/ruby-highline
-su veewee -c 'makepkg -si --noconfirm'
-cd -
-rm -rf /tmp/ruby-highline
-
 # Change TMPDIR for packer to stop /tmp from filling up during install
 export TMPDIR=$(pwd)/tmp
 mkdir -p $TMPDIR
