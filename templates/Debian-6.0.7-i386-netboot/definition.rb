@@ -5,15 +5,16 @@ Veewee::Definition.declare({
   :memory_size=> '256',
   :disk_size => '10140', :disk_format => 'VDI', :hostiocache => 'on',
   :os_type_id => 'Debian',
-  :virtualbox => { :vm_options => [ 
+  :virtualbox => { :vm_options => [
                                    'hwvirtex' => 'off',
-                                   'hwvirtexexcl' => 'off', 
                                    'nestedpaging' => 'off',
                                    'natdnshostresolver1' => 'on'
                                   ]
                           },
   :iso_file => "debian-6.0.7-i386-netinst.iso",
-  :iso_src => "http://cdimage.debian.org/cdimage/archive/6.0.7/i386/iso-cd/debian-6.0.7-i386-netinst.iso",
+  :iso_src => "",
+  :iso_download_instructions => "- You need to download this manually as the ISO is no more directly downloadable\n"+
+  "Visit http://cdimage.debian.org/cdimage/archive/6.0.7/i386/ and download it via torrent or jigdo",
   :iso_md5 => "6ebdb31269a3eaaf72fca0ed2f6ba29b",
   :iso_download_timeout => "1000",
   :boot_wait => "10", :boot_cmd_sequence => [

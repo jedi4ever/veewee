@@ -11,11 +11,9 @@ Veewee::Definition.declare({
                                    'natdnshostresolver1' => 'on'
                                   ]
                           },
-  :iso_file => "debian-6.0.6-i386-netinst.iso",
-  :iso_src => "",
-  :iso_download_instructions => "- You need to download this manually as the ISO is no more directly downloadable\n"+
-  "Visit http://cdimage.debian.org/cdimage/archive/6.0.6/i386/ and download it via torrent or jigdo",
-  :iso_md5 => "a5fdc1b74cd573d505a084baf7cc1462",
+  :iso_file => "debian-6.0.8-i386-netinst.iso",
+  :iso_src => "http://cdimage.debian.org/cdimage/archive/6.0.8/i386/iso-cd/debian-6.0.8-i386-netinst.iso",
+  :iso_md5 => "2c2054acaa9d4137483d92f405ac6dfd",
   :iso_download_timeout => "1000",
   :boot_wait => "10", :boot_cmd_sequence => [
      '<Esc>',
@@ -48,6 +46,7 @@ Veewee::Definition.declare({
     "base.sh",
     "vagrant.sh",
     "virtualbox.sh",
+    #"vmfusion.sh",
     "ruby.sh",
     "puppet.sh",
     "chef.sh",
