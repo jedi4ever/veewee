@@ -12,3 +12,7 @@ cmd /c net start winrm
 
 cmd /c reg add "HKEY_CURRENT_USER\Control Panel\Desktop" /v ScreenSaveActive /t REG_SZ /d 0 /f
 cmd /c reg add "HKEY_CURRENT_USER\Control Panel\Desktop" /v ScreenSaveIsSecure /t REG_SZ /d 0 /f
+
+cmd /c reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server" /v fDenyTSConnections /t REG_DWORD /d 0 /f
+cmd /c netsh advfirewall firewall set rule group="remote desktop" new enable=Yes
+cmd /c netsh firewall set service remotedesktop enable
