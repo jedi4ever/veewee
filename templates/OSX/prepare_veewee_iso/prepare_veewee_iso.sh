@@ -43,7 +43,7 @@ usage() {
 	cat <<EOF
 Usage:
 $(basename "$0") "/path/to/InstallESD.dmg" [/path/to/output/directory]
-$(basename "$0") "/path/to/Install OS X [Mountain] Lion.app" [/path/to/output/directory]
+$(basename "$0") "/path/to/Install OS X [[Mountain] Lion|Mavericks].app" [/path/to/output/directory]
 
 Description:
 Converts a 10.7/10.8 installer image to a new image that contains components
@@ -124,15 +124,33 @@ if [ $? -ne 0 ]; then
 	msg_error "Could not mount $ESD on $MNT_ESD"
 	exit 1
 fi
-DMG_OS_VERS=$(/usr/libexec/PlistBuddy -c 'Print :ProductVersion' "$MNT_ESD/System/Library/CoreServices/SystemVersion.plist")
+if [ -e "$MNT_ESD/System/Library/CoreServices/SystemVersion.plist" ]; then
+	SYSTEM_VERSION_PLIST="$MNT_ESD/System/Library/CoreServices/SystemVersion.plist"
+elif [ -e "$MNT_ESD/BaseSystem.dmg" ]; then
+	# This is probably an "Install OS X Mavericks.app"... check the BaseSystem.dmg for the SystemVersion.plist
+	MNT_BASESYSTEM=`/usr/bin/mktemp -d /tmp/veewee-osx-basesystem.XXXX`
+	hdiutil attach "$MNT_ESD/BaseSystem.dmg" -mountpoint "$MNT_BASESYSTEM" -shadow -nobrowse -owners on
+	[ $? -ne 0 ] && msg_error "Could not mount $MNT_ESD/BaseSystem.dmg on $MNT_BASESYSTEM" && exit 1
+	if [ -e "$MNT_BASESYSTEM/System/Library/CoreServices/SystemVersion.plist" ]; then
+		SYSTEM_VERSION_PLIST="$MNT_BASESYSTEM/System/Library/CoreServices/SystemVersion.plist"
+	else
+		msg_error "Could not find $MNT_BASESYSTEM/System/Library/CoreServices/SystemVersion.plist in BaseSystem.dmg"
+		exit 1
+	fi	
+else
+	msg_error "Could not find $ESD on $MNT_ESD"
+	exit 1	
+fi
+DMG_OS_VERS=$(/usr/libexec/PlistBuddy -c 'Print :ProductVersion' "$SYSTEM_VERSION_PLIST")
 DMG_OS_VERS_MAJOR=$(echo $DMG_OS_VERS | awk -F "." '{print $2}')
-DMG_OS_BUILD=$(/usr/libexec/PlistBuddy -c 'Print :ProductBuildVersion' "$MNT_ESD/System/Library/CoreServices/SystemVersion.plist")
+DMG_OS_BUILD=$(/usr/libexec/PlistBuddy -c 'Print :ProductBuildVersion' "$SYSTEM_VERSION_PLIST")
 OUTPUT_DMG="$OUT_DIR/OSX_InstallESD_${DMG_OS_VERS}_${DMG_OS_BUILD}.dmg"
 if [ -e "$OUTPUT_DMG" ]; then
 	msg_error "Output file $OUTPUT_DMG already exists! We're not going to overwrite it, exiting.."
 	hdiutil detach "$MNT_ESD"
 	exit 1
 fi
+[ -e "$MNT_BASESYSTEM" ] && hdiutil detach "$MNT_BASESYSTEM"
 
 SUPPORT_DIR="$SCRIPT_DIR/support"
 
@@ -142,7 +160,7 @@ SUPPORT_DIR="$SCRIPT_DIR/support"
 # direct link: http://support.apple.com/downloads/DL1596/en_US/ServerAdminTools.dmg
 AUTOPART_APP_IN_SIU="System Image Utility.app/Contents/Library/Automator/Create Image.action/Contents/Resources/AutoPartition.app"
 OSX_VERS=$(sw_vers -productVersion | awk -F "." '{print $2}')
-if [ $DMG_OS_VERS_MAJOR -eq 8 ]; then
+if [ $DMG_OS_VERS_MAJOR -eq 8 -o $DMG_OS_VERS_MAJOR -eq 9 ]; then
 	if [ $OSX_VERS -eq 7 ]; then
 		msg_status "To build Mountain Lion on Lion, we need to extract AutoPartition.app from within the 10.8 installer ESD."
 		SIU_TMPDIR=$(/usr/bin/mktemp -d /tmp/siu-108.XXXX)
@@ -170,6 +188,15 @@ if [ $DMG_OS_VERS_MAJOR -eq 8 ]; then
 		AUTOPART_TOOL="/System/Library/CoreServices/$AUTOPART_APP_IN_SIU"
 		if [ ! -e "$AUTOPART_TOOL" ]; then
 			msg_error "We're on Mountain Lion, and should have System Image Utility available at $AUTOPART_TOOL, but it's not available for some reason."
+			exit 1
+		fi
+		cp -R "$AUTOPART_TOOL" "$SUPPORT_DIR/AutoPartition-10.${DMG_OS_VERS_MAJOR}/"
+	elif [ $OSX_VERS -eq 9 ]; then
+		# Location of AutoPartition.app changed in OSX Mavericks!
+		AUTOPART_APP_IN_SIU="System Image Utility.app/Contents/Frameworks/SIUFoundation.framework/Versions/A/XPCServices/com.apple.SIUAgent.xpc/Contents/Resources/AutoPartition.app"
+		AUTOPART_TOOL="/System/Library/CoreServices/$AUTOPART_APP_IN_SIU"
+		if [ ! -e "$AUTOPART_TOOL" ]; then
+			msg_error "We're on Mavericks, and should have System Image Utility available at $AUTOPART_TOOL, but it's not available for some reason."
 			exit 1
 		fi
 		cp -R "$AUTOPART_TOOL" "$SUPPORT_DIR/AutoPartition-10.${DMG_OS_VERS_MAJOR}/"
@@ -275,7 +302,7 @@ if [ -n "$DEFAULT_ISO_DIR" ]; then
 	msg_status "Setting ISO file in definition "$DEFINITION_FILE".."
 	ISO_FILE=$(basename "$OUTPUT_DMG")
 	# Explicitly use -e in order to use double quotes around sed command
-	sed -i -e "s/%OSX_ISO%/${ISO_FILE}/" "$DEFINITION_FILE"
+	sed -i '' -e "s/%OSX_ISO%/${ISO_FILE}/" "$DEFINITION_FILE"
 fi
 
 msg_status "Done."
