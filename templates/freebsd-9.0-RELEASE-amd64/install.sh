@@ -94,7 +94,7 @@ pkg_add -C /mnt -r bash-static
 # Set up user accounts
 zfs create zroot/usr/home/vagrant
 echo "vagrant" | pw -V /mnt/etc useradd vagrant -h 0 -s csh -G wheel -d /home/vagrant -c "Vagrant User"
-echo "vagrant" | pw -V /mnt/etc usermod root
+echo "vagrant" | pw -V /mnt/etc usermod root -h 0
 
 chown 1001:1001 /mnt/home/vagrant
 

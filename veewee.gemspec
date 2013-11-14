@@ -33,11 +33,13 @@ Gem::Specification.new do |s|
   s.add_dependency "fog", "~> 1.8"
   s.add_dependency "childprocess"
   s.add_dependency "fission", ">= 0.5.0"
-  s.add_dependency "whichr"
+  s.add_dependency "os", "~> 0.9.6"
 
   # Grit is not a hard requirment any more but it is the preferred provider
   #s.add_dependency "grit"
   s.add_dependency "git"
+
+  s.required_ruby_version = '>= 1.9.2'
 
   # Modified dependency version, as libxml-ruby dependency has been removed in version 2.1.1
   # See : https://github.com/ckruse/CFPropertyList/issues/14

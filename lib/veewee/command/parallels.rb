@@ -17,6 +17,14 @@ module Veewee
         env.get_box(box_name).build(options)
       end
 
+      desc "export [BOX_NAME]", "Exports the basebox to the vagrant-parallels format"
+      method_option :debug,:type => :boolean , :default => false, :aliases => "-d", :desc => "enable debugging"
+      method_option :force,:type => :boolean , :default => false, :aliases => "-f", :desc => "overwrite existing file"
+      method_option :vagrantfile,:type => :string , :default => "", :desc => "specify Vagrantfile"
+      def export(box_name)
+        env.get_box(box_name).export_vagrant(options)
+      end
+
       desc "validate [BOX_NAME]", "Validates a box against parallels compliancy rules"
       method_option :tags,:type => :array, :default => %w{parallels puppet chef}, :aliases => "-t", :desc => "tags to validate"
       def validate(box_name)

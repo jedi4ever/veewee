@@ -107,12 +107,12 @@ All other settings are used internally by Veewee, the virtualization provider, o
 
 **IMPORTANT:** If you change values directly in a template, be sure to run `bundle exec veewee <provider> undefine` to remove the old definition and then `bundle exec veewee <provider> define` again to copy the updated template files into the definition.
 
-If you are an experienced devops veterean and have enhanced template settings, please let us know why. We are very interested in improving Veewee's templates.
+If you are an experienced devops veteran and have enhanced template settings, please let us know why. We are very interested in improving Veewee's templates.
 
 
 ## Provider `vm_options`
 
-Each provider _can_ take options that are specific the provider; more details will be available in each [provider](provider.md) doc but let's have a quick overview here:
+Each provider _can_ take options that are specific the provider; more details will be available in each [provider](providers.md) doc but let's have a quick overview here:
 
     Veewee::Definition.declare({
         :cpu_count => '1',

@@ -2,13 +2,13 @@
 source /etc/profile
 
 # add required use flags and keywords
-cat <<DATAEOF >> "$chroot/etc/portage/package.use"
+cat <<DATAEOF >> "$chroot/etc/portage/package.use/kernel"
 sys-kernel/gentoo-sources symlink
 sys-kernel/genkernel -cryptsetup
 DATAEOF
 
-cat <<DATAEOF >> "$chroot/etc/portage/package.keywords"
-dev-util/kbuild ~amd64
+cat <<DATAEOF >> "$chroot/etc/portage/package.accept_keywords/kernel"
+dev-util/kbuild ~x86 ~amd64
 DATAEOF
 
 # get, configure, compile and install the kernel and modules
@@ -58,6 +58,8 @@ CONFIG_CIFS=m
 CONFIG_CIFS_UPCAL=y
 CONFIG_CIFS_XATTR=y
 CONFIG_CIFS_DFS_UPCALL=y
+# for FUSE fs
+CONFIG_FUSE_FS=m
 # reduce size
 CONFIG_NR_CPUS=$nr_cpus
 CONFIG_COMPAT_VDSO=n

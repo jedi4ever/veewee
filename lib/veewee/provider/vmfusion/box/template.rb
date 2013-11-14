@@ -22,7 +22,10 @@ module Veewee
         enable_hypervisor_support = definition.vmfusion[:vm_options]['enable_hypervisor_support']
         
         # Depending on the fusion version, we need to update the virtualhw version
-        if @provider.fusion_version.start_with?('5.')
+        fusion_version = @provider.fusion_version
+        if fusion_version.start_with?('6.')
+          virtualhw_version = 10
+        elsif fusion_version.start_with?('5.')
           virtualhw_version = 9
         else
           virtualhw_version = 7
@@ -41,7 +44,7 @@ module Veewee
           :iso_file => "#{File.join(env.config.veewee.iso_dir,definition.iso_file)}",
           :box_name => name,
           :vnc_port => guess_vnc_port,
-          :fusion_version => @provider.fusion_version,
+          :fusion_version => fusion_version,
           :vmdk_file => vmdk_file,
           :enable_hypervisor_support => enable_hypervisor_support
         }

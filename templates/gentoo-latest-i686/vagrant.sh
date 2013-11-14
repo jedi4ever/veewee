@@ -7,16 +7,19 @@ mkdir -p "$chroot/home/vagrant/.ssh"
 chmod 700 "$chroot/home/vagrant/.ssh"
 wget --no-check-certificate "$vagrant_ssh_key_url" -O "$chroot/home/vagrant/.ssh/authorized_keys"
 chmod 600 "$chroot/home/vagrant/.ssh/authorized_keys"
-cp -f /root/.vbox_version "$chroot/home/vagrant/.vbox_version"
 
-# for passwordless logins
+# record virtualbox version
+cp -f /root/.vbox_version "$chroot/home/vagrant/.vbox_version"
+vbox_version=$(cat /root/.vbox_version)
+echo "export vbox_version=$vbox_version" >> /etc/profile.d/settings.sh
+cp /etc/profile.d/settings.sh $CHROOT/etc/profile.d/
+
 mkdir -p "$chroot/root/.ssh" 2> /dev/null
-cat /tmp/ssh-root.pub >> "$chroot/root/.ssh/authorized_keys"
 
 # add vagrant user
 chroot $chroot /bin/bash <<DATAEOF
 groupadd -r vagrant
-useradd -m -r vagrant -g vagrant -G wheel,vboxsf,vboxguest -c 'added by vagrant, veewee basebox creation'
+useradd -m -r vagrant -g vagrant -G wheel,vboxsf,vboxguest -c 'Vagrant user'
 
 # set passwords (for after reboot)
 passwd<<EOF
@@ -42,6 +45,7 @@ DATAEOF
 # configure ssh daemon
 # veewee validate uses password authentication, so we have to enable it
 cat <<DATAEOF > "$chroot/etc/ssh/sshd_config"
+Protocol 2
 HostBasedAuthentication no
 IgnoreUserKnownHosts yes
 PasswordAuthentication yes
@@ -54,4 +58,34 @@ Subsystem sftp internal-sftp
 UseDNS no
 UsePAM yes
 UsePrivilegeSeparation sandbox
+
+# X11 features need openssh emerged with USE flag "X"
+X11Forwarding yes
+X11DisplayOffset 10
+X11UseLocalhost yes
 DATAEOF
+
+
+# Set locale (glibc)
+
+# generate locale
+chroot "$chroot" /bin/bash <<DATAEOF
+echo en_US.UTF-8 UTF-8 >> /etc/locale.gen
+#echo ja_JP.UTF-8 UTF-8 >> /etc/locale.gen
+#echo fa_IR UTF-8 >> /etc/locale.gen
+locale-gen
+DATAEOF
+
+# set locale
+chroot "$chroot" /bin/bash <<DATAEOF
+echo LC_ALL=\"$locale\" >> /etc/env.d/02locale
+echo LC_TYPE=\"$locale\" >> /etc/env.d/02locale
+env-update && source /etc/profile
+DATAEOF
+
+# make hostname shorter 
+cat <<DATAEOF > "$chroot/etc/conf.d/hostname"
+# Set to the hostname of this machine
+hostname="local"
+DATAEOF
+

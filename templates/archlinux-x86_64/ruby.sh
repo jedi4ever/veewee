@@ -14,7 +14,7 @@ arch="$(uname -m)"
 package="ruby-1.9.3_p392-1-${arch}.pkg.tar.xz"
 
 cd /tmp
-wget "http://arm.konnichi.com/2013/03/23/extra/os/${arch}/${package}"
+curl "http://arm.konnichi.com/2013/03/23/extra/os/${arch}/${package}" -o "${package}"
 pacman -U --noconfirm "${package}"
 
 # Add ruby to Pacman's ignore list so it does not get upgraded to 2.0

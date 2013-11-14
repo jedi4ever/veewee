@@ -1,5 +1,7 @@
 require 'veewee/provider/core/box'
 
+require 'os'
+
 require 'veewee/provider/virtualbox/box/build'
 require 'veewee/provider/virtualbox/box/create'
 require 'veewee/provider/virtualbox/box/halt'
@@ -21,8 +23,6 @@ require 'veewee/provider/virtualbox/box/helper/version'
 require 'veewee/provider/virtualbox/box/helper/buildinfo'
 require 'veewee/provider/virtualbox/box/helper/console_type'
 require 'veewee/provider/virtualbox/box/up'
-
-require 'whichr'
 
 module Veewee
   module Provider

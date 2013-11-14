@@ -11,7 +11,11 @@ module Veewee
 
         def add_sata_controller 
           #unless => "${vboxcmd} showvminfo \"${vname}\" | grep \"SATA Controller\" ";
-          command ="#{@vboxcmd} storagectl \"#{name}\" --name \"SATA Controller\" --add sata --hostiocache #{definition.hostiocache} --sataportcount #{definition.disk_count}"
+          if vbox_version >= '4.3.0'
+            command ="#{@vboxcmd} storagectl \"#{name}\" --name \"SATA Controller\" --add sata --hostiocache #{definition.hostiocache} --portcount #{definition.disk_count}"
+          else
+            command ="#{@vboxcmd} storagectl \"#{name}\" --name \"SATA Controller\" --add sata --hostiocache #{definition.hostiocache} --sataportcount #{definition.disk_count}"
+          end
           shell_exec("#{command}")
         end
 
@@ -187,6 +191,13 @@ module Veewee
           # Modify the vm to enable or disable hw virtualization extensions
           vm_flags=%w{pagefusion acpi ioapic pae hpet hwvirtex hwvirtexcl nestedpaging largepages vtxvpid synthxcpu rtcuseutc}
 
+	  #setextradata
+          unless definition.virtualbox[:extradata].nil?
+              command="#{@vboxcmd} setextradata \"#{name}\" #{definition.virtualbox[:extradata]}"
+              puts "Setting extra data with #{command}"
+              shell_exec("#{command}")
+          end
+
           vm_flags.each do |vm_flag|
             if definition.instance_variable_defined?("@#{vm_flag}")
               vm_flag_value=definition.instance_variable_get("@#{vm_flag}")
@@ -197,7 +208,7 @@ module Veewee
             end
           end
 
-          unless definition.virtualbox[:vm_options][0].nil?
+          unless definition.virtualbox[:vm_options].nil? || definition.virtualbox[:vm_options][0].nil?
             definition.virtualbox[:vm_options][0].each do |vm_flag,vm_flag_value|
               ui.info "Setting VM Flag #{vm_flag} to #{vm_flag_value}"
               command="#{@vboxcmd} modifyvm #{name} --#{vm_flag.to_s} #{vm_flag_value}"

@@ -7,7 +7,7 @@ Veewee::Session.declare({
     # The 90-day Trial is offered for a limited time and in limited quantity.
     # The download will be available through June 30th, 2012, while supplies last.
     :iso_file => "7600.16385.090713-1255_x86fre_enterprise_en-us_EVAL_Eval_Enterprise-GRMCENEVAL_EN_DVD.iso",
-    :iso_src => "http://wb.dlservice.microsoft.com/dl/download/release/Win7/3/b/a/3bac7d87-8ad2-4b7a-87b3-def36aee35fa/7600.16385.090713-1255_x86fre_enterprise_en-us_EVAL_Eval_Enterprise-GRMCENEVAL_EN_DVD.iso",
+    :iso_src => "http://care.dlservice.microsoft.com/dl/download/evalx/win7/x86/EN/7600.16385.090713-1255_x86fre_enterprise_en-us_EVAL_Eval_Enterprise-GRMCENEVAL_EN_DVD.iso",
     :iso_md5 => "62675A3B76D21815367F372961B71A56",
     :iso_download_timeout => "100000",
 

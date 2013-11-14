@@ -24,7 +24,7 @@ wget http://downloads.sourceforge.net/sevenzip/7z922.msi
 msiexec /qb /i 7z922.msi
 
 # Download Virtualbox Additions
-VBOX_VERSION="4.1.8" #"4.0.8"
+VBOX_VERSION="4.3.2" #"4.0.8"
 wget http://download.virtualbox.org/virtualbox/$VBOX_VERSION/VBoxGuestAdditions_$VBOX_VERSION.iso
 
 # Extract the installer from the ISO (WHY WHY WHY isn't this available not bundled within an ISO)

@@ -21,7 +21,7 @@ To check if your kernel can run kvm:
     $ kvm_ok
     
     # or look for vmx or svm in /proc/cpuinfo
-    $ egrep '^flags.*(vmx|svm)' /proc/cpuinfo
+    $ grep '^flags' /proc/cpuinfo | grep -E --color '(vmx|svm)' 
 
 The kernel modules needed are the following: `kvm`, `kvm_intel` or `kvm-amd`.
 
@@ -71,7 +71,7 @@ file with:
 For more information have a look at the
 [libvirt documentation](http://libvirt.org/drvqemu.html#uris).
 
-## Using `veevee kvm` Subcommand
+## Using `veewee kvm` Subcommand
 
 You can always get help by using the the built-in help with every command:
 

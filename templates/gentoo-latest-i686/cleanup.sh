@@ -19,5 +19,9 @@ eclean -d distfiles
 rm /tmp/*
 rm -rf /var/log/*
 rm -rf /var/tmp/*
+rm /etc/profile.d/settings.sh
+
+# clean root
 rm -rf /root/.gem
+#rm -rf /root/*
 DATAEOF
