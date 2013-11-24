@@ -1,7 +1,7 @@
 Veewee::Definition.declare({
   :cpu_count => '1', :memory_size=> '768',
   #Disk size needs to be 12Gig +
-  :disk_size => '15140', :disk_format => 'VDI', :hostiocache => 'on', :hwvirtext => 'on',
+  :disk_size => '15140', :disk_format => 'VDI', :hostiocache => 'on', :hwvirtex => 'on',
   :os_type_id => 'OpenSolaris',
   :iso_file => "oi-dev-151a7-text-x86.iso",
   :iso_src => "http://dlc.openindiana.org/isos/151a7/oi-dev-151a7-text-x86.iso",

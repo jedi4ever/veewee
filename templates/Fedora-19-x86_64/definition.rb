@@ -5,7 +5,7 @@ Veewee::Session.declare({
   :disk_size => '10140',
   :disk_format => 'VDI',
   :hostiocache => 'off',
-  :hwvirtext => 'on',
+  :hwvirtex => 'on',
   :os_type_id => 'Fedora_64',
   :iso_file => "Fedora-19-x86_64-DVD.iso",
   :iso_src => "http://download.fedoraproject.org/pub/fedora/linux/releases/19/Fedora/x86_64/iso/Fedora-19-x86_64-DVD.iso",

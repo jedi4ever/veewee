@@ -1,7 +1,7 @@
 Veewee::Session.declare({
   # Minimum RAM requirement for installation is 768MB.
   :cpu_count => '1', :memory_size=> '768',
-  :disk_size => '10140', :disk_format => 'VDI', :hostiocache => 'off', :hwvirtext => 'on',
+  :disk_size => '10140', :disk_format => 'VDI', :hostiocache => 'off', :hwvirtex => 'on',
   :os_type_id => 'Fedora',
   :iso_file => "Fedora-16-i386-DVD.iso",
   :iso_src => "http://download.fedoraproject.org/pub/fedora/linux/releases/16/Fedora/i386/iso/Fedora-16-i386-DVD.iso",

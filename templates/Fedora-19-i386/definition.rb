@@ -5,7 +5,7 @@ Veewee::Session.declare({
   :disk_size => '10140',
   :disk_format => 'VDI',
   :hostiocache => 'off',
-  :hwvirtext => 'on',
+  :hwvirtex => 'on',
   :os_type_id => 'Fedora',
   :iso_file => "Fedora-19-i386-DVD.iso",
   :iso_src => "http://download.fedoraproject.org/pub/fedora/linux/releases/19/Fedora/i386/iso/Fedora-19-i386-DVD.iso",

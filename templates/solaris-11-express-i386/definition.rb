@@ -1,7 +1,7 @@
 Veewee::Definition.declare({
   :cpu_count => '1', :memory_size=> '768',
   #Disk size needs to be 12Gig +
-  :disk_size => '15140', :disk_format => 'VDI', :hostiocache => 'off', :hwvirtext => 'on',
+  :disk_size => '15140', :disk_format => 'VDI', :hostiocache => 'off', :hwvirtex => 'on',
   :os_type_id => 'OpenSolaris',
   :iso_file => "sol-11-exp-201011-ai-x86.iso",
   :iso_src => "",

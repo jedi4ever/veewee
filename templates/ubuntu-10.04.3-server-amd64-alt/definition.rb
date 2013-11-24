@@ -52,6 +52,6 @@ Veewee::Definition.declare( {
   :ssh_user             => "vagrant",
   :sudo_cmd             => "echo '%p'|sudo -S bash '%f'",
   :shutdown_cmd         => "shutdown -h now",
-  :hwvirtext      => 'off',
+  :hwvirtex      => 'off',
   :pae              => 'on'
 })
