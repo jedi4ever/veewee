@@ -8,8 +8,8 @@ If you don't find what you're looking for here, please see the official [Vagrant
 A simple workflow to build a VirtualBox VM for Vagrant would be:
 
     $ bundle exec veewee vbox templates | grep -i ubuntu
-    $ bundle exec veewee vbox define 'mybuntubox' 'ubuntu-12.10-server-amd64'
-    $ bundle exec veewee vbox build 'mybuntubox'
+    $ bundle exec veewee vbox define 'myubuntubox' 'ubuntu-12.10-server-amd64'
+    $ bundle exec veewee vbox build 'myubuntubox'
 
 For additional box building instructions, see the [Veewee Basics](basics.md) and [Definition Customization](customize.md) docs.
 

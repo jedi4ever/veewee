@@ -148,7 +148,7 @@ Validate will run some [cucumber tests](http://cukes.info/) against the box to s
 
 The following subcommand take care of exporting:
 
-    $ bundle exec veewee <provider> export 'mybuntubox'
+    $ bundle exec veewee <provider> export 'myubuntubox'
 
 The exported filetype depends on the provider. For more details on the providers, please have a look at the [Providers](providers.md) doc.
 
