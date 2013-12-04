@@ -111,11 +111,6 @@ module Veewee
               ui.info ""
               ui.info "The isofile #{filename} already exists."
             else
-
-              path1=Pathname.new(full_path)
-              path2=Pathname.new(Dir.pwd)
-              rel_path=path1.relative_path_from(path2).to_s
-
               ui.info ""
               ui.info "We did not find an isofile here : #{full_path}. \n\nThe definition provided the following download information:"
               unless "#{self.iso_src}"==""
@@ -152,9 +147,9 @@ module Veewee
                   end
                 else
                   ui.info "You have selected manual download: "
-                  ui.info "curl -C - -L '#{self.iso_src}' -o '#{rel_path}'"
-                  ui.info "md5 '#{rel_path}' " if self.iso_md5
-                  ui.info "shasum '#{rel_path}' " if self.iso_sha1
+                  ui.info "curl -C - -L '#{self.iso_src}' -o '#{full_path}'"
+                  ui.info "md5 '#{full_path}' " if self.iso_md5
+                  ui.info "shasum '#{full_path}' " if self.iso_sha1
                   ui.info "shasum -a 256 '#{rel_path}' " if self.iso_sha256
                   ui.info ""
                   exit
