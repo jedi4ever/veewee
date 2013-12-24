@@ -3,4 +3,4 @@
 # Requires
 #   reboot.sh
 
-pacman -S --noconfirm base-devel
+pacman -S --noconfirm --needed base-devel
