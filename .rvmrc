@@ -1,4 +1,4 @@
-rvm use ruby-1.9.2@veewee --create
+rvm use ruby-1.9.3@veewee --create
 #rvm use ruby-1.8.7@veewee --create
 
 alias veewee="bundle exec veewee"
