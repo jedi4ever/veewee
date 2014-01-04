@@ -10,7 +10,7 @@ module Veewee
           if self.exec("cmd.exe /C dir #{wget_vbs_file} > NUL",{:exitcode=>"*"}).status != 0
             env.ui.warn "Creating wget.vbs"
             create_wget_vbs_command do |command_chunk, chunk_num|
-              self.exec("cmd.exe /C echo \"Rendering '#{wget_vbs_file}' chunk #{chunk_num}\" && #{command_chunk}")
+              self.exec(%Q!cmd.exe /C echo "Rendering #{wget_vbs_file} chunk #{chunk_num}" && #{command_chunk}!)
             end
           end
 
@@ -72,14 +72,14 @@ Set objXMLHTTP = CreateObject("MSXML2.ServerXMLHTTP")
 Set wshShell = CreateObject( "WScript.Shell" )
 Set objUserVariables = wshShell.Environment("USER")
 
-'http proxy is optional
-'attempt to read from HTTP_PROXY env var first
+rem http proxy is optional
+rem attempt to read from HTTP_PROXY env var first
 On Error Resume Next
 
 If NOT (objUserVariables("HTTP_PROXY") = "") Then
 objXMLHTTP.setProxy 2, objUserVariables("HTTP_PROXY")
 
-'fall back to named arg
+rem fall back to named arg
 ElseIf NOT (WScript.Arguments.Named("proxy") = "") Then
 objXMLHTTP.setProxy 2, WScript.Arguments.Named("proxy")
 End If
