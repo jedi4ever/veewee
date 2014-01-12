@@ -93,7 +93,7 @@ module Veewee
           def verify_sum(full_path,type)
             filename = File.basename(full_path)
             required_sum = self.instance_variable_get('@iso_'+type.to_s)
-            ui.info "Verifying #{type} checksum : #{self.required_sum}"
+            ui.info "Verifying #{type} checksum : #{required_sum}"
             file_sum = hashsum(full_path,type)
 
             unless file_sum == required_sum
