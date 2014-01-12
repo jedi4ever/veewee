@@ -8,19 +8,18 @@ password_root=vagrant
 password_vagrant=vagrant
 
 # static versions of programs we install
-ruby_version="1.9.3-p286"
-# ...these are for rbenv and its plugins ruby-builder and rbenv-bundler
-rbenv_version="v0.3.0"
-ruby_builder_version="v20121022"
-rbenv_bundler_version="0.94"
+ruby_version="ruby:2.0" #"1.9.3-p286"
+ruby_pretty="$(echo $ruby_version | tr -d [:.])"
 
 # these two (configuring the compiler) and the stage3 url can be changed to build a 32 bit system
 accept_keywords="amd64"
 chost="x86_64-pc-linux-gnu"
 
 # stage 3 filename and full url
+# http://ftp.osuosl.org/pub/funtoo/
+# http://ftp.heanet.ie/mirrors/funtoo/
 stage3file="stage3-latest.tar.xz"
-stage3url="http://ftp.heanet.ie/mirrors/funtoo/funtoo-current/x86-64bit/generic_64/$stage3file"
+stage3url="http://ftp.osuosl.org/pub/funtoo/funtoo-stable/x86-64bit/generic_64/$stage3file"
 
 # the public key for vagrants ssh
 vagrant_ssh_key_url="https://raw.github.com/mitchellh/vagrant/master/keys/vagrant.pub"
@@ -41,7 +40,7 @@ sgdisk -n 1:0:+128M -t 1:8300 -c 1:"linux-boot" \
        -n 4:0:0     -t 4:8300 -c 4:"linux-root" \
        -p /dev/sda
 
-sleep 1
+#sleep 1
 
 # format partitions, mount swap
 mkswap /dev/sda3
@@ -54,10 +53,10 @@ sgdisk -v /dev/sda
 sgdisk -p /dev/sda
 
 # this is our chroot directory for the installation
-chroot=/mnt/gentoo
+chroot_dir=/mnt/gentoo
 
 # mount other partitions
-mount /dev/sda4 "$chroot" && cd "$chroot" && mkdir boot && mount /dev/sda1 boot
+mount /dev/sda4 "${chroot_dir}" && cd "${chroot_dir}" && mkdir boot && mount /dev/sda1 boot
 
 
 ### BASE-INSTALLATION ###
@@ -67,25 +66,25 @@ wget -nv --tries=5 "$stage3url"
 tar xpf "$stage3file" && rm "$stage3file"
 
 # prepeare chroot, update env
-mount --bind /proc "$chroot/proc"
-mount --bind /dev "$chroot/dev"
+mount --bind /proc "${chroot_dir}/proc"
+mount --bind /dev "${chroot_dir}/dev"
 
 
 ### INITIAL CONFIGURATION ###
 
-# copy nameserver information, save build timestamp 
-cp /etc/resolv.conf "$chroot/etc/"
-date -u > "$chroot/etc/vagrant_box_build_time"
-chroot "$chroot" env-update
+# copy nameserver information, save build timestamp
+cp /etc/resolv.conf "${chroot_dir}/etc/"
+date -u > "${chroot_dir}/etc/vagrant_box_build_time"
+#chroot "${chroot_dir}" env-update
 
 #" activate client side dhcp and ssh by default
-chroot "$chroot" /bin/bash <<DATAEOF
+chroot "${chroot_dir}" /bin/bash <<DATAEOF
 rc-update add dhcpcd default
 rc-update add sshd default
 DATAEOF
 
 # set fstab
-cat <<DATAEOF > "$chroot/etc/fstab"
+cat <<DATAEOF > "${chroot_dir}/etc/fstab"
 # <fs>                  <mountpoint>    <type>          <opts>                   <dump/pass>
 /dev/sda1               /boot           ext2            noauto,noatime           1 2
 /dev/sda3               none            swap            sw                       0 0
@@ -94,7 +93,7 @@ none                    /dev/shm        tmpfs           nodev,nosuid,noexec     
 DATAEOF
 
 # set make options
-cat <<DATAEOF > "$chroot/etc/portage/make.conf"
+cat <<DATAEOF > "${chroot_dir}/etc/portage/make.conf"
 CHOST="$chost"
 
 CFLAGS="-mtune=generic -O2 -pipe"
@@ -104,9 +103,15 @@ ACCEPT_KEYWORDS="$accept_keywords"
 MAKEOPTS="-j$((1 + $nr_cpus)) -l$nr_cpus.5"
 EMERGE_DEFAULT_OPTS="-j$nr_cpus --quiet-build=y"
 FEATURES="\${FEATURES} parallel-fetch"
-
+GENTOO_MIRRORS="http://distfiles ${GENTOO_MIRRORS}"
+# no reason to keep these hanging around
+DISTDIR="/tmp/distfiles"
 # english only
 LINGUAS=""
+
+# get us some ruby
+RUBY_TARGETS="${ruby_pretty}"
+USE="ruby"
 
 # for X support if needed
 INPUT_DEVICES="evdev"
@@ -114,24 +119,33 @@ VIDEO_CARDS="virtualbox"
 DATAEOF
 
 # add package use flags
-cat <<DATAEOF >> "$chroot/etc/portage/package.use"
+cat <<DATAEOF >> "${chroot_dir}/etc/portage/package.use"
 sys-kernel/gentoo-sources symlink
 sys-kernel/genkernel -cryptsetup
 DATAEOF
 
 # add package keywords
-cat <<DATAEOF >> "$chroot/etc/portage/package.keywords"
+cat <<DATAEOF >> "${chroot_dir}/etc/portage/package.keywords"
 app-emulation/virtualbox-guest-additions
 DATAEOF
 
-# update portage tree to most current state
-chroot "$chroot" emerge --sync
+# add package keywords
+cat <<DATAEOF >> "${chroot_dir}/etc/portage/package.accept_keywords"
+dev-util/kbuild ~amd64
+DATAEOF
+
+# update portage tree to most current state git://github.com/funtoo/ports-2012.git
+remote_git='git://github.com/funtoo/ports-2012.git' # 'git://home/ports-2012.git'
+echo "cloning  to /usr/portage"
+chroot "${chroot_dir}" git clone --depth 1 ${remote_git} /usr/portage
+chroot "${chroot_dir}" emerge --sync
+chroot "${chroot_dir}" env-update
 
 # set localtime
-chroot "$chroot" ln -sf "/usr/share/zoneinfo/$timezone" /etc/localtime
+chroot "${chroot_dir}" ln -sf "/usr/share/zoneinfo/$timezone" /etc/localtime
 
 # get, configure, compile and install the kernel and modules
-chroot "$chroot" /bin/bash <<DATAEOF
+chroot "${chroot_dir}" /bin/bash <<DATAEOF
 emerge sys-kernel/gentoo-sources sys-kernel/genkernel sys-boot/boot-update
 
 # specialize for VirtualBox - use loaded modules in livecd
@@ -233,32 +247,31 @@ DATAEOF
 
 # install the virtualbox guest additions, add vagrant and root to group vboxguest
 # PREREQUISITE: kernel - we install a module, so we use the kernel sources
-chroot "$chroot" /bin/bash <<DATAEOF
+chroot "${chroot_dir}" /bin/bash <<DATAEOF
 emerge app-emulation/virtualbox-guest-additions
-# we need this as gentoo doesn't do it on its own
-groupadd -r vboxsf
 mkdir /media && chgrp vboxsf /media
 rc-update add virtualbox-guest-additions default
 DATAEOF
 
-# add default users and groups, setpasswords, configure privileges and install sudo
-mkdir -p "$chroot/home/vagrant/.ssh"
-chmod 700 "$chroot/home/vagrant/.ssh"
-wget --no-check-certificate "$vagrant_ssh_key_url" -O "$chroot/home/vagrant/.ssh/authorized_keys"
-chmod 600 "$chroot/home/vagrant/.ssh/authorized_keys"
-cp -f /root/.vbox_version "$chroot/home/vagrant/.vbox_version"
-
 # for passwordless logins
-mkdir -p "$chroot/root/.ssh" 2> /dev/null
-cat /tmp/ssh-root.pub >> "$chroot/root/.ssh/authorized_keys"
+mkdir -p "${chroot_dir}/root/.ssh" 2> /dev/null
+cat /tmp/ssh-root.pub >> "${chroot_dir}/root/.ssh/authorized_keys"
 
 # PREREQUISITE: virtualbox-guest-additions - the groups created on installation have to exist
-chroot $chroot /bin/bash <<DATAEOF
+chroot ${chroot_dir} /bin/bash <<DATAEOF
 groupadd -r vagrant
-groupadd -r rbenv
-useradd -m -r vagrant -g vagrant -G wheel,rbenv,vboxsf,vboxguest -c 'added by vagrant, veewee basebox creation'
+useradd -m -r vagrant -g vagrant -G wheel,vboxsf,vboxguest -c 'added by vagrant, veewee basebox creation'
+DATAEOF
+
+# add default users and groups, setpasswords, configure privileges and install sudo
+mkdir -p "${chroot_dir}/home/vagrant/.ssh"
+chmod 700 "${chroot_dir}/home/vagrant/.ssh"
+wget --no-check-certificate "$vagrant_ssh_key_url" -O "${chroot_dir}/home/vagrant/.ssh/authorized_keys"
+chmod 600 "${chroot_dir}/home/vagrant/.ssh/authorized_keys"
+cp -f /root/.vbox_version "${chroot_dir}/home/vagrant/.vbox_version"
 
 # set passwords (for after reboot)
+chroot ${chroot_dir} /bin/bash <<DATAEOF
 passwd<<EOF
 $password_root
 $password_root
@@ -281,7 +294,7 @@ DATAEOF
 
 # configure ssh daemon
 # veewee validate uses password authentication (according to the other Funtoo-template), so we have to enable it
-cat <<DATAEOF > "$chroot/etc/ssh/sshd_config"
+cat <<DATAEOF > "${chroot_dir}/etc/ssh/sshd_config"
 HostBasedAuthentication no
 IgnoreUserKnownHosts yes
 PasswordAuthentication yes
@@ -297,46 +310,20 @@ UsePAM yes
 UsePrivilegeSeparation sandbox
 DATAEOF
 
-# install rbenv, ruby and bundler. Configure rbenv for global usage so it's usable without home directory
-chroot "$chroot" /bin/bash <<DATAEOF
-cd /usr/local/lib
-git clone git://github.com/sstephenson/rbenv.git
-cd rbenv
-git checkout -b "$rbenv_version" "$rbenv_version"
-mkdir -p env/plugins
-cd env/plugins
-git clone git://github.com/sstephenson/ruby-build.git
-cd ruby-build
-git checkout -b "$ruby_builder_version" "$ruby_builder_version"
-cd ..
-git clone git://github.com/carsomyr/rbenv-bundler.git
-cd rbenv-bundler
-git checkout -b "$rbenv_bundler_version" "$rbenv_bundler_version"
-chgrp -R rbenv /usr/local/lib/rbenv
-DATAEOF
-libtool --finish /usr/lib64
-
-# add rbenv to profile
-cat <<DATAEOF >> "$chroot/etc/profile.d/rbenv.sh"
-# add rbenv support
-rbenv_base=/usr/local/lib/rbenv
-export PATH=\$PATH:\$rbenv_base/bin
-[ -n \$RBENV_ROOT ] && export RBENV_ROOT=\$rbenv_base/env
-eval "\$(rbenv init -)"
-DATAEOF
-
 # install ruby, bundler, chef and puppet
-chroot "$chroot" /bin/bash <<DATAEOF
+echo "Install ruby, bundler, chef and puppet"
+chroot "${chroot_dir}" /bin/bash <<DATAEOF
 env-update && source /etc/profile
 
 # install ruby, use it as global version
 emerge dev-libs/libyaml
-rbenv install "$ruby_version"
-rbenv global "$ruby_version"
+emerge ${ruby_version}
+# set this as our default ruby.  remove : and .
+eselect ruby set ${ruby_pretty}
+
 
 # disable rdoc and ri
-mkdir -p "/usr/local/lib/rbenv/env/versions/$ruby_version/etc"
-cat <<EOF > "/usr/local/lib/rbenv/env/versions/$ruby_version/etc/gemrc"
+cat <<EOF > "/etc/gemrc"
 # disable rdoc and ri
 install: --no-rdoc --no-ri
 update:  --no-rdoc --no-ri
@@ -347,17 +334,17 @@ gem install bundler chef puppet
 DATAEOF
 
 # install logger and cron
-chroot "$chroot" /bin/bash <<DATAEOF
+chroot "${chroot_dir}" /bin/bash <<DATAEOF
 emerge app-admin/rsyslog sys-process/vixie-cron
 rc-update add rsyslog default
 rc-update add vixie-cron default
 DATAEOF
 
 # install nfs and automount support
-# chroot "$chroot" emerge net-fs/nfs-utils net-fs/autofs
+# chroot "${chroot_dir}" emerge net-fs/nfs-utils net-fs/autofs
 
 # make the disk bootable
-chroot "$chroot" /bin/bash <<DATAEOF
+chroot "${chroot_dir}" /bin/bash <<DATAEOF
 source /etc/profile && \
 env-update && \
 grub-install --no-floppy /dev/sda && \
@@ -370,7 +357,8 @@ cat grub.cfg
 DATAEOF
 
 ### patch to make lib/vagrant/guest/gentoo.rb happy
-chroot "$chroot" /bin/bash <<DATAEOF
+# not needed for much longer
+chroot "${chroot_dir}" /bin/bash <<DATAEOF
 cd /etc/init.d
 ln -s net.lo netif.lo
 DATAEOF
@@ -379,13 +367,17 @@ DATAEOF
 ### CLEANUP TO SHRINK THE BOX ###
 
 # a fresh install probably shouldn't nag about news
-chroot "$chroot" /usr/bin/eselect news read all
+chroot "${chroot_dir}" /usr/bin/eselect news read all > /dev/null 2>&1
 
 # cleanup time...
-chroot "$chroot" /bin/bash <<DATAEOF
+chroot "${chroot_dir}" /bin/bash <<DATAEOF
 # delete temp, cached and build artifact data - some low hanging fruit...
+
+#this is kinda big...  
+rm -r /usr/src/linux/drivers
+
 eclean -d distfiles
-rm /tmp/*
+rm -rf /tmp/*
 rm -rf /var/log/*
 rm -rf /var/tmp/*
 
@@ -396,18 +388,15 @@ rm -rf /var/tmp/*
 rm -rf /root/.gem
 
 # here's some savings crippling the usage of this box (sorted descending by damage)
-#rm -rf /usr/local/lib/rbenv/.git
-#rm -rf /usr/local/lib/rbenv/env/plugins/*/.git
 #rm -rf /usr/src/linux*
-#rm -rf /usr/portage/.git
 DATAEOF
 
 # fill all free hdd space with zeros
-dd if=/dev/zero of="$chroot/boot/EMPTY" bs=1M
-rm "$chroot/boot/EMPTY"
+dd if=/dev/zero of="${chroot_dir}/boot/EMPTY" bs=1M
+rm "${chroot_dir}/boot/EMPTY"
 
-dd if=/dev/zero of="$chroot/EMPTY" bs=1M
-rm "$chroot/EMPTY"
+dd if=/dev/zero of="${chroot_dir}/EMPTY" bs=1M
+rm "${chroot_dir}/EMPTY"
 
 # fill all swap space with zeros and recreate swap
 swapoff /dev/sda3
