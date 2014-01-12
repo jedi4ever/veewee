@@ -1,0 +1,28 @@
+The boxes come with:
+- ports system already installed
+- puppet and chef
+- check the postinstall.sh script to see what is built in the box on top of the default install
+- add/remove to your heart's content
+
+a. Easy to use boxes for experimentation
+- with puppet
+- with chef
+- with whatever else you can dream of :)
+
+b. Mount
+# freebsd mouting NFS patch for FreeBSD
+# https://github.com/mitchellh/vagrant/commit/8a0a1bddb5afc6b99cab595d6f3cc9a95bb1a509
+# OpenBSD will need patching to use it as NFS host
+From the validation steps just the mount step fails
+Virtualbox mount can be achieved using NFS mounts, it is not possible using the VBox tools since you can't compile them on OpenBSD
+1. you can have your host expose NFS mounts that can be mounted by the Openbsd guest (checkout the vagrant documentation on using NFS mounts)
+2. another way can be to work with vagrant in Puppet-server / chef-server mode since it will get manifests over the network from the puppet/chef server.
+3. use a shell provisioner and scp/rsync your manifests from the host to the guest
+
+
+c. Wait times
+I've commented in all the steps in the OpenBSD install (definitions.rb)
+Adjust the <Wait> times if your machine is slower/faster than those times.
+
+d. More on puppet usage with OpenBSD
+# http://puppetlabs.com/blog/guest-post-a-puffy-in-the-corporate-aquarium-the-sequel/
