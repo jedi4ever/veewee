@@ -37,7 +37,7 @@ module Veewee
 
     attr_accessor :use_hw_virt_ext, :use_pae, :hostiocache, :use_sata
 
-    attr_accessor :iso_dowload_timeout, :iso_src, :iso_md5, :iso_sha1, :iso_sha256, :iso_download_instructions
+    attr_accessor :iso_download_timeout, :iso_src, :iso_md5, :iso_sha1, :iso_sha256, :iso_download_instructions
 
     attr_accessor :virtualbox
     attr_accessor :vmfusion
