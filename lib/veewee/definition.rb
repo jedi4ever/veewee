@@ -37,7 +37,7 @@ module Veewee
 
     attr_accessor :use_hw_virt_ext, :use_pae, :hostiocache, :use_sata
 
-    attr_accessor :iso_dowload_timeout, :iso_src, :iso_md5, :iso_sha1 , :iso_download_instructions
+    attr_accessor :iso_download_timeout, :iso_src, :iso_md5, :iso_sha1, :iso_sha256, :iso_download_instructions
 
     attr_accessor :virtualbox
     attr_accessor :vmfusion
@@ -72,7 +72,7 @@ module Veewee
       @cpu_count = '1' ; @memory_size = '256'; @video_memory_size = '10'
 
       # Default there is no ISO file mounted
-      @iso_file = nil, @iso_src = nil ; @iso_md5 = nil ; @iso_sha1;  @iso_download_timeout = 1000 ; @iso_download_instructions = nil
+      @iso_file = nil, @iso_src = nil ; @iso_md5 = nil ; @iso_sha1;  @iso_sha256;  @iso_download_timeout = 1000 ; @iso_download_instructions = nil
 
       # Shares to add
       @add_shares = []

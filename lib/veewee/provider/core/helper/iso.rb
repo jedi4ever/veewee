@@ -9,6 +9,7 @@ module Veewee
           require 'highline/import'
           require 'digest/md5'
           require 'digest/sha1'
+          require 'digest/sha2'
 
           def download_iso(url,filename)
             if !File.exists?(env.config.veewee.iso_dir)
@@ -71,6 +72,8 @@ module Veewee
               checksum=Digest::MD5.new
             when :sha1
               checksum=Digest::SHA1.new
+            when :sha256
+              checksum=Digest::SHA256.new
             else
               raise Veewee::Error, "Unknown checksum type #{type}"
             end
@@ -90,7 +93,7 @@ module Veewee
           def verify_sum(full_path,type)
             filename = File.basename(full_path)
             required_sum = self.instance_variable_get('@iso_'+type.to_s)
-            ui.info "Verifying #{type} checksum : #{self.required_sum}"
+            ui.info "Verifying #{type} checksum : #{required_sum}"
             file_sum = hashsum(full_path,type)
 
             unless file_sum == required_sum
@@ -120,6 +123,7 @@ module Veewee
               end
               ui.info "- Md5 Checksum: #{self.iso_md5}" if self.iso_md5
               ui.info "- Sha1 Checksum: #{self.iso_sha1}" if self.iso_sha1
+              ui.info "- Sha256 Checksum: #{self.iso_sha256}" if self.iso_sha256
               ui.info "#{self.iso_download_instructions}"
               ui.info ""
 
@@ -151,6 +155,7 @@ module Veewee
                   ui.info "curl -C - -L '#{self.iso_src}' -o '#{rel_path}'"
                   ui.info "md5 '#{rel_path}' " if self.iso_md5
                   ui.info "shasum '#{rel_path}' " if self.iso_sha1
+                  ui.info "shasum -a 256 '#{rel_path}' " if self.iso_sha256
                   ui.info ""
                   exit
                 end
@@ -165,6 +170,7 @@ module Veewee
 
             verify_sum(full_path,:md5) if options["checksum"] && !self.iso_md5.nil?
             verify_sum(full_path,:sha1) if options["checksum"] && !self.iso_sha1.nil?
+            verify_sum(full_path,:sha256) if options["checksum"] && !self.iso_sha256.nil?
 
           end
         end #Module
