@@ -105,6 +105,59 @@ All other settings are used internally by Veewee, the virtualization provider, o
         :postinstall_timeout => "10000"
     })
 
+Available definitions:
+
+Definition Option               | Default                 | Provider
+--------------------------------|-------------------------|-------------------------------------------
+:params                         | empty                   | core
+:cpu_count                      | 1 CPU                   | kvm, parallels, virtualbox, vmfusion
+:memory_size                    | 256 MB of memory        | kvm, parallels, virtualbox, vmfusion
+:video_memory_size              | 10 MB of video memory   | virtualbox
+:iso_file                       | no ISO file mounted     | core, kvm, parallels, virtualbox, vmfusion
+:iso_download_timeout           | 1000                    | unused
+:iso_src                        | empty                   | core
+:iso_md5                        | empty                   | core
+:iso_sha1                       | empty                   | core
+:iso_sha256                     | empty                   | core
+:iso_download_instructions      | empty                   | core
+:disk_size                      | 10240                   | kvm, virtualbox, vmfusion
+:disk_format                    | VDI                     | kvm, virtualbox
+:disk_variant                   | Standard                | virtualbox
+:disk_count                     | 1                       | virtualbox
+:os_type_id                     | uninitialised           | core, kvm, parallels, virtualbox, vmfusion
+:boot_wait                      | uninitialised           | core
+:boot_cmd_sequence              | empty                   | core
+:kickstart_port                 | uninitialised           | core
+:kickstart_ip                   | uninitialised           | core
+:kickstart_timeout              | uninitialised           | core
+:kickstart_file                 | uninitialised           | core
+:ssh_login_timeout              | uninitialised           | kvm, parallels, virtualbox, vmfusion
+:ssh_user                       | uninitialised           | core, kvm, parallels, virtualbox, vmfusion
+:ssh_password                   | uninitialised           | core, kvm, parallels, virtualbox, vmfusion
+:ssh_key                        | uninitialised           | core
+:ssh_host_port                  | 2222                    | core, virtualbox
+:ssh_guest_port                 | 22                      | virtualbox
+:winrm_login_timeout            | 10000                   | virtualbox, vmfusion
+:winrm_user                     | uninitialised           | core, virtualbox, vmfusion
+:winrm_password                 | uninitialised           | core, virtualbox, vmfusion
+:winrm_host_port                | 5985                    | core, virtualbox, vmfusion
+:winrm_guest_port               | 5985                    | virtualbox
+:sudo_cmd                       | uninitialised           | core
+:shutdown_cmd                   | uninitialised           | core
+:pre_postinstall_file           | empty                   | core
+:postinstall_files              | empty                   | core
+:postinstall_timeout            | 10000                   | unused
+:floppy_files                   | empty                   | core, kvm, virtualbox, vmfusion
+:use_hw_virt_ext                | unused                  | unused
+:use_pae                        | unused                  | unused
+:hostiocache                    | uninitialised           | virtualbox
+:use_sata                       | true                    | virtualbox
+:add_shares                     | empty                   | vmfusion
+:vmdk_file                      | uninitialised           | vmfusion
+:skip_iso_transfer              | false                   | core
+:skip_nat_mapping               | false                   | virtualbox
+:force_ssh_port                 | false                   | core
+
 **IMPORTANT:** If you change values directly in a template, be sure to run `bundle exec veewee <provider> undefine` to remove the old definition and then `bundle exec veewee <provider> define` again to copy the updated template files into the definition.
 
 If you are an experienced devops veteran and have enhanced template settings, please let us know why. We are very interested in improving Veewee's templates.
