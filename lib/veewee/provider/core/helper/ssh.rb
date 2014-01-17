@@ -17,6 +17,39 @@ module Veewee
 
         module Ssh
 
+          require 'socket'
+
+          # nonblocking ssh connection check
+          def tcp_test_ssh(hostname, port, timeout = 2)                        
+            
+            addr = Socket.getaddrinfo(hostname, nil)
+            sockaddr = Socket.pack_sockaddr_in(port, addr[0][3])
+
+            Socket.new(Socket.const_get(addr[0][0]), Socket::SOCK_STREAM, 0).tap do |socket|
+              socket.setsockopt(Socket::IPPROTO_TCP, Socket::TCP_NODELAY, 1)
+              begin
+                socket.connect_nonblock(sockaddr)
+
+              rescue IO::WaitWritable
+                if IO.select(nil, [socket], nil, timeout)
+                  begin
+                    socket.connect_nonblock(sockaddr)
+                  rescue Errno::EISCONN
+                    socket.close
+                    return true
+                  rescue
+                    socket.close
+                    return false
+                  end
+                else
+                  socket.close
+                  return false
+                end
+              end
+            end
+            false
+          end
+
           require 'net/ssh'
           require 'net/scp'
 
@@ -41,11 +74,15 @@ module Veewee
                 while !connected do
                   begin
                     env.ui.info ".",{:new_line => false , :prefix => false} unless options[:mute]
-                    Net::SSH.start(ip, options[:user], { :port => options[:port] , :password => options[:password], :paranoid => false , :timeout => timeout }) do |ssh|
+                    if tcp_test_ssh(ip, options[:port])
+                      Net::SSH.start(ip, options[:user], { :port => options[:port] , :password => options[:password], :paranoid => false , :timeout => timeout }) do |ssh|
 
-                      ui.info "\n", {:prefix => false} unless options[:mute]
-                      block.call(ip);
-                      return true
+                        ui.info "\n", {:prefix => false} unless options[:mute]
+                        block.call(ip);
+                        return true
+                      end
+                    else 
+                      sleep 5
                     end
                   rescue Net::SSH::Disconnect, Errno::ECONNREFUSED, Errno::EHOSTUNREACH, Errno::ECONNABORTED, Errno::ECONNRESET, Errno::ENETUNREACH, Errno::ETIMEDOUT
                     sleep 5
