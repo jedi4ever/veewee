@@ -1,6 +1,6 @@
 Veewee::Definition.declare({
   :cpu_count => '1', :memory_size=> '384',
-  :disk_size => '10140', :disk_format => 'VDI', :hostiocache => 'off', :hwvirtext => 'on',
+  :disk_size => '10140', :disk_format => 'VDI', :hostiocache => 'off', :hwvirtex => 'on',
   :os_type_id => 'Fedora_64',
   :iso_file => "Fedora-14-x86_64-DVD.iso",
   :iso_src => "http://archives.fedoraproject.org/pub/archive/fedora/linux/releases/14/Fedora/x86_64/iso/Fedora-14-x86_64-DVD.iso",
