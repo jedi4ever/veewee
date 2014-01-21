@@ -29,8 +29,7 @@ cd /usr/ports/ports-mgmt/pkg
 make -DBATCH install
 
 # build packages for sudo and bash
-pkg install -y sudo bash ruby ruby-gems ruby-iconv chef puppet \
-portupgrade libtool perl yasm dev86 kBuild libiconv
+pkg install -y sudo bash ruby chef puppet portupgrade libtool perl5 yasm dev86 kBuild
 
 cat >> /etc/make.conf << EOT
 WITH_ETCSYMLINK="YES"
