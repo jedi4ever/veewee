@@ -28,7 +28,7 @@ portsnap --interactive fetch extract
 cd /usr/ports/ports-mgmt/pkg
 make -DBATCH install
 
-# build packages for sudo and bash
+# Install packages
 pkg install -y sudo bash chef puppet portupgrade perl5 virtualbox-ose-additions
 
 cat >> /etc/make.conf << EOT
