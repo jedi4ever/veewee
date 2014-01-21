@@ -35,7 +35,7 @@ Veewee::Definition.declare({
     'root',
     '<Enter>',
     'dhclient em0',
-    '<Enter>',
+    '<Enter><Wait><Wait><Wait>',
     'fetch -o /tmp/install.sh http://%IP%:%PORT%/install.sh && chmod +x /tmp/install.sh && /tmp/install.sh %NAME%<Enter>'
   ],
 :kickstart_port => "7122", :kickstart_timeout => "10000", :kickstart_file => "install.sh",
