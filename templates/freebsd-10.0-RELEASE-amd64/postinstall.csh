@@ -46,8 +46,6 @@ fetch -am -o authorized_keys 'https://raw.github.com/mitchellh/vagrant/master/ke
 chown -R vagrant /home/vagrant/.ssh
 chmod -R go-rwsx /home/vagrant/.ssh
 
-/usr/local/sbin/portsclean -C
-
 # As sharedfolders are not in defaults ports tree
 # We will use vagrant via NFS
 # Enable NFS
@@ -73,6 +71,8 @@ tar -k -C / -xf /tmp/lib32.txz
 
 cd /usr/ports/emulators/virtualbox-ose-additions
 make -DBATCH package clean
+
+/usr/local/sbin/portsclean -C
 
 # undo our customizations
 sed -i '' -e '/^REFUSE /d' /etc/portsnap.conf
