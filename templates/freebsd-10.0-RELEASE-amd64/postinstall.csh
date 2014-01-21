@@ -11,9 +11,6 @@ ntpdate -v -b in.pool.ntp.org
 
 date > /etc/vagrant_box_build_time
 
-freebsd-update --interactive fetch
-freebsd-update install
-
 # reduce the ports we extract to a minimum
 cat >> /etc/portsnap.conf << EOT
 REFUSE accessibility arabic archivers astro audio benchmarks biology cad
