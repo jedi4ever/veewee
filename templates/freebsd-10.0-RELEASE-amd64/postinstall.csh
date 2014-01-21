@@ -32,13 +32,8 @@ cd /usr/ports/ports-mgmt/pkg
 make -DBATCH install
 
 # build packages for sudo and bash
-pkg install -y sudo
-pkg install -y bash-static
-pkg install -y ruby
-pkg install -y ruby-gems
-pkg install -y ruby-iconv
-pkg install -y chef
-pkg install -y puppet
+pkg install -y sudo bash ruby ruby-gems ruby-iconv chef puppet \
+portupgrade libtool
 
 cat >> /etc/make.conf << EOT
 WITH_ETCSYMLINK="YES"
@@ -55,7 +50,6 @@ fetch -am -o authorized_keys 'https://raw.github.com/mitchellh/vagrant/master/ke
 chown -R vagrant /home/vagrant/.ssh
 chmod -R go-rwsx /home/vagrant/.ssh
 
-pkg install portupgrade
 /usr/local/sbin/portsclean -C
 
 # As sharedfolders are not in defaults ports tree
@@ -69,8 +63,6 @@ echo 'mountd_flags="-r"' >> /etc/rc.conf
 echo "vagrant ALL=(ALL) NOPASSWD: ALL" >> /usr/local/etc/sudoers
 # Restore correct su permissions
 # I'll leave that up to the reader :)
-
-pkg install -y libtool
 
 # disable X11 because vagrants are (usually) headless
 cat >> /etc/make.conf << EOT
