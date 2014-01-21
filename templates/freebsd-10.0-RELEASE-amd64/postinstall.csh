@@ -29,7 +29,7 @@ cd /usr/ports/ports-mgmt/pkg
 make -DBATCH install
 
 # build packages for sudo and bash
-pkg install -y sudo bash ruby chef puppet portupgrade libtool perl5 yasm dev86 kBuild
+pkg install -y sudo bash chef puppet portupgrade perl5 virtualbox-ose-additions
 
 cat >> /etc/make.conf << EOT
 WITH_ETCSYMLINK="YES"
@@ -64,9 +64,6 @@ echo "vagrant ALL=(ALL) NOPASSWD: ALL" >> /usr/local/etc/sudoers
 cat >> /etc/make.conf << EOT
 WITHOUT_X11="YES"
 EOT
-
-cd /usr/ports/emulators/virtualbox-ose-additions
-make -DBATCH package clean
 
 # undo our customizations
 sed -i '' -e '/^REFUSE /d' /etc/portsnap.conf
