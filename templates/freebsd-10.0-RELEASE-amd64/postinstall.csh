@@ -72,6 +72,8 @@ fetch -o /tmp/lib32.txz http://ftp.freebsd.org/pub/FreeBSD/releases/amd64/10.0-R
 tar -k -C / -xf /tmp/src.txz
 tar -k -C / -xf /tmp/lib32.txz
 
+rm -rf /tmp/*
+
 cd /usr/ports/emulators/virtualbox-ose-additions
 make -DBATCH package clean
 
