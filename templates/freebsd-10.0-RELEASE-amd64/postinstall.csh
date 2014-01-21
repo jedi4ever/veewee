@@ -33,7 +33,7 @@ make -DBATCH install
 
 # build packages for sudo and bash
 pkg install -y sudo bash ruby ruby-gems ruby-iconv chef puppet \
-portupgrade libtool
+portupgrade libtool perl yasm dev86 kBuild libiconv
 
 cat >> /etc/make.conf << EOT
 WITH_ETCSYMLINK="YES"
