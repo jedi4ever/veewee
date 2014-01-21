@@ -29,7 +29,7 @@ cd /usr/ports/ports-mgmt/pkg
 make -DBATCH install
 
 # Install packages
-pkg install -y sudo bash chef puppet portupgrade perl5 kBuild
+pkg install -y sudo bash chef puppet portupgrade perl5 kBuild yasm
 
 cat >> /etc/make.conf << EOT
 WITH_ETCSYMLINK="YES"
