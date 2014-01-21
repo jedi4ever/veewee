@@ -46,6 +46,13 @@ make install -DBATCH
 /usr/local/bin/gem install chef --no-ri --no-rdoc
 /usr/local/bin/gem install puppet --no-ri --no-rdoc
 
+cat >> /etc/make.conf << EOT
+WITH_ETCSYMLINK="YES"
+EOT
+
+cd /usr/ports/security/ca_root_nss
+make install -DBATCH
+
 #Installing vagrant keys
 mkdir /home/vagrant/.ssh
 chmod 700 /home/vagrant/.ssh
