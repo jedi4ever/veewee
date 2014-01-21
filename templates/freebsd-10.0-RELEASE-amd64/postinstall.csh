@@ -72,8 +72,6 @@ EOT
 cd /usr/ports/emulators/virtualbox-ose-additions
 make -DBATCH package clean
 
-pkg install -y virtio-kmod
-
 # undo our customizations
 sed -i '' -e '/^REFUSE /d' /etc/portsnap.conf
 # sed -i '' -e '/^WITHOUT_X11/d' /etc/make.conf
@@ -82,14 +80,6 @@ echo 'vboxdrv_load="YES"' >> /boot/loader.conf
 echo 'vboxnet_enable="YES"' >> /etc/rc.conf
 echo 'vboxguest_enable="YES"' >> /etc/rc.conf
 echo 'vboxservice_enable="YES"' >> /etc/rc.conf
-
-cat >> /boot/loader.conf << EOT
-virtio_load="YES"
-virtio_pci_load="YES"
-virtio_blk_load="YES"
-if_vtnet_load="YES"
-virtio_balloon_load="YES"
-EOT
 
 # sed -i.bak -Ee 's|/dev/ada?|/dev/vtbd|' /etc/fstab
 echo 'ifconfig_vtnet0_name="em0"' >> /etc/rc.conf

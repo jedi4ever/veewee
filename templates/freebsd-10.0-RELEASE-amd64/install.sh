@@ -14,6 +14,11 @@ vm.kmem_size="200M"
 vm.kmem_size_max="200M"
 vfs.zfs.arc_max="40M"
 vfs.zfs.vdev.cache.size="5M"
+virtio_load="YES"
+virtio_pci_load="YES"
+virtio_blk_load="YES"
+if_vtnet_load="YES"
+virtio_balloon_load="YES"
 EOT
 
 # Set up user accounts
