@@ -29,7 +29,7 @@ cd /usr/ports/ports-mgmt/pkg
 make -DBATCH install
 
 # Install packages
-pkg install -y sudo bash chef puppet portupgrade perl5
+pkg install -y sudo bash chef puppet portupgrade perl5 kBuild
 
 cat >> /etc/make.conf << EOT
 WITH_ETCSYMLINK="YES"
@@ -64,6 +64,15 @@ echo "vagrant ALL=(ALL) NOPASSWD: ALL" >> /usr/local/etc/sudoers
 cat >> /etc/make.conf << EOT
 WITHOUT_X11="YES"
 EOT
+
+fetch -o /tmp/src.txz http://ftp.freebsd.org/pub/FreeBSD/releases/amd64/10.0-RELEASE/src.txz
+fetch -o /tmp/lib32.txz http://ftp.freebsd.org/pub/FreeBSD/releases/amd64/10.0-RELEASE/lib32.txz
+
+tar -k -C / -xf /tmp/src.txz
+tar -k -C / -xf /tmp/lib32.txz
+
+cd /usr/ports/emulators/virtualbox-ose-additions
+make -DBATCH package clean
 
 # undo our customizations
 sed -i '' -e '/^REFUSE /d' /etc/portsnap.conf
