@@ -28,13 +28,14 @@ portsnap --interactive fetch extract
 cd /usr/ports/ports-mgmt/pkg
 make -DBATCH install
 
-# Install packages
+# Install binary packages versions of dependencies
 pkg install -y sudo bash chef puppet portupgrade perl5 kBuild yasm
 
 cat >> /etc/make.conf << EOT
 WITH_ETCSYMLINK="YES"
 EOT
 
+# Install certificates so we can fetch from GitHub
 cd /usr/ports/security/ca_root_nss
 make install -DBATCH
 
@@ -63,9 +64,11 @@ cat >> /etc/make.conf << EOT
 WITHOUT_X11="YES"
 EOT
 
+# Fetch base system files for building Virtualbox OSE Additions
 fetch -o /tmp/src.txz http://ftp.freebsd.org/pub/FreeBSD/releases/amd64/10.0-RELEASE/src.txz
 fetch -o /tmp/lib32.txz http://ftp.freebsd.org/pub/FreeBSD/releases/amd64/10.0-RELEASE/lib32.txz
 
+# Extract into /usr/src and /usr/lib32
 tar -k -C / -xf /tmp/src.txz
 tar -k -C / -xf /tmp/lib32.txz
 
