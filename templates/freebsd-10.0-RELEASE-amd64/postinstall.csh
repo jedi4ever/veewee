@@ -17,10 +17,10 @@ freebsd-update install
 # reduce the ports we extract to a minimum
 cat >> /etc/portsnap.conf << EOT
 REFUSE accessibility arabic archivers astro audio benchmarks biology cad
-REFUSE chinese comms databases deskutils distfiles dns editors finance french
+REFUSE chinese comms databases deskutils distfiles devel dns editors finance french
 REFUSE ftp games german graphics hebrew hungarian irc japanese java korean
 REFUSE mail math multimedia net net-im net-mgmt net-p2p news packages palm
-REFUSE polish portuguese print russian science sysutils ukrainian
+REFUSE polish portuguese print russian science sysutils textproc ukrainian
 REFUSE vietnamese www x11 x11-clocks x11-drivers x11-fm x11-fonts x11-servers
 REFUSE x11-themes x11-toolkits x11-wm
 EOT
@@ -28,23 +28,17 @@ EOT
 # get new ports
 portsnap --interactive fetch extract
 
+cd /usr/ports/ports-mgmt/pkg
+make -DBATCH install
+
 # build packages for sudo and bash
-cd /usr/ports/security/sudo
-make -DBATCH package-recursive clean
-cd /usr/ports/shells/bash-static
-make -DBATCH package clean
-
-#Off to rubygems to get first ruby running
-cd /usr/ports/devel/ruby-gems
-make install -DBATCH
-
-#Need ruby iconv in order for chef to run
-cd /usr/ports/converters/ruby-iconv
-make install -DBATCH
-
-#Installing chef & Puppet
-/usr/local/bin/gem install chef --no-ri --no-rdoc
-/usr/local/bin/gem install puppet --no-ri --no-rdoc
+pkg install -y sudo
+pkg install -y bash-static
+pkg install -y ruby
+pkg install -y ruby-gems
+pkg install -y ruby-iconv
+pkg install -y chef
+pkg install -y puppet
 
 cat >> /etc/make.conf << EOT
 WITH_ETCSYMLINK="YES"
@@ -61,11 +55,7 @@ fetch -am -o authorized_keys 'https://raw.github.com/mitchellh/vagrant/master/ke
 chown -R vagrant /home/vagrant/.ssh
 chmod -R go-rwsx /home/vagrant/.ssh
 
-# Cleaning portstree to save space
-# http://www.freebsd.org/doc/en_US.ISO8859-1/books/handbook/ports-using.html
-cd /usr/ports/ports-mgmt/portupgrade
-make install -DBATCH clean
-
+pkg install portupgrade
 /usr/local/sbin/portsclean -C
 
 # As sharedfolders are not in defaults ports tree
@@ -80,9 +70,7 @@ echo "vagrant ALL=(ALL) NOPASSWD: ALL" >> /usr/local/etc/sudoers
 # Restore correct su permissions
 # I'll leave that up to the reader :)
 
-cd /usr/ports/devel/libtool
-make clean
-make install -DBATCH
+pkg install -y libtool
 
 # disable X11 because vagrants are (usually) headless
 cat >> /etc/make.conf << EOT
@@ -92,8 +80,7 @@ EOT
 cd /usr/ports/emulators/virtualbox-ose-additions
 make -DBATCH package clean
 
-cd /usr/ports/emulators/virtio-kmod
-make -DBATCH install
+pkg install -y virtio-kmod
 
 # undo our customizations
 sed -i '' -e '/^REFUSE /d' /etc/portsnap.conf
