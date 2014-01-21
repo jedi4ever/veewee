@@ -17,10 +17,10 @@ freebsd-update install
 # reduce the ports we extract to a minimum
 cat >> /etc/portsnap.conf << EOT
 REFUSE accessibility arabic archivers astro audio benchmarks biology cad
-REFUSE chinese comms databases deskutils distfiles devel dns editors finance french
+REFUSE converters chinese comms databases deskutils distfiles devel dns editors finance french
 REFUSE ftp games german graphics hebrew hungarian irc japanese java korean
-REFUSE mail math multimedia net net-im net-mgmt net-p2p news packages palm
-REFUSE polish portuguese print russian science sysutils textproc ukrainian
+REFUSE lang mail math multimedia misc net net-im net-mgmt net-p2p news packages palm
+REFUSE polish portuguese print russian science shells sysutils textproc ukrainian
 REFUSE vietnamese www x11 x11-clocks x11-drivers x11-fm x11-fonts x11-servers
 REFUSE x11-themes x11-toolkits x11-wm
 EOT
