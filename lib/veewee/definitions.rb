@@ -184,8 +184,8 @@ module Veewee
           env.logger.debug("DefinitionDir '#{env.definition_dir}' succesfuly created")
         end
       else
-        env.logger.fatal("DefinitionDir '#{definition_dir}' is not writable")
-        raise Veewee::Error, "DefinitionDir '#{definition_dir}' is not writable"
+        env.logger.fatal("DefinitionDir '#{env.definition_dir}' is not writable")
+        raise Veewee::Error, "DefinitionDir '#{env.definition_dir}' is not writable"
       end
     end
 
