@@ -33,7 +33,11 @@ module Veewee
               rescue IO::WaitWritable
                 if IO.select(nil, [socket], nil, timeout)
                   begin
-                    socket.connect_nonblock(sockaddr)
+                    result = socket.connect_nonblock(sockaddr)
+                    if result == 0 
+                      socket.close
+                      return true
+                    end
                   rescue Errno::EISCONN
                     socket.close
                     return true
