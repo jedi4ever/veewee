@@ -12,7 +12,7 @@ Veewee::Session.declare({
   :iso_sha256 => "284ea30ddd50db1b30cd5cd9fae7495dad8714ef1e4428d69a8c8ce80e03b6a9",
   :iso_download_timeout => 1000,
   :boot_wait => "10",
-  :boot_cmd_sequence => [ '<Tab> linux text net.ifnames=0 biosdevname=0 ks=http://%IP%:%PORT%/ks.cfg<Enter><Enter>' ],
+  :boot_cmd_sequence => [ 'i<Tab> linux text net.ifnames=0 biosdevname=0 ks=http://%IP%:%PORT%/ks.cfg<Enter><Enter>' ],
   :kickstart_port => "7122",
   :kickstart_timeout => 10000,
   :kickstart_file => "ks.cfg",
