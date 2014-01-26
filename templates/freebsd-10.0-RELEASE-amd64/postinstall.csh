@@ -75,6 +75,8 @@ tar -k -C / -xf /tmp/lib32.txz
 cd /usr/ports/emulators/virtualbox-ose-additions
 make -DBATCH package clean
 
+cp /usr/local/etc/pkg.conf.sample /usr/local/etc/pkg.conf
+
 # undo our customizations
 sed -i '' -e '/^REFUSE /d' /etc/portsnap.conf
 # sed -i '' -e '/^WITHOUT_X11/d' /etc/make.conf
