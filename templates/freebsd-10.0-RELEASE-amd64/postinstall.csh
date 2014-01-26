@@ -102,12 +102,14 @@ rm -r /var/db/portsnap/snap
 rm -r /usr/ports
 rm -r /usr/src
 rm -rf /tmp/*
+rm /home/vagrant/postinstall.csh
 
-cat /dev/null > /root/.history
 
 # Zero out all data to reduce box size
 dd if=/dev/zero of=/tmp/ZEROES bs=1M
 rm /tmp/ZEROES
+
+cat /dev/null > /root/.history
 
 echo "=============================================================================="
 echo "NOTE: FreeBSD - Vagrant"
