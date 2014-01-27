@@ -98,11 +98,13 @@ module Veewee
 
           if (self.exists? && options['skip_to_postinstall'] == true) then
             ui.info "Skipping to postinstall."
-            self.up(options)
-            run_hook(:after_up)
-            # Waiting for it to boot
-            ui.info "Waiting #{definition.boot_wait.to_i} seconds for the machine to boot"
-            sleep definition.boot_wait.to_i
+            if ! self.running? then
+              self.up(options)
+              run_hook(:after_up)
+              # Waiting for it to boot
+              ui.info "Waiting #{definition.boot_wait.to_i} seconds for the machine to boot"
+              sleep definition.boot_wait.to_i
+            end
           else
             self.kickstart(options)
           end
