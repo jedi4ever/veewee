@@ -122,6 +122,7 @@ Flag Option                     | Description
 -i --postinstall-include=[...]  | forces specified file(s) to get included in postinstall even if filename has a leading underscore
 -e --postinstall-exclude=[...]  | forces specified file(s) to get excluded from postinstall even if filename has no leading underscore
 --[no-]checksum                 | force to check iso file check sum
+--skip-to-postinstall           | Skip the installation and go streight to postinstall. This is usefully for testing you post-install scripts.
 
 The `build` subcommand will run the following routines behind the scenes:
 
