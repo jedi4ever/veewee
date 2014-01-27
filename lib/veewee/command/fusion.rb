@@ -16,6 +16,9 @@ module Veewee
       method_option :checksum , :type => :boolean , :default => false, :desc => "verify checksum"
       method_option :postinstall_include, :type => :array, :default => [], :aliases => "-i", :desc => "ruby regexp of postinstall filenames to additionally include"
       method_option :postinstall_exclude, :type => :array, :default => [], :aliases => "-e", :desc => "ruby regexp of postinstall filenames to exclude"
+      method_option :skip_to_postinstall, :aliases => ['--skip-to-postinstall'],  :type => :boolean,
+                    :default => false,
+                    :desc => "Skip to postinstall."
       def build(box_name)
         env.get_box(box_name).build(options)
       end
