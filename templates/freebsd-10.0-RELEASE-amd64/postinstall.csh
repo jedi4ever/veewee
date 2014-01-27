@@ -72,12 +72,10 @@ fetch -o /tmp/lib32.txz http://ftp.freebsd.org/pub/FreeBSD/releases/amd64/10.0-R
 tar -k -C / -xf /tmp/src.txz
 tar -k -C / -xf /tmp/lib32.txz
 
-rm -rf /tmp/*
-
 cd /usr/ports/emulators/virtualbox-ose-additions
 make -DBATCH package clean
 
-/usr/local/sbin/portsclean -C
+cp /usr/local/etc/pkg.conf.sample /usr/local/etc/pkg.conf
 
 # undo our customizations
 sed -i '' -e '/^REFUSE /d' /etc/portsnap.conf
@@ -99,6 +97,21 @@ pw groupmod vboxusers -m vagrant
 
 #Bash needs to be the shell for tests to validate
 pw usermod vagrant -s /usr/local/bin/bash
+
+#Cleanup
+rm /home/vagrant/VBoxGuestAdditions*
+rm -r /var/db/portsnap/snap
+rm -r /usr/ports
+rm -r /usr/src
+rm -rf /tmp/*
+rm /home/vagrant/postinstall.csh
+
+
+# Zero out all data to reduce box size
+dd if=/dev/zero of=/tmp/ZEROES bs=1M
+rm /tmp/ZEROES
+
+cat /dev/null > /root/.history
 
 echo "=============================================================================="
 echo "NOTE: FreeBSD - Vagrant"
