@@ -79,7 +79,12 @@ module Veewee
                   begin
                     env.ui.info ".",{:new_line => false , :prefix => false} unless options[:mute]
                     if tcp_test_ssh(ip, options[:port])
-                      Net::SSH.start(ip, options[:user], { :port => options[:port] , :password => options[:password], :paranoid => false , :timeout => timeout }) do |ssh|
+                      Net::SSH.start(ip, options[:user],
+                                     { :port => options[:port],
+                                       :password => options[:password],
+                                       :auth_methods => ['password', 'publickey'],
+                                       :paranoid => false ,
+                                       :timeout => timeout }) do |ssh|
 
                         ui.info "\n", {:prefix => false} unless options[:mute]
                         block.call(ip);
@@ -106,7 +111,10 @@ module Veewee
 
           def ssh_transfer_file(host,filename,destination = '.' , options = {})
 
-            defaults={ :paranoid => false }
+            defaults={
+              :paranoid => false,
+              :auth_methods => ['password', 'publickey'],
+            }
             options=defaults.merge(options)
 
             Net::SSH.start( host,options[:user],options ) do |ssh|
@@ -133,7 +141,11 @@ module Veewee
               ui.info "Executing command: #{command}"
             end
 
-            Net::SSH.start(host, options[:user], { :port => options[:port], :password => options[:password], :paranoid => false }) do |ssh|
+            Net::SSH.start(host, options[:user], {
+                             :port => options[:port],
+                             :password => options[:password],
+                             :auth_methods => ['password', 'publickey'],
+                             :paranoid => false }) do |ssh|
 
               # open a new channel and configure a minimal set of callbacks, then run
               # the event loop until the channel finishes (closes)
