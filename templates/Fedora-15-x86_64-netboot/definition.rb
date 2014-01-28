@@ -5,7 +5,7 @@ Veewee::Session.declare({
   :disk_size => '10140', 
   :disk_format => 'VDI', 
   :hostiocache => 'off', 
-  :hwvirtext => 'on',
+  :hwvirtex => 'on',
   :os_type_id => 'Fedora_64',
   :iso_file => "Fedora-15-x86_64-netinst.iso",
   :iso_src => "http://ftp.halifax.rwth-aachen.de/fedora/linux/releases/15/Fedora/x86_64/iso/Fedora-15-x86_64-netinst.iso",

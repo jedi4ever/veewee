@@ -19,6 +19,16 @@ Windows8_64:
   :kvm:
   :vbox: Windows8_64
   :parallels: win-8
+Windows81:
+  :fusion:
+  :kvm:
+  :vbox: Windows81
+  :parallels: win-8
+Windows81_64:
+  :fusion:
+  :kvm:
+  :vbox: Windows81_64
+  :parallels: win-8
 WindowsNT:
   :fusion: winNT
   :kvm:
@@ -288,6 +298,10 @@ Solaris_64:
   :kvm:
   :vbox: Solaris_64
   :parallels: solaris-10
+Solaris11_64:
+  :fusion: solaris10-64
+  :kvm:
+  :vbox: Solaris11_64
 Solaris9:
   :fusion: solaris
   :kvm:

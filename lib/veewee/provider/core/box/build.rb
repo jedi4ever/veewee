@@ -17,24 +17,8 @@ module Veewee
           end
         end
 
-        def build(options={})
-
-          if definition.nil?
-            raise Veewee::Error,"Could not find the definition. Make sure you are one level above the definitions directory when you execute the build command."
-          end
-
-          # Requires valid definition
-
-          ui.info "Building Box #{name} with Definition #{definition.name}:"
-          options.each do |name,value|
-            ui.info "- #{name} : #{value}"
-          end
-
-          # Checking regexp of postinstall include/excludes
-          validate_postinstall_regex(options)
-
-          # Check the iso file we need to build the box
-          definition.verify_iso(options)
+        protected
+        def kickstart(options)
 
           if self.exists?
             # check if --force option was given
@@ -92,6 +76,39 @@ module Veewee
           end
 
           self.handle_kickstart(options)
+        end
+
+        def build(options={})
+
+          if definition.nil?
+            raise Veewee::Error,"Could not find the definition. Make sure you are one level above the definitions directory when you execute the build command."
+          end
+
+          # Requires valid definition
+          ui.info "Building Box #{name} with Definition #{definition.name}:"
+          options.each do |name,value|
+            ui.info "- #{name} : #{value}"
+          end
+
+          # Checking regexp of postinstall include/excludes
+          validate_postinstall_regex(options)
+
+          # Check the iso file we need to build the box
+          definition.verify_iso(options)
+
+          if (self.exists? && options['skip_to_postinstall'] == true) then
+            ui.info "Skipping to postinstall."
+            if ! self.running? then
+              self.up(options)
+              run_hook(:after_up)
+              # Waiting for it to boot
+              ui.info "Waiting #{definition.boot_wait.to_i} seconds for the machine to boot"
+              sleep definition.boot_wait.to_i
+            end
+          else
+            self.kickstart(options)
+          end
+
 
           # Wait for an ipaddress
           # This needs to be done after the kickstart:

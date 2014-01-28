@@ -20,6 +20,7 @@ Gem::Specification.new do |s|
   # DEBUG_RESOLVER=1 bundle install
   s.add_dependency "net-ssh", ">= 2.2.0"
 
+  s.add_dependency "mime-types", "~> 1.16"
   s.add_dependency "popen4", "~> 0.1.2"
   s.add_dependency "thor", "~> 0.15"
   s.add_dependency "highline"
