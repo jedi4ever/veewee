@@ -3,7 +3,7 @@ Veewee::Session.declare({
   :memory_size=> '384',
   :disk_size => '10140',
   :disk_format => 'VDI',
-  :hostiocache => 'off',
+  :hostiocache => 'on',
   :virtualbox => {
     :vm_options => [
       "pae" => "on",
@@ -12,7 +12,7 @@ Veewee::Session.declare({
   },
   :os_type_id => 'RedHat',
   :iso_file => "CentOS-5.9-i386-netinstall.iso",
-  :iso_src => "http://mirrors.kernel.org/centos/5.9/isos/i386/CentOS-5.9-i386-netinstall.iso",
+  :iso_src => "http://archive.kernel.org/centos/5.9/isos/i386/CentOS-5.9-i386-netinstall.iso",
   :iso_md5 => "e1d6716199bc3ed713b699604a0b70e0",
   :iso_download_timeout => 1000,
   :boot_wait => "10",
@@ -35,7 +35,6 @@ Veewee::Session.declare({
     "puppet.sh",
     "vagrant.sh",
     "virtualbox.sh",
-    #"vmfusion.sh",
     "cleanup.sh",
     "zerodisk.sh"
   ],

@@ -1,3 +1,3 @@
 # Install Chef
-gem install --no-ri --no-rdoc chef
 
+curl -L https://www.opscode.com/chef/install.sh | sudo bash
