@@ -15,4 +15,3 @@ gpgcheck=0
 EOM
 
 yum -y install puppet facter ruby-shadow
-
