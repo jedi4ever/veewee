@@ -1,4 +1,5 @@
 require 'veewee/provider/core/helper/ssh'
+require 'shellwords'
 module Veewee
   module Provider
     module  Core
@@ -12,11 +13,8 @@ module Veewee
           host_ip=self.ip_address
 
           if (options[:interactive]==true)
-            # Command line options
-            extended_command="#{command}"
-
             unless host_ip.nil? || host_ip==""
-              ssh_command="ssh #{ssh_commandline_options(options)} #{host_ip} \"#{extended_command}\""
+              ssh_command="ssh #{ssh_commandline_options(options)} #{host_ip} #{Shellwords.escape command}"
 
               fg_exec(ssh_command,options)
 
