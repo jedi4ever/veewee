@@ -40,8 +40,10 @@ module Veewee
             "-o IdentitiesOnly=yes",
             "-o VerifyHostKeyDNS=no"
           ]
-          if !(definition.ssh_key.nil? ||  definition.ssh_key.length!="")
-            command_options << "-i #{definition.ssh_key}"
+          if !(definition.ssh_key.nil? ||  definition.ssh_key.empty?)
+            # Filenames of SSH keys are relative to their definition
+            ssh_key = File.join(definition.path, definition.ssh_key)
+            command_options << "-i #{ssh_key}"
           end
           commandline_options="#{command_options.join(" ")} ".strip
 
