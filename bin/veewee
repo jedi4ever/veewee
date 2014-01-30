@@ -25,4 +25,5 @@ begin
 
 rescue Veewee::Error => e
   env.ui.error "#{e}"
+  exit 1
 end
