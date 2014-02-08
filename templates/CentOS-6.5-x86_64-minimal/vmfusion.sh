@@ -1,3 +1,6 @@
+# vmware-vmblock-fuse requires libfuse.so
+yum -y install fuse-libs
+
 cd /tmp
 mkdir -p /mnt/cdrom
 mount -o loop /home/veewee/linux.iso /mnt/cdrom
