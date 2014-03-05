@@ -126,6 +126,8 @@ module Veewee
           # into .veewee_params
           self.transfer_params(options)
 
+          run_hook(:before_postinstall)
+
           # Filtering post install files based upon --postinstall-include and --postinstall--exclude
           definition.postinstall_files=filter_postinstall_files(options)
 
