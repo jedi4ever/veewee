@@ -7,6 +7,7 @@ The following hooks are currently available:
 * `:after_create` after box is created
 * `:after_up` after box is started
 * `:after_boot_sequence` after boot command sequence is executed
+* `:before_postinstall` before post-install files are executed
 * `:after_postinstall` after post-install files are executed
 * `:before_ssh` before each SSH login
 
