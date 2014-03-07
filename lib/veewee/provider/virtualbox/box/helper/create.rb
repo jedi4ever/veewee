@@ -203,7 +203,7 @@ module Veewee
               vm_flag_value=definition.instance_variable_get("@#{vm_flag}")
               ui.info "Setting VM Flag #{vm_flag} to #{vm_flag_value}"
               ui.warn "Used of #{vm_flag} is deprecated - specify your options in the definition file as \n :virtualbox => { :vm_options => [\"#{vm_flag}\" => \"#{vm_flag_value}\"]}"
-              command="#{@vboxcmd} modifyvm #{name} --#{vm_flag.to_s} #{vm_flag_value}"
+              command="#{@vboxcmd} modifyvm \"#{name}\" --#{vm_flag.to_s} #{vm_flag_value}"
               shell_exec("#{command}")
             end
           end
@@ -211,7 +211,7 @@ module Veewee
           unless definition.virtualbox[:vm_options].nil? || definition.virtualbox[:vm_options][0].nil?
             definition.virtualbox[:vm_options][0].each do |vm_flag,vm_flag_value|
               ui.info "Setting VM Flag #{vm_flag} to #{vm_flag_value}"
-              command="#{@vboxcmd} modifyvm #{name} --#{vm_flag.to_s} #{vm_flag_value}"
+              command="#{@vboxcmd} modifyvm \"#{name}\" --#{vm_flag.to_s} #{vm_flag_value}"
               shell_exec("#{command}")
             end
           end

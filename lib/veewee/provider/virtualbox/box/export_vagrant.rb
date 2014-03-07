@@ -110,7 +110,7 @@ module Veewee
             end
 
             ui.info "Exporting the box"
-            command = "#{@vboxcmd} export #{name} --output #{File.join(tmp_dir,'box.ovf')}"
+            command = "#{@vboxcmd} export \"#{name}\" --output #{File.join(tmp_dir,'box.ovf')}"
             env.logger.debug("Command: #{command}")
             shell_exec(command, {:mute => false})
 
