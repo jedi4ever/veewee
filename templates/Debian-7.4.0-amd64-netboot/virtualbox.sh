@@ -21,7 +21,6 @@ if test -f .vbox_version ; then
   yes|sh /mnt/VBoxLinuxAdditions.run
   umount /mnt
 
-
   # Start the newly build driver
   /etc/init.d/vboxadd start
 
@@ -30,5 +29,7 @@ if test -f .vbox_version ; then
 
   # Test mount the veewee-validation
   mount -t vboxsf veewee-validation /tmp/veewee-validation
+
+  rm /tmp/$VBOX_ISO
 
 fi

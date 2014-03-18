@@ -17,10 +17,11 @@ if test -f .vbox_version ; then
   # Install the VirtualBox guest additions
   VBOX_VERSION=$(cat .vbox_version)
   VBOX_ISO=VBoxGuestAdditions_$VBOX_VERSION.iso
+  curl -Lo /tmp/VBoxGuestAdditions_$VBOX_VERSION.iso \
+    "http://download.virtualbox.org/virtualbox/$VBOX_VERSION/VBoxGuestAdditions_$VBOX_VERSION.iso"
   mount -o loop $VBOX_ISO /mnt
   yes|sh /mnt/VBoxLinuxAdditions.run
   umount /mnt
-
 
   # Start the newly build driver
   /etc/init.d/vboxadd start
@@ -30,5 +31,8 @@ if test -f .vbox_version ; then
 
   # Test mount the veewee-validation
   mount -t vboxsf veewee-validation /tmp/veewee-validation
+
+  # Implement old cleanup-virtualbox.sh
+  rm /tmp/$VBOX_ISO
 
 fi
