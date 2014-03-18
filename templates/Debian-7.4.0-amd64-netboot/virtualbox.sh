@@ -30,6 +30,6 @@ if test -f .vbox_version ; then
   # Test mount the veewee-validation
   mount -t vboxsf veewee-validation /tmp/veewee-validation
 
-  rm /tmp/$VBOX_ISO
+  rm $VBOX_ISO
 
 fi
