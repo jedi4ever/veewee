@@ -8,9 +8,9 @@
 
 Veewee::Session.declare({
     :os_type_id => 'Windows8_64',
-    :iso_file => "9200.16384.WIN8_RTM.120725-1247_X64FRE_ENTERPRISE_EVAL_EN-US-HRM_CENA_X64FREE_EN-US_DV5.ISO",
-    :iso_md5 => "6beffd994574ca89417286f0dc056108",
-    :iso_src => "http://care.dlservice.microsoft.com/dl/download/5/3/C/53C31ED0-886C-4F81-9A38-F58CE4CE71E8/9200.16384.WIN8_RTM.120725-1247_X64FRE_ENTERPRISE_EVAL_EN-US-HRM_CENA_X64FREE_EN-US_DV5.ISO",
+    :iso_file => "9600.16384.WINBLUE_RTM.130821-1623_X64FRE_ENTERPRISE_EVAL_EN-US-IRM_CENA_X64FREE_EN-US_DV5.ISO",
+    :iso_md5 => "5e4ecb86fd8619641f1d58f96e8561ec",
+    :iso_src => "http://care.dlservice.microsoft.com/dl/download/B/9/9/B999286E-0A47-406D-8B3D-5B5AD7373A4A/9600.16384.WINBLUE_RTM.130821-1623_X64FRE_ENTERPRISE_EVAL_EN-US-IRM_CENA_X64FREE_EN-US_DV5.ISO",
     :iso_download_timeout => "1000",
     :cpu_count => '1',
     :memory_size=> '1024',
