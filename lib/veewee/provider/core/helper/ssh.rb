@@ -82,7 +82,7 @@ module Veewee
                       Net::SSH.start(ip, options[:user],
                                      { :port => options[:port],
                                        :password => options[:password],
-                                       :auth_methods => ['password', 'publickey'],
+                                       :auth_methods => ['password','publickey','keyboard-interactive'],
                                        :paranoid => false ,
                                        :timeout => timeout }) do |ssh|
 
@@ -113,7 +113,7 @@ module Veewee
 
             defaults={
               :paranoid => false,
-              :auth_methods => ['password', 'publickey'],
+              :auth_methods => ['password','publickey','keyboard-interactive']
             }
             options=defaults.merge(options)
 
@@ -144,7 +144,7 @@ module Veewee
             Net::SSH.start(host, options[:user], {
                              :port => options[:port],
                              :password => options[:password],
-                             :auth_methods => ['password', 'publickey'],
+                             :auth_methods => ['password','publickey','keyboard-interactive'],
                              :paranoid => false }) do |ssh|
 
               # open a new channel and configure a minimal set of callbacks, then run
