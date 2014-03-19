@@ -21,12 +21,24 @@ if_vtnet_load="YES"
 virtio_balloon_load="YES"
 EOT
 
+export ASSUME_ALWAYS_YES=YES
+pkg bootstrap
+pkg2ng
+
+mv -vf /usr/local/etc/pkg.conf.sample /usr/local/etc/pkg.conf
+
+# Install binary packages versions of dependencies
+pkg install -y sudo bash-static
+
 # Set up user accounts
 zfs create tank/root/home
 zfs create tank/root/home/vagrant
-echo "vagrant" | pw -V /etc useradd vagrant -h 0 -s csh -G wheel -d /home/vagrant -c "Vagrant User"
+echo "vagrant" | pw -V /etc useradd vagrant -h 0 -s /usr/local/bin/bash -G wheel -d /home/vagrant -c "Vagrant User"
 
-chown 1001:1001 /home/vagrant
+chown -R vagrant:vagrant /home/vagrant
+
+# Enable passwordless sudo
+echo 'vagrant ALL=(ALL) NOPASSWD: ALL' >> /usr/local/etc/sudoers
 
 # Reboot
 reboot

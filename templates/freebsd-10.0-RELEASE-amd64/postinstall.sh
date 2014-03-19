@@ -1,7 +1,6 @@
-#!/bin/csh -x
-# NB: at the point when this script is run, vagrant's shell is csh
+#!/usr/bin/env bash
 
-set echo
+set -x
 
 # Set root password
 echo "vagrant" | pw -V /etc usermod root -h 0
@@ -11,8 +10,19 @@ ntpdate -v -b in.pool.ntp.org
 
 date > /etc/vagrant_box_build_time
 
+# Install binary packages versions of dependencies
+# ca_root_nss depends on perl5
+pkg install -y chef puppet portmaster perl5 kBuild yasm
+
+cat >> /etc/make.conf <<'EOT'
+WITHOUT_X11=YES
+WITH_PKGNG=YES
+OPTIONS_UNSET=X11
+OPTIONS_SET=PKGNG
+EOT
+
 # reduce the ports we extract to a minimum
-cat >> /etc/portsnap.conf << EOT
+cat >> /etc/portsnap.conf <<'EOT'
 REFUSE accessibility arabic archivers astro audio benchmarks biology cad
 REFUSE converters chinese comms databases deskutils distfiles devel dns editors finance french
 REFUSE ftp games german graphics hebrew hungarian irc japanese java korean
@@ -25,19 +35,11 @@ EOT
 # get new ports
 portsnap --interactive fetch extract
 
-cd /usr/ports/ports-mgmt/pkg
-make -DBATCH install
-
-# Install binary packages versions of dependencies
-pkg install -y sudo bash chef puppet portupgrade perl5 kBuild yasm
-
-cat >> /etc/make.conf << EOT
-WITH_ETCSYMLINK="YES"
-EOT
-
 # Install certificates so we can fetch from GitHub
+# NB: BATCH can be defined with -D, however new package options
+# require that ETCSYMLINK be set using make vars
 cd /usr/ports/security/ca_root_nss
-make install -DBATCH
+make WITH='ETCSYMLINK' WITHOUT='' -DBATCH install
 
 #Installing vagrant keys
 mkdir /home/vagrant/.ssh
@@ -54,16 +56,6 @@ echo 'rpcbind_enable="YES"' >> /etc/rc.conf
 echo 'nfs_server_enable="YES"' >> /etc/rc.conf
 echo 'mountd_flags="-r"' >> /etc/rc.conf
 
-# Enable passwordless sudo
-echo "vagrant ALL=(ALL) NOPASSWD: ALL" >> /usr/local/etc/sudoers
-# Restore correct su permissions
-# I'll leave that up to the reader :)
-
-# disable X11 because vagrants are (usually) headless
-cat >> /etc/make.conf << EOT
-WITHOUT_X11="YES"
-EOT
-
 # Fetch base system files for building Virtualbox OSE Additions
 fetch -o /tmp/src.txz http://ftp.freebsd.org/pub/FreeBSD/releases/amd64/10.0-RELEASE/src.txz
 fetch -o /tmp/lib32.txz http://ftp.freebsd.org/pub/FreeBSD/releases/amd64/10.0-RELEASE/lib32.txz
@@ -75,18 +67,14 @@ tar -k -C / -xf /tmp/lib32.txz
 cd /usr/ports/emulators/virtualbox-ose-additions
 make -DBATCH package clean
 
-cp /usr/local/etc/pkg.conf.sample /usr/local/etc/pkg.conf
-
 # undo our customizations
 sed -i '' -e '/^REFUSE /d' /etc/portsnap.conf
-# sed -i '' -e '/^WITHOUT_X11/d' /etc/make.conf
 
 echo 'vboxdrv_load="YES"' >> /boot/loader.conf
 echo 'vboxnet_enable="YES"' >> /etc/rc.conf
 echo 'vboxguest_enable="YES"' >> /etc/rc.conf
 echo 'vboxservice_enable="YES"' >> /etc/rc.conf
 
-# sed -i.bak -Ee 's|/dev/ada?|/dev/vtbd|' /etc/fstab
 echo 'ifconfig_vtnet0_name="em0"' >> /etc/rc.conf
 echo 'ifconfig_vtnet1_name="em1"' >> /etc/rc.conf
 echo 'ifconfig_vtnet2_name="em2"' >> /etc/rc.conf
@@ -95,9 +83,6 @@ echo 'ifconfig_vtnet3_name="em3"' >> /etc/rc.conf
 pw groupadd vboxusers
 pw groupmod vboxusers -m vagrant
 
-#Bash needs to be the shell for tests to validate
-pw usermod vagrant -s /usr/local/bin/bash
-
 #Cleanup
 rm /home/vagrant/VBoxGuestAdditions*
 rm -r /var/db/portsnap/snap
@@ -105,7 +90,6 @@ rm -r /usr/ports
 rm -r /usr/src
 rm -rf /tmp/*
 rm /home/vagrant/postinstall.csh
-
 
 # Zero out all data to reduce box size
 dd if=/dev/zero of=/tmp/ZEROES bs=1M
