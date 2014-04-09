@@ -1,4 +1,5 @@
 # Update the box
+export DEBIAN_FRONTEND=noninteractive
 apt-get -y update
 apt-get -y install linux-headers-$(uname -r) build-essential
 apt-get -y install zlib1g-dev libssl-dev libreadline-gplv2-dev
