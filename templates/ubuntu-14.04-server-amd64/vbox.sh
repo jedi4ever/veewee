@@ -14,5 +14,9 @@ mount -o loop $VBOX_ISO /mnt
 yes|sh /mnt/VBoxLinuxAdditions.run
 umount /mnt
 
+# Temporary fix for VirtualBox Additions version 4.3.10
+# issue #12879, see https://www.virtualbox.org/ticket/12879
+[ -e /usr/lib/VBoxGuestAdditions ] || ln -s /opt/VBoxGuestAdditions-$VBOX_VERSION/lib/VBoxGuestAdditions /usr/lib/VBoxGuestAdditions
+
 # Cleanup
 rm $VBOX_ISO
