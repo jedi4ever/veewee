@@ -6,7 +6,7 @@ Veewee::Session.declare({
   :hostiocache => 'off',
   :os_type_id => 'RedHat6_64',
   :iso_file => "CentOS-6.3-x86_64-netinstall.iso",
-  :iso_src => "http://www.mirrorservice.org/sites/mirror.centos.org/6.3/isos/x86_64/CentOS-6.3-x86_64-netinstall.iso",
+  :iso_src => "http://mirror.symnds.com/distributions/CentOS-vault/6.3/isos/x86_64/CentOS-6.3-x86_64-netinstall.iso",
   :iso_md5 => "690138908de516b6e5d7d180d085c3f3",
   :iso_download_timeout => 1000,
   :boot_wait => "15",
