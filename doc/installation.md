@@ -8,6 +8,11 @@ The Veewee project is moving quickly and the Rubygem might be outdated. Therefor
 
     $ gem install veewee
 
+The above command may fail when using OS X Mavericks and XCode 5.1 due to [Apple telling the install to fail when unknown flags are used](http://stackoverflow.com/questions/22313407/clang-error-unknown-argument-mno-fused-madd-python-package-installation-fa#22315129). To get around this, use:
+
+	$ ARCHFLAGS=-Wno-error=unused-command-line-argument-hard-error-in-future gem install veewee
+	
+
 Projects that include the `veewee` gem can also benefit from utilizing Ruby version management (see below).
 
 
