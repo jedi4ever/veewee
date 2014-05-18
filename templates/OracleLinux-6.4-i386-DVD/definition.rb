@@ -7,7 +7,7 @@ Veewee::Session.declare({
   :os_type_id => 'Oracle',
   :iso_file => "OracleLinux-R6-U4-Server-i386-dvd.iso",
   :iso_src => "http://mirrors.dotsrc.org/oracle-linux/OL6/U4/i386/OracleLinux-R6-U4-Server-i386-dvd.iso",
-  :iiso_md5 => "744fc1663519b4d54da1345669fcee52",
+  :iso_md5 => "74bc97bfb45adf786d55219622bd2427",
   :iso_download_timeout => 1000,
   :boot_wait => "10",
   :boot_cmd_sequence => [
