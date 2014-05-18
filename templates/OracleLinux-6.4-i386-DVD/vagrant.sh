@@ -1,13 +1,17 @@
 # Vagrant specific
 
-. ./proxy.sh
+set -x
+
+if [ -e ./proxy.sh ] ; then
+  source ./proxy.sh
+fi
 
 date > /etc/vagrant_box_build_time
 
 # Add vagrant user
 /usr/sbin/groupadd vagrant
 /usr/sbin/useradd vagrant -g vagrant -G wheel
-echo "vagrant"|passwd --stdin vagrant
+echo "vagrant" | passwd --stdin vagrant
 echo "vagrant        ALL=(ALL)       NOPASSWD: ALL" >> /etc/sudoers.d/vagrant
 chmod 0440 /etc/sudoers.d/vagrant
 
@@ -18,4 +22,4 @@ chmod 0600 /home/vagrant/.ssh/authorized_keys
 chown -R vagrant /home/vagrant/.ssh
 
 # Customize the message of the day
-echo 'Welcome to your Vagrant-built virtual machine.' > /etc/motd
+echo 'Welcome to Veewee built Vagrant Base Box.' > /etc/motd

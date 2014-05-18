@@ -1,26 +1,13 @@
-yum remove -y \
-byacc \
-db4-devel \
-epel-release \
-freetype  \
-gcc \
-gcc-c++ \
-gdbm-devel \
-gtk2 \
-hicolor-icon-theme \
-kernel-uek-devel \
-libffi-devel \
-libyaml-devel \
-libX11 \
-make \
-ncurses-devel \
-openssl-devel \
-readline-devel \
-rpm-build \
-rpmdevtools \
-sqlite-devel \
-tcl-devel \
-zlib-devel
+# Cleanup
 
+set -x
+
+yum -y remove gtk2 libX11 hicolor-icon-theme avahi freetype bitstream-vera-fonts
 yum -y clean all
+
+# rm -rf /etc/yum.repos.d/{puppetlabs,epel,epel-testing}.repo # keep
 rm -rf VBoxGuestAdditions_*.iso
+
+# Remove traces of mac address from network configuration
+sed -i /HWADDR/d /etc/sysconfig/network-scripts/ifcfg-eth0
+rm /etc/udev/rules.d/70-persistent-net.rules

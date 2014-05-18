@@ -1,9 +1,11 @@
 # Install Puppet
 
-. ./proxy.sh
+set -x
 
-if [ -e "/usr/local/bin/gem" ] ; then
-  /usr/local/bin/gem install --no-ri --no-rdoc puppet
-else
-  gem install --no-ri --no-rdoc puppet
+if [ -e ./proxy.sh ] ; then
+  source ./proxy.sh
 fi
+
+rpm -ivh http://yum.puppetlabs.com/puppetlabs-release-el-6.noarch.rpm
+
+yum -y install puppet facter

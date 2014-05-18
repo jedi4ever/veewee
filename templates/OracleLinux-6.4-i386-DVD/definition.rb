@@ -3,14 +3,16 @@ Veewee::Session.declare({
   :memory_size=> '480',
   :disk_size => '10140',
   :disk_format => 'VDI',
-  :hostiocache => 'on',
+  :hostiocache => 'off',
   :os_type_id => 'Oracle',
   :iso_file => "OracleLinux-R6-U4-Server-i386-dvd.iso",
   :iso_src => "http://mirrors.dotsrc.org/oracle-linux/OL6/U4/i386/OracleLinux-R6-U4-Server-i386-dvd.iso",
-  :iso_md5 => "bedf8927d9380c0c83932a24028be793",
+  :iiso_md5 => "744fc1663519b4d54da1345669fcee52",
   :iso_download_timeout => 1000,
   :boot_wait => "10",
-  :boot_cmd_sequence => [ '<Tab> text ks=http://%IP%:%PORT%/ks.cfg<Enter>' ],
+  :boot_cmd_sequence => [
+    '<Tab> text ks=http://%IP%:%PORT%/ks.cfg<Enter>'
+  ],
   :kickstart_port => "7122",
   :kickstart_timeout => 10000,
   :kickstart_file => "ks.cfg",
@@ -25,7 +27,7 @@ Veewee::Session.declare({
   :postinstall_files => [
     "proxy.sh",
     "base.sh",
-    "ruby.sh",
+    # "ruby.sh",
     "chef.sh",
     "puppet.sh",
     "vagrant.sh",

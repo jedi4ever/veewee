@@ -1,8 +1,9 @@
-. ./proxy.sh
-
 # Install Chef
-if [ -e "/usr/local/bin/gem" ] ; then
-  /usr/local/bin/gem install --no-ri --no-rdoc chef
-else
-  gem install --no-ri --no-rdoc chef
+
+set -x
+
+if [ -e ./proxy.sh ] ; then
+  source ./proxy.sh
 fi
+
+curl -L https://www.opscode.com/chef/install.sh | bash
