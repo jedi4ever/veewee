@@ -9,9 +9,9 @@ fi
 sed -i "s/^.*requiretty/#Defaults requiretty/" /etc/sudoers
 
 # Pin YUM repositories to the specific version
-yum-config-manager --enable public_ol6_u4_base
+yum-config-manager --enable public_ol6_u5_base
 yum-config-manager --disable public_ol6_latest
-yum-config-manager --enable public_ol6_UEK_base
+yum-config-manager --enable public_ol6_UEKR3_latest
 
 # If we need the latest updates, uncomment the following lines
 #yum-config-repo --enable public_ol6_latest

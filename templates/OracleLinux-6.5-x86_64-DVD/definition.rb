@@ -5,9 +5,9 @@ Veewee::Session.declare({
   :disk_format => 'VDI',
   :hostiocache => 'off',
   :os_type_id => 'Oracle_64',
-  :iso_file => "OracleLinux-R6-U4-Server-x86_64-dvd.iso",
-  :iso_src => "http://mirrors.dotsrc.org/oracle-linux/OL6/U4/x86_64/OracleLinux-R6-U4-Server-x86_64-dvd.iso",
-  :iso_md5 => "744fc1663519b4d54da1345669fcee52",
+  :iso_file => "OracleLinux-R6-U5-Server-x86_64-dvd.iso",
+  :iso_src => "http://mirrors.dotsrc.org/oracle-linux/OL6/U5/x86_64/OracleLinux-R6-U5-Server-x86_64-dvd.iso",
+  :iso_md5 => "774fb999e4ed43341dcdf5ebc0d48f42",
   :iso_download_timeout => 1000,
   :boot_wait => "10",
   :boot_cmd_sequence => [
