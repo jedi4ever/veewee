@@ -67,7 +67,7 @@ module Veewee
 
       git_template = false
       # Check if the template is a git repo
-      if template_name.start_with?("git://")
+      if template_name.start_with?("git://", "git+ssh://", "git+http://")
         git_template = true
       end
 
