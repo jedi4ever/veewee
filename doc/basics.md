@@ -75,6 +75,8 @@ If you want to use an external repository for the definition, you can specify a 
 
     $ bundle exec veewee <provider> define 'myubuntubox' 'git://github.com/jedi4ever/myubuntubox'
 
+Can be `git://`, `git+ssh://` or `git+http://`.
+
 
 ## Modify a definition (optional)
 
