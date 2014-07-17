@@ -97,7 +97,8 @@ make -DBATCH install
 
 # undo our customizations
 sed -i '' -e '/^REFUSE /d' /etc/portsnap.conf
-# sed -i '' -e '/^WITHOUT_X11/d' /etc/make.conf
+sed -i '' -e '/^PermitRootLogin /d' /etc/ssh/sshd_config
+/usr/sbin/service sshd reload
 
 echo 'vboxdrv_load="YES"' >> /boot/loader.conf
 echo 'vboxnet_enable="YES"' >> /etc/rc.conf
@@ -112,7 +113,6 @@ if_vtnet_load="YES"
 virtio_balloon_load="YES"
 EOT
 
-# sed -i.bak -Ee 's|/dev/ada?|/dev/vtbd|' /etc/fstab
 echo 'ifconfig_vtnet0_name="em0"' >> /etc/rc.conf
 echo 'ifconfig_vtnet1_name="em1"' >> /etc/rc.conf
 echo 'ifconfig_vtnet2_name="em2"' >> /etc/rc.conf
@@ -128,9 +128,9 @@ echo "==========================================================================
 echo "NOTE: FreeBSD - Vagrant"
 echo "When using this basebox you need to do some special stuff in your Vagrantfile"
 echo "1) Enable HostOnly network"
-echo "	 config.vm.network ...."
+echo "   config.vm.network ...."
 echo "2) Use nfs instead of shared folders"
-echo '		config.vm.share_folder("v-root", "/vagrant", ".", :nfs => true)'
+echo '   config.vm.share_folder("v-root", "/vagrant", ".", :nfs => true)'
 echo "============================================================================="
 
 exit
