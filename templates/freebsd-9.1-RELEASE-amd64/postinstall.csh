@@ -34,12 +34,12 @@ EOT
 # get new ports
 /tmp/portsnap fetch extract
 
-# build packages for sudo and bash
+# install sudo and bash
 pkg_delete -af
 cd /usr/ports/security/sudo
-make -DBATCH package-recursive clean
+make -DBATCH install clean
 cd /usr/ports/shells/bash-static
-make -DBATCH package clean
+make -DBATCH install clean
 
 #Off to rubygems to get first ruby running
 cd /usr/ports/devel/ruby-gems
@@ -90,7 +90,7 @@ WITHOUT_X11="YES"
 EOT
 
 cd /usr/ports/emulators/virtualbox-ose-additions
-make -DBATCH package clean
+make -DBATCH install clean
 
 cd /usr/ports/emulators/virtio-kmod
 make -DBATCH install
