@@ -3,11 +3,9 @@ Veewee::Definition.declare({
   :memory_size=> '256',
   :disk_size => '10140', :disk_format => 'VDI', :hostiocache => 'off',
   :os_type_id => 'Debian',
-  :iso_file => "debian-7.1.0-i386-netinst.iso",
-  :iso_src => "",
-  :iso_download_instructions => "- You need to download this manually as the ISO is no longer directly downloadable.\n"+
-    "Visit http://cdimage.debian.org/cdimage/archive/7.1.0/i386/ and download it via torrent or jigdo",
-  :iso_md5 => "a70efb67ca061175eabe7c5dc04ab323",
+  :iso_file => "debian-7.6.0-i386-netinst.iso",
+  :iso_src => "http://cdimage.debian.org/debian-cd/7.6.0/i386/iso-cd/debian-7.6.0-i386-netinst.iso",
+  :iso_md5 => "528e1a7315da1bbf50bd4d187880a519",
   :iso_download_timeout => "1000",
   :boot_wait => "10", :boot_cmd_sequence => [
      '<Esc>',
@@ -45,7 +43,6 @@ Veewee::Definition.declare({
     "ruby.sh",
     "puppet.sh",
     "chef.sh",
-    "cleanup-virtualbox.sh",
     "cleanup.sh",
     "zerodisk.sh"
   ],
