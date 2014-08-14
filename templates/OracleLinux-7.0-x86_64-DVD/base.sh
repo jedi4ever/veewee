@@ -15,3 +15,5 @@ rm -f epel-release-7-0.2.noarch.rpm
 echo "UseDNS no" >> /etc/ssh/sshd_config
 
 hostnamectl set-hostname oraclelinux7.vagrant.vm
+
+yum-config-manager --enable ol7_optional_latest
