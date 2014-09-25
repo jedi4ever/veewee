@@ -48,7 +48,7 @@ It is highly recommended that you use either `rvm` or `rbenv` to manage your rub
 
 [RVM](https://rvm.io/) is Veewee's prefered ruby version manager. 
 
-RVM will allow Veewee to install it's own [gemset](https://rvm.io/gemsets/basics/) and configure it's own ruby version - which keeps Veewee and it's dependancies completely separate from your other projects. Please see https://rvm.io/gemsets/basics/ for details if you are new to the concept of 'gemsets'.
+RVM will allow Veewee to install its own [gemset](https://rvm.io/gemsets/basics/) and configure its own ruby version - which keeps Veewee and its dependancies completely separate from your other projects. Please see https://rvm.io/gemsets/basics/ for details if you are new to the concept of 'gemsets'.
 
 
 ##### Installing RVM
