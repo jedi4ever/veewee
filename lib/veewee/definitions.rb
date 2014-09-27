@@ -1,10 +1,33 @@
-require 'grit'
 require 'veewee/definition'
 require 'veewee/templates'
 require 'veewee/template'
 require 'erb'
 
 module Veewee
+  class << self
+    attr_accessor :git_interface
+  end
+
+  class GitInterface
+    def clone(uri, dst_dir)
+      return ""
+    end
+  end
+
+  dirname = File.dirname(__FILE__)
+  begin
+    begin
+      require dirname + '/gritGitProvider.rb'
+      Veewee.git_interface = Veewee::GritGitProvider
+    rescue LoadError, NameError
+      require dirname + '/rubyGitGitProvider.rb'
+      Veewee.git_interface = Veewee::RubyGitGitProvider
+    end
+  rescue LoadError, NameError
+    env.logger.fatal("No git provider installed. Please install provider with: gem install grit or gem install git")
+    raise Veewee::Error, "No git provider installed. Please install provider with: gem install grit or gem install git"
+  end
+
   class Definitions
 
     attr_accessor :env
@@ -102,8 +125,8 @@ module Veewee
       if (git_template)
         begin
           env.logger.info("Starting git clone #{template_name} #{dst_dir}")
-          g = Grit::Git.new(dst_dir)
-          g.clone({ :timeout => false }, template_name, dst_dir)
+          g = Veewee.git_interface.new
+          g.clone(template_name, dst_dir)
         rescue Exception => ex
           err = "git clone #{template_name} #{dst_dir} failed: #{ex}"
           env.logger.fatal(err)
