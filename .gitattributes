@@ -1,0 +1,2 @@
+#ensures shell scripts aren't broken when checking out on Windows (see issue #805)
+*.sh eol=lf
