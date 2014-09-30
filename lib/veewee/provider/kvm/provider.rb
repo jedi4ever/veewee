@@ -46,7 +46,7 @@ module Veewee
           conn.pools.any? or raise Veewee::Error, "You need at least one (active) storage pool defined in #{Fog.credentials[:libvirt_uri]}."
 
           env.logger.info "Checking availability of the arp utility"
-          shell_exec("arp").status.zero? or raise Veewee::Error, "Could not execute the arp command. This is required to find the IP address of the VM"
+          shell_exec("arp -an").status.zero? or raise Veewee::Error, "Could not execute the arp command. This is required to find the IP address of the VM"
 
         end
 
