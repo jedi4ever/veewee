@@ -20,7 +20,7 @@ Veewee::Session.declare({
     :ssh_login_timeout => "10000000", :ssh_user => "root", :ssh_password => "vagrant", :ssh_key => "",
     :ssh_host_port => "7222", :ssh_guest_port => "22",
     :sudo_cmd => "echo '%p'|sudo -S sh '%f'",
-    :shutdown_cmd => "/bin/halt",
+    :shutdown_cmd => "poweroff",
     :postinstall_files => ["vagrant_key.py", "vnc_enable.sh" ], :postinstall_timeout => 10000,
     :vmfusion => { :vm_options => { 'enable_hypervisor_support' => true,  'download_tools' => false } }
 })
