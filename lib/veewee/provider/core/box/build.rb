@@ -1,3 +1,5 @@
+require 'to_slug'
+
 module Veewee
   module Provider
     module Core
@@ -237,12 +239,15 @@ module Veewee
           # For each kickstart file spinup a webserver and wait for the file to be fetched
           unless kickstartfiles.nil?
             kickstartfiles.each do |kickfile|
-              wait_for_http_request(kickfile,{
-                :port => definition.kickstart_port,
-                :host => definition.kickstart_ip,
-                :timeout => definition.kickstart_timeout,
-                :web_dir => definition.path
-              })
+              wait_for_http_request(
+                File.join(definition.path, kickfile),
+                kickfile.start_with?('/') ? kickfile : '/' + kickfile,
+                {
+                  :port => definition.kickstart_port,
+                  :host => definition.kickstart_ip,
+                  :timeout => definition.kickstart_timeout,
+                }
+              )
             end
           end
         end
