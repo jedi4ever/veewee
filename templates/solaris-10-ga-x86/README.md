@@ -22,17 +22,15 @@
    It also shuts down the box in the process, to allow packaging.
 
 3. Export the basebox and use it freely.
-   
-   To to this, from the definition folder execute (or provide the correct paths to the Vagrantfile.pkg):
-   
+
    ```
-   vagrant package --vagrantfile Vagrantfile.pkg --base 'vagrant-solaris10' --output 'vagrant-solaris10.box'
+   veewee vbox export 'vagrant-solaris10'
    ```
 
    You may find some issues if you run this command from your veewee installation, due to the relationship between vagrant and veewee.
    It's advisable to switch to the system's ruby (`rvm use system`) and running the command directly from the definition folder.
-   
-   
+
+
 #Migration to VMWare
 VirtualBox VMs can easily be migrated to VMWare but, in the case of Solaris 10 (at least), some differences regarding the use of IDE and SCSI render the migrated box unusable.
 

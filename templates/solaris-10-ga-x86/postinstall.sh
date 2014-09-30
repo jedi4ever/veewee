@@ -10,6 +10,10 @@ PATH=/usr/bin:/usr/sbin:$PATH
 export PATH
 
 yes|/usr/sbin/pkgadd -d http://mirror.opencsw.org/opencsw/pkgutil-`uname -p`.pkg all
+
+# Uncomment this and pick a fast mirror from http://mirror.opencsw.org/status/
+# echo "mirror=http://www.grangefields.co.uk/mirrors/csw/testing" >> /etc/opt/csw/pkgutil.conf
+
 /opt/csw/bin/pkgutil -U
 
 # get 'sudo'
@@ -48,7 +52,7 @@ echo "LookupClientHostnames=no" >> /etc/ssh/sshd_config
 #
 ## no solaris2.11 .... mkheaders here ! needs some fixing ??
 ## /opt/csw/gcc4/libexec/gcc/i386-pc-solaris2.10/4.3.3/install-tools/mkheaders
-#/opt/csw/gcc4/libexec/gcc/i386-pc-solaris2.8/4.3.3/install-tools/mkheaders 
+#/opt/csw/gcc4/libexec/gcc/i386-pc-solaris2.8/4.3.3/install-tools/mkheaders
 #
 #/opt/csw/sbin/alternatives --display rbconfig18
 #/opt/csw/sbin/alternatives --set rbconfig18 /opt/csw/lib/ruby/1.8/i386-solaris2.9/rbconfig.rb.gcc4
