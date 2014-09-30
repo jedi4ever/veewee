@@ -4,6 +4,8 @@
 #   basedevel.sh
 #   user.sh
 
+pacman -S --noconfirm --needed base-devel
+
 cd /tmp
 curl 'https://aur.archlinux.org/packages/pa/packer/packer.tar.gz' -o packer.tar.gz
 tar xzf packer.tar.gz
