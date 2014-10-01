@@ -1,6 +1,7 @@
 Veewee::Definition.declare({
   :cpu_count => '1',
   :memory_size=> '2048',
+  :video_memory_size => '32',
   :disk_size => '40000',
   :disk_format => 'VDI',
   :hostiocache => 'off',
@@ -27,5 +28,16 @@ Veewee::Definition.declare({
     "puppet.sh",               # Puppet install from Hashicorp's puppet-boostrap repo
     "fix_user_perms.sh"        # some folders in vagrant's got created as root in the above script
   ],
-  :postinstall_timeout => "10000"
+  :postinstall_timeout => "10000",
+  # For valid `VBoxManage modifyvm` options, see `VBoxManage help modifyvm` or `VBoxManage -h`
+  :virtualbox => { :vm_options => [
+    'accelerate3d' => 'on', # Enable 3D Acceleration
+    'ioapic' => 'on',
+    'pae' => 'on',          # Enable PAE/NX
+    'hwvirtex' => 'on',     # Enable VT-x / AMD-V
+    'chipset' => 'ich9',    # Use ICH9 chipset for motherboard
+    'nic1' => 'nat',        # Force the first nic to be enabled and attached to NAT
+    'firmware' => 'efi',    # Need EFI to boot image
+    'rtcuseutc' => 'on'     # Set hardware clock in UTC
+    ] }
 })
