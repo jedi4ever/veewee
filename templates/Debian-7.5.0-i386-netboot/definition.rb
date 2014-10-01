@@ -4,9 +4,7 @@ Veewee::Definition.declare({
   :disk_size => '10140', :disk_format => 'VDI', :hostiocache => 'off',
   :os_type_id => 'Debian',
   :iso_file => "debian-7.5.0-i386-netinst.iso",
-  :iso_src => "",
-  :iso_download_instructions => "- You need to download this manually as the ISO is no longer directly downloadable.\n"+
-    "Visit http://cdimage.debian.org/cdimage/archive/7.5.0/i386/ and download it via torrent or jigdo",
+  :iso_src => "http://cdimage.debian.org/cdimage/archive/7.5.0/i386/iso-cd/debian-7.5.0-i386-netinst.iso",
   :iso_md5 => "0e6eaacb5a5828473afe90f6df9c8f16",
   :iso_download_timeout => "1000",
   :boot_wait => "10", :boot_cmd_sequence => [
