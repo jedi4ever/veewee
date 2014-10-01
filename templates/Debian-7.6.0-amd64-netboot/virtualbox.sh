@@ -32,4 +32,6 @@ if test -f .vbox_version ; then
 
   rm $VBOX_ISO
 
+  # Symlink vbox guest additions. Fix for https://github.com/mitchellh/vagrant/issues/3341
+  ln -s /opt/VBoxGuestAdditions-$VBOX_VERSION/lib/VBoxGuestAdditions /usr/lib/VBoxGuestAdditions
 fi
