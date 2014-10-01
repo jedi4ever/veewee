@@ -25,4 +25,9 @@ curl -k 'https://raw.github.com/mitchellh/vagrant/master/keys/vagrant.pub' > /Us
 chmod 600 /Users/vagrant/.ssh/authorized_keys
 chown -R vagrant /Users/vagrant/.ssh
 
+# Make zero free space on the drive so veewee can shrink it later with vmware-vdiskmanager
+# References: https://communities.vmware.com/message/2289660
+#             http://www.vmware.com/support/ws45/doc/disks_vdiskmanager_run_ws.html
+cat /dev/zero > wipefile; rm wipefile
+
 exit
