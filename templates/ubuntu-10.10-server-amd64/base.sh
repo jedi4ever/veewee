@@ -1,3 +1,10 @@
+#!/bin/bash
+
+if [ -f .veewee_params ]
+then
+  . .veewee_params
+fi
+
 # Replace all ubuntu mirror with the old-release mirror
 sed -i -e 's@http://.*.ubuntu.com@http://old-releases.ubuntu.com@' /etc/apt/sources.list
 

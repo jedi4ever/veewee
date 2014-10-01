@@ -1,3 +1,10 @@
+#!/bin/bash
+
+if [ -f .veewee_params ]
+then
+  . .veewee_params
+fi
+
 mkdir /home/vagrant/.ssh
 chmod 700 /home/vagrant/.ssh
 cd /home/vagrant/.ssh

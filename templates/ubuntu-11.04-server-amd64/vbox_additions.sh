@@ -1,3 +1,10 @@
+#!/bin/bash
+
+if [ -f .veewee_params ]
+then
+  . .veewee_params
+fi
+
 # Installing the virtualbox guest additions
 if test -e /home/vagrant/.vbox_version; then
 	VBOX_VERSION=$(cat /home/vagrant/.vbox_version)
