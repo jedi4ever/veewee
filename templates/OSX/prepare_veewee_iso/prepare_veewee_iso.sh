@@ -124,6 +124,39 @@ if [ $? -ne 0 ]; then
 	msg_error "Could not mount $ESD on $MNT_ESD"
 	exit 1
 fi
+if [ ! -e "$MNT_ESD/System/Library/CoreServices/SystemVersion.plist" ]; then
+	install_app=$(ls -1 -d "$MNT_ESD/Install OS X"*.app | head -n1)
+	if [ -n "$install_app" -a -d "$install_app" ]; then
+		# This might be an install .app inside a dmg
+		if [ -e "$install_app/Contents/SharedSupport/InstallESD.dmg" ]; then
+			TOPLVL_ESD="$ESD"
+			TOPLVL_MNT_ESD="$MNT_ESD"
+			ESD="$install_app/Contents/SharedSupport/InstallESD.dmg"
+
+			MNT_ESD=`/usr/bin/mktemp -d /tmp/veewee-osx-esd.XXXX`
+			msg_status "Found an 'Install OS X *.app' file: $install_app"
+			msg_status "Attaching to OS X installer image with shadow file.."
+			hdiutil attach "$ESD" -mountpoint "$MNT_ESD" -shadow -nobrowse -owners on 
+			if [ $? -ne 0 ]; then
+				[ ! -e "$ESD" ] && msg_error "Could not find $ESD in $(pwd)"
+				msg_error "Could not mount $ESD on $MNT_ESD"
+				exit 1
+			fi
+			if [ ! -e "$MNT_ESD/System/Library/CoreServices/SystemVersion.plist" ]; then
+				msg_error "Can't determine OSX version.  File not found: $MNT_ESD/System/Library/CoreServices/SystemVersion.plist"
+				exit 1
+			fi
+		else
+			msg_error "Can't locate an InstallESD.dmg in this source location $install_app!"
+		fi
+	else
+		msg_error "Can't determine OSX version.  File not found: $MNT_ESD/System/Library/CoreServices/SystemVersion.plist"
+		hdiutil detach "$MNT_ESD"
+		rm "$ESD.shadow"
+		rm -rf "$MNT_ESD"
+		exit 1
+	fi
+fi
 DMG_OS_VERS=$(/usr/libexec/PlistBuddy -c 'Print :ProductVersion' "$MNT_ESD/System/Library/CoreServices/SystemVersion.plist")
 DMG_OS_VERS_MAJOR=$(echo $DMG_OS_VERS | awk -F "." '{print $2}')
 DMG_OS_BUILD=$(/usr/libexec/PlistBuddy -c 'Print :ProductBuildVersion' "$MNT_ESD/System/Library/CoreServices/SystemVersion.plist")
@@ -131,6 +164,15 @@ OUTPUT_DMG="$OUT_DIR/OSX_InstallESD_${DMG_OS_VERS}_${DMG_OS_BUILD}.dmg"
 if [ -e "$OUTPUT_DMG" ]; then
 	msg_error "Output file $OUTPUT_DMG already exists! We're not going to overwrite it, exiting.."
 	hdiutil detach "$MNT_ESD"
+	if [ -n "$TOPLVL_MNT_ESD" ]; then
+		hdiutil detach "$TOPLVL_MNT_ESD"
+		rm "$TOPLVL_ESD.shadow"
+		rm -rf "$TOPLVL_MNT_ESD"
+		rm -rf "$MNT_ESD"
+	else
+		rm "$ESD.shadow"
+		rm -rf "$MNT_ESD"
+	fi
 	exit 1
 fi
 
@@ -262,8 +304,15 @@ hdiutil detach "$MNT_ESD"
 
 msg_status "Converting to final output file.."
 hdiutil convert -format UDZO -o "$OUTPUT_DMG" -shadow "$ESD.shadow" "$ESD"
-rm "$ESD.shadow"
-rm -rf "$MNT_ESD"
+if [ -z "$TOPLVL_ESD" ]; then
+	rm "$ESD.shadow"
+	rm -rf "$MNT_ESD"
+else
+	hdiutil detach "$TOPLVL_MNT_ESD"
+	rm "$TOPLVL_ESD.shadow"
+	rm -rf "$TOPLVL_MNT_ESD"
+	rm -rf "$MNT_ESD"
+fi
 
 msg_status "Fixing permissions.."
 chown -R $VEEWEE_UID:$VEEWEE_GID \
