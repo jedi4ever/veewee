@@ -1,2 +1,4 @@
 # Install Chef
-curl -L https://www.opscode.com/chef/install.sh | bash
+gem install --no-ri --no-rdoc mime-types -v '1.16'
+gem install --no-ri --no-rdoc chef
+
