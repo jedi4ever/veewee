@@ -1,5 +1,7 @@
 require 'veewee/provider/core/helper/ssh'
 require 'shellwords'
+require 'pathname'
+
 module Veewee
   module Provider
     module  Core
@@ -37,13 +39,17 @@ module Veewee
             "-p #{ssh_options[:port]}",
             "-o UserKnownHostsFile=/dev/null",
             "-t -o StrictHostKeyChecking=no",
-            "-o IdentitiesOnly=yes",
             "-o VerifyHostKeyDNS=no"
           ]
-          if !(definition.ssh_key.nil? ||  definition.ssh_key.empty?)
-            # Filenames of SSH keys are relative to their definition
-            ssh_key = File.join(definition.path, definition.ssh_key)
-            command_options << "-i #{ssh_key}"
+          if definition.ssh_key
+            command_options << "-o IdentitiesOnly=yes"
+            ssh_keys = Array(ssh_key)
+            ssh_keys.each do |ssh_keys|
+              # Filenames of SSH keys are relative to their definition
+              ssh_key = Pathname.new(definition.ssh_key)
+              ssh_key = File.join(definition.path, ssh_key) if ssh_key.relative?
+              command_options << "-i #{ssh_key}"
+            end
           end
           commandline_options="#{command_options.join(" ")} ".strip
 
