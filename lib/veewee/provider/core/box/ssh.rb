@@ -25,7 +25,7 @@ module Veewee
             end
           else
             ssh_options={:user => definition.ssh_user,:password => definition.ssh_password, :port => definition.ssh_host_port}
-            ssh_options[:keys] = Array(definition.ssh_key) if definition.ssh_key
+            ssh_options[:keys] = ssh_key_to_a(definition.ssh_key) if definition.ssh_key
             ssh_execute(host_ip, command, ssh_options)
           end
 

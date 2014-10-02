@@ -26,6 +26,13 @@ end
 
 module Veewee::Provider::Core::Helper::Ssh
 
+  def ssh_key_to_a(ssh_key)
+    case ssh_key
+    when "" then []
+    else Array(ssh_key)
+    end
+  end
+
   # nonblocking ssh connection check
   def tcp_test_ssh(hostname, port, timeout = 2)
 
