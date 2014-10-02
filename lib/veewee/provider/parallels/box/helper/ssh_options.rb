@@ -11,6 +11,7 @@ module Veewee
             :password => definition.ssh_password,
             :timeout => definition.ssh_login_timeout.to_i
           }
+          ssh_options[:keys] = Array(definition.ssh_keys) if definition.ssh_keys
           return ssh_options
         end
 
