@@ -26,6 +26,17 @@ end
 
 module Veewee::Provider::Core::Helper::Ssh
 
+  def build_ssh_options
+    ssh_options={
+      :user => definition.ssh_user,
+      :port => 22,
+      :password => definition.ssh_password,
+      :timeout => definition.ssh_login_timeout.to_i
+    }
+    ssh_options[:keys] = ssh_key_to_a(definition.ssh_key) if definition.ssh_key
+    return ssh_options
+  end
+
   def ssh_key_to_a(ssh_key)
     case ssh_key
     when "" then []
