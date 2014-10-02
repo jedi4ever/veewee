@@ -4,23 +4,16 @@ module Veewee
       module BoxCommand
 
         def ssh_options
-          port=definition.ssh_host_port
-          if self.exists?
-            forward=self.forwarding("guestssh")
-            unless forward.nil?
-              port=forward[:host_port]
+          build_ssh_options.tap do |options|
+            port = definition.ssh_host_port
+            if self.exists?
+              forward=self.forwarding("guestssh")
+              unless forward.nil?
+                port=forward[:host_port]
+              end
             end
+            options[:port] = port
           end
-
-          ssh_options={
-            :user => definition.ssh_user,
-            :port => port,
-            :password => definition.ssh_password,
-            :timeout => definition.ssh_login_timeout.to_i
-          }
-          ssh_options[:keys] = ssh_key_to_a(definition.ssh_key) if definition.ssh_key
-          return ssh_options
-
         end
 
       end
