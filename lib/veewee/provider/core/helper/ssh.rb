@@ -209,6 +209,7 @@ module Veewee::Provider::Core::Helper::Ssh
       :auth_methods => %w[ password publickey keyboard-interactive ],
       :paranoid => false
     }.merge(options)
+    options=Hash[ options.select { |key, value| Net::SSH::VALID_OPTIONS.include?(key) } ]
     Net::SSH.start( host, options[:user], options ) do |ssh|
       yield ssh
     end
