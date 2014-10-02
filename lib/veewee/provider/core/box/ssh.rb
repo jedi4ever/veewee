@@ -54,7 +54,7 @@ module Veewee
           ]
           if definition.ssh_key
             command_options << "-o IdentitiesOnly=yes"
-            ssh_keys = Array(ssh_key)
+            ssh_keys = ssh_key_to_a(ssh_key)
             ssh_keys.each do |ssh_keys|
               # Filenames of SSH keys are relative to their definition
               ssh_key = Pathname.new(definition.ssh_key)
