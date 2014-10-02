@@ -192,6 +192,31 @@ Each provider _can_ take options that are specific the provider; more details wi
 
 This box will have `pae` and `ioapic` enabled with VirtualBox, and will use the `brlxc0` bridge with KVM (on libvirt).
 
+## Using Yaml for storing configuration
+
+You can store definitions in `*.yml` files, loading them is as easy as:
+
+    Veewee::Definition.declare_yaml(file_name1, filename2 ...)
+
+For example given those 3 files:
+
+    .
+    ├── definitions
+    │   └── myubuntubox
+    │       ├── definition.rb
+    │       ├── definition.yml
+    │       ├── 64bit.yml
+    │       ├── 32bit.yml
+    │       └── ...
+
+And `definition.rb` with
+
+    Veewee::Definition.declare_yaml('definition.yml', '64bit.yml')
+
+Then veewee will read first `definition.yml` and `64bit.yml`, this way
+it is possible to mix multiple possible combinations of systems,
+versions, and architectures. All the configurations available in
+`declare` are also valid in `*yml` files.
 
 ## Up Next
 
