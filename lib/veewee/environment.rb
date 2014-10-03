@@ -26,10 +26,10 @@ module Veewee
     # - :validation_dir  : directory that contains a list of validation tests, that can be run after building a box
     # - :tmp_dir         : directory that will be used for creating temporary files, needs to be rewritable, default to $environment_dir/tmp
     attr_accessor :template_path
-    attr_accessor :definition_dir
-    attr_accessor :iso_dir
+    attr_writer   :definition_dir
+    attr_writer   :iso_dir
     attr_accessor :validation_dir
-    attr_accessor :tmp_dir
+    attr_writer   :tmp_dir
 
     # The {UI} Object to communicate with the outside world
     attr_writer :ui
@@ -66,11 +66,8 @@ module Veewee
       defaults = {
         :cwd => cwd,
         :veewee_filename => "Veeweefile",
-        :definition_dir => File.join(cwd, "definitions"),
         :template_path => [File.expand_path(File.join(File.dirname(__FILE__), "..", "..", 'templates')), "templates"],
-        :iso_dir => File.join(cwd, "iso"),
         :validation_dir => File.join(File.expand_path(File.join(File.dirname(__FILE__), "..", "..")), "validation"),
-        :tmp_dir => File.join(cwd, "tmp")
       }
 
       options = defaults.merge(options)
@@ -105,6 +102,16 @@ module Veewee
       @ostypes = YAML.load_file(yamlfile)
 
       return self
+    end
+
+    def definition_dir
+      @definition_dir ||= File.join(cwd, "definitions")
+    end
+    def iso_dir
+      @iso_dir ||= File.join(cwd, "iso")
+    end
+    def tmp_dir
+      tmp_dir ||= File.join(cwd, "tmp")
     end
 
     def self.workdir
