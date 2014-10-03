@@ -58,6 +58,7 @@ module Veewee
 
           #return true if host is excluded from proxy via no_proxy env var, false otherwise
           def no_proxy? host
+            return false if host.nil?
             @no_proxy ||= (ENV['NO_PROXY'] || ENV['no_proxy'] || 'localhost, 127.0.0.1').split(/\s*,\s*/)
             @no_proxy.each do |host_addr|
               return true if host.match(Regexp.quote(host_addr)+'$')
