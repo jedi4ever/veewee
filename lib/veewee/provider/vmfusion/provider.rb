@@ -22,18 +22,16 @@ module Veewee
 
         def fusion_version
           # We ask the system profiler for all installed software
-          shell_results = IO.popen("system_profiler SPApplicationsDataType",
-                                   :external_encoding => Encoding::UTF_8){ |p| p.readlines }
-
+          shell_results = shell_exec("system_profiler SPApplicationsDataType", :external_encoding => Encoding::UTF_8)
 
           env.logger.info("Checking version by querying the system_profiler")
-          env.logger.debug(shell_results.join(''))
+          env.logger.debug(shell_results.stdout)
 
-          if shell_results.empty?
+          if shell_results.stdout == ""
             ui.warn "Could not detect the exact version of vmware. assuming 5.1"
             version = "5.1"
           else
-            version = shell_results.join('').split(/VMware/)[1].split(/\n/)[2].split(/:/)[1].strip
+            version = shell_results.stdout.split(/VMware/)[1].split(/\n/)[2].split(/:/)[1].strip
           end
 
           return version
