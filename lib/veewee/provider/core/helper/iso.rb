@@ -31,15 +31,15 @@ module Veewee
             pbar = nil
             uri = URI.parse(url)
             uri.open(
-              :content_length_proc => lambda {|t|
-              if t && 0 < t
-                pbar = ProgressBar.new("Fetching file", t)
-                pbar.file_transfer_mode
-              end
-            },
+              :content_length_proc => lambda { |t|
+                if t && 0 < t
+                  pbar = ProgressBar.new("Fetching file", t)
+                  pbar.file_transfer_mode
+                end
+              },
               :progress_proc => lambda {|s|
-              pbar.set s if pbar
-            },
+                pbar.set s if pbar
+              },
               #consider proxy env vars only if host is not excluded
               :proxy => !no_proxy?(uri.host)
             ) { |src|
