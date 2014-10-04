@@ -5,6 +5,7 @@ Gem::Specification.new do |s|
   s.name        = "veewee"
   s.version     = Veewee::VERSION
   s.platform    = Gem::Platform::RUBY
+  s.license     = 'MIT'
   s.authors     = ["Patrick Debois"]
   s.email       = ["patrick.debois@jedi.be"]
   s.homepage    = "http://github.com/jedi4ever/veewee/"
