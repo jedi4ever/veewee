@@ -92,9 +92,9 @@ module Veewee
       #
       def self.register(options = {})
         # self refers to the class object of the provider subclass
-        self.class_variable_set(:@@command, options[:command])
-        self.class_variable_set(:@@description, options[:description])
-        self.class_variable_set(:@@provider, options[:provider])
+        self.send(:class_variable_set, :@@command,     options[:command]    )
+        self.send(:class_variable_set, :@@description, options[:description])
+        self.send(:class_variable_set, :@@provider,    options[:provider]   )
         CLI.register(self, options[:command], options[:command], options[:description], options[:opts])
       end
 
