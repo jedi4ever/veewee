@@ -175,7 +175,7 @@ module Veewee
         def optimize_disk
           env.ui.info "Optimizing Disk"
           path_to_hdd = File.join read_settings.fetch("Home"), "harddisk.hdd"
-          optimize_command = "#{@prldisktool} compact --buildmap --hdd #{path_to_hdd}"
+          optimize_command = "#{@prldisktool} compact --hdd #{path_to_hdd}"
           shell_exec optimize_command
         end
       end #Module
