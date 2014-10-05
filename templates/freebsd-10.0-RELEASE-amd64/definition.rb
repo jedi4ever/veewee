@@ -29,20 +29,25 @@ Veewee::Definition.declare({
     '<Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait>',
     '<Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait>',
     '<Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait>',
-    '<Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait>',
-    '<Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait>',
-    '<Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait>',
     'root',
+    '<Enter>',
     '<Enter>',
     'dhclient em0',
     '<Enter><Wait><Wait><Wait>',
     'fetch -o /tmp/install.sh http://%IP%:%PORT%/install.sh && chmod +x /tmp/install.sh && /tmp/install.sh %NAME%<Enter>'
   ],
-:kickstart_port => "7122", :kickstart_timeout => "10000", :kickstart_file => "install.sh",
-  :ssh_login_timeout => "10000", :ssh_user => "vagrant", :ssh_password => "vagrant", :ssh_key => "",
-  :ssh_host_port => "7222", :ssh_guest_port => "22",
-  :sudo_cmd => "cat '%f' | su -",
+  :kickstart_port => "7122",
+  :kickstart_timeout => "25000",
+  :kickstart_file => "install.sh",
+  :ssh_login_timeout => "25000",
+  :ssh_user => "vagrant",
+  :ssh_password => "vagrant",
+  :ssh_key => "",
+  :ssh_host_port => "7222",
+  :ssh_guest_port => "22",
+  :sudo_cmd => "sudo /bin/sh '%f'",
   :shutdown_cmd => "shutdown -p now",
-  :postinstall_files => [ "postinstall.csh"], :postinstall_timeout => "10000"
-
+  :postinstall_files => [ "postinstall.sh"],
+  :postinstall_timeout => "25000"
 })
+
