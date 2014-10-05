@@ -74,7 +74,7 @@ module Veewee
             until thestring.length == 0
               nospecial=true;
               @@special_keys.keys.each { |key|
-                if thestring.start_with?(key)
+                if thestring.match(/^#{key}/i)
                   #take thestring
                   #check if it starts with a special key + pop special string
                   keycodes=keycodes+@@special_keys[key]+' ';
