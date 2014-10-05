@@ -29,11 +29,13 @@ module Veewee
             # A workaround is to send the scancodes one-by-one.
             codes=""
             for keycode in keycodes.split(' ') do
-              unless keycode=="wait"
-                send_keycode(keycode)
-                sleep 0.01
-              else
-                sleep 1
+              case keycode
+                when 'wait'   then sleep 1
+                when 'wait5'  then sleep 5
+                when 'wait10' then sleep 10
+                else
+                  send_keycode(keycode)
+                  sleep 0.01
               end
             end
             #sleep after each sequence (needs to be param)
