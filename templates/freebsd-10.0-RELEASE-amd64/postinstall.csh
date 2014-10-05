@@ -29,7 +29,7 @@ cd /usr/ports/ports-mgmt/pkg
 make -DBATCH install
 
 # Install binary packages versions of dependencies
-pkg install -y sudo bash chef puppet portupgrade perl5 kBuild yasm
+pkg install -y sudo bash rubygem-chef puppet portupgrade perl5 kBuild yasm
 
 cat >> /etc/make.conf << EOT
 WITH_ETCSYMLINK="YES"
@@ -85,6 +85,8 @@ echo 'vboxdrv_load="YES"' >> /boot/loader.conf
 echo 'vboxnet_enable="YES"' >> /etc/rc.conf
 echo 'vboxguest_enable="YES"' >> /etc/rc.conf
 echo 'vboxservice_enable="YES"' >> /etc/rc.conf
+
+echo 'hostname="vagrant"' >> /etc/rc.conf
 
 # sed -i.bak -Ee 's|/dev/ada?|/dev/vtbd|' /etc/fstab
 echo 'ifconfig_vtnet0_name="em0"' >> /etc/rc.conf
