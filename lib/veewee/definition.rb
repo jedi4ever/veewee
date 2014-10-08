@@ -127,7 +127,13 @@ module Veewee
 
     def declare_yaml(*files)
       files.each do |file|
-        declare(YAML.load_file(file))
+        if Hash === file
+          env.logger.info("Reading hash options")
+        else
+          env.logger.info("Reading yaml file: #{file}")
+          file = YAML.load_file(file)
+        end
+        declare(file)
       end
     end
 

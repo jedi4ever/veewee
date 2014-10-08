@@ -196,7 +196,7 @@ This box will have `pae` and `ioapic` enabled with VirtualBox, and will use the 
 
 You can store definitions in `*.yml` files, loading them is as easy as:
 
-    Veewee::Definition.declare_yaml(file_name1, filename2 ...)
+    Veewee::Definition.declare_yaml(filename1, filename2 ...)
 
 For example given those 3 files:
 
@@ -217,6 +217,17 @@ Then veewee will read first `definition.yml` and `64bit.yml`, this way
 it is possible to mix multiple possible combinations of systems,
 versions, and architectures. All the configurations available in
 `declare` are also valid in `*yml` files.
+
+You can also mix options with file names like:
+
+    Veewee::Definition.declare_yaml(
+      {:cpu_count => '1'},
+      filename1,
+      {:ssh_user => 'vagrant'},
+      filename2,
+      ...
+    )
+
 
 ## Up Next
 
