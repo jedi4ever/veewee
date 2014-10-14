@@ -15,7 +15,7 @@ module Veewee
 
           if (options[:interactive]==true)
             unless host_ip.nil? || host_ip==""
-              ssh_command="ssh #{ssh_commandline_options(options)} #{host_ip} #{Shellwords.escape command}"
+              ssh_command="ssh #{ssh_commandline_options(options)} #{host_ip} #{Shellwords.escape(command) if command}"
 
               fg_exec(ssh_command,options)
 
@@ -43,10 +43,10 @@ module Veewee
           ]
           if definition.ssh_key
             command_options << "-o IdentitiesOnly=yes"
-            ssh_keys = ssh_key_to_a(ssh_key)
+            ssh_keys = ssh_key_to_a(definition.ssh_key)
             ssh_keys.each do |ssh_keys|
               # Filenames of SSH keys are relative to their definition
-              ssh_key = Pathname.new(definition.ssh_key)
+              ssh_key = Pathname.new(ssh_keys)
               ssh_key = File.join(definition.path, ssh_key) if ssh_key.relative?
               command_options << "-i #{ssh_key}"
             end
