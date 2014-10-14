@@ -15,8 +15,7 @@ module Veewee
 
           if (options[:interactive]==true)
             unless host_ip.nil? || host_ip==""
-              raise Veewee::Error,"No ssh command was given" if command.nil?
-              ssh_command="ssh #{ssh_commandline_options(options)} #{host_ip} #{Shellwords.escape command}"
+              ssh_command="ssh #{ssh_commandline_options(options)} #{host_ip} #{Shellwords.escape(command) if command}"
 
               fg_exec(ssh_command,options)
 
