@@ -37,7 +37,8 @@
 
             <UserData>
               <!-- Product Key from http://technet.microsoft.com/en-us/library/ff793406.aspx -->
-                <ProductKey>W3GGN-FT8W3-Y4M27-J84CP-Q3VJ9
+                <ProductKey>
+                    <Key>W3GGN-FT8W3-Y4M27-J84CP-Q3VJ9</Key>
                     <WillShowUI>Never</WillShowUI>
                 </ProductKey>
 
