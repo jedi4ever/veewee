@@ -12,26 +12,25 @@ module Veewee
       def vnc_type(sequence,host,display=20)
         counter=0
         env.logger.info "Opening VNC #{host} on display #{display}"
-        vnc=Net::VNC.open("#{host}:#{display}",{:wait => 0.001})
-        sequence.each { |s|
-          counter=counter+1
+        Net::VNC.open("#{host}:#{display}",{:wait => 0.001}) do |vnc|
+          sequence.each { |s|
+            counter=counter+1
 
-          ui.info "Typing:[#{counter}]: "+s
+            ui.info "Typing:[#{counter}]: "+s
 
-          keycodes=string_to_vnccode(s)
+            keycodes=string_to_vnccode(s)
 
-            keycodes.each do |keycode|
-              if keycode==:wait
-                sleep 1
-              else
-                send_vnc_keycode(vnc,keycode)
+              keycodes.each do |keycode|
+                if keycode==:wait
+                  sleep 1
+                else
+                  send_vnc_keycode(vnc,keycode)
+                end
               end
-            end
-        }
-        vnc.close
-        ui.info "Done typing."
-        ui.info ""
-
+          }
+          ui.info "Done typing."
+          ui.info ""
+        end
       end
 
       def send_vnc_keycode(vnc,keycode)
@@ -48,7 +47,7 @@ module Veewee
 
       def string_to_vnccode(thestring)
 
-	# https://github.com/aquasync/ruby-vnc/blob/master/data/keys.yaml
+  # https://github.com/aquasync/ruby-vnc/blob/master/data/keys.yaml
 
         special=Hash.new
         # Specific veewee
