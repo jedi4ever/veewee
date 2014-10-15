@@ -72,10 +72,12 @@ module Veewee
           })
 
           # Type the boot sequence
+          t =
           Thread.new do
             self.console_type(boot_sequence)
             run_hook(:after_boot_sequence)
           end
+          t.abort_on_exception = true
 
           self.handle_kickstart(options)
         end
