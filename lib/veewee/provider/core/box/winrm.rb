@@ -31,27 +31,6 @@ module Veewee
 
         end
 
-        private
-        def winrm_options(options)
-
-          command_options = [
-            #"-q", #Suppress warning messages
-            #            "-T", #Pseudo-terminal will not be allocated because stdin is not a terminal.
-            "-p #{winrm_options[:port]}",
-            "-o UserKnownHostsFile=/dev/null",
-            "-t -o StrictHostKeyChecking=no",
-            "-o IdentitiesOnly=yes",
-            "-o VerifyHostKeyDNS=no"
-          ]
-          if !(definition.winrm_key.nil? ||  definition.winrm_key.length!="")
-            command_options << "-i #{definition.winrm_key}"
-          end
-          commandline_options="#{command_options.join(" ")} ".strip
-
-          user_option=definition.winrm_user.nil? ? "" : "-l #{definition.winrm_user}"
-
-          return "#{commandline_options} #{user_option}"
-        end
       end # Module
     end # Module
   end # Module

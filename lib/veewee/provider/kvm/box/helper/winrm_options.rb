@@ -1,6 +1,6 @@
 module Veewee
   module Provider
-    module Vmfusion
+    module Kvm
       module BoxCommand
 
         def winrm_options
