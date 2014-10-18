@@ -18,12 +18,11 @@ Veewee::Session.declare({
     :iso_download_timeout => "1000",
 
     :cpu_count => '1',
-    :memory_size=> '384', 
+    :memory_size=> '384',
     :disk_size => '20280', :disk_format => 'VDI', :hostiocache => 'off',
 
 
     #:kickstart_port => "7122",
-    #:kickstart_ip => self.local_ip, we could set this manually, I wish we could push this to the 
     #:kickstart_timeout => 1000,
     #:kickstart_file => ["VBoxWindowsAdditions-amd64.exe"],
 
@@ -38,7 +37,7 @@ Veewee::Session.declare({
     :boot_wait => "50",
     # after 40 seconds, hit these keys to not enter a product key and fully automate the install
     # if your machine is slower it may take more time
-    :boot_cmd_sequence => [ 
+    :boot_cmd_sequence => [
       '<Tab><Tab><Spacebar>',
       '<Tab><Tab><Tab><Spacebar>',
       '<Tab><Spacebar>'
@@ -46,7 +45,7 @@ Veewee::Session.declare({
 
     :ssh_login_timeout => "10000",
     # Actively attempt to ssh in for 10000 seconds
-    :ssh_user => "vagrant", :ssh_password => "vagrant", :ssh_key => "", 
+    :ssh_user => "vagrant", :ssh_password => "vagrant", :ssh_key => "",
     :ssh_host_port => "7233", :ssh_guest_port => "22",
     # And run postinstall.sh for up to 10000 seconds
     :postinstall_timeout => "10000",

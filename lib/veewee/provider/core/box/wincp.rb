@@ -32,11 +32,10 @@ module Veewee
               urlpath,
               {
                 :port => definition.kickstart_port,
-                :host => definition.kickstart_ip,
                 :timeout => definition.kickstart_timeout,
               }
           )
-          
+
           begin
             self.when_winrm_login_works(self.ip_address,winrm_options.merge(options)) do
               env.ui.info "Going to try and copy #{localfile} to #{remotefile.inspect}"

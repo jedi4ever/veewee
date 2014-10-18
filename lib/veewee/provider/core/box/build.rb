@@ -223,34 +223,30 @@ module Veewee
         # It requires a definition to find all the necessary information
         def handle_kickstart(options)
 
-          # Handling the kickstart by web
-          kickstartfiles=definition.kickstart_file
-
-          if kickstartfiles.nil? || kickstartfiles.length == 0
-            env.ui.info "Skipping webserver as no kickstartfile was specified"
-          else
-            env.ui.info "Starting a webserver #{definition.kickstart_ip}:#{definition.kickstart_port}\n"
+          case definition.kickstart_file
+          when Array  then kickstartfiles = definition.kickstart_file
+          when String then kickstartfiles = definition.kickstartfiles.split
+          when nil    then kickstartfiles = []
+          else raise "Do not know how to handle kickstart_file: #{kickstart_file.inspect}"
           end
 
-          # Check if the kickstart is an array or a single string
-          if kickstartfiles.is_a?(String)
-            # Let's turn it into an array
-            kickstartfiles=kickstartfiles.split
+          if kickstartfiles.empty?
+            env.ui.info "Skipping webserver as no kickstartfile was specified"
+          else
+            env.ui.info "Starting a webserver #{host_ip_as_seen_by_guest}:#{definition.kickstart_port}, check your firewall if nothing happens\n"
+            timeouts = Array(definition.kickstart_timeout)
           end
 
           # For each kickstart file spinup a webserver and wait for the file to be fetched
-          unless kickstartfiles.nil?
-            kickstartfiles.each do |kickfile|
-              wait_for_http_request(
-                File.join(definition.path, kickfile),
-                kickfile.start_with?('/') ? kickfile : '/' + kickfile,
-                {
-                  :port => definition.kickstart_port,
-                  :host => definition.kickstart_ip,
-                  :timeout => definition.kickstart_timeout,
-                }
-              )
-            end
+          kickstartfiles.each_with_index do |kickfile, index|
+            wait_for_http_request(
+              File.join(definition.path, kickfile),
+              kickfile.start_with?('/') ? kickfile : '/' + kickfile,
+              {
+                :port => definition.kickstart_port,
+                :timeout => timeouts.fetch(index, timeouts.last), # get the matching kickfile timeout or the last defined
+              }
+            )
           end
         end
 
