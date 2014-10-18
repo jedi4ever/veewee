@@ -40,7 +40,7 @@ Veewee::Session.declare({
 
 
     #:kickstart_port => "7122",
-    #:kickstart_timeout => 1000,
+    #:kickstart_timeout => 300,
     #:kickstart_file => ["VBoxWindowsAdditions-amd64.exe"],
 
     :floppy_files => [

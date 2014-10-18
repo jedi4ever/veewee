@@ -14,7 +14,7 @@ Veewee::Session.declare({
   :boot_wait => "15",
   :boot_cmd_sequence => [ '<Tab> text ks=http://%IP%:%PORT%/ks.cfg<Enter>' ],
   :kickstart_port => "7122",
-  :kickstart_timeout => 10000,
+  :kickstart_timeout => 300,
   :kickstart_file => "ks.cfg",
   :ssh_login_timeout => "100",
   :ssh_user => "vagrant",

@@ -8,7 +8,7 @@ Veewee::Definition.declare({
   :boot_wait => "10", :boot_cmd_sequence => [
     'linux text ks=http://%IP%:%PORT%/ks.cfg<Enter>'
   ],
-  :kickstart_port => "7122", :kickstart_timeout => 10000, :kickstart_file => "ks.cfg",
+  :kickstart_port => "7122", :kickstart_timeout => 300, :kickstart_file => "ks.cfg",
   :ssh_login_timeout => "10000", :ssh_user => "vagrant", :ssh_password => "vagrant", :ssh_key => "",
   :ssh_host_port => "7222", :ssh_guest_port => "22",
   :sudo_cmd => "echo '%p'|sudo -S sh '%f'",

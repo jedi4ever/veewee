@@ -55,7 +55,7 @@ Veewee::Definition.declare({
   :iso_download_timeout => "1000",
   :boot_wait         => "10",
   :kickstart_port    => "7122",
-  :kickstart_timeout => "10000",
+  :kickstart_timeout => "300",
   :kickstart_file    => ["autoinst.xml", "autoinst.xml"],
   :ssh_login_timeout => "10000",
   :ssh_user          => "root",

@@ -58,25 +58,25 @@ module Veewee
             fn = test(?e, '/dev/null') ? '/dev/null' : 'NUL:'
             webrick_logger = WEBrick::Log.new(fn, WEBrick::Log::INFO)
 
-            timeout = (options[:timeout] || 20).to_i
+            timeout = options[:timeout] || 60
+            server  = nil
             Timeout.timeout(timeout) do
-              @server =
+              server =
               ::WEBrick::HTTPServer.new(
                 :Port => options[:port],
                 :Logger => webrick_logger,
                 :AccessLog => webrick_logger
               )
               env.logger.debug("mounting file #{urlname}")
-              @server.mount("#{urlname}", Veewee::Provider::Core::Helper::Servlet::FileServlet, filename, ui, options[:threaded])
+              server.mount("#{urlname}", Veewee::Provider::Core::Helper::Servlet::FileServlet, filename, ui, options[:threaded])
               trap("INT"){
-                @server.shutdown
+                server.shutdown
                 ui.info "Stopping webserver"
                 exit
               }
             end
-            @server = nil
           rescue Timeout::Error
-            @server.shutdown unless @server.nil?
+            server.shutdown unless server.nil?
             raise "File #{filename.inspect} was not requested in #{timeout}seconds, are you using firewall blocking connections to port: #{options[:port]}?"
           end
 

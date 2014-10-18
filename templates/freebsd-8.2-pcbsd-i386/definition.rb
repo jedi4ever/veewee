@@ -23,7 +23,7 @@ Veewee::Definition.declare({
     'echo "Hope i got the file";/usr/PCBSD/pc-sysinstall/pc-sysinstall -c /root/pcinstall.fbg.cfg<Enter>',
     'reboot<Enter>'
   ],
-  :kickstart_port => "7122", :kickstart_timeout => "10000", :kickstart_file => "pcinstall.fbg.cfg",
+  :kickstart_port => "7122", :kickstart_timeout => "300", :kickstart_file => "pcinstall.fbg.cfg",
   :ssh_login_timeout => "10000", :ssh_user => "vagrant", :ssh_password => "vagrant", :ssh_key => "",
   :ssh_host_port => "7222", :ssh_guest_port => "22",
   :sudo_cmd => "cat '%f'|su -",

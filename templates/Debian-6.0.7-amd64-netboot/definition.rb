@@ -26,7 +26,7 @@ Veewee::Definition.declare({
     '<Enter>'
   ],
   :kickstart_port => "7122",
-  :kickstart_timeout => "10000",
+  :kickstart_timeout => "300",
   :kickstart_file => "preseed.cfg",
   :ssh_login_timeout => "10000",
   :ssh_user => "vagrant",

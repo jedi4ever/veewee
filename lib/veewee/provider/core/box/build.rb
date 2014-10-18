@@ -234,7 +234,7 @@ module Veewee
             env.ui.info "Skipping webserver as no kickstartfile was specified"
           else
             env.ui.info "Starting a webserver #{host_ip_as_seen_by_guest}:#{definition.kickstart_port}, check your firewall if nothing happens\n"
-            timeouts = Array(definition.kickstart_timeout)
+            timeouts = Array(definition.kickstart_timeout).map(&:to_i)
           end
 
           # For each kickstart file spinup a webserver and wait for the file to be fetched

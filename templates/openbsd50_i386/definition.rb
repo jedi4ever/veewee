@@ -75,7 +75,7 @@ Veewee::Session.declare({
    'no<Enter><Wait>',
    'reboot<Enter>'
   ],
-  :kickstart_port => "7122", :kickstart_timeout => "10000", :kickstart_file => "",
+  :kickstart_port => "7122", :kickstart_timeout => "300", :kickstart_file => "",
   :ssh_login_timeout => "10000", :ssh_user => "root", :ssh_password => "vagrant", :ssh_key => "",
   :ssh_host_port => "7222", :ssh_guest_port => "22",
   :sudo_cmd => "sh '%f'",

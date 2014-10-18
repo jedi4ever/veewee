@@ -15,7 +15,7 @@ Veewee::Session.declare({
     'keyboard-configuration/layout=USA keyboard-configuration/variant=USA console-setup/ask_detect=false ',
     'initrd=/install/initrd.gz -- <Enter>'
   ],
-  :kickstart_port => "7122", :kickstart_timeout => "10000", :kickstart_file => "preseed.cfg",
+  :kickstart_port => "7122", :kickstart_timeout => "300", :kickstart_file => "preseed.cfg",
   :ssh_login_timeout => "10000", :ssh_user => "vagrant", :ssh_password => "vagrant", :ssh_key => "",
   :ssh_host_port => "7222", :ssh_guest_port => "22",
   :sudo_cmd => "echo '%p'|sudo -S sh '%f'",

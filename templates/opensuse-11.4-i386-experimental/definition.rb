@@ -20,7 +20,7 @@ Veewee::Definition.declare({
     #'initrd=/install/initrd.gz -- <Enter>'
     '<Enter>'
    ],
-  :kickstart_port => "7122", :kickstart_timeout => "10000", 
+  :kickstart_port => "7122", :kickstart_timeout => "300", 
   #We need this twice, as it is read twice
   :kickstart_file => ["autoinst.xml","autoinst.xml"],
   :ssh_login_timeout => "10000", :ssh_user => "vagrant", :ssh_password => "vagrant", :ssh_key => "",

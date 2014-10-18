@@ -16,7 +16,7 @@ Veewee::Session.declare({
     ' textmode=1',
     '<Enter>'
    ],
-  :kickstart_port => "7122", :kickstart_timeout => "10000",
+  :kickstart_port => "7122", :kickstart_timeout => "300",
   :kickstart_file => ["autoinst_en.xml", "autoinst_en.xml"],
   # disable prev line and enable next line to install with german settings
   #:kickstart_file => ["autoinst_de.xml", "autoinst_de.xml"],
