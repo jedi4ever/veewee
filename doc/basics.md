@@ -14,8 +14,8 @@ Each template folder name follows a naming scheme to help you choosing the right
 For example, the template for a Ubuntu 12.10 server (i386) basebox looks like this:
 
     ubuntu-12.10-server-i386[-netboot]
-    ^       ^           ^     ^ 
-    |       |           |     +----- install flavor                        
+    ^       ^           ^     ^
+    |       |           |     +----- install flavor
     |       |           +----- architecture
     |       +----- version
     +----- OS name
@@ -97,9 +97,9 @@ Or you can remove the folder under `definitions`:
 
 ## Manage ISO files
 
-The distro ISOs (also called *disk images*) provide all files needed to install the OS. This file is essential for starting the installation process. 
+The distro ISOs (also called *disk images*) provide all files needed to install the OS. This file is essential for starting the installation process.
 
-If you already have an `.iso` file for the desired distribution on your disk, put it inside the `iso/` directory and make sure `definition.rb` is referencing the correct file. 
+If you already have an `.iso` file for the desired distribution on your disk, put it inside the `iso/` directory and make sure `definition.rb` is referencing the correct file.
 
 If an expected ISO is not found in the `iso/` directory, Veewee will ask you to download the ISO file from the web. Depending on your internet connection fetching an ISO file can take a while.
 
@@ -113,7 +113,7 @@ In order to build the defined box, execute this subcommand:
 The `build` subcommand can take the following optional flags:
 
 Flag Option                     | Description
---------------------------------|-------------    
+--------------------------------|-------------
 -f --force                      | overwrites if already exists
 -a --auto                       | automatically downloads the ISO without asking
 -n --nogui                      | builds in the background rather than opening a VM GUI and building in the GUI window
@@ -133,7 +133,7 @@ The `build` subcommand will run the following routines behind the scenes:
 * Mount the ISO file `:iso_file`
 * Boot up the machine and wait for `:boot_time`
 * Send the keystrokes in `:boot_cmd_sequence`
-* Start up a webserver on `:kickstart_port` to wait for a request from the `:kickstart_file`
+* Start up a webserver on `:kickstart_port` to wait `:kickstart_timeout` for a request for the `:kickstart_file`
   IMPORTANT: Do NOT navigate to the file in your browser or the server will stop and the installer will not be able to find your preseed
 * Wait for ssh login to work with `:ssh_user` and `:ssh_password`
 * `sudo` execute the `:postinstall_files`
@@ -198,7 +198,7 @@ Validation is highly recommended before requesting a fork pull on any modified t
 
 Finally let's export the box so it can be distributed or used by Vagrant:
 
-    $ bundle exec veewee vbox export 'myubuntubox'    
+    $ bundle exec veewee vbox export 'myubuntubox'
 
 
 ## Up Next

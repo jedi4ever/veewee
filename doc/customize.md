@@ -92,7 +92,7 @@ All other settings are used internally by Veewee, the virtualization provider, o
             'initrd=/install/initrd.gz -- <Enter>'
         ],
         :kickstart_port => "7122",
-        :kickstart_timeout => "10000",
+        :kickstart_timeout => "60",
         :kickstart_file => "preseed.cfg",
         :ssh_login_timeout => "10000",
         :ssh_user => "vagrant",
@@ -128,7 +128,6 @@ Definition Option               | Default                 | Provider
 :boot_wait                      | uninitialised           | core
 :boot_cmd_sequence              | empty                   | core
 :kickstart_port                 | uninitialised           | core
-:kickstart_ip                   | uninitialised           | core
 :kickstart_timeout              | uninitialised           | core
 :kickstart_file                 | uninitialised           | core
 :ssh_login_timeout              | uninitialised           | kvm, parallels, virtualbox, vmfusion
