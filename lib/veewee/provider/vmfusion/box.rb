@@ -4,7 +4,6 @@ require 'veewee/provider/core/helper/tcp'
 
 require 'veewee/provider/vmfusion/box/helper/status'
 require 'veewee/provider/vmfusion/box/helper/ip'
-require 'veewee/provider/vmfusion/box/helper/ssh_options'
 require 'veewee/provider/vmfusion/box/helper/vnc'
 require 'veewee/provider/vmfusion/box/helper/console_type'
 require 'veewee/provider/vmfusion/box/helper/buildinfo'

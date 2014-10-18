@@ -37,6 +37,10 @@ module Veewee::Provider::Core::Helper::Ssh
     return ssh_options
   end
 
+  def ssh_options
+    build_ssh_options
+  end
+
   def ssh_key_to_a(ssh_key)
     case ssh_key
     when "" then []

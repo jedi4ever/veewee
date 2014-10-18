@@ -11,7 +11,6 @@ require 'veewee/provider/kvm/box/destroy'
 require 'veewee/provider/kvm/box/export_vagrant'
 
 require 'veewee/provider/kvm/box/helper/ip'
-require 'veewee/provider/kvm/box/helper/ssh_options'
 require 'veewee/provider/kvm/box/helper/status'
 require 'veewee/provider/kvm/box/helper/console_type'
 
