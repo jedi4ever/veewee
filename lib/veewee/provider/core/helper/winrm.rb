@@ -33,6 +33,10 @@ module Veewee
             }
           end
 
+          def winrm_options
+            build_winrm_options
+          end
+
           def winrm_up?(ip,options)
             begin
               if not @winrm_up
