@@ -38,8 +38,9 @@ Gem::Specification.new do |s|
   s.add_dependency "fission", "0.5.0"
   s.add_dependency "to_slug"
   s.add_dependency "os", "~> 0.9.6"
+  s.add_dependency "gem-content", "~>1.0"
 
-  s.required_ruby_version = '>= 1.9.2'
+  s.required_ruby_version = '>= 1.9.3'
 
   # Modified dependency version, as libxml-ruby dependency has been removed in version 2.1.1
   # See : https://github.com/ckruse/CFPropertyList/issues/14
@@ -54,4 +55,8 @@ Gem::Specification.new do |s|
   s.files        = `git ls-files`.split("\n")
   s.executables  = `git ls-files`.split("\n").map { |f| f =~ /^bin\/(.*)/ ? $1 : nil }.compact
   s.require_path = 'lib'
+
+  s.metadata = {
+    "veewee-templates" => "templates"
+  }
 end

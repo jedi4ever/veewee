@@ -66,7 +66,7 @@ module Veewee
       defaults = {
         :cwd => cwd,
         :veewee_filename => "Veeweefile",
-        :template_path => [File.expand_path(File.join(File.dirname(__FILE__), "..", "..", 'templates')), "templates"],
+        :template_path => ["templates"],
         :validation_dir => File.join(File.expand_path(File.join(File.dirname(__FILE__), "..", "..")), "validation"),
       }
 

@@ -1,3 +1,5 @@
+require "gem-content"
+
 module Veewee
   class Templates
 
@@ -53,6 +55,7 @@ module Veewee
     # Traverses path to see which exist or not
     # and checks if available
     def valid_paths(paths)
+      paths = GemContent.get_gem_paths("veewee-templates")
       valid_paths = paths.collect { |path|
         if File.exists?(path) && File.directory?(path)
           env.logger.info "Path #{path} exists"
