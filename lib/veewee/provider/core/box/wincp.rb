@@ -26,18 +26,19 @@ module Veewee
 
           urlpath = localfile.to_slug
           urlpath = urlpath.start_with?('/') ? urlpath : '/' + urlpath
-          env.ui.warn "Spinning up an allow_for_http_request on http://#{host_ip_as_seen_by_guest}:#{definition.kickstart_port}#{localfile} at URL #{urlpath}"
-          allow_for_http_request(
-              localfile,
-              urlpath,
-              {
-                :port => definition.kickstart_port,
-                :timeout => definition.kickstart_timeout,
-              }
-          )
 
           begin
             self.when_winrm_login_works(self.ip_address,winrm_options.merge(options)) do
+              env.ui.warn "Spinning up an allow_for_http_request on http://#{host_ip_as_seen_by_guest}:#{definition.kickstart_port}#{localfile} at URL #{urlpath}"
+              allow_for_http_request(
+                  localfile,
+                  urlpath,
+                  {
+                    :port => definition.kickstart_port,
+                    :timeout => 300,
+                  }
+              )
+
               env.ui.info "Going to try and copy #{localfile} to #{remotefile.inspect}"
               self.exec("cmd.exe /C cscript %TEMP%\\wget.vbs /url:http://#{host_ip_as_seen_by_guest}:#{definition.kickstart_port}#{urlpath} /path:#{remotefile}")
               # while true do
