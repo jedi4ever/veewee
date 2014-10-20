@@ -42,24 +42,25 @@ module Veewee
 
         module Web
           def wait_for_http_request(filename, urlname, options) # original blocking
-            s = server_for_http_request(filename, urlname, options)
-            s.start
+            server_for_http_request(filename, urlname, options) do |server|
+              server.start
+            end
           end
 
           def allow_for_http_request(filename, urlname, options) # start in new thread
-            s = server_for_http_request(filename, urlname, options.merge({:threaded => false}))
-            t = Thread.new { s.start }
-            t.abort_on_exception = true
+            server_for_http_request(filename, urlname, options.merge({:threaded => false})) do |server|
+              t = Thread.new { server.start }
+              t.abort_on_exception = true
+            end
           end
 
-          def server_for_http_request(filename, urlname, options)
+          def server_for_http_request(filename, urlname, options, &block)
             # Calculate the OS equivalent of /dev/null , on windows this is NUL:
             # http://www.ruby-forum.com/topic/115472
             fn = test(?e, '/dev/null') ? '/dev/null' : 'NUL:'
             webrick_logger = WEBrick::Log.new(fn, WEBrick::Log::INFO)
 
             timeout = options[:timeout] || 60
-            server  = nil
             Timeout.timeout(timeout) do
               server =
               ::WEBrick::HTTPServer.new(
@@ -74,6 +75,7 @@ module Veewee
                 ui.info "Stopping webserver"
                 exit
               }
+              yield server
             end
           rescue Timeout::Error
             server.shutdown unless server.nil?
