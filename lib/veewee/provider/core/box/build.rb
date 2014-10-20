@@ -225,7 +225,7 @@ module Veewee
 
           case definition.kickstart_file
           when Array  then kickstartfiles = definition.kickstart_file
-          when String then kickstartfiles = definition.kickstartfiles.split
+          when String then kickstartfiles = definition.kickstart_file.split
           when nil    then kickstartfiles = []
           else raise "Do not know how to handle kickstart_file: #{kickstart_file.inspect}"
           end
