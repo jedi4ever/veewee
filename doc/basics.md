@@ -62,6 +62,17 @@ Veewee provides templates for a lot of different operation systems. To see all t
 
 Templates have the same structure as definitions, but templates are used to generate definitions. Definitions are simply **your** customizable templates that you can modify as you see fit.
 
+### Template sources
+
+Veewee will detect all gems with `veewee-templates` gemspec `metadata` pointing to templates directory:
+
+```ruby
+  spec.metadata = {
+    "veewee-templates" => "templates"
+  }
+```
+
+For example see [veewee.gemspec](../veewee.gemspec).
 
 ## Create a definition
 
