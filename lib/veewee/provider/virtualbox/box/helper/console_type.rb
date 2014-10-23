@@ -30,12 +30,10 @@ module Veewee
             codes=""
             for keycode in keycodes.split(' ') do
               case keycode
-                when 'wait'   then sleep 1
-                when 'wait5'  then sleep 5
-                when 'wait10' then sleep 10
-                else
-                  send_keycode(keycode)
-                  sleep 0.01
+              when /^wait(\d*)$/ then sleep_guess($1)
+              else
+                send_keycode(keycode)
+                sleep 0.01
               end
             end
             #sleep after each sequence (needs to be param)
@@ -45,6 +43,11 @@ module Veewee
           ui.info "Done typing."
           ui.info ""
 
+        end
+
+        def sleep_guess(str)
+          str = "1" if str == ""
+          sleep str.to_i
         end
 
         def send_keycode(keycode)
