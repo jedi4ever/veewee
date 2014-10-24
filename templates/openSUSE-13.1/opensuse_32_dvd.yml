@@ -1,0 +1,8 @@
+:os_type_id: OpenSUSE
+:iso_file: "openSUSE-13.1-DVD-i586.iso"
+:iso_src: "http://download.opensuse.org/distribution/13.1/iso/openSUSE-13.1-DVD-i586.iso"
+:iso_md5: "1bd6223430910f6d5a168d4e19171462"
+:boot_cmd_sequence:
+  - '<Esc><Enter>'
+  - 'linux netdevice=enp0s3 netsetup=dhcp install=cd:/ lang=en_US autoyast=http://%IP%:%PORT%/autoinst.xml textmode=1'
+  - '<Enter>'
