@@ -7,9 +7,9 @@
   '<Esc><Enter>'
   'linux netdevice=eth0 netsetup=dhcp'
   ' install=cd:/'
-  ' lang=de_DE autoyast=http://%IP%:%PORT%/autoinst_de.xml'
+  ' lang=de_DE autoyast=http://%IP%:%PORT%/autoinst_64_de.xml'
   ' textmode=1'
   '<Enter>'
 :kickstart_file:
- - "autoinst_de.xml"
- - "autoinst_de.xml"
+ - "autoinst_64_de.xml"
+ - "autoinst_64_de.xml"
