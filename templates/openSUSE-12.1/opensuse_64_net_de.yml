@@ -1,0 +1,14 @@
+---
+:os_type_id: 'OpenSUSE_64'
+:iso_file: "openSUSE-12.1-NET-x86_64.iso"
+:iso_src: "http://download.opensuse.org/distribution/12.1/iso/openSUSE-12.1-NET-x86_64.iso"
+:iso_md5: "4b6f9142faadd95a25a7d81ebd656acf"
+:boot_cmd_sequence:
+ - '<Esc><Enter>'
+ - 'linux netdevice=eth0 netsetup=dhcp textmode=1'
+ - ' install=http://download.opensuse.org/distribution/12.1/repo/oss/ insecure=1'
+ - ' lang=de_DE autoyast=http://%IP%:%PORT%/autoinst_64_de.xml'
+ - '<Enter>'
+:kickstart_file:
+ - "autoinst_64_de.xml"
+ - "autoinst_64_de.xml"

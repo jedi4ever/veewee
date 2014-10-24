@@ -7,8 +7,8 @@
  - '<Esc><Enter>'
  - 'linux netdevice=eth0 netsetup=dhcp textmode=1'
  - ' install=http://download.opensuse.org/distribution/12.1/repo/oss/ insecure=1'
- - ' lang=en_US autoyast=http://%IP%:%PORT%/autoinst_en.xml'
+ - ' lang=en_US autoyast=http://%IP%:%PORT%/autoinst_32_en.xml'
  - '<Enter>'
 :kickstart_file:
- - "autoinst_en.xml"
- - "autoinst_en.xml"
+ - "autoinst_32_en.xml"
+ - "autoinst_32_en.xml"
