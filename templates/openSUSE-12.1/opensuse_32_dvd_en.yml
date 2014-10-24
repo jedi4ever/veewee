@@ -1,0 +1,14 @@
+---
+:os_type_id: 'OpenSUSE'
+:iso_file: "openSUSE-12.1-DVD-i586.iso"
+:iso_src: "http://download.opensuse.org/distribution/12.1/iso/openSUSE-12.1-DVD-i586.iso"
+:iso_md5: "22b4d6bfdb11f5bdd36a05f9968a780c"
+:boot_cmd_sequence:
+ - '<Esc><Enter>'
+ - 'linux netdevice=eth0 netsetup=dhcp textmode=1'
+ - ' install=cd:/'
+ - ' lang=en_US autoyast=http://%IP%:%PORT%/autoinst_en.xml'
+ - '<Enter>'
+:kickstart_file:
+ - "autoinst_en.xml"
+ - "autoinst_en.xml"
