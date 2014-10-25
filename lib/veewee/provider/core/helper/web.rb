@@ -12,7 +12,7 @@ module Veewee
             timeout = options[:timeout] || 60
             thread.join(timeout) or begin
               thread.kill
-              raise "File #{filename.inspect} was not requested in #{timeout} seconds, are you using firewall blocking connections to port: #{options[:port]}?"
+              raise "File #{filename.inspect} was not requested as #{urlname.inspect} in #{timeout} seconds, are you using firewall blocking connections to port: #{options[:port]}?"
             end
           end
 
@@ -28,9 +28,8 @@ module Veewee
         private
 
           def server_for_http_request(filename, urlname, options)
-            read_content(filename)
             initialize_server(options[:port])
-            mount_file(urlname)
+            mount_file(filename, urlname)
             @server.start
           ensure
             server_shutdown
@@ -38,11 +37,12 @@ module Veewee
 
           def read_content(filename)
             ui.info "Reading content #{filename}"
-            @content = File.open(filename, "r").read
+            content = File.open(filename, "r").read
             if File.extname(filename) == ".erb"
               ui.info "Evaluating template #{filename}"
-              @content = ::ERB.new(@content).result(binding)
+              content = ::ERB.new(content).result(binding)
             end
+            content
           end
 
           def initialize_server(port)
@@ -59,14 +59,14 @@ module Veewee
             )
           end
 
-          def mount_file(urlname)
+          def mount_file(filename, urlname)
             urlname = urlname[0..-5] if File.extname(urlname)  == ".erb"
 
             @server.mount_proc(urlname) do |request, response|
               ui.info "Serving content for #{urlname}"
               response['Content-Type']='text/plain'
               response.status = 200
-              response.body   = @content
+              response.body   = read_content(filename)
               server_shutdown
             end
           end
