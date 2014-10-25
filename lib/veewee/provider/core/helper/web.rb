@@ -18,7 +18,7 @@ module Veewee
 
           def allow_for_http_request(filename, urlname, options) # start in new thread
             thread = Thread.new do
-              server_for_http_request(filename, urlname, options.merge({:threaded => false}))
+              server_for_http_request(filename, urlname, options)
             end
             thread.abort_on_exception = true
             trap("INT") { thread.kill }
@@ -27,10 +27,10 @@ module Veewee
 
         private
 
-          def server_for_http_request(filename, urlname, options, &block)
+          def server_for_http_request(filename, urlname, options)
             read_content(filename)
             initialize_server(options[:port])
-            mount_file(urlname, !options[:threaded])
+            mount_file(urlname)
             @server.start
           ensure
             server_shutdown
@@ -59,7 +59,7 @@ module Veewee
             )
           end
 
-          def mount_file(urlname, one_file_only = true)
+          def mount_file(urlname)
             urlname = urlname[0..-5] if File.extname(urlname)  == ".erb"
 
             @server.mount_proc(urlname) do |request, response|
@@ -67,7 +67,7 @@ module Veewee
               response['Content-Type']='text/plain'
               response.status = 200
               response.body   = @content
-              server_shutdown if one_file_only
+              server_shutdown
             end
           end
 
