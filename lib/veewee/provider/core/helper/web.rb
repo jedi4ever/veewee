@@ -2,6 +2,7 @@ module Veewee
   module Provider
     module Core
       module Helper
+
         require 'webrick'
 
         include WEBrick
@@ -35,16 +36,6 @@ module Veewee
             server_shutdown
           end
 
-          def read_content(filename)
-            ui.info "Reading content #{filename}"
-            content = File.open(filename, "r").read
-            if File.extname(filename) == ".erb"
-              ui.info "Evaluating template #{filename}"
-              content = ::ERB.new(content).result(binding)
-            end
-            content
-          end
-
           def initialize_server(port)
             # Calculate the OS equivalent of /dev/null , on windows this is NUL:
             # http://www.ruby-forum.com/topic/115472
@@ -71,6 +62,16 @@ module Veewee
             end
           end
 
+          def read_content(filename)
+            ui.info "Reading content #{filename}"
+            content = File.open(filename, "r").read
+            if File.extname(filename) == ".erb"
+              ui.info "Evaluating template #{filename}"
+              content = ::ERB.new(content).result(binding)
+            end
+            content
+          end
+
           def server_shutdown
             if @server
               ui.info "Stopping webserver"
@@ -81,6 +82,7 @@ module Veewee
           end
 
         end #Class
+
       end #Module
     end #Module
   end #Module
