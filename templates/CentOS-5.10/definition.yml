@@ -1,5 +1,4 @@
 ---
-:os_type_id: 'RedHat_64'
 :cpu_count: '1'
 :memory_size: '384'
 :disk_size: '10140'
@@ -9,9 +8,6 @@
   :vm_options:
     "pae": "on"
     "ioapic": "on"
-:iso_file: "CentOS-5.10-x86_64-bin-DVD-1of2.iso"
-:iso_src: "http://mirrors.kernel.org/centos/5.10/isos/x86_64/CentOS-5.10-x86_64-bin-DVD-1of2.iso"
-:iso_md5: "715f7355074c00530cd6ee1d9f43cc3f"
 :iso_download_timeout: 1000
 :boot_wait: "10"
 :boot_cmd_sequence:
