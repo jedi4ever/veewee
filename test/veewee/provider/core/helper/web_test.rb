@@ -1,4 +1,4 @@
-`VBoxManage -v`
+`VBoxManage -v` rescue nil
 if $?.success?
 
 require 'test/unit'
