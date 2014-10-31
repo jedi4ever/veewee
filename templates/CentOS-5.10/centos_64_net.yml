@@ -1,0 +1,8 @@
+---
+:os_type_id: 'RedHat_64'
+:iso_file: "CentOS-5.10-x86_64-netinstall.iso"
+:iso_src: "http://mirrors.kernel.org/centos/5.10/isos/x86_64/CentOS-5.10-x86_64-netinstall.iso"
+:iso_md5: "e09e44f04f0a4b97b04935e0ba88833f"
+:kickstart_file: "ks_64_net.cfg"
+:boot_cmd_sequence:
+ - 'linux text ks=http://%IP%:%PORT%/ks_64_net.cfg<Enter>'

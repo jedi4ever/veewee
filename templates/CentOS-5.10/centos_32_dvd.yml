@@ -1,5 +1,5 @@
 ---
-:os_type_id: 'RedHat_64'
+:os_type_id: 'RedHat'
 :iso_file: "CentOS-5.10-i386-bin-DVD-1of2.iso"
 :iso_src: "http://mirrors.kernel.org/centos/5.10/isos/i386/CentOS-5.10-i386-bin-DVD-1of2.iso"
 :iso_md5: "ec0acc2a4f6a813ea85bf1e36acb03f0"
