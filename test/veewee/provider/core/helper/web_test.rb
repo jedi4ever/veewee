@@ -1,3 +1,6 @@
+`VBoxManage -v`
+if $?.success?
+
 require 'test/unit'
 require 'veewee'
 
@@ -22,4 +25,6 @@ echo DVD
       @box.send(:read_content, File.join(@definition_dir, @definition_name, "autorun0.erb"))
     )
   end
+end
+
 end

@@ -18,13 +18,10 @@ class TestVeeweeBuild < Test::Unit::TestCase
   # - kickstart fetch
   # - postinstall execution
   def test_box_1_build
-    `VBoxManage -v`
-    if $?.success?
     assert_nothing_raised {
       @box.build({'auto' => true,'force' => true, 'nogui' => true , 'disk_count' => 2})
       #@box.build({"auto" => true,"force" => true })
     }
-    end
   end
 
   # Run an ssh command
