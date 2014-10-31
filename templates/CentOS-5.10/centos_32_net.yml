@@ -3,6 +3,3 @@
 :iso_file: "CentOS-5.10-i386-netinstall.iso"
 :iso_src: "http://mirrors.kernel.org/centos/5.10/isos/i386/CentOS-5.10-i386-netinstall.iso"
 :iso_md5: "8d19b12cb5f65a4b5c2bc61a98abf80c"
-:kickstart_file: "ks_32_net.cfg"
-:boot_cmd_sequence:
- - 'linux text ks=http://%IP%:%PORT%/ks_32_net.cfg<Enter>'

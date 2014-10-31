@@ -3,6 +3,3 @@
 :iso_file: "CentOS-5.10-i386-bin-DVD-1of2.iso"
 :iso_src: "http://mirrors.kernel.org/centos/5.10/isos/i386/CentOS-5.10-i386-bin-DVD-1of2.iso"
 :iso_md5: "ec0acc2a4f6a813ea85bf1e36acb03f0"
-:kickstart_file: "ks_dvd.cfg"
-:boot_cmd_sequence:
-  - 'linux text ks=http://%IP%:%PORT%/ks_dvd.cfg<Enter>'
