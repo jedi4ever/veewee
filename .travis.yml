@@ -1,6 +1,4 @@
 language: ruby
-before_install:
- - "VBoxManage -v"
 rvm:
   - 1.9.3
   - 2.0
