@@ -1,0 +1,8 @@
+#!/bin/bash
+
+echo "Testing one <%= definition.os_type_id %>"
+<% if definition.iso_file =~ /netboot/ %>
+echo netboot
+<% else %>
+echo DVD
+<% end %>
