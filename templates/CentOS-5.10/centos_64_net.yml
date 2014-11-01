@@ -1,5 +1,6 @@
 ---
 :os_type_id: 'RedHat_64'
 :iso_file: "CentOS-5.10-x86_64-netinstall.iso"
-:iso_src: "http://mirrors.kernel.org/centos/5.10/isos/x86_64/CentOS-5.10-x86_64-netinstall.iso"
+:iso_src: "http://mirror.symnds.com/distributions/CentOS-vault/5.10/isos/x86_64/CentOS-5.10-x86_64-netinstall.iso"
+--- for EU use: :iso_src: "http://mirror.nsc.liu.se/centos-store/5.10/isos/x86_64/CentOS-5.10-x86_64-netinstall.iso"
 :iso_md5: "e09e44f04f0a4b97b04935e0ba88833f"
