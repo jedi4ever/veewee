@@ -4,7 +4,7 @@ if $?.success?
 require 'test/unit'
 require 'veewee'
 
-class TestVeeweeBuild < Test::Unit::TestCase
+class TestVeeweeDownload < Test::Unit::TestCase
   def setup
     @definition_dir = File.expand_path("../../../../../definitions", __FILE__)
     @definition_name = "erb_definition"
