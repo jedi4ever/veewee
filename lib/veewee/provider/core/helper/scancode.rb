@@ -78,7 +78,7 @@ module Veewee
                   #take thestring
                   #check if it starts with a special key + pop special string
                   keycodes += value + result.captures.join(",") + ' '
-                  thestring = thestring.slice(result.string.length, thestring.length-result.string.length)
+                  thestring = thestring.slice(result.to_s.length, thestring.length-result.to_s.length)
                   nospecial = false;
                   break;
                 end
