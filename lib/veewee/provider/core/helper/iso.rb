@@ -43,16 +43,20 @@ module Veewee
               #consider proxy env vars only if host is not excluded
               :proxy => !no_proxy?(uri.host)
             ) { |src|
-              # We assume large 10K files, so this is tempfile object
-              env.logger.info "#{src.class}"
+              if
+                src.methods(&:to_sym).include?(:path)
+              then
+                # We assume large 10K files, so this is tempfile object
                 ui.info "Moving #{src.path} to #{localfile}"
                 # Force the close of the src stream to release handle before moving
                 # Not forcing the close may cause an issue on windows (Permission Denied)
                 src.close
                 FileUtils.mv(src.path,localfile)
-                #open(localfile,"wb") { |dst|
-                  #dst.write(src.read)
-                #}
+              else
+                open(localfile,"wb") { |dst|
+                  dst.write(src.read)
+                }
+              end
             }
           end
 
