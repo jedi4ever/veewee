@@ -5,7 +5,7 @@
 :disk_format: 'VDI'
 :hostiocache: 'off'
 :iso_download_timeout: 1000
-:boot_wait: "10"
+:boot_wait: "15"
 :boot_cmd_sequence:
   - '<Tab> text ks=http://%IP%:%PORT%/ks.cfg<Enter>'
 :kickstart_port: "7122"
@@ -21,6 +21,7 @@
 :shutdown_cmd: "/sbin/halt -h -p"
 :postinstall_files:
   - "base.sh"
+  - "ruby.sh"
   - "chef.sh"
   - "puppet.sh"
   - "vagrant.sh"

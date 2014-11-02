@@ -1,0 +1,4 @@
+:os_type_id: 'RedHat'
+:iso_file: "CentOS-6.5-i386-minimal.iso"
+:iso_src: "http://yum.singlehop.com/CentOS/6.5/isos/i386/CentOS-6.5-i386-minimal.iso"
+:iso_md5: "a4f27ab51d0d2c9d36b68c56b39f752b"
