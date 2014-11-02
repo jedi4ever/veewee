@@ -1,0 +1,5 @@
+---
+:os_type_id => 'RedHat6_64',
+:iso_file => "CentOS-6.5-x86_64-netinstall.iso",
+:iso_src => "http://yum.singlehop.com/CentOS/6.5/isos/x86_64/CentOS-6.5-x86_64-netinstall.iso",
+:iso_md5 => "939fd1d87c11ffe7795324438b85adfb",
