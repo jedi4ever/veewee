@@ -14,7 +14,7 @@
   - 'linux text ks=http://%IP%:%PORT%/ks.cfg<Enter>'
 :kickstart_port: "7122"
 :kickstart_timeout: 300
-:kickstart_file: "ks.cfg"
+:kickstart_file: "ks.cfg.erb"
 :ssh_login_timeout: "10000"
 :ssh_user: "vagrant"
 :ssh_password: "vagrant"
