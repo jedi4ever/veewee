@@ -33,7 +33,7 @@ Installing Veewee without a Ruby version manager is **NOT** recommended:
 
 With RVM already installed (see [Requirements](requirements.md)), ensure a ruby version that's supported by Veewee is available on your machine:
 
-    $ rvm install 1.9.2
+    $ rvm install ruby
 
 Clone the veewee project from source:
 
@@ -43,7 +43,7 @@ Clone the veewee project from source:
 
 Set the local gemset and ruby version within the current directory:
 
-    $ rvm use 1.9.2@veewee --create
+    $ rvm use ruby@veewee --create
 
 Run `bundle install` to install Gemfile dependencies for our local gemset:
 
