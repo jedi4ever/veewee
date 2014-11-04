@@ -1,6 +1,6 @@
 install
 cdrom
-<% if definition.iso_file =~ /DVD/ %>
+<% if definition.iso_file =~ /minimal/ %>
 cdrom
 <% elsif definition.os_type_id == "RedHat" %>
 url --url=http://mirror.symnds.com/distributions/CentOS-vault/6.5/os/i386/
