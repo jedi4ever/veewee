@@ -103,6 +103,12 @@ module Veewee
             :expected_string => 'root',
             :sudo => true
           },
+          { :description => 'Checking passwordless sudo',
+            :tags => [ 'virtualbox','kvm', 'parallels'],
+            :command => 'nopass=0; nopass=`echo '' | sudo -S -l 2> /dev/null | grep -c NOPASSWD`; [ $nopass -gt 0 ] && echo 0 || echo 1',
+            :expected_string => '0',
+            :sudo => false
+          },
           { :description => 'Checking ruby',
             :tags => [ 'virtualbox','kvm', 'parallels','ruby'],
             :command => '. /etc/profile ;ruby --version 2> /dev/null 1> /dev/null;  echo $?',
