@@ -22,7 +22,7 @@ module Veewee
               server_for_http_request(filename, urlname, options)
             end
             thread.abort_on_exception = true
-            trap("INT") { thread.kill }
+            trap("INT") { thread.kill; exit }
             thread
           end
 
