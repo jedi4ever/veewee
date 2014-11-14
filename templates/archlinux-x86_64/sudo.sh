@@ -3,7 +3,7 @@
 # Requires
 #   reboot.sh
 
-sudo pacman -S --noconfirm sudo
+pacman -S --noconfirm sudo
 
 # Sudo setup
 cat <<EOF > /etc/sudoers
