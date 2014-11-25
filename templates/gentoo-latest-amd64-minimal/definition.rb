@@ -1,6 +1,6 @@
 require 'net/http'
 
-template_uri   = 'http://distfiles.gentoo.org/releases/x86/autobuilds/latest-install-x86-minimal.txt'
+template_uri   = 'http://distfiles.gentoo.org/releases/amd64/autobuilds/latest-install-amd64-minimal.txt'
 template_build = Net::HTTP.get_response(URI.parse(template_uri)).body
 template_build = /^(([^#].*)\/(.*))/.match(template_build)
 
@@ -10,9 +10,9 @@ Veewee::Definition.declare({
   :disk_size   => '20280',
   :disk_format => 'VDI',
   :hostiocache => 'off',
-  :os_type_id  => 'Gentoo',
+  :os_type_id  => 'Gentoo_64',
   :iso_file    => template_build[3],
-  :iso_src     => "http://distfiles.gentoo.org/releases/x86/autobuilds/#{template_build[1]}",
+  :iso_src     => "http://distfiles.gentoo.org/releases/amd64/autobuilds/#{template_build[1]}",
   :iso_download_timeout => 1000,
   :boot_wait => "10",
   :boot_cmd_sequence => [
@@ -41,14 +41,12 @@ Veewee::Definition.declare({
     'settings.sh',
     'base.sh',
     'kernel.sh',
-    'usb.sh',
+    #'usb.sh',
     'git.sh',
-    'subversion.sh',
+    #'subversion.sh',
     'virtualbox.sh',
     'vagrant.sh',
-    'ruby.sh',
-    'add_chef.sh',
-    'add_puppet.sh',
+    #'ruby.sh',
     'add_vim.sh',
     'cron.sh',
     'syslog.sh',

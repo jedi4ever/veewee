@@ -49,7 +49,7 @@ chroot "$chroot" env-update
 
 # bring up network interface and sshd on boot (for older systemd naming scheme, eth0)
 chroot "$chroot" /bin/bash <<DATAEOF
-ln -s /dev/null /etc/udev/rules.d/80-net-name-slot.rules
+ln -s /dev/null /etc/udev/rules.d/80-net-setup-link.rules
 DATAEOF
 chroot "$chroot" /bin/bash <<DATAEOF
 cd /etc/conf.d
@@ -92,7 +92,7 @@ INPUT_DEVICES="evdev"
 VIDEO_CARDS="virtualbox"
 
 # Additional portage overlays (space char separated)
-PORTDIR_OVERLAY="/usr/local/portage"
+PORTDIR_OVERLAY="${PORTDIR_OVERLAY} /usr/local/portage"
 
 # Including /usr/local/portage overlay
 source "/usr/local/portage/make.conf"

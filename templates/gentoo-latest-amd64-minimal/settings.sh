@@ -2,21 +2,23 @@
 
 cat <<DATAEOF > "/etc/profile.d/veewee.sh"
 # stage 3 filename and full url
-# retrieve from Gentoo current autobuild txt - these change regularly
+# retrieve from Gentoo current autobuild txt - these change regularlya
 
 # distfiles source
 distfiles_url=http://distfiles.gentoo.org
+#distfiles_url=http://gentoo.cites.uiuc.edu/pub/gentoo
+#distfiles_url=ftp://ftp.iij.ad.jp/pub/linux/gentoo
 
-build_arch="x86"
-build_proc="i686"
+build_arch="amd64"
+build_proc="amd64"
 stage3current=\`curl -s \${distfiles_url}/releases/\${build_arch}/autobuilds/latest-stage3-\${build_proc}.txt|grep -v "^#"\`
 export stage3url="\${distfiles_url}/releases/\${build_arch}/autobuilds/\${stage3current}"
 export stage3file=\${stage3current##*/}
 export portageurl="\${distfiles_url}/snapshots/portage-latest.tar.bz2"
 
 # these two (configuring the compiler) and the stage3 url can be changed to build a 32 bit system
-export accept_keywords="x86"
-export chost="i686-pc-linux-gnu"
+export accept_keywords="amd64"
+export chost="x86_64-pc-linux-gnu"
 
 # kernel version to use
 export kernel_version="3.14.14"

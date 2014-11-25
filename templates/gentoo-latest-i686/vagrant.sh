@@ -19,7 +19,7 @@ mkdir -p "$chroot/root/.ssh" 2> /dev/null
 # add vagrant user
 chroot $chroot /bin/bash <<DATAEOF
 groupadd -r vagrant
-useradd -m -r vagrant -g vagrant -G wheel,vboxsf,vboxguest -c 'Vagrant user'
+useradd -m -r vagrant -g vagrant -G wheel,vboxsf,vboxguest,video -c 'Vagrant user'
 
 # set passwords (for after reboot)
 passwd<<EOF
