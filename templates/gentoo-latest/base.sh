@@ -20,7 +20,7 @@ mkfs.ext4 /dev/sda4
 mount /dev/sda4 "$chroot" && cd "$chroot" && mkdir boot && mount /dev/sda1 boot
 
 # download stage 3, unpack it, delete the stage3 archive file
-wget -nv --tries=5 "$stage3url"
+wget --tries=5 "$stage3url"
 tar xpf "$stage3file" && rm "$stage3file"
 
 # prepeare chroot, update env
@@ -72,19 +72,20 @@ DATAEOF
 cat <<DATAEOF > "$chroot/etc/portage/make.conf"
 CHOST="$chost"
 
-CFLAGS="-mtune=generic -Os -pipe"
+CFLAGS="-mtune=generic -O2 -pipe"
 CXXFLAGS="\${CFLAGS}"
 
 ACCEPT_KEYWORDS="$accept_keywords"
 MAKEOPTS="-j$((1 + $nr_cpus)) -l$nr_cpus.5"
 EMERGE_DEFAULT_OPTS="-j$nr_cpus --quiet-build=y"
-FEATURES="\${FEATURES} parallel-fetch nodoc noman noinfo"
-USE="nls cjk unicode -doc -bluetooth"
+FEATURES="\${FEATURES} parallel-fetch"
+USE="nls cjk unicode"
 
 PYTHON_TARGETS="python2_7 python3_2 python3_3"
 USE_PYTHON="3.2 2.7"
 
-LINGUAS="en ja"
+# english only
+LINGUAS="en"
 
 # for X support if needed
 INPUT_DEVICES="evdev"
