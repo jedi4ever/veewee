@@ -1,0 +1,31 @@
+---
+:cpu_count: 2
+:memory_size: '1024'
+:disk_size: '20280'
+:disk_format: 'VDI'
+:hostiocache: 'off'
+:os_type_id: 'Gentoo_64'
+:iso_download_timeout: 1000
+:boot_wait: "10"
+:boot_cmd_sequence:
+  - '<Wait><Wait><Wait><Wait>'
+  - 'gentoo-nofb<Enter>'
+  - '<Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait>'
+  - '<Enter>'
+  - '<Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait><Wait>'
+  - 'passwd<Enter><Wait><Wait>'
+  - 'vagrant<Enter><Wait>'
+  - 'vagrant<Enter><Wait>'
+  - '/etc/init.d/sshd start<Enter>'
+:kickstart_port: '7122'
+:kickstart_timeout: 300
+:kickstart_file: ''
+:ssh_login_timeout: '10000'
+:ssh_user: 'root'
+:ssh_password: 'vagrant'
+:ssh_key: ''
+:ssh_host_port: '7222'
+:ssh_guest_port: '22'
+:sudo_cmd: "cat '%f'|su -"
+:shutdown_cmd: 'shutdown -hP now'
+:postinstall_timeout: 10000
