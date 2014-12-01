@@ -116,23 +116,10 @@ module Veewee
               ui.info ""
               ui.info "The isofile #{filename} already exists."
             else
-              ui.info ""
-              ui.info "We did not find an isofile here : #{full_path}. \n\nThe definition provided the following download information:"
-              unless "#{self.iso_src}"==""
-                ui.info "- Download url: #{self.iso_src}"
-              end
-              ui.info "- Md5 Checksum: #{self.iso_md5}" if self.iso_md5
-              ui.info "- Sha1 Checksum: #{self.iso_sha1}" if self.iso_sha1
-              ui.info "- Sha256 Checksum: #{self.iso_sha256}" if self.iso_sha256
-              ui.info "#{self.iso_download_instructions}"
-              ui.info ""
+              info_source_and_checksums
 
               if self.iso_src == ""
-                ui.info "Please follow the instructions above:"
-                ui.info "- to get the ISO"
-                ui.info" - put it in <currentdir>/iso"
-                ui.info "- then re-run the command"
-                ui.info ""
+                info_no_source
                 raise Veewee::Error, "No ISO src is available, can't download it automatically"
               else
                 answer=nil
@@ -151,12 +138,7 @@ module Veewee
                     raise Veewee::Error, "There was an error downloading #{self.iso_src}:\n#{ex}"
                   end
                 else
-                  ui.info "You have selected manual download: "
-                  ui.info "curl -C - -L '#{self.iso_src}' -o '#{full_path}'"
-                  ui.info "md5 '#{full_path}' " if self.iso_md5
-                  ui.info "shasum '#{full_path}' " if self.iso_sha1
-                  ui.info "shasum -a 256 '#{rel_path}' " if self.iso_sha256
-                  ui.info ""
+                  info_manual_download
                   exit
                 end
 
@@ -171,8 +153,38 @@ module Veewee
             verify_sum(full_path,:md5) if options["checksum"] && !self.iso_md5.nil?
             verify_sum(full_path,:sha1) if options["checksum"] && !self.iso_sha1.nil?
             verify_sum(full_path,:sha256) if options["checksum"] && !self.iso_sha256.nil?
-
           end
+
+          def info_source_and_checksums
+            ui.info ""
+            ui.info "We did not find an isofile here : #{full_path}. \n\nThe definition provided the following download information:"
+            unless "#{self.iso_src}"==""
+              ui.info "- Download url: #{self.iso_src}"
+            end
+            ui.info "- Md5 Checksum: #{self.iso_md5}" if self.iso_md5
+            ui.info "- Sha1 Checksum: #{self.iso_sha1}" if self.iso_sha1
+            ui.info "- Sha256 Checksum: #{self.iso_sha256}" if self.iso_sha256
+            ui.info "#{self.iso_download_instructions}"
+            ui.info ""
+          end
+
+          def info_no_source
+            ui.info "Please follow the instructions above:"
+            ui.info "- to get the ISO"
+            ui.info" - put it in <currentdir>/iso"
+            ui.info "- then re-run the command"
+            ui.info ""
+          end
+
+          def info_manual_download
+            ui.info "You have selected manual download: "
+            ui.info "curl -C - -L '#{self.iso_src}' -o '#{full_path}'"
+            ui.info "md5 '#{full_path}' " if self.iso_md5
+            ui.info "shasum '#{full_path}' " if self.iso_sha1
+            ui.info "shasum -a 256 '#{rel_path}' " if self.iso_sha256
+            ui.info ""
+          end
+
         end #Module
 
       end #Module
