@@ -257,6 +257,12 @@ module Veewee
           definition.postinstall_files.each do |postinstall_file|
             # Filenames of postinstall_files are relative to their definition
             filename=File.join(definition.path,postinstall_file)
+
+            if File.basename(postinstall_file).start_with?("_")
+              env.logger.info "Skipping copy of postinstallfile #{postinstall_file}"
+              next
+            end
+
             self.copy_to_box(filename,File.basename(filename))
             if not (definition.winrm_user && definition.winrm_password)
               self.exec("chmod +x \"#{File.basename(filename)}\"")
