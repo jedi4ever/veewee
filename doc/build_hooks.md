@@ -25,7 +25,7 @@ But if you want to copy arbitrary files to the guest you can do this in a hook.
 
 <pre>
 Veewee::Definition.declare({
-  hooks => {
+  :hooks => {
       :after_postinstall => Proc.new { definition.box.scp('/tmp/foo.txt', '/tmp/bar.txt') }
   }
 })
@@ -58,7 +58,7 @@ end
 myhooks = Hooks.new(veewee_definition)
 
 Veewee::Definition.declare({
-  hooks => {
+  :hooks => {
       :after_boot_sequence => Proc.new { myhooks.after_boot_sequence },
       :before_ssh => Proc.new { myhooks.before_ssh }
   }
