@@ -1,6 +1,6 @@
 require 'net/http'
 
-iso_mirror = 'http://mirrors.kernel.org/archlinux/iso/2013.12.01'
+iso_mirror = 'http://mirrors.kernel.org/archlinux/iso/2015.03.01'
 uri = "#{iso_mirror}/md5sums.txt"
 response = Net::HTTP.get_response(URI.parse(uri)).body.split
 iso = response[1]
