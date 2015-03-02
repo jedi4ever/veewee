@@ -33,10 +33,15 @@ arch-chroot /mnt <<ENDCHROOT
 # https://bugs.freedesktop.org/show_bug.cgi?id=59964
 # Replace this with a better fix, when available.
 
-systemctl enable dhcpcd\@eth0.service
+# Automatic interface selection
+# If ssh hangs and cannot reconnect, comment this line and uncomment the
+# two following ones.
+systemctl enable dhcpcd\@$(ip addr show label 'en*' | head -1 | cut -d' ' -f2 | sed 's/://').service
 
-# Disable systemd's Predictable Network Interface Names
-ln -s /dev/null /etc/udev/rules.d/80-net-name-slot.rules
+# Manual interface selection by disabling systemd's Predictable Network Interface Names
+# Uncomment the two following lines if automatic detection didn't work.
+#ln -s /dev/null /etc/udev/rules.d/80-net-setup-link.rules
+#systemctl enable dhcpcd\@eth0.service
 
 # Set root password
 passwd<<EOF
