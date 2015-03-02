@@ -36,7 +36,7 @@ arch-chroot /mnt <<ENDCHROOT
 systemctl enable dhcpcd\@eth0.service
 
 # Disable systemd's Predictable Network Interface Names
-ln -s /dev/null /etc/udev/rules.d/80-net-name-slot.rules
+ln -s /dev/null /etc/udev/rules.d/80-net-setup-link.rules
 
 # Set root password
 passwd<<EOF
