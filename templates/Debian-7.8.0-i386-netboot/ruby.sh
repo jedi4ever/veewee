@@ -1,5 +1,5 @@
 apt-get -y install libyaml-0-2
-RUBY_VERSION=2.0.0-p451
+RUBY_VERSION=2.0.0-p598
 
 cd /tmp
 
