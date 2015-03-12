@@ -9,10 +9,9 @@ file = YAML.load_file(definitionVariation);
 arch = file[:architecture]
 
 template_uri   = "http://distfiles.gentoo.org/releases/#{arch}/autobuilds/latest-install-#{arch}-minimal.txt"
-template_build = Net::HTTP.get_response(URI.parse(template_uri)).body
-template_build = /^(([^#].*)\/(.*))/.match(template_build)
+template_build = Net::HTTP.get_response(URI.parse(template_uri)).body.split(/\n/).last.split(/\ /)
 
 Veewee::Definition.declare({
-    :iso_file    => template_build[3],
-    :iso_src     => "http://distfiles.gentoo.org/releases/#{arch}/autobuilds/#{template_build[1]}"
+    :iso_file    => template_build.first.split(/\//).last,
+    :iso_src     => "http://distfiles.gentoo.org/releases/#{arch}/autobuilds/#{template_build.last}"
 })
