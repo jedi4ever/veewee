@@ -9,6 +9,26 @@
         <product_dir>/</product_dir>
       </listentry>
       <listentry>
+        <media_url><![CDATA[http://download.opensuse.org/repositories/devel:languages:ruby:backports/SLE_11_SP3/]]></media_url>
+        <name>devel_languages_ruby_backports</name>
+        <product>devel_languages_ruby_backports</product>
+        <product_dir>/</product_dir>
+        <signature-handling>
+          <accept_non_trusted_gpg_key>
+            <all config:type="boolean">false</all>
+            <keys config:type="list">
+              <keyid>9AF0C9A20E9AF123</keyid>
+            </keys>
+          </accept_non_trusted_gpg_key>
+          <import_gpg_key>
+            <all config:type="boolean">false</all>
+            <keys config:type="list">
+              <keyid>9AF0C9A20E9AF123</keyid>
+            </keys>
+          </import_gpg_key>
+        </signature-handling>
+        </listentry>
+      <listentry>
         <media_url><![CDATA[http://download.opensuse.org/repositories/systemsmanagement:/puppet/SLE_11_SP3/]]></media_url>
         <name>systemsmanagement_puppet</name>
         <product>systemsmanagement_puppet</product>
@@ -622,8 +642,7 @@
       <package>sle-sdk-release-SDK</package>
       <package>sles-manuals_en</package>
       <package>yast2-trans-en_US</package>
-      <package>rubygem-ruby-augeas</package>
-      <package>rubygem-ruby-shadow</package>
+      <package>rubygem-puppet</package>
       <package>augeas</package>
     </packages>
     <patterns config:type="list">

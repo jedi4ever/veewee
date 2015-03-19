@@ -25,7 +25,7 @@ echo -e "\nspeed-up remote logins ..."
 echo -e "\n# added by veewee/postinstall.sh" >> /etc/ssh/sshd_config
 echo -e "UseDNS no\n" >> /etc/ssh/sshd_config
 
-# install chef and puppet
+# install chef
 echo -e "\ninstall chef ..."
 gem install chef --no-ri --no-rdoc
 
