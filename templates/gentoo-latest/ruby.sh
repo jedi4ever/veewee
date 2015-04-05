@@ -2,8 +2,8 @@
 source /etc/profile
 
 cat <<DATAEOF >> "$chroot/etc/portage/make.conf"
-# use ruby 1.9
-RUBY_TARGETS="ruby19"
+# use ruby 2.0
+RUBY_TARGETS="ruby20"
 DATAEOF
 
 cat <<DATAEOF >> "$chroot/etc/portage/package.accept_keywords/ruby"
@@ -12,6 +12,6 @@ DATAEOF
 
 chroot "$chroot" /bin/bash <<DATAEOF
 env-update && source /etc/profile
-emerge --autounmask-write ruby:1.9
-eselect ruby set ruby19
+emerge --autounmask-write ruby:2.0
+eselect ruby set ruby20
 DATAEOF
