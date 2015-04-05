@@ -9,7 +9,7 @@ distfiles_url=http://distfiles.gentoo.org
 
 build_arch="x86"
 build_proc="i686"
-stage3current=\`curl -s \${distfiles_url}/releases/\${build_arch}/autobuilds/latest-stage3-\${build_proc}.txt|grep -v "^#"\`
+stage3current=\`curl -s \${distfiles_url}/releases/\${build_arch}/autobuilds/latest-stage3-\${build_proc}.txt|grep -v "^#"|grep -o "^\\S*"\`
 export stage3url="\${distfiles_url}/releases/\${build_arch}/autobuilds/\${stage3current}"
 export stage3file=\${stage3current##*/}
 export portageurl="\${distfiles_url}/snapshots/portage-latest.tar.bz2"
@@ -19,8 +19,8 @@ export accept_keywords="x86"
 export chost="i686-pc-linux-gnu"
 
 # kernel version to use
-export kernel_version="3.14.14"
-export kernel_image_version="3.14.14-gentoo"
+export kernel_version="3.14.36"
+export kernel_image_version="3.14.36-gentoo"
 
 # timezone (as a subdirectory of /usr/share/zoneinfo)
 export timezone="UTC"
