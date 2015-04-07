@@ -13,5 +13,5 @@ template_build = Net::HTTP.get_response(URI.parse(template_uri)).body.split(/\n/
 
 Veewee::Definition.declare({
     :iso_file    => template_build.first.split(/\//).last,
-    :iso_src     => "http://distfiles.gentoo.org/releases/#{arch}/autobuilds/#{template_build.last}"
+    :iso_src     => "http://distfiles.gentoo.org/releases/#{arch}/autobuilds/#{template_build.first}"
 })
