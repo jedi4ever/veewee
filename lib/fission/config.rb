@@ -34,11 +34,13 @@ module Fission
       end
 
       @attributes['plist_file'] = File.expand_path('~/Library/Preferences/com.vmware.fusion.plist')
-      @attributes['gui_bin'] = File.expand_path('/Applications/VMware Fusion.app/Contents/MacOS/vmware')
+      @attributes['gui_bin'] = '/Applications/VMware Fusion.app/Contents/MacOS/vmware'
 
       load_from_file
 
+
       @attributes['vmrun_cmd'] = "#{@attributes['vmrun_bin'].gsub(' ', '\ ')} -T fusion"
+      @attributes['gui_bin'] = File.expand_path(@attributes['gui_bin'])
     end
 
     # Public: Helper method to access config atributes.  This is a shortcut for
