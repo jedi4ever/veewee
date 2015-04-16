@@ -7,7 +7,7 @@
 # Adapted from https://wiki.archlinux.org/index.php/VirtualBox
 
 # Install and set up VirtualBox Guest Additions
-pacman -S --noconfirm virtualbox-guest-utils
+pacman -S --noconfirm virtualbox-guest-utils-nox
 
 cat <<EOF > /etc/modules-load.d/virtualbox.conf
 vboxguest
