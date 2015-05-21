@@ -24,11 +24,11 @@ module Fission
 
       fusion_version = :unknown
 
-      @attributes['vmrun_bin'] = %w{
-        /Library/Application Support/VMware Fusion/vmrun
-        /Applications/VMware Fusion.app/Contents/Library/vmrun
-        /usr/local/bin/vmrun
-      }.find { |path| File.exists?(path) }
+      @attributes['vmrun_bin'] = [
+        '/Library/Application Support/VMware Fusion/vmrun',
+        '/Applications/VMware Fusion.app/Contents/Library/vmrun',
+        '/usr/local/bin/vmrun'
+      ].find { |path| File.exists?(path) }
 
       if fusion_version == :unknown
       end
