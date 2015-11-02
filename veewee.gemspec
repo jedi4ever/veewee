@@ -12,14 +12,15 @@ Gem::Specification.new do |s|
   s.summary     = %q{Vagrant box creation}
   s.description = %q{Expand the 'vagrant box' command to support the creation of base boxes from scratch}
 
-  s.required_rubygems_version = ">= 1.3.6"
+  s.required_rubygems_version = ">= 1.9.0"
   s.rubyforge_project         = "veewee"
 
 
   # Currently locked to 2.2.0
   # if specifying to >= 2.2.0 it would use 2.3 and bundler would go in a resolver loop
   # DEBUG_RESOLVER=1 bundle install
-  s.add_dependency "net-ssh", ">= 2.2.0"
+  # net-ssh > 2.10.0 requires removing 1.9.3 support
+  s.add_dependency "net-ssh", ">= 2.2.0", "< 2.10.0"
 
   s.add_dependency "mime-types", "~> 1.16"
   s.add_dependency "popen4", "~> 0.1.2"
