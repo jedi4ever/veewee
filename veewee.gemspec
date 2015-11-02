@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.summary     = %q{Vagrant box creation}
   s.description = %q{Expand the 'vagrant box' command to support the creation of base boxes from scratch}
 
-  s.required_rubygems_version = ">= 1.9.0"
+  s.required_rubygems_version = ">= 2.1.0"
   s.rubyforge_project         = "veewee"
 
 
