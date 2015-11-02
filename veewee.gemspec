@@ -40,7 +40,7 @@ Gem::Specification.new do |s|
   s.add_dependency "os", "~> 0.9.6"
   s.add_dependency "gem-content", "~>1.0"
 
-  s.required_ruby_version = '>= 1.9.3'
+  s.required_ruby_version = '>= 2.0'
 
   # Modified dependency version, as libxml-ruby dependency has been removed in version 2.1.1
   # See : https://github.com/ckruse/CFPropertyList/issues/14

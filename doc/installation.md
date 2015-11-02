@@ -1,7 +1,7 @@
 # Veewee Installation
 
 Before installing Veewee, please see the [Requirements](requirements.md) doc.
-Currently supported versions of ruby: `1.9.3` to `2.2.1`
+Currently supported versions of ruby: `2.0` and `2.1`
 ##### IMPORTANT: For best results, please use the latest version of Ruby.
 
 ## Install as a gem

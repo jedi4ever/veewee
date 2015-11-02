@@ -43,7 +43,7 @@ On Windows, you will need to install:
 
 It is highly recommended that you use either `rvm` or `rbenv` to manage your ruby versions.
 
-Veewee currently supports Ruby version `1.9.3` to `2.2.1`
+Veewee currently supports Ruby version `2.0` and `2.1`
 IMPORTANT : For best results, please use the latest version of Ruby.
 
 
