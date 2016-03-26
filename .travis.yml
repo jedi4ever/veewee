@@ -3,5 +3,10 @@ rvm:
   - 1.9.3
   - 2.0
   - 2.1
+sudo: false
+cache: bundler
+before_script:
+  - rvm rubygems latest
+  - gem update bundler
 notifications:
   irc: "chat.freenode.net#veewee"
