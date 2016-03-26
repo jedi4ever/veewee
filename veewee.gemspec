@@ -19,7 +19,11 @@ Gem::Specification.new do |s|
   # Currently locked to 2.2.0
   # if specifying to >= 2.2.0 it would use 2.3 and bundler would go in a resolver loop
   # DEBUG_RESOLVER=1 bundle install
-  s.add_dependency "net-ssh", ">= 2.2.0"
+  if RUBY_VERSION > "2.0.0"
+    s.add_dependency "net-ssh", ">= 2.2.0"
+  else
+    s.add_dependency "net-ssh", "~> 2.2"
+  end
   s.add_dependency "net-scp", "~> 1.2"
 
   s.add_dependency "mime-types", "~> 1.16"
