@@ -44,7 +44,6 @@ Gem::Specification.new do |s|
   s.add_dependency "to_slug"
   s.add_dependency "os", "~> 0.9.6"
   s.add_dependency "gem-content", "~>1.0"
-  s.add_dependency "net-scp", ">= 1.2.1"
 
   s.required_ruby_version = '>= 1.9.3'
 
