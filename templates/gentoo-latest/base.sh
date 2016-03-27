@@ -19,8 +19,19 @@ mkfs.ext4 /dev/sda4
 # mount other partitions
 mount /dev/sda4 "$chroot" && cd "$chroot" && mkdir boot && mount /dev/sda1 boot
 
+if [ -f ~/postinstall-gentoo.tar ]; then
+    echo "Post installation file found. Extracting..."
+    tar xvf ~/postinstall-gentoo.tar && rm ~/postinstall-gentoo.tar
+fi
+
+
 # download stage 3, unpack it, delete the stage3 archive file
-wget --tries=5 "$stage3url"
+if [ ! -f $stage3file ]; then
+    wget --tries=5 "$stage3url"
+else
+    echo "Using pre-downloaded file, $stage3file ..."
+fi
+
 tar xpf "$stage3file" && rm "$stage3file"
 
 # prepeare chroot, update env
@@ -32,17 +43,21 @@ cp /etc/resolv.conf "$chroot/etc/"
 date -u > "$chroot/etc/vagrant_box_build_time"
 
 # retrieve and extract latest portage tarball
-chroot "$chroot" wget --tries=5 "${portageurl}"
+if [ ! -f portage-latest.tar.bz2 ]; then
+    chroot "$chroot" wget --tries=5 "${portageurl}"
+else
+    echo "Using pre-downloaded portage file."
+fi
+
 chroot "$chroot" tar -xjpf portage-latest.tar.bz2 -C /usr
 chroot "$chroot" rm -rf portage-latest.tar.bz2
 chroot "$chroot" env-update
 
 # bring up network interface and sshd on boot (Alt. for new systemd naming scheme, enp0s3)
 #chroot "$chroot" /bin/bash <<DATAEOF
-#cd /etc/conf.d
 #sed -i "s/eth0/enp0s3/" /etc/udhcpd.conf
-#echo 'config_enp0s3=( "dhcp" )' >> net
-#ln -s net.lo /etc/init.d/net.enp0s3
+#echo 'config_enp0s3=( "dhcp" )' >> /etc/conf.d/net
+#ln -s /etc/init.d/net.lo /etc/init.d/net.enp0s3
 #rc-update add net.enp0s3 default
 #rc-update add sshd default
 #DATAEOF

@@ -10,7 +10,11 @@ DATAEOF
 chroot "$chroot" emerge grub
 
 # tweak timeout
+chroot "$chroot" sed -i "s/#GRUB_TIMEOUT=/GRUB_TIMEOUT=/g" /etc/default/grub
 chroot "$chroot" sed -i "s/GRUB_TIMEOUT=.*/GRUB_TIMEOUT=1/g" /etc/default/grub
+# Force old interface naming convention.
+chroot "$chroot" sed -i "s/#GRUB_CMDLINE_LINUX=/GRUB_CMDLINE_LINUX=/g" /etc/default/grub
+chroot "$chroot" sed -i "s/GRUB_CMDLINE_LINUX=.*/GRUB_CMDLINE_LINUX=\"net.ifnames=0\"/g" /etc/default/grub
 
 # make the disk bootable
 chroot "$chroot" /bin/bash <<DATAEOF
