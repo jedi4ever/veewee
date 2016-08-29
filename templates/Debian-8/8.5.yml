@@ -1,0 +1,5 @@
+---
+:os_type_id: Debian_64
+:iso_file: debian-8.5.0-amd64-netinst.iso
+:iso_src: http://cdimage.debian.org/debian-cd/8.5.0/amd64/iso-cd/debian-8.5.0-amd64-netinst.iso
+:iso_md5: 3e1b9029a0cf188730646c379d15073f
