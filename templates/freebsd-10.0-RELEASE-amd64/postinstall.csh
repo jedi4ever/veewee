@@ -86,6 +86,8 @@ echo 'vboxnet_enable="YES"' >> /etc/rc.conf
 echo 'vboxguest_enable="YES"' >> /etc/rc.conf
 echo 'vboxservice_enable="YES"' >> /etc/rc.conf
 
+echo 'hostname="vagrant"' >> /etc/rc.conf
+
 # sed -i.bak -Ee 's|/dev/ada?|/dev/vtbd|' /etc/fstab
 echo 'ifconfig_vtnet0_name="em0"' >> /etc/rc.conf
 echo 'ifconfig_vtnet1_name="em1"' >> /etc/rc.conf
