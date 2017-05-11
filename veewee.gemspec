@@ -32,7 +32,7 @@ Gem::Specification.new do |s|
   s.add_dependency "highline"
   s.add_dependency "json"
   #s.add_dependency "json", ">= 1.5.1", "< 1.8.0"
-  s.add_dependency "progressbar"
+  s.add_dependency "progressbar", "0.21.0"
   s.add_dependency "i18n"
   #s.add_dependency "cucumber", ">=1.0.0"
   s.add_dependency "ansi", "~> 1.3.0"
