@@ -1,0 +1,5 @@
+---
+:os_type_id: 'Debian_64'
+:iso_file: "debian-8.2.0-amd64-netinst.iso"
+:iso_src: "http://cdimage.debian.org/debian-cd/8.2.0/amd64/iso-cd/debian-8.2.0-amd64-netinst.iso"
+:iso_md5: "762eb3dfc22f85faf659001ebf270b4f"
