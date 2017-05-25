@@ -1,8 +1,17 @@
+# Set sources.list to long term support repository.
+echo "deb http://httpredir.debian.org/debian/ squeeze main contrib non-free
+deb-src http://httpredir.debian.org/debian/ squeeze main contrib non-free
+deb http://httpredir.debian.org/debian squeeze-lts main contrib non-free
+deb-src http://httpredir.debian.org/debian squeeze-lts main contrib non-free" > /etc/apt/sources.list
+
 # Update the box
-apt-get -y update
-apt-get -y install linux-headers-$(uname -r) build-essential
-apt-get -y install zlib1g-dev libssl-dev libreadline5-dev
-apt-get -y install curl unzip
+export DEBIAN_FRONTEND="noninteractive"
+apt-get -qq update
+apt-get -qq upgrade
+apt-get -qq dist-upgrade
+apt-get -qq install linux-headers-$(uname -r) build-essential
+apt-get -qq install zlib1g-dev libssl-dev libreadline5-dev
+apt-get -qq install curl unzip
 apt-get clean
 
 # Set up sudo
