@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.summary     = %q{Vagrant box creation}
   s.description = %q{Expand the 'vagrant box' command to support the creation of base boxes from scratch}
 
-  s.required_rubygems_version = ">= 1.3.6"
+  s.required_rubygems_version = ">= 2.1.0"
   s.rubyforge_project         = "veewee"
 
 
@@ -45,7 +45,7 @@ Gem::Specification.new do |s|
   s.add_dependency "os", "~> 0.9.6"
   s.add_dependency "gem-content", "~>1.0"
 
-  s.required_ruby_version = '>= 1.9.3'
+  s.required_ruby_version = '>= 2.0'
 
   # Modified dependency version, as libxml-ruby dependency has been removed in version 2.1.1
   # See : https://github.com/ckruse/CFPropertyList/issues/14
