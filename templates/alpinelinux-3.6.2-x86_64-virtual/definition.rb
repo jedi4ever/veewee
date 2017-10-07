@@ -49,6 +49,7 @@ Veewee::Definition.declare({
     'apk.sh',
     'virtualbox.sh',
     'vagrant.sh',
+    # 'aports.sh',
     'ruby.sh',
     'puppet.sh',
     'chef.sh',
