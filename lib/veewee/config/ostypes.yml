@@ -29,6 +29,11 @@ Windows81_64:
   :kvm:
   :vbox: Windows81_64
   :parallels: win-8
+Windows2012_64:
+  :fusion: 
+  :kvm:
+  :vbox: Windows2012_64
+  :parallels: 
 WindowsNT:
   :fusion: winNT
   :kvm:
