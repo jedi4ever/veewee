@@ -46,7 +46,7 @@ A definition usually consists of at least these postinstall files:
 
 Filename        | Description
 ----------------|-------------
-preseed.cfg     | Default options for the installer. See https://help.ubuntu.com/12.04/installation-guide/i386/preseed-using.html
+preseed.cfg     | Default options for the installer. See https://help.ubuntu.com/12.04/installation-guide/en.i386/apbs02.html
 definition.rb   | Core definition of a box; like CPU, RAM, and the commands for the initial boot sequence
 postinstall.sh  | Steps that run _after_ installing the OS
 
@@ -77,9 +77,9 @@ All other settings are used internally by Veewee, the virtualization provider, o
         :disk_format => 'VDI',
         :disk_variant => 'Standard',
         :os_type_id => 'Ubuntu',
-        :iso_file => "ubuntu-12.10-server-i386.iso",
-        :iso_src => "http://releases.ubuntu.com/precise/ubuntu-12.10-server-i386.iso",
-        :iso_md5 => "3daaa312833a7da1e85e2a02787e4b66",
+        :iso_file => "ubuntu-12.04.5-server-i386.iso",
+        :iso_src => "http://releases.ubuntu.com/precise/ubuntu-12.04.5-server-i386.iso",
+        :iso_sha256 => "bec39e79664aa189dea338993f636e54c5eda2f84c27def7b06bd6373ab87628",
         :iso_download_timeout => "1000",
         :boot_wait => "10",
         :boot_cmd_sequence => [
