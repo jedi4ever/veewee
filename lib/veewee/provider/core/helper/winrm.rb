@@ -103,7 +103,7 @@ module Veewee
 
 
           def winrm_transfer_file(host,filename,destination = '.' , options = {})
-            options = winrm_options.merge(options.merge({:paranoid => false }))
+            options = winrm_options.merge(options.merge({:verify_host_name => :never }))
             # when_winrm_login_works
 
             env.ui.info "FIXME: Transferring #{filename} to #{destination} "

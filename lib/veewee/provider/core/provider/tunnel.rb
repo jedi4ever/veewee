@@ -7,9 +7,9 @@ module Veewee
 
 
       def ssh_tunnel_start(forwardings)
-        #ssh_options={ :keys => [ vm.private_key ], :paranoid => false, :keys_only => true}
+        #ssh_options={ :keys => [ vm.private_key ], :verify_host_key => :never, :keys_only => true }
 
-        ssh_options={ :paranoid => false}
+        ssh_options={ :verify_host_key => :never }
         host=@connection.uri.host
         user=@connection.uri.user
 
