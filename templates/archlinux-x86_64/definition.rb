@@ -1,8 +1,12 @@
 require 'net/http'
 
-iso_mirror = 'http://mirrors.kernel.org/archlinux/iso/2015.03.01'
+iso_mirror = 'https://mirrors.edge.kernel.org/archlinux/iso/latest/'
 uri = "#{iso_mirror}/md5sums.txt"
-response = Net::HTTP.get_response(URI.parse(uri)).body.split
+response = Net::HTTP.get_response(URI.parse(uri))
+if response.code != '200' then
+  fail "Could not download from #{uri}: [#{response.code}] #{response}"
+end
+response = response.body.split
 iso = response[1]
 iso_md5 = response[0]
 
