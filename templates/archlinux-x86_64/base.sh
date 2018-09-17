@@ -36,7 +36,7 @@ arch-chroot /mnt <<ENDCHROOT
 # Automatic interface selection
 # If ssh hangs and cannot reconnect, comment this line and uncomment the
 # two following ones.
-systemctl enable dhcpcd\@$(ip addr show label 'en*' | head -1 | cut -d' ' -f2 | sed 's/://').service
+systemctl enable dhcpcd\@$(cd /sys/class/net/; ls -d en* | head -n1).service
 
 # Manual interface selection by disabling systemd's Predictable Network Interface Names
 # Uncomment the two following lines if automatic detection didn't work.
